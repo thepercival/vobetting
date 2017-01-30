@@ -1,0 +1,60 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: coen
+ * Date: 28-1-17
+ * Time: 21:20
+ */
+
+namespace VOBetting\Auth;
+
+use VOBetting\Auth\User;
+use VOBettingRepository\Auth\User as UserRepository;
+
+class Service
+{
+	/**
+	 * @var UserRepository
+	 */
+	protected $repos;
+
+	/**
+	 * Service constructor.
+	 *
+	 * @param UserRepository $userRepository
+	 */
+	public function __construct( UserRepository $userRepository )
+	{
+		$this->repos = $userRepository;
+	}
+
+	/**
+	 * @param User\Name $name
+	 * @param string $password
+	 * @param User\Emailaddress $emailaddress
+	 *
+	 * @throws \Exception
+	 */
+	public function register( User\Name $name, $password, User\Emailaddress $emailaddress )
+	{
+		if ( $name !== "coen" ){
+			throw new \Exception("alleen de gebruikersnaam coen kan geregistreerd worden");
+		}
+		$userTmp = $this->repos->findOneBy( array('name' => $name ) );
+		if ( $userTmp ) {
+			throw new \Exception("de gebruikersnaam is al in gebruik");
+		}
+		$userTmp = $this->repos->findOneBy( array('emailaddress' => $emailaddress ) );
+		if ( $userTmp ) {
+			throw new \Exception("het emailadres is al in gebruik");
+		}
+
+		$password = password_hash( $password, PASSWORD_DEFAULT);
+
+		$user = new User($name, $password, $emailaddress);
+
+		return $this->repos->save($user);
+	}
+
+
+}

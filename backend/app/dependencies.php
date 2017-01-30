@@ -5,8 +5,13 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use \Slim\Middleware\JwtAuthentication;
 
 $container = $app->getContainer();
+
+/*$container['savewww'] = function ($c) {
+	return $c->get('settings')['www']['url'];
+};*/
 
 // view renderer
 $container['renderer'] = function ($c) {
@@ -60,29 +65,32 @@ $container['serializer'] = function( $c ) {
 // JWTAuthentication
 $container['jwtauth'] = function( $c ) {
     $settings = $c->get('settings');
-    return new \Slim\Middleware\JwtAuthentication([
+    return new JwtAuthentication([
         "secure" => true,
         "relaxed" => ["localhost"],
         "secret" => $settings['auth']['jwtsecret'],
-        "algorithm" => $settings['auth']['jwtalgorithm'],
+        // "algorithm" => $settings['auth']['jwtalgorithm'], default
         "rules" => [
-            new \Slim\Middleware\JwtAuthentication\RequestPathRule([
-                "path" => "/users"
-            ]),
-            new \Slim\Middleware\JwtAuthentication\RequestMethodRule([
-                "passthrough" => ["GET","OPTIONS","POST"] /* @TODO GET MOET HIER WEG */
+            new JwtAuthentication\RequestPathRule([
+	            "path" => "/",
+	            "passthrough" => ["/auth/register", "/auth/login"]
+            ])	        ,
+            new JwtAuthentication\RequestMethodRule([
+                "passthrough" => ["OPTIONS"]
             ])
         ]
     ]);
 };
 
 // actions
-/*$container['App\Action\AuthAction'] = function ($c) {
-	return new App\Action\AuthAction( $c->get('settings'), $c->get('em'), $c->get('jwtauth'), $c->get('serializer') );
-};*/
-$container['App\Action\Auth\User'] = function ($c) {
+$container['App\Action\Auth'] = function ($c) {
 	$em = $c->get('em');
     $userRepository = new VOBettingRepository\Auth\User($em,$em->getClassMetaData(VOBetting\Auth\User::class));
+	return new App\Action\Auth($userRepository,$c->get('serializer'),$c->get('settings'));
+};
+$container['App\Action\Auth\User'] = function ($c) {
+	$em = $c->get('em');
+	$userRepository = new VOBettingRepository\Auth\User($em,$em->getClassMetaData(VOBetting\Auth\User::class));
 	return new App\Action\Auth\User($userRepository,$c->get('serializer'),$c->get('settings'));
 };
 /*$container['App\Action\CompetitionSeasonAction'] = function ($c) {

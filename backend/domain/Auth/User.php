@@ -30,7 +30,7 @@ class User
 	 */
 	private $emailaddress;
 
-	public function __construct( User\Name $name, User\Password $password, User\Emailaddress $emailaddress )
+	public function __construct( User\Name $name, $password, User\Emailaddress $emailaddress )
 	{
 		$this->name = $name;
 		$this->password = $password;
@@ -64,7 +64,7 @@ class User
 	}
 
 	/**
-	 * @return User\Password
+	 * @return string
 	 */
 	public function getPassword()
 	{
@@ -72,9 +72,9 @@ class User
 	}
 
 	/**
-	 * @param User\Password $password
+	 * @param Ustring
 	 */
-	public function setPassword( User\Password $password )
+	public function setPassword( string $password )
 	{
 		$this->password = $password;
 	}

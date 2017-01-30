@@ -8,9 +8,9 @@
 
 namespace VOBettingRepository\Auth;
 
-use Doctrine\ORM\EntityManager;
+// use Doctrine\ORM\EntityManager;
 
-class User extends \Doctrine\ORM\EntityRepository
+class User extends \VOBettingRepository\Main
 {
 	public function getByName( $arrWhere )
 	{

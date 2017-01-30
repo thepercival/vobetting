@@ -8,7 +8,7 @@ return [
         'environment' => getenv('ENVIRONMENT'),
         'displayErrorDetails' => ( getenv('ENVIRONMENT') === "development" ),
         'addContentLengthHeader' => false, // Allow the web server to send the content-length header
-	    // 'determineRouteBeforeAppMiddleware' => true,
+	    'determineRouteBeforeAppMiddleware' => true,
 
         // Renderer settings
         'renderer' => [
