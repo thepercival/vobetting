@@ -93,6 +93,7 @@ $container['App\Action\Auth\User'] = function ($c) {
 	$userRepository = new VOBettingRepository\Auth\User($em,$em->getClassMetaData(VOBetting\Auth\User::class));
 	return new App\Action\Auth\User($userRepository,$c->get('serializer'),$c->get('settings'));
 };
+
 /*$container['App\Action\CompetitionSeasonAction'] = function ($c) {
 	$competitionSeasonResource = new \App\Resource\CompetitionSeasonResource($c->get('em'));
     return new App\Action\CompetitionSeasonAction($competitionSeasonResource,$c->get('serializer'));

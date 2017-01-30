@@ -25,6 +25,7 @@ return [
         'doctrine' => [
             'meta' => [
                 'entity_path' => [
+	                __DIR__ . '/../vendor/thepercival/voetbal/db/yml-mapping',
 	                __DIR__ . '/../db/yml-mapping'
                 ],
                 'auto_generate_proxies' => true,

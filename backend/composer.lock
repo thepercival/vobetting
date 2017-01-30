@@ -1167,12 +1167,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "bad923c3253231bf03153447e8052bfe2f1e38ef"
+                "reference": "0d965dbb265c56fb2437b7d21b3deced729603c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/bad923c3253231bf03153447e8052bfe2f1e38ef",
-                "reference": "bad923c3253231bf03153447e8052bfe2f1e38ef",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/0d965dbb265c56fb2437b7d21b3deced729603c1",
+                "reference": "0d965dbb265c56fb2437b7d21b3deced729603c1",
                 "shasum": ""
             },
             "require": {
@@ -1212,7 +1212,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2017-01-24 12:56:16"
+            "time": "2017-01-30 19:57:58"
         },
         {
             "name": "nikic/fast-route",
@@ -2234,12 +2234,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/thepercival/voetbal.git",
-                "reference": "eaf83d35ecd2bb677416482ef23403c972bc69cf"
+                "reference": "331aa8a5ab5ef5f7bf7c65ba1532040caaa83a08"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thepercival/voetbal/zipball/eaf83d35ecd2bb677416482ef23403c972bc69cf",
-                "reference": "eaf83d35ecd2bb677416482ef23403c972bc69cf",
+                "url": "https://api.github.com/repos/thepercival/voetbal/zipball/331aa8a5ab5ef5f7bf7c65ba1532040caaa83a08",
+                "reference": "331aa8a5ab5ef5f7bf7c65ba1532040caaa83a08",
                 "shasum": ""
             },
             "require": {
@@ -2255,7 +2255,7 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Voetbal\\": "src/"
+                    "Voetbal\\": "domain/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -2274,7 +2274,7 @@
                 "Voetbal",
                 "football"
             ],
-            "time": "2017-01-25 20:57:58"
+            "time": "2017-01-30 20:33:31"
         },
         {
             "name": "tuupola/slim-jwt-auth",
@@ -2882,12 +2882,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "69f832b87c731d5cacad7f91948778fe98335fdd"
+                "reference": "b01bb9de5c6daf9896eb837d5587c1570986fa13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/69f832b87c731d5cacad7f91948778fe98335fdd",
-                "reference": "69f832b87c731d5cacad7f91948778fe98335fdd",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/b01bb9de5c6daf9896eb837d5587c1570986fa13",
+                "reference": "b01bb9de5c6daf9896eb837d5587c1570986fa13",
                 "shasum": ""
             },
             "require": {
@@ -2956,7 +2956,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-01-28 06:14:33"
+            "time": "2017-01-30 07:21:28"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -3068,12 +3068,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/comparator.git",
-                "reference": "2f09d5a251c4a92d1a80518c2166b5d0d742bc63"
+                "reference": "7c391956f8086a22a257cb26461544e4fc8e02e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/2f09d5a251c4a92d1a80518c2166b5d0d742bc63",
-                "reference": "2f09d5a251c4a92d1a80518c2166b5d0d742bc63",
+                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/7c391956f8086a22a257cb26461544e4fc8e02e0",
+                "reference": "7c391956f8086a22a257cb26461544e4fc8e02e0",
                 "shasum": ""
             },
             "require": {
@@ -3124,7 +3124,7 @@
                 "compare",
                 "equality"
             ],
-            "time": "2016-12-10 08:07:52"
+            "time": "2017-01-29 09:51:01"
         },
         {
             "name": "sebastian/diff",

@@ -28,18 +28,33 @@ $app->group('/auth', function () use ($app) {
 
 });
 
-/*$app->get('/:resourceType(/(:id)(/))', function($resourceType, $id = null) {
-    $resource = ObjectRepository::get($resourceType);
-    echo $resource->get($id);
-});*/
+//$app->get('/:resourceType', 'App\Action\Default:fetch');
+//$app->get('/:resourceType/{id}', 'App\Action\Default:fetchOne');
 
-$app->get('/associations', function ($request, $response, $args) {
+$app->get('/{resourceType}[/{id}]', function ($request, $response, $args) use ($app) {
+
+	$id = array_key_exists("id",$args) ? $args["id"] : null;
+	$resourceType = array_key_exists("resourceType",$args) ? $args["resourceType"] : null;
+	$this->logger->info("default resource route get : " . $resourceType . ( $id ? '/' . $id : null ) );
+
+	$repos = new \VOBettingRepository\Main( $app->getContainer()->get('em'), $resourceType );
+	$arrRetVal = ( $id === null ) ? $repos->findAll() : $repos->findOneBy($id);
+
+	$serializer = $app->getContainer()->get('serializer');
+
+	return $response
+		->withHeader('Content-Type', 'application/json;charset=utf-8')
+		->write($serializer->serialize( $arrRetVal, 'json'));
+	;
+});
+
+/*$app->get('/associations', function ($request, $response, $args) {
     // Sample log message
     $this->logger->info("Slim-Skeleton '/' route");
 
     // Render index view
     return $this->renderer->render($response, 'index.phtml', $args);
-});
+});*/
 
 /*
  $app->get('/[{name}]', function ($request, $response, $args) {
