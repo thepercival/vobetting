@@ -1,0 +1,7 @@
+<div *ngIf="associations.length==0">
+    <div class="alert alert-danger">geen bonden gevonden</div>
+    <button (click)="goBack()">ga terug</button>
+</div>
+<div *ngIf="associations.length>0">
+    <div class="alert alert-success">bonden gevonden</div>
+</div>
