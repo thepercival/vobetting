@@ -15,7 +15,7 @@ VOBetting\Auth\User:
       nullable: false
     password:
       type: string
-      length : !php/const:VOBetting\Auth\User\Password::MAX_LENGTH
+      length : !php/const:VOBetting\Auth\User\Password::MAX_LENGTH_HASH
       nullable: false
     emailaddress:
       type: string

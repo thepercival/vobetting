@@ -13,6 +13,7 @@ class Password
 	private $password;
 	const MIN_LENGTH = 3;
 	const MAX_LENGTH = 50;
+	const MAX_LENGTH_HASH = 255;
 
 	public function __construct( $password )
 	{

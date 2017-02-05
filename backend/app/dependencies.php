@@ -94,7 +94,8 @@ $container['App\Action\Auth\User'] = function ($c) {
 	return new App\Action\Auth\User($userRepository,$c->get('serializer'),$c->get('settings'));
 };
 
-/*$container['App\Action\CompetitionSeasonAction'] = function ($c) {
-	$competitionSeasonResource = new \App\Resource\CompetitionSeasonResource($c->get('em'));
-    return new App\Action\CompetitionSeasonAction($competitionSeasonResource,$c->get('serializer'));
-};*/
+$container['Voetbal\Action\Association'] = function ($c) {
+	$em = $c->get('em');
+	$associationRepository = new Voetbal\Repository\Association($em,$em->getClassMetaData(Voetbal\Association::class));
+	return new Voetbal\Action\Association($associationRepository,$c->get('serializer'));
+};

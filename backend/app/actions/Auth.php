@@ -33,7 +33,6 @@ final class Auth
 	{
 		$sErrorMessage = null;
 		try{
-
 			$userName = new User\Name( $request->getParam('name') );
 			$userPassword = new User\Password( $request->getParam('password') );
 			$userEmailaddress = new User\Emailaddress( $request->getParam('emailaddress') );
@@ -68,7 +67,7 @@ final class Auth
 			);
 
 			if (!$user or !password_verify( $password, $user->getPassword() ) ) {
-				throw new \Exception( "ongeldige emailadres en wachtwoord ".$user->getPassword()." combinatie ".$password);
+				throw new \Exception( "ongeldige emailadres en wachtwoord(".$password.") ".$user->getPassword()." combinatie ".$password);
 			}
 
 			/*if ( !$user->getActive() ) {
