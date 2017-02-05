@@ -20,6 +20,10 @@ export class Association implements VoetbalInterface{
         return this.id;
     };
 
+    setId( id: number): void {
+        this.id = id;
+    };
+
     getName(): string {
         return this.name;
     };

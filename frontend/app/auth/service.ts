@@ -9,8 +9,7 @@ import { Router } from '@angular/router';
 export class AuthenticationService {
     public token: string;
     public userid: number;
-    private authUrl = 'http://localhost:2999/auth/';
-    public usersUrl = 'http://localhost:2999/users';
+    private url = 'http://localhost:2999/auth/';    
     public user: User;  // is called from backend on first time
     private headers = new Headers({'Content-Type': 'application/json'});
 
@@ -42,7 +41,7 @@ export class AuthenticationService {
     getLoggedInUser(id: number): Observable<User> {
         let headers = new Headers({ 'Authorization': 'Bearer ' + this.token, 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
-        const url = `${this.usersUrl}/${id}`;
+        const url = `${this.url + 'users'}/${id}`;
 
         return this.http.get(url, options)
             // ...and calling .json() on the response to return data
@@ -53,7 +52,7 @@ export class AuthenticationService {
 
     register( newUser: User ): Observable<User> {
         return this.http
-            .post(this.authUrl + 'register', JSON.stringify( newUser ), {headers: this.headers})
+            .post(this.url + 'register', JSON.stringify( newUser ), {headers: this.headers})
             // ...and calling .json() on the response to return data
             .map((res:Response) => res.json())
             //...errors if any
@@ -61,13 +60,13 @@ export class AuthenticationService {
     }
 
     activate( email: string, activationkey : string ): Observable<boolean> {
-        return this.http.post( this.authUrl + 'activate', { email: email, activationkey: activationkey })
+        return this.http.post( this.url + 'activate', { email: email, activationkey: activationkey })
             .map((response: Response) => response.text() )
             .catch(this.handleError);
     }
 
     login(emailaddress, password): Observable<boolean> {
-        return this.http.post( this.authUrl + 'login', { emailaddress: emailaddress, password: password })
+        return this.http.post( this.url + 'login', { emailaddress: emailaddress, password: password })
             .map((response: Response) => {
                 let json = response.json();
                 // login successful if there's a jwt token in the response
@@ -96,7 +95,7 @@ export class AuthenticationService {
     }
 
     passwordReset( email: string ): Observable<boolean> {
-        return this.http.post( this.authUrl + 'passwordreset', { email: email })
+        return this.http.post( this.url + 'passwordreset', { email: email })
             .map((response: Response) => {
                 let retVal = response.text()
                 // console.log( retVal );
@@ -106,7 +105,7 @@ export class AuthenticationService {
     }
 
     passwordChange( email: string, password: string, key: string ): Observable<boolean> {
-        return this.http.post( this.authUrl + 'passwordchange', { email: email, password: password, key: key })
+        return this.http.post( this.url + 'passwordchange', { email: email, password: password, key: key })
             .map((response: Response) => {
                 let retVal = response.text();
                 // console.log( retVal );
