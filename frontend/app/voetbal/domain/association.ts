@@ -10,10 +10,8 @@ export class Association implements VoetbalInterface{
     protected parent: Association;
 
     // constructor
-    constructor(
-        name: string
-    ){
-        this.name = name;
+    constructor( name: string ){
+        this.setName(name);
     }
 
     getId(): number {
@@ -26,6 +24,10 @@ export class Association implements VoetbalInterface{
 
     getName(): string {
         return this.name;
+    };
+
+    setName(name: string): void {
+        this.name = name;
     };
 
     getDescription(): string {

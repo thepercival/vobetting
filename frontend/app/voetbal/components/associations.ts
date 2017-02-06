@@ -11,6 +11,7 @@ import { Association } from '../domain/association';
 import { VoetbalInterface } from '../domain/interface';
 import { AssociationRepository } from '../repositories/association';
 import { AssociationAddModalContent } from './association/modal/add';
+import { AssociationEditModalContent } from './association/modal/edit';
 
 
 
@@ -73,10 +74,10 @@ export class AssociationsComponent implements OnInit{
         }, associationId);*/
 
         if ( association == null) {
-            this.message = { "type": "danger", "message": "de bond kan niet gevonden worden"};
+            this.message = { "type": "danger", "message": "de bond kan niet gewijzigd worden"};
         }
 
-        const modalRef = this.modalService.open(AssociationAddModalContent, { backdrop : 'static' } );
+        const modalRef = this.modalService.open(AssociationEditModalContent, { backdrop : 'static' } );
         modalRef.componentInstance.association = association;
     }
 

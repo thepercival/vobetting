@@ -12,7 +12,7 @@
     </thead>
     <tbody>
         <tr *ngFor="let association of associations">
-            <td style="text-align: center"><a type="button" href="javascript:void(0)" class="btn btn-secondary" (click)="onEdit(association.id)"><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
+            <td style="text-align: center"><a type="button" href="javascript:void(0)" class="btn btn-secondary" (click)="onEdit(association)"><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
             <td>{{association.name}}</td>
             <td class="hidden-xs-down">{{association.desciption}}</td>
             <td style="text-align: center"><a type="button" href="javascript:void(0)" class="btn btn-secondary" (click)="onRemove(association)"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>

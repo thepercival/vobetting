@@ -1,18 +1,7 @@
 <?php
 // Application middleware
 
-
-$app->add( $app->getContainer()->get('jwtauth') );
-
-/*$app->add(function($request, $response, $next) {
-	$arrQueryParams = $request->getQueryParams();
-    $token = array_key_exists("token", $arrQueryParams ) ? $arrQueryParams["token"] : null;
-    if (false === empty($token)) {
-        $request = $request->withHeader("Authorization", "Bearer {$token}");
-    }
-    return $next($request, $response);
-});*/
-
+// $app->add( $app->getContainer()->get('jwtauth') );
 
 $app->add( function ($request, $response, $next) use ( $app ) {
 

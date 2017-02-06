@@ -22,6 +22,7 @@ import { GlobalEventsManager } from "./global-events-manager";
 import { AssociationsComponent }  from './voetbal/components/associations';
 import { AssociationRepository }  from './voetbal/repositories/association';
 import { AssociationAddModalContent } from './voetbal/components/association/modal/add';
+import { AssociationEditModalContent } from './voetbal/components/association/modal/edit';
 
 @NgModule({
    imports:      [
@@ -37,11 +38,11 @@ import { AssociationAddModalContent } from './voetbal/components/association/mod
         NavbarComponent,
         HomeComponent,
         RegisterComponent, ActivateComponent, LoginComponent, LogoutComponent, PasswordResetComponent, PasswordChangeComponent, UsersComponent,
-        AssociationsComponent, AssociationAddModalContent
+        AssociationsComponent, AssociationAddModalContent, AssociationEditModalContent
     ],
 
     entryComponents: [
-        AssociationAddModalContent
+        AssociationAddModalContent, AssociationEditModalContent
     ],
     providers:    [
         AuthGuard,
