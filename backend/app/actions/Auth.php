@@ -37,7 +37,7 @@ final class Auth
 			$userPassword = new User\Password( $request->getParam('password') );
 			$userEmailaddress = new User\Emailaddress( $request->getParam('emailaddress') );
 
-			$user = $this->authService->register( $userName, $userPassword, $userEmailaddress );
+			$user = $this->authService->register( $userName, $request->getParam('password'), $userEmailaddress );
 			if ($user === null or !($user instanceof User))
 				throw new \Exception( "de nieuwe gebruiker kan niet worden geretourneerd");
 
@@ -66,8 +66,8 @@ final class Auth
 				array( 'emailaddress' => $emailaddress )
 			);
 
-			if (!$user or !password_verify( $password, $user->getPassword() ) ) {
-				throw new \Exception( "ongeldige emailadres en wachtwoord(".$password.") ".$user->getPassword()." combinatie ".$password);
+            if ( password_verify( $password, $user->getPassword() ) !== true ) {
+				throw new \Exception( "ongeldige emailadres en wachtwoord(".$password.") (".$user->getPassword().") combinatie (".password_hash( $password, PASSWORD_DEFAULT).")",E_ERROR);
 			}
 
 			/*if ( !$user->getActive() ) {

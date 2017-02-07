@@ -4,6 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
+    "hash": "195729b74e496d1d601c9b9dcb568ea6",
     "content-hash": "5eb0d6b200cd2c0d7456c7669d3860df",
     "packages": [
         {
@@ -31,7 +32,7 @@
                 "MIT"
             ],
             "description": "Promoting the interoperability of container objects (DIC, SL, etc.)",
-            "time": "2014-12-30T15:22:37+00:00"
+            "time": "2014-12-30 15:22:37"
         },
         {
             "name": "doctrine/annotations",
@@ -235,7 +236,7 @@
                 "collections",
                 "iterator"
             ],
-            "time": "2017-01-03T10:49:41+00:00"
+            "time": "2017-01-03 10:49:41"
         },
         {
             "name": "doctrine/common",
@@ -683,7 +684,7 @@
                 "betting",
                 "betting api"
             ],
-            "time": "2015-03-01T01:30:22+00:00"
+            "time": "2015-03-01 01:30:22"
         },
         {
             "name": "firebase/php-jwt",
@@ -726,7 +727,7 @@
             ],
             "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",
             "homepage": "https://github.com/firebase/php-jwt",
-            "time": "2016-07-18T04:51:16+00:00"
+            "time": "2016-07-18 04:51:16"
         },
         {
             "name": "guzzlehttp/command",
@@ -772,7 +773,7 @@
                 }
             ],
             "description": "Provides the foundation for building command based web service clients",
-            "time": "2015-01-14T18:54:57+00:00"
+            "time": "2015-01-14 18:54:57"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -871,7 +872,7 @@
                 }
             ],
             "description": "Provides an implementation of the Guzzle Command library that uses Guzzle service descriptions to describe web services, serialize requests, and parse responses into easy to use model structures.",
-            "time": "2014-12-23T19:13:18+00:00"
+            "time": "2014-12-23 19:13:18"
         },
         {
             "name": "guzzlehttp/ringphp",
@@ -1029,7 +1030,7 @@
                 "range",
                 "time"
             ],
-            "time": "2016-09-19T10:33:45+00:00"
+            "time": "2016-09-19 10:33:45"
         },
         {
             "name": "league/tactician",
@@ -1080,7 +1081,7 @@
                 "command bus",
                 "service layer"
             ],
-            "time": "2016-02-20T11:14:36+00:00"
+            "time": "2016-02-20 11:14:36"
         },
         {
             "name": "monolog/monolog",
@@ -1166,12 +1167,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "c2c2296f4a6b2b9ff7e1b571d308864facaa2317"
+                "reference": "926aee5ab38c2868816aa760f862a85ad01cb61a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/c2c2296f4a6b2b9ff7e1b571d308864facaa2317",
-                "reference": "c2c2296f4a6b2b9ff7e1b571d308864facaa2317",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/926aee5ab38c2868816aa760f862a85ad01cb61a",
+                "reference": "926aee5ab38c2868816aa760f862a85ad01cb61a",
                 "shasum": ""
             },
             "require": {
@@ -1211,7 +1212,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2017-01-31 13:48:49"
+            "time": "2017-02-06 22:02:47"
         },
         {
             "name": "nikic/fast-route",
@@ -1254,7 +1255,7 @@
                 "router",
                 "routing"
             ],
-            "time": "2017-01-19T11:35:12+00:00"
+            "time": "2017-01-19 11:35:12"
         },
         {
             "name": "paragonie/random_compat",
@@ -1302,7 +1303,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2016-11-07T23:38:38+00:00"
+            "time": "2016-11-07 23:38:38"
         },
         {
             "name": "phpmailer/phpmailer",
@@ -1362,7 +1363,7 @@
                 }
             ],
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
-            "time": "2017-01-09T09:33:47+00:00"
+            "time": "2017-01-09 09:33:47"
         },
         {
             "name": "pimple/pimple",
@@ -1597,7 +1598,7 @@
                 "template",
                 "view"
             ],
-            "time": "2016-10-11T07:43:08+00:00"
+            "time": "2016-10-11 07:43:08"
         },
         {
             "name": "slim/slim",
@@ -2236,12 +2237,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/thepercival/voetbal.git",
-                "reference": "3f83b1d9da327c9a1b66b270661f88c0d7f314ba"
+                "reference": "482f326660a6c2a3ebd824fe726a1f9530826fff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thepercival/voetbal/zipball/3f83b1d9da327c9a1b66b270661f88c0d7f314ba",
-                "reference": "3f83b1d9da327c9a1b66b270661f88c0d7f314ba",
+                "url": "https://api.github.com/repos/thepercival/voetbal/zipball/482f326660a6c2a3ebd824fe726a1f9530826fff",
+                "reference": "482f326660a6c2a3ebd824fe726a1f9530826fff",
                 "shasum": ""
             },
             "require": {
@@ -2279,7 +2280,7 @@
                 "Voetbal",
                 "football"
             ],
-            "time": "2017-02-06 13:46:02"
+            "time": "2017-02-06 20:45:51"
         },
         {
             "name": "tuupola/slim-jwt-auth",
@@ -2426,7 +2427,7 @@
                 "object",
                 "object graph"
             ],
-            "time": "2017-01-26T22:05:40+00:00"
+            "time": "2017-01-26 22:05:40"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -2525,7 +2526,7 @@
                 }
             ],
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
-            "time": "2016-09-30T07:12:33+00:00"
+            "time": "2016-09-30 07:12:33"
         },
         {
             "name": "phpdocumentor/type-resolver",
@@ -2572,7 +2573,7 @@
                     "email": "me@mikevanriel.com"
                 }
             ],
-            "time": "2016-11-25T06:54:22+00:00"
+            "time": "2016-11-25 06:54:22"
         },
         {
             "name": "phpspec/prophecy",
@@ -2786,7 +2787,7 @@
             "keywords": [
                 "template"
             ],
-            "time": "2015-06-21T13:50:34+00:00"
+            "time": "2015-06-21 13:50:34"
         },
         {
             "name": "phpunit/php-timer",
@@ -2830,7 +2831,7 @@
             "keywords": [
                 "timer"
             ],
-            "time": "2016-05-12T18:03:57+00:00"
+            "time": "2016-05-12 18:03:57"
         },
         {
             "name": "phpunit/php-token-stream",
@@ -2887,12 +2888,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "1fd10bf3bd7b9172f43063a818a16b2381743008"
+                "reference": "89c103a1128245204e2eccb0a0f9859bc7dfdacb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/1fd10bf3bd7b9172f43063a818a16b2381743008",
-                "reference": "1fd10bf3bd7b9172f43063a818a16b2381743008",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/89c103a1128245204e2eccb0a0f9859bc7dfdacb",
+                "reference": "89c103a1128245204e2eccb0a0f9859bc7dfdacb",
                 "shasum": ""
             },
             "require": {
@@ -2961,7 +2962,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-02-06 11:45:00"
+            "time": "2017-02-07 06:59:58"
         },
         {
             "name": "phpunit/phpunit-mock-objects",

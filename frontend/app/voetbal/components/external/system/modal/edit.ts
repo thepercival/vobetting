@@ -4,24 +4,24 @@
 
 import {Component, Input, OnInit, AfterViewInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Association } from '../../../domain/association';
-import { AssociationRepository } from '../../../repositories/association';
+import { ExternalSystem } from '../../../../domain/external/system';
+import { ExternalSystemRepository } from '../../../../repositories/external/system';
 
 @Component({
     moduleId: module.id,
-    selector: 'association-edit-modal-content',
+    selector: 'externalsystem-edit-modal-content',
     templateUrl: 'edit.html'
 })
-export class AssociationEditModalContent implements OnInit{
+export class ExternalSystemEditModalContent implements OnInit{
     @Input()
-    object: Association;
+    object: ExternalSystem;
     model: any = {};
     loading = false;
     error = '';
 
     constructor(
         public activeModal: NgbActiveModal,
-        private repos: AssociationRepository
+        private repos: ExternalSystemRepository
     ) {}
 
     ngOnInit() {
@@ -34,12 +34,13 @@ export class AssociationEditModalContent implements OnInit{
     edit(): boolean {
         this.model.name = this.model.name.trim();
         if (!this.model.name) { return false; }
+        // let jsonAssociation = { "name": this.model.name/*, seasonname : this.model.seasonname*/ };
         this.object.setName( this.model.name );
 
         this.repos.editObject( this.object )
             .subscribe(
                 /* happy path */ object => {
-                    this.activeModal.close( object );
+                    this.activeModal.close( object);
                 },
                 /* error path */ e => { this.error = e; this.loading = false; },
                 /* onComplete */ () => this.loading = false

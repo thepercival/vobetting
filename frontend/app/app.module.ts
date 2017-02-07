@@ -23,6 +23,10 @@ import { AssociationsComponent }  from './voetbal/components/associations';
 import { AssociationRepository }  from './voetbal/repositories/association';
 import { AssociationAddModalContent } from './voetbal/components/association/modal/add';
 import { AssociationEditModalContent } from './voetbal/components/association/modal/edit';
+import { ExternalSystemsComponent }  from './voetbal/components/external/systems';
+import { ExternalSystemRepository }  from './voetbal/repositories/external/system';
+import { ExternalSystemAddModalContent } from './voetbal/components/external/system/modal/add';
+import { ExternalSystemEditModalContent } from './voetbal/components/external/system/modal/edit';
 
 @NgModule({
    imports:      [
@@ -38,18 +42,21 @@ import { AssociationEditModalContent } from './voetbal/components/association/mo
         NavbarComponent,
         HomeComponent,
         RegisterComponent, ActivateComponent, LoginComponent, LogoutComponent, PasswordResetComponent, PasswordChangeComponent, UsersComponent,
-        AssociationsComponent, AssociationAddModalContent, AssociationEditModalContent
+        AssociationsComponent, AssociationAddModalContent, AssociationEditModalContent,
+        ExternalSystemsComponent, ExternalSystemAddModalContent, ExternalSystemEditModalContent
     ],
 
     entryComponents: [
-        AssociationAddModalContent, AssociationEditModalContent
+        AssociationAddModalContent, AssociationEditModalContent,
+        ExternalSystemAddModalContent, ExternalSystemEditModalContent
     ],
     providers:    [
         AuthGuard,
         AuthenticationService,
         UserService,
         GlobalEventsManager,
-        AssociationRepository
+        AssociationRepository,
+        ExternalSystemRepository
     ],
     bootstrap:    [
         AppComponent

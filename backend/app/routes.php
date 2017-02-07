@@ -9,6 +9,14 @@ $app->group('/voetbal', function () use ($app) {
 	$app->delete('/associations/{id}', 'Voetbal\Action\Association:remove');
 });
 
+$app->group('/voetbal/external', function () use ($app) {
+    $app->get('/systems', 'Voetbal\Action\External\System:fetch');
+    $app->get('/systems/{id}', 'Voetbal\Action\External\System:fetchOne');
+    $app->post('/systems', 'Voetbal\Action\External\System:add');
+    $app->put('/systems/{id}', 'Voetbal\Action\External\System:edit');
+    $app->delete('/systems/{id}', 'Voetbal\Action\External\System:remove');
+});
+
 $app->group('/auth', function () use ($app) {
 	$app->post('/register', 'App\Action\Auth:register');
 	$app->post('/login', 'App\Action\Auth:login');

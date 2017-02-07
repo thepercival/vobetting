@@ -1,7 +1,7 @@
 <?php
 // Application middleware
 
-$app->add( $app->getContainer()->get('jwtauth') );
+// $app->add( $app->getContainer()->get('jwtauth') );
 
 $app->add( function ($request, $response, $next) use ( $app ) {
 
@@ -13,5 +13,3 @@ $app->add( function ($request, $response, $next) use ( $app ) {
 		->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Origin, Content-Type, Accept, Authorization')
 		->withHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
 });
-
-

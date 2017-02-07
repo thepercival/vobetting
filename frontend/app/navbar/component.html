@@ -6,6 +6,9 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
             <li *ngIf="authenticationService.token" class="nav-item float-xs-right">
+                <a class="nav-link" routerLink="/externalsystems" routerLinkActive="active" style="color:white;">externe systemen</a>
+            </li>
+            <li *ngIf="authenticationService.token" class="nav-item float-xs-right">
                 <a class="nav-link" routerLink="/associations" routerLinkActive="active" style="color:white;">bonden</a>
             </li>
             <li *ngIf="!authenticationService.token" class="nav-item float-xs-right">

@@ -1,9 +1,8 @@
 /**
  * Created by coen on 30-1-17.
  */
-import {VoetbalInterface} from './interface';
 
-export class Association implements VoetbalInterface{
+export class Association{
     protected id: number;
     protected name: string;
     protected description: string;

@@ -8,6 +8,8 @@ import { LogoutComponent }  from './user/logout.component';
 import { PasswordResetComponent, PasswordChangeComponent }  from './user/password.component';
 import { UsersComponent }  from './user/users.component';
 import { AssociationsComponent }  from './voetbal/components/associations';
+import { ExternalSystemsComponent }  from './voetbal/components/external/systems';
+
 import { AuthGuard }  from './auth/guard';
 const routes: Routes = [
     { path: 'home',  component: HomeComponent },
@@ -19,6 +21,7 @@ const routes: Routes = [
     { path: 'passwordchange', component: PasswordChangeComponent },
     { path: 'users', component: UsersComponent, canActivate: [AuthGuard] },
     { path: 'associations', component: AssociationsComponent, canActivate: [AuthGuard] },
+    { path: 'externalsystems', component: ExternalSystemsComponent, canActivate: [AuthGuard] },
     { path: '', redirectTo: '/home', pathMatch: 'full' },
     // otherwise redirect to home
     { path: '**', redirectTo: '' }

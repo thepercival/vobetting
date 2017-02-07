@@ -23,7 +23,7 @@ export class RegisterComponent {
         this.loading = true;
         var user = new User();
         user.name = this.model.name;
-        user.password = this.model.name;
+        user.password = this.model.password;
         user.emailaddress = this.model.email;
 
         this.authService.register( user )

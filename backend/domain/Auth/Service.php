@@ -42,16 +42,15 @@ class Service
 		//}
 		$userTmp = $this->repos->findOneBy( array('name' => $name ) );
 		if ( $userTmp ) {
-			throw new \Exception("de gebruikersnaam is al in gebruik");
+			throw new \Exception("de gebruikersnaam is al in gebruik",E_ERROR);
 		}
 		$userTmp = $this->repos->findOneBy( array('emailaddress' => $emailaddress ) );
 		if ( $userTmp ) {
-			throw new \Exception("het emailadres is al in gebruik");
+			throw new \Exception("het emailadres is al in gebruik",E_ERROR);
 		}
-
-		$password = password_hash( $password, PASSWORD_DEFAULT);
-
-		$user = new User($name, $password, $emailaddress);
+        $hashedPassword = password_hash( $password, PASSWORD_DEFAULT);
+        // throw new \Exception($password." x ".$hashedPassword,E_ERROR);
+		$user = new User($name, $hashedPassword, $emailaddress);
 
 		return $this->repos->save($user);
 	}
