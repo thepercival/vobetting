@@ -67,7 +67,7 @@ final class Auth
 			);
 
 			if (!$user or !password_verify( $password, $user->getPassword() ) ) {
-				throw new \Exception( "ongeldige emailadres en wachtwoord(".$password.") ".$user->getPassword()." combinatie ".$password);
+				throw new \Exception( "ongeldige emailadres en wachtwoord combinatie");
 			}
 
 			/*if ( !$user->getActive() ) {

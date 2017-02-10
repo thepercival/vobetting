@@ -105,4 +105,5 @@ export class AssociationsComponent implements OnInit{
     goBack(): void {
         this.location.back();
     }
+
 }

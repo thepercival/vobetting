@@ -7,6 +7,24 @@ $app->group('/voetbal', function () use ($app) {
 	$app->post('/associations', 'Voetbal\Action\Association:add');
 	$app->put('/associations/{id}', 'Voetbal\Action\Association:edit');
 	$app->delete('/associations/{id}', 'Voetbal\Action\Association:remove');
+
+    $app->get('/seasons', 'Voetbal\Action\Season:fetch');
+    $app->get('/seasons/{id}', 'Voetbal\Action\Season:fetchOne');
+    $app->post('/seasons', 'Voetbal\Action\Season:add');
+    $app->put('/seasons/{id}', 'Voetbal\Action\Season:edit');
+    $app->delete('/seasons/{id}', 'Voetbal\Action\Season:remove');
+
+    $app->get('/competitions', 'Voetbal\Action\Competition:fetch');
+    $app->get('/competitions/{id}', 'Voetbal\Action\Competition:fetchOne');
+    $app->post('/competitions', 'Voetbal\Action\Competition:add');
+    $app->put('/competitions/{id}', 'Voetbal\Action\Competition:edit');
+    $app->delete('/competitions/{id}', 'Voetbal\Action\Competition:remove');
+
+    $app->get('/competitionseasons', 'Voetbal\Action\Competitionseason:fetch');
+    $app->get('/competitionseasons/{id}', 'Voetbal\Action\Competitionseason:fetchOne');
+    $app->post('/competitionseasons', 'Voetbal\Action\Competitionseason:add');
+    $app->put('/competitionseasons/{id}', 'Voetbal\Action\Competitionseason:edit');
+    $app->delete('/competitionseasons/{id}', 'Voetbal\Action\Competitionseason:remove');
 });
 
 $app->group('/auth', function () use ($app) {

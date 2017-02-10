@@ -316,12 +316,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "31c41ee0d5d09bd02ee3ef2e93f647d0ceed4363"
+                "reference": "613309255382c0e89742b128b75e1917ce9748c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/31c41ee0d5d09bd02ee3ef2e93f647d0ceed4363",
-                "reference": "31c41ee0d5d09bd02ee3ef2e93f647d0ceed4363",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/613309255382c0e89742b128b75e1917ce9748c3",
+                "reference": "613309255382c0e89742b128b75e1917ce9748c3",
                 "shasum": ""
             },
             "require": {
@@ -379,7 +379,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2017-02-06 01:56:34"
+            "time": "2017-02-08 12:57:54"
         },
         {
             "name": "doctrine/inflector",
@@ -1166,12 +1166,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "c2c2296f4a6b2b9ff7e1b571d308864facaa2317"
+                "reference": "926aee5ab38c2868816aa760f862a85ad01cb61a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/c2c2296f4a6b2b9ff7e1b571d308864facaa2317",
-                "reference": "c2c2296f4a6b2b9ff7e1b571d308864facaa2317",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/926aee5ab38c2868816aa760f862a85ad01cb61a",
+                "reference": "926aee5ab38c2868816aa760f862a85ad01cb61a",
                 "shasum": ""
             },
             "require": {
@@ -1211,7 +1211,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2017-01-31 13:48:49"
+            "time": "2017-02-06 22:02:47"
         },
         {
             "name": "nikic/fast-route",
@@ -2236,17 +2236,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/thepercival/voetbal.git",
-                "reference": "3f83b1d9da327c9a1b66b270661f88c0d7f314ba"
+                "reference": "8440b00abd77845624443393a19ded5753d3c38b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thepercival/voetbal/zipball/3f83b1d9da327c9a1b66b270661f88c0d7f314ba",
-                "reference": "3f83b1d9da327c9a1b66b270661f88c0d7f314ba",
+                "url": "https://api.github.com/repos/thepercival/voetbal/zipball/8440b00abd77845624443393a19ded5753d3c38b",
+                "reference": "8440b00abd77845624443393a19ded5753d3c38b",
                 "shasum": ""
             },
             "require": {
                 "doctrine/orm": "^2.5",
-                "league/period": "~3.1",
+                "league/period": "~3.3",
                 "league/tactician": "~1.0",
                 "nesbot/carbon": "~1.21",
                 "symfony/serializer": "^3.1",
@@ -2279,7 +2279,7 @@
                 "Voetbal",
                 "football"
             ],
-            "time": "2017-02-06 13:46:02"
+            "time": "2017-02-08 20:16:07"
         },
         {
             "name": "tuupola/slim-jwt-auth",
@@ -2887,12 +2887,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "1fd10bf3bd7b9172f43063a818a16b2381743008"
+                "reference": "944600e244f80a5252679878553b95c63dbf978b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/1fd10bf3bd7b9172f43063a818a16b2381743008",
-                "reference": "1fd10bf3bd7b9172f43063a818a16b2381743008",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/944600e244f80a5252679878553b95c63dbf978b",
+                "reference": "944600e244f80a5252679878553b95c63dbf978b",
                 "shasum": ""
             },
             "require": {
@@ -2961,7 +2961,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-02-06 11:45:00"
+            "time": "2017-02-08 05:54:05"
         },
         {
             "name": "phpunit/phpunit-mock-objects",

@@ -19,10 +19,16 @@ import { LoginComponent }  from './user/login.component';
 import { UsersComponent }  from './user/users.component';
 import { PasswordResetComponent, PasswordChangeComponent }  from './user/password.component';
 import { GlobalEventsManager } from "./global-events-manager";
+import { AdminComponent } from "./admin/component";
 import { AssociationsComponent }  from './voetbal/components/associations';
 import { AssociationRepository }  from './voetbal/repositories/association';
 import { AssociationAddModalContent } from './voetbal/components/association/modal/add';
 import { AssociationEditModalContent } from './voetbal/components/association/modal/edit';
+import { CompetitionsComponent }  from './voetbal/components/competitions';
+import { CompetitionRepository }  from './voetbal/repositories/competition';
+import {CompetitionAddModalContent } from './voetbal/components/competition/modal/add';
+import { CompetitionEditModalContent } from './voetbal/components/competition/modal/edit';
+import { CompetitionsExternalComponent } from './voetbal/components/competition/external';
 
 @NgModule({
    imports:      [
@@ -37,19 +43,24 @@ import { AssociationEditModalContent } from './voetbal/components/association/mo
         AppComponent,
         NavbarComponent,
         HomeComponent,
+        AdminComponent,
         RegisterComponent, ActivateComponent, LoginComponent, LogoutComponent, PasswordResetComponent, PasswordChangeComponent, UsersComponent,
-        AssociationsComponent, AssociationAddModalContent, AssociationEditModalContent
+        AssociationsComponent, AssociationAddModalContent, AssociationEditModalContent,
+        CompetitionsComponent, CompetitionAddModalContent, CompetitionEditModalContent,
+        CompetitionsExternalComponent
     ],
 
     entryComponents: [
-        AssociationAddModalContent, AssociationEditModalContent
+        AssociationAddModalContent, AssociationEditModalContent,
+        CompetitionAddModalContent, CompetitionEditModalContent
     ],
     providers:    [
         AuthGuard,
         AuthenticationService,
         UserService,
         GlobalEventsManager,
-        AssociationRepository
+        AssociationRepository,
+        CompetitionRepository
     ],
     bootstrap:    [
         AppComponent
