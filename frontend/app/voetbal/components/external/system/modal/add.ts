@@ -4,34 +4,37 @@
 
 import {Component, Input, OnInit, AfterViewInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { AssociationRepository } from '../../../repositories/association';
+import { ExternalSystemRepository } from '../../../../repositories/external/system';
+import { ExternalSystem } from '../../../../domain/external/system';
 
 @Component({
     moduleId: module.id,
-    selector: 'association-add-modal-content',
+    selector: 'externalsystem-add-modal-content',
     templateUrl: 'add.html'
 })
-export class AssociationAddModalContent implements OnInit{
-    @Input() object;
+export class ExternalSystemAddModalContent implements OnInit{
+    @Input()
+    object: ExternalSystem;
     model: any = {};
     loading = false;
     error = '';
 
     constructor(
         public activeModal: NgbActiveModal,
-        private repos: AssociationRepository
+        private repos: ExternalSystemRepository
     ) {}
 
     ngOnInit() {
         if ( this.object ) {
-            this.model.name = this.object.name;
+            this.model.name = this.object.getName();
+            this.model.website = this.object.getWebsite();
         }
     }
 
     add(): boolean {
-        this.model.name = this.model.name.trim();
-        if (!this.model.name) { return false; }
-        let json = { "name": this.model.name/*, seasonname : this.model.seasonname*/ };
+        this.model.website = this.model.name.trim();
+        if (!this.model.website) { return false; }
+        let json = { "name": this.model.name, "website" : this.model.website };
 
        this.repos.createObject( json )
             .subscribe(

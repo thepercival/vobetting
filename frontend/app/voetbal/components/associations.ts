@@ -8,7 +8,6 @@ import { Location }                 from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { Association } from '../domain/association';
-import { VoetbalInterface } from '../domain/interface';
 import { AssociationRepository } from '../repositories/association';
 import { AssociationAddModalContent } from './association/modal/add';
 import { AssociationEditModalContent } from './association/modal/edit';
@@ -35,8 +34,7 @@ export class AssociationsComponent implements OnInit{
         private repos: AssociationRepository,
         private route: ActivatedRoute,
         private location: Location,
-        private modalService: NgbModal,
-        private associationRepository: AssociationRepository
+        private modalService: NgbModal
         // private globalEventsManger: GlobalEventsManager
     ) {}
 
@@ -62,9 +60,8 @@ export class AssociationsComponent implements OnInit{
         modalRef.result.then((association) => {
             this.associations.push( association );
             this.message = { "type": "success", "message": "bond("+association.getName()+") toegevoegd"};
-        }/*, (reason) => {
-            modalRef.closeResult = reason;
-        }*/);
+        }, (reason) => {
+        });
     }
 
     onEdit( association: Association ): void {
@@ -89,7 +86,7 @@ export class AssociationsComponent implements OnInit{
         if ( association == null) {
             this.message = { "type": "danger", "message": "de bond kan niet gevonden worden"};
         }
-        this.associationRepository.removeObject( association )
+        this.repos.removeObject( association )
              .subscribe(
                  /* happy path */ retval => {
                     let index = this.associations.indexOf( association );

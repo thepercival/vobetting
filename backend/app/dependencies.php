@@ -126,3 +126,9 @@ $container['Voetbal\Action\Competitionseason'] = function ($c) {
         $c->get('serializer')
     );
 };
+
+$container['Voetbal\Action\External\System'] = function ($c) {
+    $em = $c->get('em');
+    $externalsystemRepository = new Voetbal\Repository\External\System($em,$em->getClassMetaData(Voetbal\External\System::class));
+    return new Voetbal\Action\External\System($externalsystemRepository,$c->get('serializer'));
+};

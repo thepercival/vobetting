@@ -37,7 +37,7 @@ final class Auth
 			$userPassword = new User\Password( $request->getParam('password') );
 			$userEmailaddress = new User\Emailaddress( $request->getParam('emailaddress') );
 
-			$user = $this->authService->register( $userName, $userPassword, $userEmailaddress );
+			$user = $this->authService->register( $userName, $request->getParam('password'), $userEmailaddress );
 			if ($user === null or !($user instanceof User))
 				throw new \Exception( "de nieuwe gebruiker kan niet worden geretourneerd");
 

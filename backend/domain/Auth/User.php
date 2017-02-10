@@ -74,7 +74,7 @@ class User
 	/**
 	 * @param Ustring
 	 */
-	public function setPassword( string $password )
+	public function setPassword( $password )
 	{
 		$this->password = $password;
 	}

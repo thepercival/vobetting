@@ -29,6 +29,10 @@ import { CompetitionRepository }  from './voetbal/repositories/competition';
 import {CompetitionAddModalContent } from './voetbal/components/competition/modal/add';
 import { CompetitionEditModalContent } from './voetbal/components/competition/modal/edit';
 import { CompetitionsExternalComponent } from './voetbal/components/competition/external';
+import { ExternalSystemsComponent }  from './voetbal/components/external/systems';
+import { ExternalSystemRepository }  from './voetbal/repositories/external/system';
+import { ExternalSystemAddModalContent } from './voetbal/components/external/system/modal/add';
+import { ExternalSystemEditModalContent } from './voetbal/components/external/system/modal/edit';
 
 @NgModule({
    imports:      [
@@ -48,11 +52,15 @@ import { CompetitionsExternalComponent } from './voetbal/components/competition/
         AssociationsComponent, AssociationAddModalContent, AssociationEditModalContent,
         CompetitionsComponent, CompetitionAddModalContent, CompetitionEditModalContent,
         CompetitionsExternalComponent
+        AssociationsComponent, AssociationAddModalContent, AssociationEditModalContent,
+        ExternalSystemsComponent, ExternalSystemAddModalContent, ExternalSystemEditModalContent
     ],
 
     entryComponents: [
         AssociationAddModalContent, AssociationEditModalContent,
         CompetitionAddModalContent, CompetitionEditModalContent
+        AssociationAddModalContent, AssociationEditModalContent,
+        ExternalSystemAddModalContent, ExternalSystemEditModalContent
     ],
     providers:    [
         AuthGuard,
@@ -61,6 +69,8 @@ import { CompetitionsExternalComponent } from './voetbal/components/competition/
         GlobalEventsManager,
         AssociationRepository,
         CompetitionRepository
+        AssociationRepository,
+        ExternalSystemRepository
     ],
     bootstrap:    [
         AppComponent

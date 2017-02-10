@@ -1,5 +1,5 @@
 /**
- * Created by coen on 30-1-17.
+ * Created by cdunnink on 7-2-2017.
  */
 
 import { Injectable } from '@angular/core';
@@ -7,13 +7,13 @@ import { Headers, Http, Response, RequestOptions } from '@angular/http';
 import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-import { Association } from '../domain/association';
+import { ExternalSystem } from '../../domain/external/system';
 
 @Injectable()
-export class AssociationRepository {
+export class ExternalSystemRepository {
 
     private headers = new Headers({'Content-Type': 'application/json'});
-    private url : string = "http://localhost:2999/voetbal/associations";
+    private url : string = "http://localhost:2999/voetbal/external/systems";
     private http: Http;
 
     constructor( http: Http )
@@ -39,42 +39,44 @@ export class AssociationRepository {
         return headers;
     }
 
-    getObjects(): Observable<Association[]>
+    getObjects(): Observable<ExternalSystem[]>
     {
         return this.http.get(this.url, new RequestOptions({ headers: this.getHeaders() }) )
             .map(this.jsonArrayToObject)
             .catch( this.handleError );
     }
 
-    jsonToObjectHelper( jsonAssociation : any ): Association
+    /*jsonToObjectHelper( json : any ): ExternalSystem
     {
-        let association = new Association(jsonAssociation.name);
-        association.setId(jsonAssociation.id);
-        return association;
-    }
+        let externalSystem = new ExternalSystem(json.name);
+        externalSystem.setId(json.id);
+        return externalSystem;
+    }*/
 
-    jsonArrayToObject( res: Response ): Association[]
+    jsonArrayToObject( res: Response ): ExternalSystem[]
     {
-        let associations: Association[] = [];
-        for (let jsonAssociation of res.json()) {
-            // let x = this.jsonToObjectHelper(jsonAssociation);
-            let association = new Association(jsonAssociation.name);
-            association.setId(jsonAssociation.id);
-            associations.push( association );
+        let objects: ExternalSystem[] = [];
+        for (let json of res.json()) {
+            // let x = this.jsonToObjectHelper(jsonExternalSystem);
+            let object = new ExternalSystem(json.name);
+            object.setId(json.id);
+            object.setWebsite(json.website);
+            objects.push( object );
         }
-        return associations;
+        return objects;
     }
 
-    jsonToObject( res: Response ): Association
+    jsonToObject( res: Response ): ExternalSystem
     {
-        let jsonAssociation = res.json();
-        let association = new Association(jsonAssociation.name);
-        association.setId(jsonAssociation.id);
+        let json = res.json();
+        let object = new ExternalSystem(json.name);
+        object.setId(json.id);
+        object.setWebsite(json.website);
         // associations.push( association );
-        return association; // this.jsonToObjectHelper( res.json() );
+        return object; // this.jsonToObjectHelper( res.json() );
     }
 
-    getObject( id: number): Observable<Association>
+    getObject( id: number): Observable<ExternalSystem>
     {
         let url = this.url + '/'+id;
         return this.http.get(url)
@@ -84,7 +86,7 @@ export class AssociationRepository {
             .catch((error:any) => Observable.throw(error.message || 'Server error' ));
     }
 
-    createObject( jsonObject: any ): Observable<Association>
+    createObject( jsonObject: any ): Observable<ExternalSystem>
     {
         return this.http
             .post(this.url, jsonObject, new RequestOptions({ headers: this.getHeaders() }))
@@ -94,7 +96,7 @@ export class AssociationRepository {
             .catch(this.handleError);
     }
 
-    editObject( object: Association ): Observable<Association>
+    editObject( object: ExternalSystem ): Observable<ExternalSystem>
     {
         let url = this.url + '/'+object.getId();
         return this.http
@@ -105,7 +107,7 @@ export class AssociationRepository {
             .catch(this.handleError);
     }
 
-    removeObject( object: Association): Observable<void>
+    removeObject( object: ExternalSystem): Observable<void>
     {
         let url = this.url + '/'+object.getId();
         return this.http

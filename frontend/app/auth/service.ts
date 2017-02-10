@@ -123,7 +123,7 @@ export class AuthenticationService {
     }
 
     // this could also be a private method of the component class
-    handleError(error: any): Observable<any> {
+    handleError(error: Response): Observable<any> {
         console.error( error.statusText );
         // throw an application level error
         return Observable.throw( error.statusText );
