@@ -11,7 +11,7 @@ import { Competition } from '../../domain/competition';
 import { CompetitionRepository } from '../../repositories/competition';
 import { CompetitionAddModalContent } from './modal/add';
 import { CompetitionEditModalContent } from './modal/edit';
-import { ExternalSystem } from '../../domain/externalsystem';
+import { ExternalSystem } from '../../domain/external/system';
 
 @Component({
     moduleId: module.id,
@@ -26,7 +26,7 @@ export class CompetitionsExternalComponent implements OnInit{
     competitions: Competition[];
     externalcompetitions: Competition[] = [];
     externalsystem: ExternalSystem;
-    externalsystems: ExternalSystem[];
+    externalsystems: ExternalSystem[] = [];
 
     message: any = null;
 

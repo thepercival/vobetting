@@ -51,15 +51,13 @@ import { ExternalSystemEditModalContent } from './voetbal/components/external/sy
         RegisterComponent, ActivateComponent, LoginComponent, LogoutComponent, PasswordResetComponent, PasswordChangeComponent, UsersComponent,
         AssociationsComponent, AssociationAddModalContent, AssociationEditModalContent,
         CompetitionsComponent, CompetitionAddModalContent, CompetitionEditModalContent,
-        CompetitionsExternalComponent
-        AssociationsComponent, AssociationAddModalContent, AssociationEditModalContent,
+        CompetitionsExternalComponent,
         ExternalSystemsComponent, ExternalSystemAddModalContent, ExternalSystemEditModalContent
     ],
 
     entryComponents: [
         AssociationAddModalContent, AssociationEditModalContent,
-        CompetitionAddModalContent, CompetitionEditModalContent
-        AssociationAddModalContent, AssociationEditModalContent,
+        CompetitionAddModalContent, CompetitionEditModalContent,
         ExternalSystemAddModalContent, ExternalSystemEditModalContent
     ],
     providers:    [
@@ -68,8 +66,7 @@ import { ExternalSystemEditModalContent } from './voetbal/components/external/sy
         UserService,
         GlobalEventsManager,
         AssociationRepository,
-        CompetitionRepository
-        AssociationRepository,
+        CompetitionRepository,
         ExternalSystemRepository
     ],
     bootstrap:    [
