@@ -10,5 +10,10 @@
     "removeComments": false,
     "noImplicitAny": false
     /*,"outDir": "dist/js/"*/
+    ,"exclude": [
+      "typings/browser.d.ts",
+      "typings/browser",
+      "node_modules"
+    ]
   }
 }

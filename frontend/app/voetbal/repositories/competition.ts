@@ -42,36 +42,18 @@ export class CompetitionRepository {
     getObjects(): Observable<Competition[]>
     {
         return this.http.get(this.url, new RequestOptions({ headers: this.getHeaders() }) )
-            .map(this.jsonArrayToObject)
+            .map((res) => this.jsonArrayToObject(res))
             .catch( this.handleError );
     }
 
-    jsonToObjectHelper( jsonCompetition : any ): Competition
-    {
-        let competition = new Competition(jsonCompetition.name);
-        competition.setId(jsonCompetition.id);
-        return competition;
-    }
-
-    jsonArrayToObject( res: Response ): Competition[]
+    private jsonArrayToObject( res: Response ): Competition[]
     {
         let competitions: Competition[] = [];
-        for (let jsonCompetition of res.json()) {
-            // let x = this.jsonToObjectHelper(jsonCompetition);
-            let competition = new Competition(jsonCompetition.name);
-            competition.setId(jsonCompetition.id);
-            competitions.push( competition );
+        for (let json of res.json()) {
+            let object = this.jsonToObjectHelper(json);
+            competitions.push( object );
         }
         return competitions;
-    }
-
-    jsonToObject( res: Response ): Competition
-    {
-        let jsonCompetition = res.json();
-        let competition = new Competition(jsonCompetition.name);
-        competition.setId(jsonCompetition.id);
-        // competitions.push( competition );
-        return competition; // this.jsonToObjectHelper( res.json() );
     }
 
     getObject( id: number): Observable<Competition>
@@ -84,12 +66,24 @@ export class CompetitionRepository {
             .catch((error:any) => Observable.throw(error.message || 'Server error' ));
     }
 
+    private jsonToObject( res: Response ): Competition
+    {
+        return this.jsonToObjectHelper( res.json() );
+    }
+
+    private jsonToObjectHelper( jsonCompetition : any ): Competition
+    {
+        let competition = new Competition(jsonCompetition.name);
+        competition.setId(jsonCompetition.id);
+        return competition;
+    }
+
     createObject( jsonObject: any ): Observable<Competition>
     {
         return this.http
             .post(this.url, jsonObject, new RequestOptions({ headers: this.getHeaders() }))
             // ...and calling .json() on the response to return data
-            .map(this.jsonToObject)
+            .map((res) => this.jsonToObject(res))
             //...errors if any
             .catch(this.handleError);
     }

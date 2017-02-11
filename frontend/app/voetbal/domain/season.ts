@@ -1,11 +1,10 @@
 /**
- * Created by cdunnink on 7-2-2017.
+ * Created by coen on 11-2-17.
  */
 
-export abstract class ExternalSystem{
+export class Season {
     protected id: number;
     protected name: string;
-    protected website: string;
 
     // constructor
     constructor( name: string ){
@@ -27,14 +26,4 @@ export abstract class ExternalSystem{
     setName(name: string): void {
         this.name = name;
     };
-
-    getWebsite(): string {
-        return this.website;
-    };
-
-    setWebsite(website: string): void {
-        this.website = website;
-    };
-
-    abstract hasAvailableExportClass( exportClass: string ): boolean;
 }

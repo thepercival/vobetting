@@ -3,31 +3,29 @@
     <h2>competities importeren</h2>
     <div *ngIf="message" class="alert alert-{{message.type}}" role="alert">{{message.message}}</div>
     <div class="row">
-        <div *ngIf="externalsystem" class="col-xs-12 col-sm-6">
-            <div>
-                <a type="button" href="javascript:void(0)" class="btn btn-secondary" (click)="onRemove(competition)"><i class="fa fa-plus" aria-hidden="true"></i></a>
-            </div>
-            <div *ngFor="let competition of competitions" style="margin-top:8px; margin-bottom:8px;">
-                <div class="btn-group" role="group" aria-label="competities">
-                    <a type="button" href="javascript:void(0)" class="btn btn-secondary" (click)="onRemove(competition)"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                    <button [disabled]="true" class="btn btn-secondary" (click)="onRemove(competition)">{{competition.getName()}}</button>
-                    <a type="button" href="javascript:void(0)" class="btn btn-secondary" (click)="onRemove(competition)"><i class="fa fa-link" aria-hidden="true"></i></a>
+        <div class="col-xs-12 col-sm-6">
+            <div *ngIf="externalsystem">
+                <div>
+                    <a type="button" href="javascript:void(0)" class="btn btn-secondary" (click)="onRemove(competition)"><i class="fa fa-plus" aria-hidden="true"></i></a>
+                </div>
+                <div *ngFor="let competition of competitions" style="margin-top:8px; margin-bottom:8px;">
+                    <div class="btn-group" role="group" aria-label="competities">
+                        <a type="button" href="javascript:void(0)" class="btn btn-secondary" (click)="onRemove(competition)"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                        <button [disabled]="true" class="btn btn-secondary" (click)="onRemove(competition)">{{competition.getName()}}</button>
+                        <a type="button" href="javascript:void(0)" class="btn btn-secondary" (click)="onRemove(competition)"><i class="fa fa-link" aria-hidden="true"></i></a>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-xs-12 col-sm-6">
             <div>
                 <label>extern systeem</label>
-                <span class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Dropdown button
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
+                <div ngbDropdown class="d-inline-block">
+                    <button class="btn btn-outline-primary" id="dropdownMenu1" ngbDropdownToggle>{{ externalsystem ? externalsystem.getName() : 'selecteer extern systeem' }}</button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <button *ngFor="let externalsystemit of externalsystems"  class="dropdown-item" (click)="onSelectExternalSystem(externalsystemit)">{{externalsystemit.getName()}}</button>
                     </div>
-                </span>
+                </div>
             </div>
             <div *ngIf="externalsystem">
                 <div *ngFor="let externalcompetition of externalcompetitions" style="margin-top:8px; margin-bottom:8px;">

@@ -12,6 +12,7 @@ import { CompetitionRepository } from '../../repositories/competition';
 import { CompetitionAddModalContent } from './modal/add';
 import { CompetitionEditModalContent } from './modal/edit';
 import { ExternalSystem } from '../../domain/external/system';
+import { ExternalSystemRepository } from '../../repositories/external/system';
 
 @Component({
     moduleId: module.id,
@@ -26,7 +27,7 @@ export class CompetitionsExternalComponent implements OnInit{
     competitions: Competition[];
     externalcompetitions: Competition[] = [];
     externalsystem: ExternalSystem;
-    externalsystems: ExternalSystem[] = [];
+    externalsystems: ExternalSystem[];
 
     message: any = null;
 
@@ -34,7 +35,8 @@ export class CompetitionsExternalComponent implements OnInit{
         private repos: CompetitionRepository,
         private route: ActivatedRoute,
         private location: Location,
-        private modalService: NgbModal
+        private modalService: NgbModal,
+        private reposExternalSystem: ExternalSystemRepository,
         // private globalEventsManger: GlobalEventsManager
     ) {}
 
@@ -48,6 +50,24 @@ export class CompetitionsExternalComponent implements OnInit{
                 /* error path */ e => {},
                 /* onComplete */ () => {}
             );
+
+        this.reposExternalSystem.getObjects()
+            .subscribe(
+                /* happy path */ externalsystems => {
+
+                    this.externalsystems = externalsystems.filter( externalsystem => externalsystem.hasAvailableExportClass( Competition.constructor.name ) );
+
+                    console.log( externalsystems );
+                },
+                /* error path */ e => {},
+                /* onComplete */ () => {}
+            );
+    }
+
+    onSelectExternalSystem( externalSystem: ExternalSystem ): void {
+        // this.externalsystems = ExternalSystem.getCompetitions();
+        this.externalsystem = externalSystem;
+
     }
 
     onAdd(): void {

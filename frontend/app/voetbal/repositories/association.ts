@@ -42,36 +42,18 @@ export class AssociationRepository {
     getObjects(): Observable<Association[]>
     {
         return this.http.get(this.url, new RequestOptions({ headers: this.getHeaders() }) )
-            .map(this.jsonArrayToObject)
+            .map((res) => this.jsonArrayToObject(res))
             .catch( this.handleError );
     }
 
-    jsonToObjectHelper( jsonAssociation : any ): Association
-    {
-        let association = new Association(jsonAssociation.name);
-        association.setId(jsonAssociation.id);
-        return association;
-    }
-
-    jsonArrayToObject( res: Response ): Association[]
+    private jsonArrayToObject( res: Response ): Association[]
     {
         let associations: Association[] = [];
-        for (let jsonAssociation of res.json()) {
-            // let x = this.jsonToObjectHelper(jsonAssociation);
-            let association = new Association(jsonAssociation.name);
-            association.setId(jsonAssociation.id);
-            associations.push( association );
+        for (let json of res.json()) {
+            let object = this.jsonToObjectHelper(json);
+            associations.push( object );
         }
         return associations;
-    }
-
-    jsonToObject( res: Response ): Association
-    {
-        let jsonAssociation = res.json();
-        let association = new Association(jsonAssociation.name);
-        association.setId(jsonAssociation.id);
-        // associations.push( association );
-        return association; // this.jsonToObjectHelper( res.json() );
     }
 
     getObject( id: number): Observable<Association>
@@ -89,9 +71,21 @@ export class AssociationRepository {
         return this.http
             .post(this.url, jsonObject, new RequestOptions({ headers: this.getHeaders() }))
             // ...and calling .json() on the response to return data
-            .map(this.jsonToObject)
+            .map((res) => this.jsonToObject(res))
             //...errors if any
             .catch(this.handleError);
+    }
+
+    private jsonToObject( res: Response ): Association
+    {
+        return this.jsonToObjectHelper( res.json() );
+    }
+
+    private jsonToObjectHelper( jsonAssociation : any ): Association
+    {
+        let association = new Association(jsonAssociation.name);
+        association.setId(jsonAssociation.id);
+        return association;
     }
 
     editObject( object: Association ): Observable<Association>

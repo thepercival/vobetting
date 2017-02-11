@@ -8,6 +8,8 @@ import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { ExternalSystem } from '../../domain/external/system';
+import { ExternalSystemSoccerOdds } from '../../domain/external/system/soccerodds';
+import { ExternalSystemSeasonsTest } from '../../domain/external/system/seasonstest';
 
 @Injectable()
 export class ExternalSystemRepository {
@@ -42,38 +44,18 @@ export class ExternalSystemRepository {
     getObjects(): Observable<ExternalSystem[]>
     {
         return this.http.get(this.url, new RequestOptions({ headers: this.getHeaders() }) )
-            .map(this.jsonArrayToObject)
+            .map( (res) => this.jsonArrayToObject(res) )
             .catch( this.handleError );
     }
 
-    /*jsonToObjectHelper( json : any ): ExternalSystem
-    {
-        let externalSystem = new ExternalSystem(json.name);
-        externalSystem.setId(json.id);
-        return externalSystem;
-    }*/
-
-    jsonArrayToObject( res: Response ): ExternalSystem[]
+    private jsonArrayToObject( res: Response ): ExternalSystem[]
     {
         let objects: ExternalSystem[] = [];
         for (let json of res.json()) {
-            // let x = this.jsonToObjectHelper(jsonExternalSystem);
-            let object = new ExternalSystem(json.name);
-            object.setId(json.id);
-            object.setWebsite(json.website);
+            let object = this.jsonToObjectHelper(json);
             objects.push( object );
         }
         return objects;
-    }
-
-    jsonToObject( res: Response ): ExternalSystem
-    {
-        let json = res.json();
-        let object = new ExternalSystem(json.name);
-        object.setId(json.id);
-        object.setWebsite(json.website);
-        // associations.push( association );
-        return object; // this.jsonToObjectHelper( res.json() );
     }
 
     getObject( id: number): Observable<ExternalSystem>
@@ -81,9 +63,34 @@ export class ExternalSystemRepository {
         let url = this.url + '/'+id;
         return this.http.get(url)
         // ...and calling .json() on the response to return data
-            .map(this.jsonToObject)
+            .map((res) => this.jsonToObject(res))
             //...errors if any
             .catch((error:any) => Observable.throw(error.message || 'Server error' ));
+    }
+
+    private jsonToObject( res: Response ): ExternalSystem
+    {
+        return this.jsonToObjectHelper(res.json());
+    }
+
+    private jsonToObjectHelper( json : any ): ExternalSystem
+    {
+        let externalSystem = this.getObjectByName(json.name);
+        externalSystem.setId(json.id);
+        externalSystem.setWebsite(json.website);
+        return externalSystem;
+    }
+
+    private getObjectByName( name: string): ExternalSystem
+    {
+        let externalSystem;
+        if ( name == "Soccer Odds" ) {
+            externalSystem = new ExternalSystemSoccerOdds( name );
+        }
+        else if ( name == "Seasonstest" ) {
+            externalSystem = new ExternalSystemSeasonsTest( name );
+        }
+        return externalSystem;
     }
 
     createObject( jsonObject: any ): Observable<ExternalSystem>
