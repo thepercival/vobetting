@@ -7,6 +7,8 @@ export class Competition {
     protected id: number;
     protected name: string;
 
+    static classname = "Competition";
+
     // constructor
     constructor( name: string ){
         this.setName(name);

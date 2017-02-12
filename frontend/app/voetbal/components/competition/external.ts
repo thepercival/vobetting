@@ -13,6 +13,7 @@ import { CompetitionAddModalContent } from './modal/add';
 import { CompetitionEditModalContent } from './modal/edit';
 import { ExternalSystem } from '../../domain/external/system';
 import { ExternalSystemRepository } from '../../repositories/external/system';
+import { ExternalSystemCompetitionInterface } from '../../domain/external/system/interface';
 
 @Component({
     moduleId: module.id,
@@ -54,20 +55,27 @@ export class CompetitionsExternalComponent implements OnInit{
         this.reposExternalSystem.getObjects()
             .subscribe(
                 /* happy path */ externalsystems => {
-
-                    this.externalsystems = externalsystems.filter( externalsystem => externalsystem.hasAvailableExportClass( Competition.constructor.name ) );
-
-                    console.log( externalsystems );
+                    this.externalsystems = externalsystems.filter(
+                        externalsystem => externalsystem.hasAvailableExportClass( Competition.classname )
+                    );
                 },
                 /* error path */ e => {},
                 /* onComplete */ () => {}
             );
     }
 
-    onSelectExternalSystem( externalSystem: ExternalSystem ): void {
-        // this.externalsystems = ExternalSystem.getCompetitions();
+    onSelectExternalSystem( externalSystem: any ): void {
         this.externalsystem = externalSystem;
 
+        externalSystem.getCompetitions()
+            .subscribe(
+                /* happy path */ competitions => {
+                    this.externalcompetitions = competitions;
+                    // do something here
+                },
+                /* error path */ e => {},
+                /* onComplete */ () => {}
+            );
     }
 
     onAdd(): void {

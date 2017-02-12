@@ -19,7 +19,7 @@ $app->group('/voetbal', function () use ($app) {
     $app->post('/competitions', 'Voetbal\Action\Competition:add');
     $app->put('/competitions/{id}', 'Voetbal\Action\Competition:edit');
     $app->delete('/competitions/{id}', 'Voetbal\Action\Competition:remove');
-
+    
     $app->get('/competitionseasons', 'Voetbal\Action\Competitionseason:fetch');
     $app->get('/competitionseasons/{id}', 'Voetbal\Action\Competitionseason:fetchOne');
     $app->post('/competitionseasons', 'Voetbal\Action\Competitionseason:add');
@@ -33,6 +33,11 @@ $app->group('/voetbal/external', function () use ($app) {
     $app->post('/systems', 'Voetbal\Action\External\System:add');
     $app->put('/systems/{id}', 'Voetbal\Action\External\System:edit');
     $app->delete('/systems/{id}', 'Voetbal\Action\External\System:remove');
+
+    $app->get('/{resourceType}', 'Voetbal\Action\External\Object:fetch');
+    $app->get('/{resourceType}/{id}', 'Voetbal\Action\External\Object:fetchOne');
+    $app->post('/{resourceType}', 'Voetbal\Action\External\Object:add');
+    $app->delete('/{resourceType}/{id}', 'Voetbal\Action\External\Object:remove');
 });
 
 $app->group('/auth', function () use ($app) {
@@ -44,23 +49,4 @@ $app->group('/auth', function () use ($app) {
 	$app->get('/users', 'App\Action\Auth\User:fetch');
 	$app->get('/users/{id}', 'App\Action\Auth\User:fetchOne');
 });
-
-/*
-$app->get('/{resourceType}[/{id}]', function ($request, $response, $args) use ($app) {
-
-	$id = array_key_exists("id",$args) ? $args["id"] : null;
-	$resourceType = array_key_exists("resourceType",$args) ? $args["resourceType"] : null;
-	$this->logger->info("default resource route get : " . $resourceType . ( $id ? '/' . $id : null ) );
-
-	$repos = new \VOBettingRepository\Main( $app->getContainer()->get('em'), $resourceType );
-	$arrRetVal = ( $id === null ) ? $repos->findAll() : $repos->findOneBy($id);
-
-	$serializer = $app->getContainer()->get('serializer');
-
-	return $response
-		->withHeader('Content-Type', 'application/json;charset=utf-8')
-		->write($serializer->serialize( $arrRetVal, 'json'));
-	;
-});
-*/
 

@@ -5,15 +5,16 @@
 import { ExternalSystemSeasonInterface } from './interface';
 import { ExternalSystem } from './../system';
 import { Season } from '../../season';
+import { Http } from '@angular/http';
 
 export class ExternalSystemSeasonsTest extends ExternalSystem implements ExternalSystemSeasonInterface{
     protected website: string;
     protected exportclasses: string[];
 
     // constructor
-    constructor( name: string ){
+    constructor( name: string, http: Http ){
         super(name);
-        this.exportclasses = [Season.constructor.name];
+        this.exportclasses = [Season.classname];
     }
 
     hasAvailableExportClass( exportclassparam: string ): boolean

@@ -8,6 +8,8 @@ export class Association{
     protected description: string;
     protected parent: Association;
 
+    static classname = "Association";
+
     // constructor
     constructor( name: string ){
         this.setName(name);
@@ -44,5 +46,4 @@ export class Association{
     setParent(parent: Association): void {
         this.parent = parent;
     };
-
 }

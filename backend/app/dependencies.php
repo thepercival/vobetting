@@ -132,3 +132,7 @@ $container['Voetbal\Action\External\System'] = function ($c) {
     $externalsystemRepository = new Voetbal\Repository\External\System($em,$em->getClassMetaData(Voetbal\External\System::class));
     return new Voetbal\Action\External\System($externalsystemRepository,$c->get('serializer'));
 };
+
+$container['Voetbal\Action\External\Object'] = function ($c) {
+    return new Voetbal\Action\External\Object($em = $c->get('em'),$c->get('serializer'));
+};

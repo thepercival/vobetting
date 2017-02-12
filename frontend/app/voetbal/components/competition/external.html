@@ -31,7 +31,7 @@
                 <div *ngFor="let externalcompetition of externalcompetitions" style="margin-top:8px; margin-bottom:8px;">
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <a type="button" href="javascript:void(0)" class="btn btn-secondary" (click)="onRemove(externalcompetition)"><i class="fa fa-link" aria-hidden="true"></i></a>
-                        <button [disabled] class="btn btn-secondary" (click)="onRemove(externalcompetition)">{{externalcompetition.getName()}}</button>
+                        <button [disabled] class="btn btn-secondary">{{externalcompetition.getName()}}</button>
                     </div>
                 </div>
             </div>

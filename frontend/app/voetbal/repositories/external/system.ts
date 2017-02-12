@@ -85,10 +85,10 @@ export class ExternalSystemRepository {
     {
         let externalSystem;
         if ( name == "Soccer Odds" ) {
-            externalSystem = new ExternalSystemSoccerOdds( name );
+            externalSystem = new ExternalSystemSoccerOdds( name, this.http );
         }
         else if ( name == "Seasonstest" ) {
-            externalSystem = new ExternalSystemSeasonsTest( name );
+            externalSystem = new ExternalSystemSeasonsTest( name, this.http );
         }
         return externalSystem;
     }

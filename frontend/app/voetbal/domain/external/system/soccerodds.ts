@@ -5,15 +5,22 @@
 import { ExternalSystemCompetitionInterface } from './interface';
 import { ExternalSystem } from './../system';
 import { Competition } from './../../competition';
+import { ExternalSystemSoccerOddsRepository } from '../../../repositories/external/system/soccerodds';
+import { Http } from '@angular/http';
+import {Observable} from 'rxjs/Rx';
 
 export class ExternalSystemSoccerOdds extends ExternalSystem implements ExternalSystemCompetitionInterface{
     protected website: string;
     protected exportclasses: string[];
+    protected repos: ExternalSystemSoccerOddsRepository;
+    protected competitions: Competition[];
 
     // constructor
-    constructor( name: string ){
+    constructor( name: string, http: Http )
+    {
          super(name);
-        this.exportclasses = [Competition.constructor.name]; //
+         this.repos = new ExternalSystemSoccerOddsRepository( http );
+         this.exportclasses = [Competition.classname]; //
     }
 
     hasAvailableExportClass( exportclassparam: string ): boolean
@@ -22,10 +29,8 @@ export class ExternalSystemSoccerOdds extends ExternalSystem implements External
         return x.length > 0;
     }
 
-    getCompetitions(): Competition[]
+    getCompetitions(): Observable<Competition[]>
     {
-        // roep api aan en geef competitions terug!!!
-        // kan ook backend aanroepen en deze gebruiken???
-        return [];
+        return this.repos.getCompetitions()
     }
 }

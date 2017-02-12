@@ -5,6 +5,7 @@
 import { Association } from './../../association';
 import { Competition } from './../../competition';
 import { Season } from './../../season';
+import {Observable} from 'rxjs/Rx';
 
 export interface ExternalSystemAssociation
 {
@@ -13,7 +14,7 @@ export interface ExternalSystemAssociation
 
 export interface ExternalSystemCompetitionInterface
 {
-    getCompetitions(): Competition[];
+    getCompetitions(): Observable<Competition[]>;
 }
 
 export interface ExternalSystemSeasonInterface

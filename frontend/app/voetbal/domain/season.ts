@@ -6,6 +6,8 @@ export class Season {
     protected id: number;
     protected name: string;
 
+    static classname = "Season";
+
     // constructor
     constructor( name: string ){
         this.setName(name);
