@@ -34,12 +34,14 @@ export class CompetitionEditModalContent implements OnInit{
     edit(): boolean {
         this.model.name = this.model.name.trim();
         if (!this.model.name) { return false; }
-        let jsonCompetition = { "name": this.model.name/*, seasonname : this.model.seasonname*/ };
+        // let jsonCompetition = { "name": this.model.name/*, seasonname : this.model.seasonname*/ };
+
         this.competition.setName( this.model.name );
 
         this.competitionRepository.editObject( this.competition )
             .subscribe(
                 /* happy path */ competition => {
+                    console.log(competition);
                     this.activeModal.close( competition);
                 },
                 /* error path */ e => { this.error = e; this.loading = false; },

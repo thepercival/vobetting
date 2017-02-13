@@ -22,6 +22,9 @@ export class ExternalObjectRepository {
     jsonToArrayHelper( jsonArray : any, importableObject: any ): ExternalObject[]
     {
         let externalObjects: ExternalObject[] = [];
+        if ( jsonArray == null ){
+            return externalObjects;
+        }
         for (let json of jsonArray) {
             externalObjects.push( this.jsonToObjectHelper(json,importableObject) );
         }

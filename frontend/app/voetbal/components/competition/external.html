@@ -4,18 +4,46 @@
     <div *ngIf="message" class="alert alert-{{message.type}}" role="alert">{{message.message}}</div>
     <div class="row">
         <div class="col-xs-12 col-sm-6">
-            <div *ngIf="externalsystem">
-                <div>
-                    <a type="button" href="javascript:void(0)" class="btn btn-secondary" (click)="onRemove(competition)"><i class="fa fa-plus" aria-hidden="true"></i></a>
-                </div>
-                <div *ngFor="let competition of competitions" style="margin-top:8px; margin-bottom:8px;">
-                    <div class="btn-group" role="group" aria-label="competities">
-                        <a type="button" href="javascript:void(0)" class="btn btn-secondary" (click)="onRemove(competition)"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                        <button [disabled]="true" class="btn btn-secondary" (click)="onRemove(competition)">{{competition.getName()}}</button>
-                        <a type="button" href="javascript:void(0)" class="btn btn-secondary" (click)="onRemove(competition)"><i class="fa fa-link" aria-hidden="true"></i></a>
-                    </div>
-                </div>
+            <div>
+                <label>intern systeem</label>
             </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>
+                        <button type="button" class="btn btn-secondary" (click)="onAdd()"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                    </th>
+                    <th>intern</th>
+                    <th>extern</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <template ngFor let-competition [ngForOf]="competitions">
+                    <template [ngIf]="competition.getExternals().length >= 1">
+                    <tr *ngFor="let external of competition.getExternals()">
+                        <td *ngIf="!first" [attr.rowspan]="competition.getExternals().length">
+                            <button type="button" class="btn btn-secondary" (click)="onEdit(competition)"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                        </td>
+                        <td *ngIf="!first" [attr.rowspan]="competition.getExternals().length">
+                            {{competition.getName()}}
+                        </td>
+                        <td>
+                            {{external.getExternalSystem().getName()}}(#{{external.getExternalid()}})
+                        </td>
+                    </tr>
+                    </template>
+                    <tr *ngIf="competition.getExternals().length == 0">
+                        <td>
+                            <button type="button" class="btn btn-secondary" (click)="onEdit(competition)"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                        </td>
+                        <td>
+                            {{competition.getName()}}
+                        </td>
+                        <td></td>
+                    </tr>
+                    </template>
+                </tbody>
+            </table>
         </div>
         <div class="col-xs-12 col-sm-6">
             <div>
@@ -27,17 +55,30 @@
                     </div>
                 </div>
             </div>
-            <div *ngIf="externalsystem">
-                <div *ngFor="let externalcompetition of externalcompetitions" style="margin-top:8px; margin-bottom:8px; text-align: right">
-                    <div class="btn-group" role="group" aria-label="Basic example">
-                        <a type="button" *ngIf="externalcompetition.getExternals().length == 0" href="javascript:void(0)" class="btn btn-secondary" (click)="onAddAndConnect(externalcompetition)"><i class="fa fa-link" aria-hidden="true"></i><i class="fa fa-plus" aria-hidden="true"></i></a>
-                        <a type="button" *ngIf="externalcompetition.getExternals().length == 0" href="javascript:void(0)" class="btn btn-secondary" (click)="onConnect(externalcompetition)"><i class="fa fa-link" aria-hidden="true"></i></a>
-                        <button *ngIf="externalcompetition.getExternals().length == 1" [disabled] class="btn btn-secondary">{{getCompetitionName(externalcompetition)}}</button>
-                        <a type="button" *ngIf="externalcompetition.getExternals().length == 1" href="javascript:void(0)" class="btn btn-secondary" (click)="onRemove(externalcompetition)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                        <button [disabled] class="btn btn-secondary">{{externalcompetition.getName()}}</button>
-                    </div>
-                </div>
-            </div>
+            <table *ngIf="externalsystem" class="table">
+                <thead>
+                    <tr>
+                        <th>intern</th>
+                        <th style="text-align: center">acties</th>
+                        <th>extern</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let externalcompetition of externalcompetitions" style="text-align: right">
+                    <td>
+                        <span *ngIf="externalcompetition.getExternals().length == 1">{{getCompetitionName(externalcompetition)}}</span>
+                    </td>
+                    <td style="text-align: center">
+                        <button type="button" *ngIf="externalcompetition.getExternals().length == 0" class="btn btn-secondary" (click)="onAddAndConnect(externalcompetition)"><i class="fa fa-link" aria-hidden="true"></i><i class="fa fa-plus" aria-hidden="true"></i></button>
+                        <button type="button" *ngIf="externalcompetition.getExternals().length == 0" class="btn btn-secondary" (click)="onConnect(externalcompetition)"><i class="fa fa-link" aria-hidden="true"></i></button>
+                        <button type="button" *ngIf="externalcompetition.getExternals().length == 1" class="btn btn-secondary" (click)="onRemove(externalcompetition)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                    </td>
+                    <td>
+                        {{externalcompetition.getName()}}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

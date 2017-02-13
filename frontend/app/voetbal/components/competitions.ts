@@ -76,6 +76,12 @@ export class CompetitionsComponent implements OnInit{
 
         const modalRef = this.modalService.open(CompetitionEditModalContent, { backdrop : 'static' } );
         modalRef.componentInstance.competition = competition;
+        modalRef.result.then((competition) => {
+            this.message = { "type": "success", "message": "competitie("+competition.getName()+") gewijzigd"};
+        }/*, (reason) => {
+         modalRef.closeResult = reason;
+         }*/);
+
     }
 
     onRemove(competitionParam: Competition): void {

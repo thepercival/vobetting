@@ -13,7 +13,6 @@ import { ExternalObjectRepository } from './external/object'
 @Injectable()
 export class CompetitionRepository {
 
-    private headers = new Headers({'Content-Type': 'application/json'});
     private url : string = "http://localhost:2999/voetbal/competitions";
     private http: Http;
     private externalObjectRepository: ExternalObjectRepository;
@@ -35,7 +34,7 @@ export class CompetitionRepository {
 
     getHeaders(): Headers
     {
-        let headers = new Headers(this.headers);
+        let headers = new Headers({'Content-Type': 'application/json; charset=utf-8'});
         if ( this.getToken() != null ) {
             headers.append( 'Authorization', 'Bearer ' + this.getToken() );
         }
@@ -90,10 +89,11 @@ export class CompetitionRepository {
     editObject( object: Competition ): Observable<Competition>
     {
         let url = this.url + '/'+object.getId();
+
         return this.http
-            .put(url, JSON.stringify( object ), new RequestOptions({ headers: this.getHeaders() }))
+            .put(url, JSON.stringify( object ), { headers: this.getHeaders() })
             // ...and calling .json() on the response to return data
-            .map((res:Response) => res.json())
+            .map((res) => { console.log(res.json()); return this.jsonToObjectHelper(res.json()); })
             //...errors if any
             .catch(this.handleError);
     }
