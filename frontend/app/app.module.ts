@@ -26,8 +26,9 @@ import { AssociationAddModalContent } from './voetbal/components/association/mod
 import { AssociationEditModalContent } from './voetbal/components/association/modal/edit';
 import { CompetitionsComponent }  from './voetbal/components/competitions';
 import { CompetitionRepository }  from './voetbal/repositories/competition';
-import {CompetitionAddModalContent } from './voetbal/components/competition/modal/add';
+import { CompetitionAddModalContent } from './voetbal/components/competition/modal/add';
 import { CompetitionEditModalContent } from './voetbal/components/competition/modal/edit';
+import { CompetitionAddExternalModalContent } from './voetbal/components/competition/modal/addexternal';
 import { CompetitionsExternalComponent } from './voetbal/components/competition/external';
 import { ExternalSystemsComponent }  from './voetbal/components/external/systems';
 import { ExternalSystemRepository }  from './voetbal/repositories/external/system';
@@ -52,14 +53,15 @@ import { ExternalObjectRepository }  from './voetbal/repositories/external/objec
         RegisterComponent, ActivateComponent, LoginComponent, LogoutComponent, PasswordResetComponent, PasswordChangeComponent, UsersComponent,
         AssociationsComponent, AssociationAddModalContent, AssociationEditModalContent,
         CompetitionsComponent, CompetitionAddModalContent, CompetitionEditModalContent,
-        CompetitionsExternalComponent,
+        CompetitionAddExternalModalContent, CompetitionsExternalComponent,
         ExternalSystemsComponent, ExternalSystemAddModalContent, ExternalSystemEditModalContent
     ],
 
     entryComponents: [
         AssociationAddModalContent, AssociationEditModalContent,
         CompetitionAddModalContent, CompetitionEditModalContent,
-        ExternalSystemAddModalContent, ExternalSystemEditModalContent
+        ExternalSystemAddModalContent, ExternalSystemEditModalContent,
+        CompetitionAddExternalModalContent
     ],
     providers:    [
         AuthGuard,

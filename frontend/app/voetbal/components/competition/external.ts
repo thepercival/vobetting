@@ -11,9 +11,9 @@ import { Competition } from '../../domain/competition';
 import { CompetitionRepository } from '../../repositories/competition';
 import { CompetitionAddModalContent } from './modal/add';
 import { CompetitionEditModalContent } from './modal/edit';
+import { CompetitionAddExternalModalContent } from './modal/addexternal';
 import { ExternalSystem } from '../../domain/external/system';
 import { ExternalSystemRepository } from '../../repositories/external/system';
-import { ExternalSystemCompetitionInterface } from '../../domain/external/system/interface';
 
 @Component({
     moduleId: module.id,
@@ -104,6 +104,23 @@ export class CompetitionsExternalComponent implements OnInit{
         modalRef.componentInstance.competition = competition;
         modalRef.result.then((competition) => {
             this.message = { "type": "success", "message": "competitie("+competition.getName()+") gewijzigd"};
+        }/*, (reason) => {
+         modalRef.closeResult = reason;
+         }*/);
+    }
+
+    onAddExternal( externalcompetition: Competition): void {
+        this.message = null;
+        const modalRef = this.modalService.open(CompetitionAddExternalModalContent, { backdrop : 'static' } );
+
+
+        modalRef.componentInstance.competitions = this.competitions.filter(
+            competition => !competition.hasExternalid( externalcompetition.getId().toString(), this.externalsystem )
+        );
+
+        modalRef.result.then((competition) => {
+            this.competitions.push( competition );
+            this.message = { "type": "success", "message": "competitie("+competition.getName()+") toegevoegd"};
         }/*, (reason) => {
          modalRef.closeResult = reason;
          }*/);

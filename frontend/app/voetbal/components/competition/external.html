@@ -69,8 +69,8 @@
                         <span *ngIf="externalcompetition.getExternals().length == 1">{{getCompetitionName(externalcompetition)}}</span>
                     </td>
                     <td style="text-align: center">
-                        <button type="button" *ngIf="externalcompetition.getExternals().length == 0" class="btn btn-secondary" (click)="onAddAndConnect(externalcompetition)"><i class="fa fa-link" aria-hidden="true"></i><i class="fa fa-plus" aria-hidden="true"></i></button>
-                        <button type="button" *ngIf="externalcompetition.getExternals().length == 0" class="btn btn-secondary" (click)="onConnect(externalcompetition)"><i class="fa fa-link" aria-hidden="true"></i></button>
+                        <button type="button" *ngIf="externalcompetition.getExternals().length == 0" class="btn btn-secondary" (click)="onAddExternalAutomatic(externalcompetition)"><i class="fa fa-link" aria-hidden="true"></i><i class="fa fa-plus" aria-hidden="true"></i></button>
+                        <button type="button" *ngIf="externalcompetition.getExternals().length == 0" class="btn btn-secondary" (click)="onAddExternal(externalcompetition)"><i class="fa fa-link" aria-hidden="true"></i></button>
                         <button type="button" *ngIf="externalcompetition.getExternals().length == 1" class="btn btn-secondary" (click)="onRemove(externalcompetition)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                     </td>
                     <td>
