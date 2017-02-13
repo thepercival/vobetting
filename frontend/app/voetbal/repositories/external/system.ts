@@ -44,14 +44,14 @@ export class ExternalSystemRepository {
     getObjects(): Observable<ExternalSystem[]>
     {
         return this.http.get(this.url, new RequestOptions({ headers: this.getHeaders() }) )
-            .map( (res) => this.jsonArrayToObject(res) )
+            .map( (res) => this.jsonToArrayHelper(res.json()) )
             .catch( this.handleError );
     }
 
-    private jsonArrayToObject( res: Response ): ExternalSystem[]
+    jsonToArrayHelper( jsonArray : any ): ExternalSystem[]
     {
         let objects: ExternalSystem[] = [];
-        for (let json of res.json()) {
+        for (let json of jsonArray) {
             let object = this.jsonToObjectHelper(json);
             objects.push( object );
         }
@@ -63,22 +63,18 @@ export class ExternalSystemRepository {
         let url = this.url + '/'+id;
         return this.http.get(url)
         // ...and calling .json() on the response to return data
-            .map((res) => this.jsonToObject(res))
+            .map((res) => this.jsonToObjectHelper(res.json()))
             //...errors if any
             .catch((error:any) => Observable.throw(error.message || 'Server error' ));
     }
 
-    private jsonToObject( res: Response ): ExternalSystem
-    {
-        return this.jsonToObjectHelper(res.json());
-    }
-
-    private jsonToObjectHelper( json : any ): ExternalSystem
+    jsonToObjectHelper( json : any ): ExternalSystem
     {
         let externalSystem = this.getObjectByName(json.name);
         externalSystem.setId(json.id);
         externalSystem.setWebsite(json.website);
         return externalSystem;
+
     }
 
     private getObjectByName( name: string): ExternalSystem
@@ -98,7 +94,7 @@ export class ExternalSystemRepository {
         return this.http
             .post(this.url, jsonObject, new RequestOptions({ headers: this.getHeaders() }))
             // ...and calling .json() on the response to return data
-            .map(this.jsonToObject)
+            .map((res) => this.jsonToObjectHelper(res.json()))
             //...errors if any
             .catch(this.handleError);
     }

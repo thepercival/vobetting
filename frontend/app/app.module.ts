@@ -33,6 +33,7 @@ import { ExternalSystemsComponent }  from './voetbal/components/external/systems
 import { ExternalSystemRepository }  from './voetbal/repositories/external/system';
 import { ExternalSystemAddModalContent } from './voetbal/components/external/system/modal/add';
 import { ExternalSystemEditModalContent } from './voetbal/components/external/system/modal/edit';
+import { ExternalObjectRepository }  from './voetbal/repositories/external/object';
 
 @NgModule({
    imports:      [
@@ -67,7 +68,8 @@ import { ExternalSystemEditModalContent } from './voetbal/components/external/sy
         GlobalEventsManager,
         AssociationRepository,
         CompetitionRepository,
-        ExternalSystemRepository
+        ExternalSystemRepository,
+        ExternalObjectRepository
     ],
     bootstrap:    [
         AppComponent

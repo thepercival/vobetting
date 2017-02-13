@@ -29,6 +29,7 @@ export class CompetitionsExternalComponent implements OnInit{
     externalcompetitions: Competition[] = [];
     externalsystem: ExternalSystem;
     externalsystems: ExternalSystem[];
+    linksexterntointern: any[] = [];    // uasble per externalsystem
 
     message: any = null;
 
@@ -67,11 +68,10 @@ export class CompetitionsExternalComponent implements OnInit{
     onSelectExternalSystem( externalSystem: any ): void {
         this.externalsystem = externalSystem;
 
-        externalSystem.getCompetitions()
+        externalSystem.getCompetitions(this.competitions)
             .subscribe(
                 /* happy path */ competitions => {
                     this.externalcompetitions = competitions;
-                    // do something here
                 },
                 /* error path */ e => {},
                 /* onComplete */ () => {}

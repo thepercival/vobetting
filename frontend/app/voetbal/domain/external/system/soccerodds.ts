@@ -18,9 +18,9 @@ export class ExternalSystemSoccerOdds extends ExternalSystem implements External
     // constructor
     constructor( name: string, http: Http )
     {
-         super(name);
-         this.repos = new ExternalSystemSoccerOddsRepository( http );
-         this.exportclasses = [Competition.classname]; //
+        super(name);
+        this.repos = new ExternalSystemSoccerOddsRepository( http, this );
+        this.exportclasses = [Competition.classname]; //
     }
 
     hasAvailableExportClass( exportclassparam: string ): boolean
@@ -29,8 +29,9 @@ export class ExternalSystemSoccerOdds extends ExternalSystem implements External
         return x.length > 0;
     }
 
-    getCompetitions(): Observable<Competition[]>
+
+    getCompetitions( appCompetitions: Competition[] ): Observable<Competition[]>
     {
-        return this.repos.getCompetitions()
+        return this.repos.getCompetitions( appCompetitions )
     }
 }

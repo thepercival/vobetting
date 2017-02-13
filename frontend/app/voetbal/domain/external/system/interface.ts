@@ -14,7 +14,7 @@ export interface ExternalSystemAssociation
 
 export interface ExternalSystemCompetitionInterface
 {
-    getCompetitions(): Observable<Competition[]>;
+    getCompetitions( appCompetitions: Competition[] ): Observable<Competition[]>;
 }
 
 export interface ExternalSystemSeasonInterface

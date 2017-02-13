@@ -8,6 +8,7 @@ import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { Competition } from '../domain/competition';
+import { ExternalObjectRepository } from './external/object'
 
 @Injectable()
 export class CompetitionRepository {
@@ -15,10 +16,12 @@ export class CompetitionRepository {
     private headers = new Headers({'Content-Type': 'application/json'});
     private url : string = "http://localhost:2999/voetbal/competitions";
     private http: Http;
+    private externalObjectRepository: ExternalObjectRepository;
 
-    constructor( http: Http )
+    constructor( http: Http, externalObjectRepository: ExternalObjectRepository )
     {
         this.http = http;
+        this.externalObjectRepository = externalObjectRepository;
     }
 
     getToken(): string
@@ -42,14 +45,14 @@ export class CompetitionRepository {
     getObjects(): Observable<Competition[]>
     {
         return this.http.get(this.url, new RequestOptions({ headers: this.getHeaders() }) )
-            .map((res) => this.jsonArrayToObject(res))
+            .map((res) => this.jsonToArrayHelper(res.json()))
             .catch( this.handleError );
     }
 
-    private jsonArrayToObject( res: Response ): Competition[]
+    jsonToArrayHelper( jsonArray : any ): Competition[]
     {
         let competitions: Competition[] = [];
-        for (let json of res.json()) {
+        for (let json of jsonArray) {
             let object = this.jsonToObjectHelper(json);
             competitions.push( object );
         }
@@ -61,20 +64,16 @@ export class CompetitionRepository {
         let url = this.url + '/'+id;
         return this.http.get(url)
         // ...and calling .json() on the response to return data
-            .map(this.jsonToObject)
+            .map((res) => this.jsonToObjectHelper(res.json()))
             //...errors if any
             .catch((error:any) => Observable.throw(error.message || 'Server error' ));
     }
 
-    private jsonToObject( res: Response ): Competition
+    jsonToObjectHelper( json : any ): Competition
     {
-        return this.jsonToObjectHelper( res.json() );
-    }
-
-    private jsonToObjectHelper( jsonCompetition : any ): Competition
-    {
-        let competition = new Competition(jsonCompetition.name);
-        competition.setId(jsonCompetition.id);
+        let competition = new Competition(json.name);
+        competition.setId(json.id);
+        competition.addExternals(this.externalObjectRepository.jsonToArrayHelper(json.externals,competition));
         return competition;
     }
 
@@ -83,7 +82,7 @@ export class CompetitionRepository {
         return this.http
             .post(this.url, jsonObject, new RequestOptions({ headers: this.getHeaders() }))
             // ...and calling .json() on the response to return data
-            .map((res) => this.jsonToObject(res))
+            .map((res) => this.jsonToObjectHelper(res.json()))
             //...errors if any
             .catch(this.handleError);
     }

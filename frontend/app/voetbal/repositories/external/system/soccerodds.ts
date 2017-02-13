@@ -8,6 +8,9 @@ import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { Competition } from '../../../domain/competition';
+import { ExternalObjectRepository } from '../object';
+import { ExternalSystemSoccerOdds } from '../../../domain/external/system/soccerodds';
+import { ExternalSystemRepository } from '../system';
 
 @Injectable()
 export class ExternalSystemSoccerOddsRepository{
@@ -15,10 +18,15 @@ export class ExternalSystemSoccerOddsRepository{
     private headers = new Headers({'Content-Type': 'application/json'});
     private url : string = "https://arisalexis-soccer-odds-v1.p.mashape.com";
     private http: Http;
+    private externalObjectRepository: ExternalObjectRepository;
+    private externalSystem: ExternalSystemSoccerOdds;
 
-    constructor( http: Http )
+    constructor( http: Http, externalSystem: ExternalSystemSoccerOdds )
     {
         this.http = http;
+        this.externalSystem = externalSystem;
+        let externalSystemRepository = new ExternalSystemRepository(http);
+        this.externalObjectRepository = new ExternalObjectRepository( externalSystemRepository );
     }
 
     getToken(): string
@@ -35,45 +43,35 @@ export class ExternalSystemSoccerOddsRepository{
         return headers;
     }
 
-    getCompetitions(): Observable<Competition[]>
+    getCompetitions( appCompetitions: Competition[] ): Observable<Competition[]>
     {
         let url = this.url + '/leagues';
         return this.http.get(url, new RequestOptions({ headers: this.getHeaders() }) )
-            .map((res) => this.jsonArrayToObject(res))
+            .map((res) => this.jsonCompetitionsToArrayHelper(res.json(), appCompetitions ))
             .catch( this.handleError );
     }
 
-    private jsonArrayToObject( res: Response ): Competition[]
+    jsonCompetitionsToArrayHelper( jsonArray : any, appCompetitions: Competition[] ): Competition[]
     {
         let competitions: Competition[] = [];
-        for (let json of res.json()) {
-            let object = this.jsonToObjectHelper(json);
+        for (let json of jsonArray) {
+            let object = this.jsonCompetitionToObjectHelper(json,appCompetitions);
             competitions.push( object );
         }
         return competitions;
     }
 
-    getObject( id: number): Observable<Competition>
+    jsonCompetitionToObjectHelper( json : any, appCompetitions: Competition[] ): Competition
     {
-        let url = this.url + '/'+id;
-        return this.http.get(url)
-        // ...and calling .json() on the response to return data
-            .map(this.jsonToObject)
-            //...errors if any
-            .catch((error:any) => Observable.throw(error.message || 'Server error' ));
-
-    }
-
-    private jsonToObject( res: Response ): Competition
-    {
-        return this.jsonToObjectHelper( res.json() );
-    }
-
-    private jsonToObjectHelper( json : any ): Competition
-    {
-        console.log(json);
         let competition = new Competition(json.name);
-        competition.setId(json.id);
+        competition.setId(json.leagueId);
+
+        let foundAppCompetitions = appCompetitions.filter( compFilter => compFilter.hasExternalid( competition.getId().toString(), this.externalSystem ) );
+        let foundAppCompetition = foundAppCompetitions.shift();
+        if ( foundAppCompetition ){
+            let jsonExternal = { "externalid" : foundAppCompetition.getId(), "externalsystem": null };
+            competition.addExternals(this.externalObjectRepository.jsonToArrayHelper([jsonExternal],competition));
+        }
         return competition;
     }
 
