@@ -121,4 +121,22 @@ export class CompetitionsExternalComponent implements OnInit{
     goBack(): void {
         this.location.back();
     }
+
+    getCompetitionName( externalcompetition: Competition): string
+    {
+        let externals = externalcompetition.getExternals();
+        if ( externals.length != 1 ){
+            return;
+        }
+
+        let externalid = externals[0].getExternalid();
+
+        let foundCompetitions = this.competitions.filter(
+            competition => competition.getId().toString() == externalid
+        );
+        if ( foundCompetitions.length != 1 ){
+            return;
+        }
+        return foundCompetitions[0].getName();
+    }
 }

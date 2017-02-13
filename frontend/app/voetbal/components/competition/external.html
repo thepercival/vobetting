@@ -28,11 +28,12 @@
                 </div>
             </div>
             <div *ngIf="externalsystem">
-                <div *ngFor="let externalcompetition of externalcompetitions" style="margin-top:8px; margin-bottom:8px;">
+                <div *ngFor="let externalcompetition of externalcompetitions" style="margin-top:8px; margin-bottom:8px; text-align: right">
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <a type="button" *ngIf="externalcompetition.getExternals().length == 0" href="javascript:void(0)" class="btn btn-secondary" (click)="onAddAndConnect(externalcompetition)"><i class="fa fa-link" aria-hidden="true"></i><i class="fa fa-plus" aria-hidden="true"></i></a>
                         <a type="button" *ngIf="externalcompetition.getExternals().length == 0" href="javascript:void(0)" class="btn btn-secondary" (click)="onConnect(externalcompetition)"><i class="fa fa-link" aria-hidden="true"></i></a>
-                        <a type="button" *ngIf="externalcompetition.getExternals().length > 0" href="javascript:void(0)" class="btn btn-secondary" (click)="onRemove(externalcompetition)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                        <button *ngIf="externalcompetition.getExternals().length == 1" [disabled] class="btn btn-secondary">{{getCompetitionName(externalcompetition)}}</button>
+                        <a type="button" *ngIf="externalcompetition.getExternals().length == 1" href="javascript:void(0)" class="btn btn-secondary" (click)="onRemove(externalcompetition)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                         <button [disabled] class="btn btn-secondary">{{externalcompetition.getName()}}</button>
                     </div>
                 </div>
