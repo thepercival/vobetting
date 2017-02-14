@@ -18,13 +18,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                    <template ngFor let-competition [ngForOf]="competitions">
+                <template ngFor let-competition [ngForOf]="competitions">
                     <template [ngIf]="competition.getExternals().length >= 1">
-                    <tr *ngFor="let external of competition.getExternals()">
-                        <td *ngIf="!first" [attr.rowspan]="competition.getExternals().length">
+                    <tr *ngFor="let external of competition.getExternals(); let first = first">
+                        <td *ngIf="first" [attr.rowspan]="competition.getExternals().length">
                             <button type="button" class="btn btn-secondary" (click)="onEdit(competition)"><i class="fa fa-pencil" aria-hidden="true"></i></button>
                         </td>
-                        <td *ngIf="!first" [attr.rowspan]="competition.getExternals().length">
+                        <td *ngIf="first" [attr.rowspan]="competition.getExternals().length">
                             {{competition.getName()}}
                         </td>
                         <td>
@@ -41,7 +41,7 @@
                         </td>
                         <td></td>
                     </tr>
-                    </template>
+                </template>
                 </tbody>
             </table>
         </div>
@@ -58,9 +58,9 @@
             <table *ngIf="externalsystem" class="table">
                 <thead>
                     <tr>
-                        <th>intern</th>
+                        <th style="text-align: right">intern</th>
                         <th style="text-align: center">acties</th>
-                        <th>extern</th>
+                        <th style="text-align: right">extern</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -69,12 +69,11 @@
                         <span *ngIf="externalcompetition.getExternals().length == 1">{{getCompetitionName(externalcompetition)}}</span>
                     </td>
                     <td style="text-align: center">
-                        <button type="button" *ngIf="externalcompetition.getExternals().length == 0" class="btn btn-secondary" (click)="onAddExternalAutomatic(externalcompetition)"><i class="fa fa-link" aria-hidden="true"></i><i class="fa fa-plus" aria-hidden="true"></i></button>
                         <button type="button" *ngIf="externalcompetition.getExternals().length == 0" class="btn btn-secondary" (click)="onAddExternal(externalcompetition)"><i class="fa fa-link" aria-hidden="true"></i></button>
-                        <button type="button" *ngIf="externalcompetition.getExternals().length == 1" class="btn btn-secondary" (click)="onRemove(externalcompetition)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                        <button type="button" *ngIf="externalcompetition.getExternals().length == 1" class="btn btn-secondary" (click)="onRemove(externalcompetition.getExternals()[0])"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                     </td>
                     <td>
-                        {{externalcompetition.getName()}}
+                        {{externalcompetition.getName()}}(#{{externalcompetition.getId()}})
                     </td>
                 </tr>
                 </tbody>

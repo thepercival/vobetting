@@ -7,6 +7,7 @@
         <th style="text-align: center">{{objects?.length}}</th>
         <th>naam</th>
         <th class="hidden-xs-down">website</th>
+        <th class="hidden-xs-down">api-url</th>
         <th style="text-align: center"><a type="button" href="javascript:void(0)" class="btn btn-secondary" (click)="onAdd()"><i class="fa fa-plus" aria-hidden="true"></i></a></th>
     </tr>
     </thead>
@@ -15,6 +16,7 @@
         <td style="text-align: center"><a type="button" href="javascript:void(0)" class="btn btn-secondary" (click)="onEdit(object)"><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
         <td>{{object.getName()}}</td>
         <td class="hidden-xs-down">{{object.getWebsite()}}</td>
+        <td class="hidden-xs-down">{{object.getApiurl()}}</td>
         <td style="text-align: center"><a type="button" href="javascript:void(0)" class="btn btn-secondary" (click)="onRemove(object)"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
     </tr>
     </tbody>

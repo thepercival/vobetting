@@ -4,7 +4,7 @@
 
 import {Component, Input, OnInit, AfterViewInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { CompetitionRepository } from '../../../repositories/competition';
+import { Competition } from '../../../domain/competition';
 
 @Component({
     moduleId: module.id,
@@ -12,36 +12,24 @@ import { CompetitionRepository } from '../../../repositories/competition';
     templateUrl: 'addexternal.html'
 })
 export class CompetitionAddExternalModalContent implements OnInit{
-    @Input() competitions; // all competitions where a certain externalsystem and externalid are not yet linked
+    @Input() competitions:Competition[]; // all competitions where a certain externalsystem and externalid are not yet linked
     model: any = {};
+
     loading = false;
     error = '';
 
     constructor(
-        public activeModal: NgbActiveModal,
-        private competitionRepository: CompetitionRepository
-    ) {}
+        public activeModal: NgbActiveModal
+    ) {
+
+    }
 
     ngOnInit() {
         this.model.competitions = this.competitions;
     }
 
-    addExternal(): boolean {
-        // this.model.name = this.model.name.trim();
-        // if (!this.model.name) { return false; }
-        // let jsonCompetition = { "name": this.model.name };
-
-       // this.competitionRepository.createObject( jsonCompetition )
-       //      .subscribe(
-       //          /* happy path */ competition => {
-       //              this.activeModal.close( competition);
-       //         },
-       //          /* error path */ e => { this.error = e; this.loading = false; },
-       //          /* onComplete */ () => this.loading = false
-       //      );
-
-        this.error = 'implementeer het opslaan van een externe competitie aan een interne';
-
-        return false;
+    addExternal(competition): boolean {
+       this.activeModal.close(competition);
+       return false;
     }
 }

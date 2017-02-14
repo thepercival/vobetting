@@ -6,13 +6,15 @@
         <tr>
             <th style="text-align: center">{{competitions?.length}}</th>
             <th>naam</th>
-            <th style="text-align: center"><a type="button" href="javascript:void(0)" class="btn btn-secondary" (click)="onAdd()"><i class="fa fa-plus" aria-hidden="true"></i></a></th>
+            <th>afkorting</th>
+            <th style="text-align: center"><button type="button" class="btn btn-secondary" (click)="onAdd()"><i class="fa fa-plus" aria-hidden="true"></i></button></th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let competition of competitions">
             <td style="text-align: center"><a type="button" href="javascript:void(0)" class="btn btn-secondary" (click)="onEdit(competition)"><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
-            <td>{{competition.name}}</td>
+            <td>{{competition.getName()}}</td>
+            <td>{{competition.getAbbreviation()}}</td>
             <td style="text-align: center"><a type="button" href="javascript:void(0)" class="btn btn-secondary" (click)="onRemove(competition)"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
         </tr>
     </tbody>

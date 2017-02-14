@@ -8,21 +8,15 @@
     <div class="modal-body">
         <div class="form-group">
             <label for="name">naam</label>
-            <input class="form-control" id="name" name="name" type="text" placeholder="naam" maxlength="25" required [(ngModel)]="model.name" #name="ngModel" focus="true" />
-        </div>
-        <!--<div class="form-group">
-            <label for="seasonname">seizoensnaam</label>
-            <input class="form-control" id="seasonname" name="seasonname" type="text" maxlength="9" placeholder="2017/2018" [disabled]="demo" required [(ngModel)]="model.seasonname" #seasonname="ngModel"/>
+            <input class="form-control" id="name" name="name" type="text" placeholder="naam" maxlength="25" required [(ngModel)]="model.name" #name="ngModel" />
         </div>
         <div class="form-group">
-            <label for="nrofparticipants">aantal deelnemers</label>
-            <input class="form-control" id="nrofparticipants" name="nrofparticipants" type="number" placeholder="16" required [(ngModel)]="model.nrofparticipants" #nrofparticipants="ngModel" focus="{{ demo ? 'true' : 'false'}}" />
+            <label for="abbreviation">afkorting</label>
+            <input class="form-control" id="abbreviation" name="abbreviation" type="text" maxlength="{{maxvalues.abbreviation}}" placeholder="afk" required [(ngModel)]="model.abbreviation" #abbreviation="ngModel"/>
         </div>
 
-        <div *ngIf="!demo && f.submitted && !seasonname.valid" class="alert alert-danger">seizoensnaam is verplicht</div>
-        <div *ngIf="f.submitted && !nrofparticipants.valid" class="alert alert-danger">aantal deelnemers is verplicht</div>
-        -->
         <div *ngIf="f.submitted && !name.valid" class="alert alert-danger">naam is verplicht</div>
+        <div *ngIf="f.submitted && !abbreviation.valid" class="alert alert-danger">afkorting is verplicht</div>
         <div *ngIf="error" class="alert alert-danger" role="alert">{{error}}</div>
     </div>
     <div class="modal-footer">

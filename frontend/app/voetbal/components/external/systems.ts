@@ -63,6 +63,12 @@ export class ExternalSystemsComponent implements OnInit{
 
         const modalRef = this.modalService.open(ExternalSystemEditModalContent, { backdrop : 'static' } );
         modalRef.componentInstance.object = object;
+        modalRef.result.then((externalsystem) => {
+            this.message = { "type": "success", "message": "het externe systeem is gewijzigd"};
+        }, (reason) => {
+            //modalRef.closeResult = reason;
+            console.error(reason);
+         });
     }
 
     onRemove(externalSystemParam: ExternalSystem): void {

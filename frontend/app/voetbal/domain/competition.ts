@@ -8,9 +8,14 @@ import { ExternalSystem} from './external/system';
 export class Competition {
     protected id: number;
     protected name: string;
+    protected abbreviation: string;
     protected externals: ExternalObject[] = [];
 
-    static classname = "Competition";
+    static readonly classname = "Competition";
+
+    static readonly MIN_LENGTH_NAME = 30;
+    static readonly MAX_LENGTH_NAME = 30;
+    static readonly MAX_LENGTH_ABBREVIATION = 7;
 
     // constructor
     constructor( name: string ){
@@ -33,6 +38,14 @@ export class Competition {
         this.name = name;
     };
 
+    getAbbreviation(): string {
+        return this.abbreviation;
+    };
+
+    setAbbreviation(abbreviation: string): void {
+        this.abbreviation = abbreviation;
+    };
+
     getExternals(): ExternalObject[] {
         return this.externals;
     };
@@ -43,8 +56,15 @@ export class Competition {
         }
     };
 
-    hasExternalid( externalid: string, externalsystem: ExternalSystem ): boolean {
+    getExternal( externalid: string, externalsystem: ExternalSystem ): ExternalObject {
         let foundExternals = this.getExternals().filter( external => external.getExternalid() == externalid && ( ( external.getExternalSystem() == null && externalsystem == null ) || external.getExternalSystem().getId() == externalsystem.getId() ) );
-        return foundExternals.length > 0;
+        if ( foundExternals.length != 1 ) {
+            return null;
+        }
+        return foundExternals[0];
+    }
+
+    hasExternalid( externalid: string, externalsystem: ExternalSystem ): boolean {
+        return this.getExternal(externalid, externalsystem) != null;
     }
 }

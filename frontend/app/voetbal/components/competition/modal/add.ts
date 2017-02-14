@@ -2,38 +2,39 @@
  * Created by coen on 5-2-17.
  */
 
-import {Component, Input, OnInit, AfterViewInit } from '@angular/core';
+import {Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { CompetitionRepository } from '../../../repositories/competition';
+import { CompetitionRepository } from '../../../repositories/competition'
+import { Competition } from '../../../domain/competition';
 
 @Component({
     moduleId: module.id,
     selector: 'competition-add-modal-content',
     templateUrl: 'add.html'
 })
-export class CompetitionAddModalContent implements OnInit{
-    @Input() competition;
+export class CompetitionAddModalContent{
     model: any = {};
     loading = false;
     error = '';
+    maxvalues: any = {};
 
     constructor(
         public activeModal: NgbActiveModal,
-        private competitionRepository: CompetitionRepository
-    ) {}
-
-    ngOnInit() {
-        if ( this.competition ) {
-            this.model.name = this.competition.name;
-        }
+        private repos: CompetitionRepository
+    ) {
+        this.maxvalues.namemin = Competition.MIN_LENGTH_NAME;
+        this.maxvalues.name = Competition.MAX_LENGTH_NAME;
+        this.maxvalues.abbreviation = Competition.MAX_LENGTH_ABBREVIATION;
     }
 
     add(): boolean {
+        //console.log(this.model);
         this.model.name = this.model.name.trim();
         if (!this.model.name) { return false; }
-        let jsonCompetition = { "name": this.model.name/*, seasonname : this.model.seasonname*/ };
+        let json = { "name": this.model.name, "abbreviation" : this.model.abbreviation.trim() };
 
-       this.competitionRepository.createObject( jsonCompetition )
+        // this.activeModal.close( json);
+       this.repos.createObject( json )
             .subscribe(
                 /* happy path */ competition => {
                     this.activeModal.close( competition);
@@ -42,6 +43,6 @@ export class CompetitionAddModalContent implements OnInit{
                 /* onComplete */ () => this.loading = false
             );
 
-        return false;
+         return false;
     }
 }

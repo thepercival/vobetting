@@ -26,7 +26,7 @@ export class ExternalSystemSoccerOddsRepository{
         this.http = http;
         this.externalSystem = externalSystem;
         let externalSystemRepository = new ExternalSystemRepository(http);
-        this.externalObjectRepository = new ExternalObjectRepository( externalSystemRepository );
+        this.externalObjectRepository = new ExternalObjectRepository(http, externalSystemRepository );
     }
 
     getToken(): string

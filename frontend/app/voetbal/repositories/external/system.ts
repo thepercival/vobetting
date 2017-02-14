@@ -71,10 +71,16 @@ export class ExternalSystemRepository {
     jsonToObjectHelper( json : any ): ExternalSystem
     {
         let externalSystem = this.getObjectByName(json.name);
+        if (externalSystem == null){
+            return externalSystem;
+        }
         externalSystem.setId(json.id);
         externalSystem.setWebsite(json.website);
+        externalSystem.setUsername(json.username);
+        externalSystem.setPassword(json.password);
+        externalSystem.setApiurl(json.apiurl);
+        externalSystem.setApikey(json.apikey);
         return externalSystem;
-
     }
 
     private getObjectByName( name: string): ExternalSystem
@@ -102,12 +108,31 @@ export class ExternalSystemRepository {
     editObject( object: ExternalSystem ): Observable<ExternalSystem>
     {
         let url = this.url + '/'+object.getId();
+        // console.log(JSON.stringify( object ));
+        console.log(this.objectToJsonHelper(object));
+
+        //return Observable.throw( "wat gaat er fout?" );
+
         return this.http
-            .put(url, JSON.stringify( object ), new RequestOptions({ headers: this.getHeaders() }))
+            .put(url, JSON.stringify( this.objectToJsonHelper(object) ), new RequestOptions({ headers: this.getHeaders() }))
             // ...and calling .json() on the response to return data
-            .map((res:Response) => res.json())
+            .map((res) => this.jsonToObjectHelper(res.json()))
             //...errors if any
             .catch(this.handleError);
+    }
+
+    objectToJsonHelper( object : ExternalSystem ): any
+    {
+        let json = {
+            "id":object.getId(),
+            "name":object.getName(),
+            "website":object.getWebsite(),
+            "username":object.getUsername(),
+            "password":object.getPassword(),
+            "apiurl":object.getApiurl(),
+            "apikey":object.getApikey()
+        };
+        return json;
     }
 
     removeObject( object: ExternalSystem): Observable<void>

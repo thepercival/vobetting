@@ -8,12 +8,12 @@ import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { Competition } from '../domain/competition';
-import { ExternalObjectRepository } from './external/object'
+import { ExternalObjectRepository } from './external/object';
 
 @Injectable()
 export class CompetitionRepository {
 
-    private url : string = "http://localhost:2999/voetbal/competitions";
+    private url : string;
     private http: Http;
     private externalObjectRepository: ExternalObjectRepository;
 
@@ -21,6 +21,12 @@ export class CompetitionRepository {
     {
         this.http = http;
         this.externalObjectRepository = externalObjectRepository;
+        this.url = "http://localhost:2999/voetbal/" + this.getUrlpostfix();
+    }
+
+    getUrlpostfix(): string
+    {
+        return 'competitions';
     }
 
     getToken(): string
@@ -72,6 +78,7 @@ export class CompetitionRepository {
     {
         let competition = new Competition(json.name);
         competition.setId(json.id);
+        competition.setAbbreviation(json.abbreviation);
         competition.addExternals(this.externalObjectRepository.jsonToArrayHelper(json.externals,competition));
         return competition;
     }

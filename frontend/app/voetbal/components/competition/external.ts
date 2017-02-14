@@ -13,7 +13,9 @@ import { CompetitionAddModalContent } from './modal/add';
 import { CompetitionEditModalContent } from './modal/edit';
 import { CompetitionAddExternalModalContent } from './modal/addexternal';
 import { ExternalSystem } from '../../domain/external/system';
+import { ExternalObject } from '../../domain/external/object';
 import { ExternalSystemRepository } from '../../repositories/external/system';
+import { ExternalObjectRepository } from '../../repositories/external/object';
 
 @Component({
     moduleId: module.id,
@@ -29,8 +31,7 @@ export class CompetitionsExternalComponent implements OnInit{
     externalcompetitions: Competition[] = [];
     externalsystem: ExternalSystem;
     externalsystems: ExternalSystem[];
-    linksexterntointern: any[] = [];    // uasble per externalsystem
-
+    loading: boolean = false;
     message: any = null;
 
     constructor(
@@ -39,6 +40,7 @@ export class CompetitionsExternalComponent implements OnInit{
         private location: Location,
         private modalService: NgbModal,
         private reposExternalSystem: ExternalSystemRepository,
+        private externalObjectRepository: ExternalObjectRepository
         // private globalEventsManger: GlobalEventsManager
     ) {}
 
@@ -119,32 +121,66 @@ export class CompetitionsExternalComponent implements OnInit{
         );
 
         modalRef.result.then((competition) => {
-            this.competitions.push( competition );
-            this.message = { "type": "success", "message": "competitie("+competition.getName()+") toegevoegd"};
+            this.externalObjectRepository.createObject( this.repos.getUrlpostfix(), competition, externalcompetition.getId().toString(), this.externalsystem )
+                .subscribe(
+                    /* happy path */ externalobject => {
+                        // @todo following code should move to service
+                        // add to internal
+                        competition.getExternals().push(externalobject);
+                        // add to external
+                        let jsonExternal = { "externalid" : competition.getId(), "externalsystem": null };
+                        externalcompetition.addExternals(this.externalObjectRepository.jsonToArrayHelper([jsonExternal],externalcompetition));
+                        this.message = { "type": "success", "message": "externe competitie "+externalcompetition.getName()+" gekoppeld aan ("+competition.getName()+") toegevoegd"};
+                    },
+                    /* error path */ e => { this.message = { "type": "success", "message": e}; this.loading = false; },
+                    /* onComplete */ () => this.loading = false
+                );
+
         }/*, (reason) => {
          modalRef.closeResult = reason;
          }*/);
     }
 
-    onImport( competition: Competition ): void {
-        //this.message = null;
-        /*let competition = this.competitions.find( function(item: Competition) {
-         return ( item.getId() == competitionId );
-         }, competitionId);*/
+    onRemove( externalObject: ExternalObject ): void
+    {
+        // @todo following code should move to service
+        // remove from internal
+        let internalcompetition = this.getCompetition( externalObject.getImportableObject() );
+        if ( internalcompetition == null ) {
+            this.message = { "type": "danger", "message": "interne competitie niet gevonden"};
+            return;
+        }
 
-        //if ( competition == null) {
-        //    this.message = { "type": "danger", "message": "de competitie kan niet gewijzigd worden"};
-        //}
+        let internalexternal = internalcompetition.getExternal(externalObject.getImportableObject().getId(), this.externalsystem);
 
-        //const modalRef = this.modalService.open(CompetitionEditModalContent, { backdrop : 'static' } );
-        //modalRef.componentInstance.competition = competition;
+        this.externalObjectRepository.removeObject( this.repos.getUrlpostfix(), internalexternal )
+            .subscribe(
+                /* happy path */ retval => {
+
+                    let indextmp = internalcompetition.getExternals().indexOf(internalexternal);
+                    if (indextmp > -1) {
+                        internalcompetition.getExternals().splice(indextmp, 1);
+                    }
+
+                    // remove from external
+                    let externals = externalObject.getImportableObject().getExternals();
+                    let index = externals.indexOf(externalObject);
+                    if (index > -1) {
+                        externals.splice(index, 1);
+                    }
+
+                    this.message = { "type": "success", "message": "externe competitie "+externalObject.getImportableObject().getName()+" ontkoppeld van ("+internalcompetition.getName()+") toegevoegd"};
+                },
+                /* error path */ e => { this.message = { "type": "success", "message": e}; this.loading = false; },
+                /* onComplete */ () => this.loading = false
+            );
     }
 
     goBack(): void {
         this.location.back();
     }
 
-    getCompetitionName( externalcompetition: Competition): string
+    private getCompetition( externalcompetition: Competition): Competition
     {
         let externals = externalcompetition.getExternals();
         if ( externals.length != 1 ){
@@ -159,6 +195,15 @@ export class CompetitionsExternalComponent implements OnInit{
         if ( foundCompetitions.length != 1 ){
             return;
         }
-        return foundCompetitions[0].getName();
+        return foundCompetitions[0];
+    }
+
+    getCompetitionName( externalcompetition: Competition): string
+    {
+        let internalcompetition = this.getCompetition(externalcompetition);
+        if ( internalcompetition == null ){
+            return;
+        }
+        return internalcompetition.getName();
     }
 }

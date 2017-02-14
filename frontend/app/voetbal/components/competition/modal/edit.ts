@@ -18,30 +18,34 @@ export class CompetitionEditModalContent implements OnInit{
     model: any = {};
     loading = false;
     error = '';
+    maxvalues: any = {};
 
     constructor(
         public activeModal: NgbActiveModal,
         private competitionRepository: CompetitionRepository
-    ) {}
+    ) {
+        this.maxvalues.namemin = Competition.MIN_LENGTH_NAME;
+        this.maxvalues.name = Competition.MAX_LENGTH_NAME;
+        this.maxvalues.abbreviation = Competition.MAX_LENGTH_ABBREVIATION;
+    }
 
     ngOnInit() {
         if ( this.competition ) {
             this.model.name = this.competition.getName();
-            // this.model.seasonname = moment().format('YYYY');
+            this.model.abbreviation = this.competition.getAbbreviation();
         }
     }
 
     edit(): boolean {
         this.model.name = this.model.name.trim();
         if (!this.model.name) { return false; }
-        // let jsonCompetition = { "name": this.model.name/*, seasonname : this.model.seasonname*/ };
-
         this.competition.setName( this.model.name );
+        this.competition.setAbbreviation( this.model.abbreviation );
 
         this.competitionRepository.editObject( this.competition )
             .subscribe(
                 /* happy path */ competition => {
-                    console.log(competition);
+                    // console.log(competition);
                     this.activeModal.close( competition);
                 },
                 /* error path */ e => { this.error = e; this.loading = false; },

@@ -62,6 +62,7 @@ export class CompetitionsComponent implements OnInit{
         }/*, (reason) => {
             modalRef.closeResult = reason;
         }*/);
+        // return false;
     }
 
     onEdit( competition: Competition ): void {
