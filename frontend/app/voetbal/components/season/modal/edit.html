@@ -1,0 +1,40 @@
+<div class="modal-header">
+    <h4 class="modal-title">seizoen wijzigen</h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<form class="card card-block" name="formSeasonEdit" (ngSubmit)="f.form.valid && edit() && false" #f="ngForm" novalidate>
+    <div class="modal-body">
+        <div class="form-group">
+            <label for="name">naam</label>
+            <input class="form-control" id="name" name="name" type="text" placeholder="naam" maxlength="25" required [(ngModel)]="model.name" #name="ngModel" />
+        </div>
+        <div class="form-group">
+            <label for="startdate">startdatum</label>
+            <div class="input-group">
+                <input class="form-control" placeholder="yyyy-mm-dd" id="startdate" name="startdate" [(ngModel)]="model.startdate" required ngbDatepicker #startdate="ngbDatepicker">
+                <div class="input-group-addon" (click)="startdate.toggle()" >
+                    <span class="fa fa-calendar" aria-hidden="true" style="cursor: pointer"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="enddate">einddatum</label>
+            <div class="input-group">
+                <input class="form-control" placeholder="yyyy-mm-dd" id="enddate" name="enddate" [(ngModel)]="model.enddate" required ngbDatepicker #enddate="ngbDatepicker">
+                <div class="input-group-addon" (click)="enddate.toggle()" >
+                    <span class="fa fa-calendar" aria-hidden="true" style="cursor: pointer"></span>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="f.submitted && !name.valid" class="alert alert-danger">naam is verplicht</div>
+        <div *ngIf="f.submitted && !f.controls['startdate'].valid" class="alert alert-danger">startdatum is verplicht</div>
+        <div *ngIf="f.submitted && !f.controls['enddate'].valid" class="alert alert-danger">einddatum is verplicht</div>
+        <div *ngIf="error" class="alert alert-danger" role="alert">{{error}}</div>
+    </div>
+    <div class="modal-footer">
+        <button [disabled]="loading" class="btn btn-primary" type="submit">wijzigen <i *ngIf="loading" class="fa fa-spinner fa-spin fa-fw"></i> </button>
+        <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss()">sluiten</button>
+    </div>
+</form>

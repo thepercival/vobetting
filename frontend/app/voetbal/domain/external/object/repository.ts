@@ -6,15 +6,15 @@
  * Created by cdunnink on 7-2-2017.
  */
 
-import { ExternalObject } from '../../domain/external/object';
-import { ExternalSystemRepository } from './system';
+import { ExternalObject } from '../object';
+import { ExternalSystemRepository } from '../system/repository';
 import { Injectable } from '@angular/core';
 
 import { Headers, Http, Response, RequestOptions } from '@angular/http';
 import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-import { ExternalSystem } from './../../domain/external/system';
+import { ExternalSystem } from '../system';
 
 @Injectable()
 export class ExternalObjectRepository {

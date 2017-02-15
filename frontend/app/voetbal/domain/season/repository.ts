@@ -1,5 +1,5 @@
 /**
- * Created by coen on 30-1-17.
+ * Created by coen on 10-2-17.
  */
 
 import { Injectable } from '@angular/core';
@@ -7,18 +7,23 @@ import { Headers, Http, Response, RequestOptions } from '@angular/http';
 import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-import { Association } from '../domain/association';
+import { Season } from '../season';
 
 @Injectable()
-export class AssociationRepository {
+export class SeasonRepository {
 
-    private headers = new Headers({'Content-Type': 'application/json'});
-    private url : string = "http://localhost:2999/voetbal/associations";
+    private url : string;
     private http: Http;
 
     constructor( http: Http )
     {
         this.http = http;
+        this.url = "http://localhost:2999/voetbal/" + this.getUrlpostfix();
+    }
+
+    getUrlpostfix(): string
+    {
+        return 'seasons';
     }
 
     getToken(): string
@@ -32,74 +37,73 @@ export class AssociationRepository {
 
     getHeaders(): Headers
     {
-        let headers = new Headers(this.headers);
+        let headers = new Headers({'Content-Type': 'application/json; charset=utf-8'});
         if ( this.getToken() != null ) {
             headers.append( 'Authorization', 'Bearer ' + this.getToken() );
         }
         return headers;
     }
 
-    getObjects(): Observable<Association[]>
+    getObjects(): Observable<Season[]>
     {
         return this.http.get(this.url, new RequestOptions({ headers: this.getHeaders() }) )
-            .map((res) => this.jsonArrayToObject(res))
+            .map((res) => this.jsonToArrayHelper(res.json()))
             .catch( this.handleError );
     }
 
-    private jsonArrayToObject( res: Response ): Association[]
+    jsonToArrayHelper( jsonArray : any ): Season[]
     {
-        let associations: Association[] = [];
-        for (let json of res.json()) {
+        let seasons: Season[] = [];
+        for (let json of jsonArray) {
             let object = this.jsonToObjectHelper(json);
-            associations.push( object );
+            seasons.push( object );
         }
-        return associations;
+        return seasons;
     }
 
-    getObject( id: number): Observable<Association>
+    getObject( id: number): Observable<Season>
     {
         let url = this.url + '/'+id;
         return this.http.get(url)
         // ...and calling .json() on the response to return data
-            .map(this.jsonToObject)
+            .map((res) => this.jsonToObjectHelper(res.json()))
             //...errors if any
             .catch((error:any) => Observable.throw(error.message || 'Server error' ));
     }
 
-    createObject( jsonObject: any ): Observable<Association>
+    jsonToObjectHelper( json : any ): Season
+    {
+        console.log(json);
+        let season = new Season(json.name);
+        season.setId(json.id);
+        season.setStartdate(new Date(json.startdate.timestamp*1000));
+        season.setEnddate(new Date(json.enddate.timestamp*1000));
+        return season;
+    }
+
+    createObject( jsonObject: any ): Observable<Season>
     {
         return this.http
             .post(this.url, jsonObject, new RequestOptions({ headers: this.getHeaders() }))
             // ...and calling .json() on the response to return data
-            .map((res) => this.jsonToObject(res))
+            .map((res) => this.jsonToObjectHelper(res.json()))
             //...errors if any
             .catch(this.handleError);
     }
 
-    private jsonToObject( res: Response ): Association
-    {
-        return this.jsonToObjectHelper( res.json() );
-    }
-
-    private jsonToObjectHelper( jsonAssociation : any ): Association
-    {
-        let association = new Association(jsonAssociation.name);
-        association.setId(jsonAssociation.id);
-        return association;
-    }
-
-    editObject( object: Association ): Observable<Association>
+    editObject( object: Season ): Observable<Season>
     {
         let url = this.url + '/'+object.getId();
+console.log(JSON.stringify( object ));
         return this.http
-            .put(url, JSON.stringify( object ), new RequestOptions({ headers: this.getHeaders() }))
+            .put(url, JSON.stringify( object ), { headers: this.getHeaders() })
             // ...and calling .json() on the response to return data
-            .map((res:Response) => res.json())
+            .map((res) => { return this.jsonToObjectHelper(res.json()); })
             //...errors if any
             .catch(this.handleError);
     }
 
-    removeObject( object: Association): Observable<void>
+    removeObject( object: Season): Observable<void>
     {
         let url = this.url + '/'+object.getId();
         return this.http

@@ -13,7 +13,7 @@ export class Competition {
 
     static readonly classname = "Competition";
 
-    static readonly MIN_LENGTH_NAME = 30;
+    static readonly MIN_LENGTH_NAME = 3;
     static readonly MAX_LENGTH_NAME = 30;
     static readonly MAX_LENGTH_ABBREVIATION = 7;
 

@@ -8,7 +8,7 @@ import { Location }                 from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { Association } from '../domain/association';
-import { AssociationRepository } from '../repositories/association';
+import { AssociationRepository } from '../domain/association/repository';
 import { AssociationAddModalContent } from './association/modal/add';
 import { AssociationEditModalContent } from './association/modal/edit';
 

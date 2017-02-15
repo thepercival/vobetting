@@ -8,7 +8,7 @@ import { Location }                 from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { Competition } from '../domain/competition';
-import { CompetitionRepository } from '../repositories/competition';
+import { CompetitionRepository } from '../domain/competition/repository';
 import { CompetitionAddModalContent } from './competition/modal/add';
 import { CompetitionEditModalContent } from './competition/modal/edit';
 
@@ -32,8 +32,7 @@ export class CompetitionsComponent implements OnInit{
         private repos: CompetitionRepository,
         private route: ActivatedRoute,
         private location: Location,
-        private modalService: NgbModal,
-        private competitionRepository: CompetitionRepository
+        private modalService: NgbModal
         // private globalEventsManger: GlobalEventsManager
     ) {}
 
@@ -93,7 +92,7 @@ export class CompetitionsComponent implements OnInit{
         if ( competition == null) {
             this.message = { "type": "danger", "message": "de competitie kan niet gevonden worden"};
         }
-        this.competitionRepository.removeObject( competition )
+        this.repos.removeObject( competition )
              .subscribe(
                  /* happy path */ retval => {
                     let index = this.competitions.indexOf( competition );

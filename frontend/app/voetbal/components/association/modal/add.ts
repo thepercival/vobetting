@@ -4,7 +4,7 @@
 
 import {Component, Input, OnInit, AfterViewInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { AssociationRepository } from '../../../repositories/association';
+import { AssociationRepository } from '../../../domain/association/repository';
 
 @Component({
     moduleId: module.id,

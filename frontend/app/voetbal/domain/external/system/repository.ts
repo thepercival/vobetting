@@ -7,9 +7,8 @@ import { Headers, Http, Response, RequestOptions } from '@angular/http';
 import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-import { ExternalSystem } from '../../domain/external/system';
-import { ExternalSystemSoccerOdds } from '../../domain/external/system/soccerodds';
-import { ExternalSystemSeasonsTest } from '../../domain/external/system/seasonstest';
+import { ExternalSystem } from '../system';
+import { ExternalSystemSoccerOdds } from './soccerodds';
 
 @Injectable()
 export class ExternalSystemRepository {
@@ -89,9 +88,9 @@ export class ExternalSystemRepository {
         if ( name == "Soccer Odds" ) {
             externalSystem = new ExternalSystemSoccerOdds( name, this.http );
         }
-        else if ( name == "Seasonstest" ) {
-            externalSystem = new ExternalSystemSeasonsTest( name, this.http );
-        }
+        // else if ( name == "Seasonstest" ) {
+        //     externalSystem = new ExternalSystemSeasonsTest( name, this.http );
+        // }
         return externalSystem;
     }
 

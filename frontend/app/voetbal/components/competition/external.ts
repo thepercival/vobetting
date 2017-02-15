@@ -8,14 +8,14 @@ import { Location }                 from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { Competition } from '../../domain/competition';
-import { CompetitionRepository } from '../../repositories/competition';
+import { CompetitionRepository } from '../../domain/competition/repository';
 import { CompetitionAddModalContent } from './modal/add';
 import { CompetitionEditModalContent } from './modal/edit';
 import { CompetitionAddExternalModalContent } from './modal/addexternal';
 import { ExternalSystem } from '../../domain/external/system';
 import { ExternalObject } from '../../domain/external/object';
-import { ExternalSystemRepository } from '../../repositories/external/system';
-import { ExternalObjectRepository } from '../../repositories/external/object';
+import { ExternalSystemRepository } from '../../domain/external/system/repository';
+import { ExternalObjectRepository } from '../../domain/external/object/repository';
 
 @Component({
     moduleId: module.id,

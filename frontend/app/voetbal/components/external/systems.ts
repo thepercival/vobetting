@@ -8,7 +8,7 @@ import { Location }                 from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ExternalSystem } from '../../domain/external/system';
-import { ExternalSystemRepository } from '../../repositories/external/system';
+import { ExternalSystemRepository } from '../../domain/external/system/repository';
 import { ExternalSystemAddModalContent } from './system/modal/add';
 import { ExternalSystemEditModalContent } from './system/modal/edit';
 

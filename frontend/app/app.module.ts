@@ -21,20 +21,24 @@ import { PasswordResetComponent, PasswordChangeComponent }  from './user/passwor
 import { GlobalEventsManager } from "./global-events-manager";
 import { AdminComponent } from "./admin/component";
 import { AssociationsComponent }  from './voetbal/components/associations';
-import { AssociationRepository }  from './voetbal/repositories/association';
+import { AssociationRepository }  from './voetbal/domain/association/repository';
 import { AssociationAddModalContent } from './voetbal/components/association/modal/add';
 import { AssociationEditModalContent } from './voetbal/components/association/modal/edit';
 import { CompetitionsComponent }  from './voetbal/components/competitions';
-import { CompetitionRepository }  from './voetbal/repositories/competition';
+import { CompetitionRepository }  from './voetbal/domain/competition/repository';
 import { CompetitionAddModalContent } from './voetbal/components/competition/modal/add';
 import { CompetitionEditModalContent } from './voetbal/components/competition/modal/edit';
 import { CompetitionAddExternalModalContent } from './voetbal/components/competition/modal/addexternal';
 import { CompetitionsExternalComponent } from './voetbal/components/competition/external';
+import { SeasonsComponent }  from './voetbal/components/seasons';
+import { SeasonRepository }  from './voetbal/domain/season/repository';
+import { SeasonAddModalContent } from './voetbal/components/season/modal/add';
+import { SeasonEditModalContent } from './voetbal/components/season/modal/edit';
 import { ExternalSystemsComponent }  from './voetbal/components/external/systems';
-import { ExternalSystemRepository }  from './voetbal/repositories/external/system';
+import { ExternalSystemRepository }  from './voetbal/domain/external/system/repository';
 import { ExternalSystemAddModalContent } from './voetbal/components/external/system/modal/add';
 import { ExternalSystemEditModalContent } from './voetbal/components/external/system/modal/edit';
-import { ExternalObjectRepository }  from './voetbal/repositories/external/object';
+import { ExternalObjectRepository }  from './voetbal/domain/external/object/repository';
 
 @NgModule({
    imports:      [
@@ -54,12 +58,14 @@ import { ExternalObjectRepository }  from './voetbal/repositories/external/objec
         AssociationsComponent, AssociationAddModalContent, AssociationEditModalContent,
         CompetitionsComponent, CompetitionAddModalContent, CompetitionEditModalContent,
         CompetitionAddExternalModalContent, CompetitionsExternalComponent,
+        SeasonsComponent, SeasonAddModalContent, SeasonEditModalContent,
         ExternalSystemsComponent, ExternalSystemAddModalContent, ExternalSystemEditModalContent
     ],
 
     entryComponents: [
         AssociationAddModalContent, AssociationEditModalContent,
         CompetitionAddModalContent, CompetitionEditModalContent,
+        SeasonAddModalContent, SeasonEditModalContent,
         ExternalSystemAddModalContent, ExternalSystemEditModalContent,
         CompetitionAddExternalModalContent
     ],
@@ -70,6 +76,7 @@ import { ExternalObjectRepository }  from './voetbal/repositories/external/objec
         GlobalEventsManager,
         AssociationRepository,
         CompetitionRepository,
+        SeasonRepository,
         ExternalSystemRepository,
         ExternalObjectRepository
     ],

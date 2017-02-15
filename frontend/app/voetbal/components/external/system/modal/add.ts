@@ -4,7 +4,7 @@
 
 import {Component, Input, OnInit, AfterViewInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { ExternalSystemRepository } from '../../../../repositories/external/system';
+import { ExternalSystemRepository } from '../../../../domain/external/system/repository';
 import { ExternalSystem } from '../../../../domain/external/system';
 
 @Component({

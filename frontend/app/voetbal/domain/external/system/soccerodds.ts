@@ -5,7 +5,7 @@
 import { ExternalSystemCompetitionInterface } from './interface';
 import { ExternalSystem } from './../system';
 import { Competition } from './../../competition';
-import { ExternalSystemSoccerOddsRepository } from '../../../repositories/external/system/soccerodds';
+import { ExternalSystemSoccerOddsRepository } from './soccerodds/repository';
 import { Http } from '@angular/http';
 import {Observable} from 'rxjs/Rx';
 

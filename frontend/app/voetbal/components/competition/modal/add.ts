@@ -4,7 +4,7 @@
 
 import {Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { CompetitionRepository } from '../../../repositories/competition'
+import { CompetitionRepository } from '../../../domain/competition/repository'
 import { Competition } from '../../../domain/competition';
 
 @Component({

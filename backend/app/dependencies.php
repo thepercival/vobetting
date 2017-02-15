@@ -5,6 +5,7 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use \Slim\Middleware\JwtAuthentication;
 
 $container = $app->getContainer();
@@ -58,6 +59,14 @@ $container['serializer'] = function( $c ) {
 	$normalizer->setCircularReferenceHandler(function ($object) {
 		return $object->getId();
 	});
+
+    //$normalizerGetSet = new GetSetMethodNormalizer();
+    /*$normalizer->setCallbacks(array('createdAt' => function ($dateTime) {
+        return $dateTime instanceof \DateTime
+            ? $dateTime->getTimestamp()
+            : null;
+    }));*/
+
 	$normalizers = array( $normalizer );
 	return new Serializer($normalizers, $encoders);
 };

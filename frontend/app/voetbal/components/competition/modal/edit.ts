@@ -5,7 +5,7 @@
 import {Component, Input, OnInit, AfterViewInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Competition } from '../../../domain/competition';
-import { CompetitionRepository } from '../../../repositories/competition';
+import { CompetitionRepository } from '../../../domain/competition/repository';
 
 @Component({
     moduleId: module.id,

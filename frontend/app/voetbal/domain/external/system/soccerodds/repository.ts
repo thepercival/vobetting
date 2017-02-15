@@ -7,10 +7,10 @@ import { Headers, Http, Response, RequestOptions } from '@angular/http';
 import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-import { Competition } from '../../../domain/competition';
-import { ExternalObjectRepository } from '../object';
-import { ExternalSystemSoccerOdds } from '../../../domain/external/system/soccerodds';
-import { ExternalSystemRepository } from '../system';
+import { Competition } from '../../../competition';
+import { ExternalObjectRepository } from '../../object/repository';
+import { ExternalSystemSoccerOdds } from '../soccerodds';
+import { ExternalSystemRepository } from '../repository';
 
 @Injectable()
 export class ExternalSystemSoccerOddsRepository{
