@@ -91,6 +91,9 @@ export class ExternalSystemRepository {
         // else if ( name == "Seasonstest" ) {
         //     externalSystem = new ExternalSystemSeasonsTest( name, this.http );
         // }
+        else {
+            externalSystem = new ExternalSystem( name );
+        }
         return externalSystem;
     }
 

@@ -1,6 +1,6 @@
 <div class="modal-header">
     <h4 class="modal-title">competitie toevoegen</h4>
-    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
@@ -20,6 +20,6 @@
     </div>
     <div class="modal-footer">
         <button [disabled]="loading" class="btn btn-primary" type="submit">toevoegen <i *ngIf="loading" class="fa fa-spinner fa-spin fa-fw"></i> </button>
-        <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss('Close click')">sluiten</button>
+        <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss()">sluiten</button>
     </div>
 </form>

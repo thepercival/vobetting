@@ -22,7 +22,7 @@ export class CompetitionEditModalContent implements OnInit{
 
     constructor(
         public activeModal: NgbActiveModal,
-        private competitionRepository: CompetitionRepository
+        private repos: CompetitionRepository
     ) {
         this.maxvalues.namemin = Competition.MIN_LENGTH_NAME;
         this.maxvalues.name = Competition.MAX_LENGTH_NAME;
@@ -42,7 +42,7 @@ export class CompetitionEditModalContent implements OnInit{
         this.competition.setName( this.model.name );
         this.competition.setAbbreviation( this.model.abbreviation );
 
-        this.competitionRepository.editObject( this.competition )
+        this.repos.editObject( this.competition )
             .subscribe(
                 /* happy path */ competition => {
                     // console.log(competition);

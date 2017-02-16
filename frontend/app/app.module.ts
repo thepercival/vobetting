@@ -34,6 +34,10 @@ import { SeasonsComponent }  from './voetbal/components/seasons';
 import { SeasonRepository }  from './voetbal/domain/season/repository';
 import { SeasonAddModalContent } from './voetbal/components/season/modal/add';
 import { SeasonEditModalContent } from './voetbal/components/season/modal/edit';
+import { CompetitionSeasonsComponent }  from './voetbal/components/competitionseasons';
+import { CompetitionSeasonRepository }  from './voetbal/domain/competitionseason/repository';
+import { CompetitionSeasonAddModalContent } from './voetbal/components/competitionseason/modal/add';
+import { CompetitionSeasonEditModalContent } from './voetbal/components/competitionseason/modal/edit';
 import { ExternalSystemsComponent }  from './voetbal/components/external/systems';
 import { ExternalSystemRepository }  from './voetbal/domain/external/system/repository';
 import { ExternalSystemAddModalContent } from './voetbal/components/external/system/modal/add';
@@ -59,6 +63,7 @@ import { ExternalObjectRepository }  from './voetbal/domain/external/object/repo
         CompetitionsComponent, CompetitionAddModalContent, CompetitionEditModalContent,
         CompetitionAddExternalModalContent, CompetitionsExternalComponent,
         SeasonsComponent, SeasonAddModalContent, SeasonEditModalContent,
+        CompetitionSeasonsComponent, CompetitionSeasonAddModalContent, CompetitionSeasonEditModalContent,
         ExternalSystemsComponent, ExternalSystemAddModalContent, ExternalSystemEditModalContent
     ],
 
@@ -67,6 +72,7 @@ import { ExternalObjectRepository }  from './voetbal/domain/external/object/repo
         CompetitionAddModalContent, CompetitionEditModalContent,
         SeasonAddModalContent, SeasonEditModalContent,
         ExternalSystemAddModalContent, ExternalSystemEditModalContent,
+        CompetitionSeasonAddModalContent, CompetitionSeasonEditModalContent,        
         CompetitionAddExternalModalContent
     ],
     providers:    [
@@ -77,6 +83,7 @@ import { ExternalObjectRepository }  from './voetbal/domain/external/object/repo
         AssociationRepository,
         CompetitionRepository,
         SeasonRepository,
+        CompetitionSeasonRepository,
         ExternalSystemRepository,
         ExternalObjectRepository
     ],

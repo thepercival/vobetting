@@ -59,8 +59,9 @@ export class AssociationsComponent implements OnInit{
 
         modalRef.result.then((association) => {
             this.associations.push( association );
-            this.message = { "type": "success", "message": "bond("+association.getName()+") toegevoegd"};
+            this.message = { "type": "success", "message": "de bond("+association.getName()+") is toegevoegd"};
         }, (reason) => {
+            if ( reason ){ this.message = { "type": "danger", "message": reason}; }
         });
     }
 
@@ -76,6 +77,11 @@ export class AssociationsComponent implements OnInit{
 
         const modalRef = this.modalService.open(AssociationEditModalContent, { backdrop : 'static' } );
         modalRef.componentInstance.association = association;
+        modalRef.result.then((competition) => {
+            this.message = { "type": "success", "message": "de bond("+association.getName()+") is gewijzigd"};
+        }, (reason) => {
+            if ( reason ){ this.message = { "type": "danger", "message": reason}; }
+        });
     }
 
     onRemove(associationParam: Association): void {

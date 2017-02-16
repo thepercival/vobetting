@@ -42,14 +42,14 @@ export class AssociationRepository {
     getObjects(): Observable<Association[]>
     {
         return this.http.get(this.url, new RequestOptions({ headers: this.getHeaders() }) )
-            .map((res) => this.jsonArrayToObject(res))
+            .map((res) => this.jsonArrayToObject(res.json()))
             .catch( this.handleError );
     }
 
-    private jsonArrayToObject( res: Response ): Association[]
+    jsonArrayToObject( jsonArray: any ): Association[]
     {
         let associations: Association[] = [];
-        for (let json of res.json()) {
+        for (let json of jsonArray) {
             let object = this.jsonToObjectHelper(json);
             associations.push( object );
         }
@@ -61,7 +61,7 @@ export class AssociationRepository {
         let url = this.url + '/'+id;
         return this.http.get(url)
         // ...and calling .json() on the response to return data
-            .map(this.jsonToObject)
+            .map((res) => this.jsonToObjectHelper(res.json()))
             //...errors if any
             .catch((error:any) => Observable.throw(error.message || 'Server error' ));
     }
@@ -71,20 +71,15 @@ export class AssociationRepository {
         return this.http
             .post(this.url, jsonObject, new RequestOptions({ headers: this.getHeaders() }))
             // ...and calling .json() on the response to return data
-            .map((res) => this.jsonToObject(res))
+            .map((res) => this.jsonToObjectHelper(res.json()))
             //...errors if any
             .catch(this.handleError);
     }
 
-    private jsonToObject( res: Response ): Association
+    jsonToObjectHelper( json : any ): Association
     {
-        return this.jsonToObjectHelper( res.json() );
-    }
-
-    private jsonToObjectHelper( jsonAssociation : any ): Association
-    {
-        let association = new Association(jsonAssociation.name);
-        association.setId(jsonAssociation.id);
+        let association = new Association(json.name);
+        association.setId(json.id);
         return association;
     }
 
@@ -94,7 +89,7 @@ export class AssociationRepository {
         return this.http
             .put(url, JSON.stringify( object ), new RequestOptions({ headers: this.getHeaders() }))
             // ...and calling .json() on the response to return data
-            .map((res:Response) => res.json())
+            .map((res) => this.jsonToObjectHelper(res.json()))
             //...errors if any
             .catch(this.handleError);
     }

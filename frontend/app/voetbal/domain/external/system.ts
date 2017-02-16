@@ -2,7 +2,7 @@
  * Created by cdunnink on 7-2-2017.
  */
 
-export abstract class ExternalSystem{
+export class ExternalSystem{
     protected id: number;
     protected name: string;
     protected website: string;
@@ -79,5 +79,8 @@ export abstract class ExternalSystem{
         this.apikey = apikey;
     };
 
-    abstract hasAvailableExportClass( exportClass: string ): boolean;
+    hasAvailableExportClass( exportClass: string ): boolean
+    {
+        return false;
+    }
 }

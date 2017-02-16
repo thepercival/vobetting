@@ -58,10 +58,9 @@ export class CompetitionsComponent implements OnInit{
         modalRef.result.then((competition) => {
             this.competitions.push( competition );
             this.message = { "type": "success", "message": "competitie("+competition.getName()+") toegevoegd"};
-        }/*, (reason) => {
-            modalRef.closeResult = reason;
-        }*/);
-        // return false;
+        }, (reason) => {
+            if ( reason ){ this.message = { "type": "danger", "message": reason}; }
+        });
     }
 
     onEdit( competition: Competition ): void {
@@ -78,9 +77,9 @@ export class CompetitionsComponent implements OnInit{
         modalRef.componentInstance.competition = competition;
         modalRef.result.then((competition) => {
             this.message = { "type": "success", "message": "competitie("+competition.getName()+") gewijzigd"};
-        }/*, (reason) => {
-         modalRef.closeResult = reason;
-         }*/);
+        }, (reason) => {
+            if ( reason ){ this.message = { "type": "danger", "message": reason}; }
+         });
 
     }
 

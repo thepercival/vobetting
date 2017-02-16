@@ -51,6 +51,7 @@ export class ExternalSystemsComponent implements OnInit{
             this.objects.push( object );
             this.message = { "type": "success", "message": "extern systeem("+object.getName()+") toegevoegd"};
         }, (reason) => {
+            if (reason){ this.message = { "type": "danger", "message": reason}; }
         });
     }
 
@@ -66,8 +67,7 @@ export class ExternalSystemsComponent implements OnInit{
         modalRef.result.then((externalsystem) => {
             this.message = { "type": "success", "message": "het externe systeem is gewijzigd"};
         }, (reason) => {
-            //modalRef.closeResult = reason;
-            console.error(reason);
+            if (reason){ this.message = { "type": "danger", "message": reason}; }
          });
     }
 

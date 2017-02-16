@@ -16,7 +16,7 @@ import { ExternalSystemRepository } from '../repository';
 export class ExternalSystemSoccerOddsRepository{
 
     private headers = new Headers({'Content-Type': 'application/json'});
-    private url : string = "https://arisalexis-soccer-odds-v1.p.mashape.com";
+    private url : string;
     private http: Http;
     private externalObjectRepository: ExternalObjectRepository;
     private externalSystem: ExternalSystemSoccerOdds;
@@ -27,11 +27,12 @@ export class ExternalSystemSoccerOddsRepository{
         this.externalSystem = externalSystem;
         let externalSystemRepository = new ExternalSystemRepository(http);
         this.externalObjectRepository = new ExternalObjectRepository(http, externalSystemRepository );
+        this.url = "https://arisalexis-soccer-odds-v1.p.mashape.com";
     }
 
     getToken(): string
     {
-        return "0UcAt1xsSWmshJ5q1s0jjHZ6iWO3p1euSe0jsnrSR3odKAKsWU";
+        return this.externalSystem.getApikey(); // 0UcAt1xsSWmshJ5q1s0jjHZ6iWO3p1euSe0jsnrSR3odKAKsWU
     }
 
     getHeaders(): Headers

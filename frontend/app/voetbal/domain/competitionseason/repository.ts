@@ -1,5 +1,5 @@
 /**
- * Created by coen on 10-2-17.
+ * Created by coen on 16-2-17.
  */
 
 import { Injectable } from '@angular/core';
@@ -7,23 +7,36 @@ import { Headers, Http, Response, RequestOptions } from '@angular/http';
 import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-import { Season } from '../season';
+import { CompetitionSeason } from '../competitionseason';
+import { AssociationRepository } from '../association/repository';
+import { CompetitionRepository } from '../competition/repository';
+import { SeasonRepository } from '../season/repository';
+// import { ExternalObjectRepository } from '../external/object/repository';
 
 @Injectable()
-export class SeasonRepository {
+export class CompetitionSeasonRepository {
 
     private url : string;
     private http: Http;
+    // private externalObjectRepository: ExternalObjectRepository;
 
-    constructor( http: Http )
+
+
+    constructor( http: Http,
+         private associationRepository: AssociationRepository,
+         private competitionRepository: CompetitionRepository,
+         private seasonRepository: SeasonRepository,
+         /*externalObjectRepository: ExternalObjectRepository,*/
+    )
     {
         this.http = http;
+        //this.externalObjectRepository = externalObjectRepository;
         this.url = "http://localhost:2999/voetbal/" + this.getUrlpostfix();
     }
 
     getUrlpostfix(): string
     {
-        return 'seasons';
+        return 'competitionseasons';
     }
 
     getToken(): string
@@ -44,24 +57,24 @@ export class SeasonRepository {
         return headers;
     }
 
-    getObjects(): Observable<Season[]>
+    getObjects(): Observable<CompetitionSeason[]>
     {
         return this.http.get(this.url, new RequestOptions({ headers: this.getHeaders() }) )
             .map((res) => this.jsonToArrayHelper(res.json()))
             .catch( this.handleError );
     }
 
-    jsonToArrayHelper( jsonArray : any ): Season[]
+    jsonToArrayHelper( jsonArray : any ): CompetitionSeason[]
     {
-        let seasons: Season[] = [];
+        let competitionseasons: CompetitionSeason[] = [];
         for (let json of jsonArray) {
             let object = this.jsonToObjectHelper(json);
-            seasons.push( object );
+            competitionseasons.push( object );
         }
-        return seasons;
+        return competitionseasons;
     }
 
-    getObject( id: number): Observable<Season>
+    getObject( id: number): Observable<CompetitionSeason>
     {
         let url = this.url + '/'+id;
         return this.http.get(url)
@@ -71,17 +84,22 @@ export class SeasonRepository {
             .catch((error:any) => Observable.throw(error.message || 'Server error' ));
     }
 
-    jsonToObjectHelper( json : any ): Season
+    jsonToObjectHelper( json : any ): CompetitionSeason
     {
         console.log(json);
-        let season = new Season(json.name);
-        season.setId(json.id);
-        season.setStartdate(new Date(json.startdate.timestamp*1000));
-        season.setEnddate(new Date(json.enddate.timestamp*1000));
-        return season;
+        let association = this.associationRepository.jsonToObjectHelper(json.association);
+        let competition = this.competitionRepository.jsonToObjectHelper(json.competition);
+        let season = this.seasonRepository.jsonToObjectHelper(json.season);
+
+        let competitionseason = new CompetitionSeason(association, competition, season);
+        competitionseason.setId(json.id);
+        competitionseason.setState(json.state);
+        competitionseason.setQualificationrule(json.qualificationrule);
+        // competitionseason.addExternals(this.externalObjectRepository.jsonToArrayHelper(json.externals,competition));
+        return competitionseason;
     }
 
-    createObject( jsonObject: any ): Observable<Season>
+    createObject( jsonObject: any ): Observable<CompetitionSeason>
     {
         return this.http
             .post(this.url, jsonObject, new RequestOptions({ headers: this.getHeaders() }))
@@ -91,19 +109,19 @@ export class SeasonRepository {
             .catch(this.handleError);
     }
 
-    editObject( object: Season ): Observable<Season>
+    editObject( object: CompetitionSeason ): Observable<CompetitionSeason>
     {
         let url = this.url + '/'+object.getId();
-console.log(this.objectToJsonHelper(object));
+
         return this.http
-            .put(url, JSON.stringify( this.objectToJsonHelper(object) ), { headers: this.getHeaders() })
+            .put(url, JSON.stringify( object ), { headers: this.getHeaders() })
             // ...and calling .json() on the response to return data
-            .map((res) => { return this.jsonToObjectHelper(res.json()); })
+            .map((res) => { console.log(res.json()); return this.jsonToObjectHelper(res.json()); })
             //...errors if any
             .catch(this.handleError);
     }
 
-    removeObject( object: Season): Observable<void>
+    removeObject( object: CompetitionSeason): Observable<void>
     {
         let url = this.url + '/'+object.getId();
         return this.http
@@ -114,17 +132,6 @@ console.log(this.objectToJsonHelper(object));
             .catch(this.handleError);
     }
 
-    objectToJsonHelper( object : Season ): any
-    {
-        let json = {
-            "id":object.getId(),
-            "name":object.getName(),
-            "startdate":object.getStartdate().toISOString(),
-            "enddate":object.getEnddate().toISOString()
-        };
-        return json;
-    }
-
     // this could also be a private method of the component class
     handleError(res: Response): Observable<any> {
         console.error( res );
@@ -132,3 +139,4 @@ console.log(this.objectToJsonHelper(object));
         return Observable.throw( res.statusText );
     }
 }
+

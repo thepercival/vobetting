@@ -1,0 +1,15 @@
+<div class="modal-header">
+    <h4 class="modal-title">competitieseizoen toevoegen</h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<form class="card card-block" name="formCompetitionSeasonAdd" (ngSubmit)="f.form.valid && add() && false" #f="ngForm" novalidate>
+    <div class="modal-body">
+        <div *ngIf="error" class="alert alert-danger" role="alert">{{error}}</div>
+    </div>
+    <div class="modal-footer">
+        <button [disabled]="loading" class="btn btn-primary" type="submit">toevoegen <i *ngIf="loading" class="fa fa-spinner fa-spin fa-fw"></i> </button>
+        <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss()">sluiten</button>
+    </div>
+</form>

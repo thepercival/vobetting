@@ -11,6 +11,7 @@ import { AdminComponent }  from './admin/component';
 import { AssociationsComponent }  from './voetbal/components/associations';
 import { CompetitionsComponent }  from './voetbal/components/competitions';
 import { SeasonsComponent }  from './voetbal/components/seasons';
+import { CompetitionSeasonsComponent }  from './voetbal/components/competitionseasons';
 import { CompetitionsExternalComponent }  from './voetbal/components/competition/external';
 import { ExternalSystemsComponent }  from './voetbal/components/external/systems';
 import { AuthGuard }  from './auth/guard';
@@ -29,6 +30,7 @@ const routes: Routes = [
     { path: 'competitions/external', component: CompetitionsExternalComponent, canActivate: [AuthGuard] },
     { path: 'seasons', component: SeasonsComponent, canActivate: [AuthGuard] },
     { path: 'externalsystems', component: ExternalSystemsComponent, canActivate: [AuthGuard] },
+    { path: 'competitionseasons', component: CompetitionSeasonsComponent, canActivate: [AuthGuard] },
     { path: '', redirectTo: '/home', pathMatch: 'full' },
     // otherwise redirect to home
     { path: '**', redirectTo: '' }
