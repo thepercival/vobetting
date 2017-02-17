@@ -14,7 +14,7 @@
                         <button type="button" class="btn btn-secondary" (click)="onAdd()" title="item toevoegen"><i class="fa fa-plus" aria-hidden="true"></i></button>
                     </th>
                     <th>intern</th>
-                    <th>extern</th>
+                    <th colspan="2">extern</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -27,9 +27,8 @@
                         <td *ngIf="first" [attr.rowspan]="competition.getExternals().length">
                             {{competition.getName()}}
                         </td>
-                        <td>
-                            {{external.getExternalSystem().getName()}}(#{{external.getExternalid()}})
-                        </td>
+                        <td>{{external.getExternalSystem().getName()}}</td>
+                        <td>#{{external.getExternalid()}}</td>
                     </tr>
                     </template>
                     <tr *ngIf="competition.getExternals().length == 0">

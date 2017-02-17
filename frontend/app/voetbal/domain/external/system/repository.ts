@@ -89,7 +89,7 @@ export class ExternalSystemRepository {
         if ( name == "Soccer Odds" ) {
             externalSystem = new ExternalSystemSoccerOdds( name, this.http );
         }
-        else if ( name == "Soccer - Sports Open Data" ) {
+        else if ( name == "Soccer Sports" ) {
              externalSystem = new ExternalSystemSoccerSports( name, this.http );
         }
         else {
