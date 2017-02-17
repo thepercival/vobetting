@@ -77,7 +77,7 @@ export class AssociationsComponent implements OnInit{
 
         const modalRef = this.modalService.open(AssociationEditModalContent, { backdrop : 'static' } );
         modalRef.componentInstance.association = association;
-        modalRef.result.then((competition) => {
+        modalRef.result.then((association) => {
             this.message = { "type": "success", "message": "de bond("+association.getName()+") is gewijzigd"};
         }, (reason) => {
             if ( reason ){ this.message = { "type": "danger", "message": reason}; }

@@ -1,29 +1,26 @@
 <!-- <div class="alert alert-success">bonden gevonden</div> -->
 <h2>competitieseizoenen beheren</h2>
 
-<div>selecteer eerst een bond</div>
-
-<div *ngIf="association">
-    <hr>
-    <div *ngIf="message" class="alert alert-{{message.type}}" role="alert">{{message.message}}</div>
-    <table class="table" style="max-width: 600px;">
-        <thead>
-        <tr>
-            <th style="text-align: center">{{competitionseasons?.length}}</th>
-            <th>naam</th>
-            <th>status</th>
-            <th style="text-align: center"><button type="button" class="btn btn-secondary" (click)="onAdd()"><i class="fa fa-plus" aria-hidden="true"></i></button></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let competitionseason of competitionseasons">
-            <td style="text-align: center"><a type="button" href="javascript:void(0)" class="btn btn-secondary" (click)="onEdit(competitionseason)"><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
-            <td>{{competitionseason.getName()}}</td>
-            <td>{{competitionseason.getStateDescription()}}</td>
-            <td style="text-align: center"><a type="button" href="javascript:void(0)" class="btn btn-secondary" (click)="onRemove(competitionseason)"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+<div *ngIf="message" class="alert alert-{{message.type}}" role="alert">{{message.message}}</div>
+<table class="table" style="max-width: 600px;">
+    <thead>
+    <tr>
+        <th style="text-align: center">{{competitionseasons?.length}}</th>
+        <th>naam</th>
+        <th>status</th>
+        <th class="hidden-xs-down">bond</th>
+        <th style="text-align: center"><button type="button" class="btn btn-secondary" (click)="onAdd()"><i class="fa fa-plus" aria-hidden="true"></i></button></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let competitionseason of competitionseasons">
+        <td style="text-align: center"><a type="button" [class.disabled]="true" href="javascript:void(0)" class="btn btn-secondary" (click)="onEdit(competitionseason)"><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
+        <td>{{competitionseason.getName()}}</td>
+        <td>{{competitionseason.getStateDescription()}}</td>
+        <td class="hidden-xs-down">{{competitionseason.getAssociation().getName()}}</td>
+        <td style="text-align: center"><a type="button" href="javascript:void(0)" class="btn btn-secondary" (click)="onRemove(competitionseason)"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
+    </tr>
+    </tbody>
+</table>
 <hr>
 <a href="#" class="btn btn-secondary" (click)="goBack()">ga terug</a>

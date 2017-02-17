@@ -14,7 +14,7 @@ import { AssociationRepository } from '../../../domain/association/repository';
 })
 export class AssociationEditModalContent implements OnInit{
     @Input()
-    object: Association;
+    association: Association;
     model: any = {};
     loading = false;
     error = '';
@@ -25,8 +25,8 @@ export class AssociationEditModalContent implements OnInit{
     ) {}
 
     ngOnInit() {
-        if ( this.object ) {
-            this.model.name = this.object.getName();
+        if ( this.association ) {
+            this.model.name = this.association.getName();
             // this.model.seasonname = moment().format('YYYY');
         }
     }
@@ -34,14 +34,14 @@ export class AssociationEditModalContent implements OnInit{
     edit(): boolean {
         this.model.name = this.model.name.trim();
         if (!this.model.name) { return false; }
-        this.object.setName( this.model.name );
+        this.association.setName( this.model.name );
 
-        this.repos.editObject( this.object )
+        this.repos.editObject( this.association )
             .subscribe(
                 /* happy path */ object => {
                     this.activeModal.close( object );
                 },
-                /* error path */ e => { this.error = e; this.loading = false; },
+                /* error path */ e => { this.error = e; this.loading = false; console.log(666); },
                 /* onComplete */ () => this.loading = false
             );
 

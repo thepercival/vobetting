@@ -33,6 +33,7 @@ export class CompetitionsExternalComponent implements OnInit{
     externalsystems: ExternalSystem[];
     loading: boolean = false;
     message: any = null;
+    classname: string;
 
     constructor(
         private repos: CompetitionRepository,
@@ -42,7 +43,9 @@ export class CompetitionsExternalComponent implements OnInit{
         private reposExternalSystem: ExternalSystemRepository,
         private externalObjectRepository: ExternalObjectRepository
         // private globalEventsManger: GlobalEventsManager
-    ) {}
+    ) {
+        this.classname = Competition.classname;
+    }
 
     ngOnInit(): void {
 
@@ -59,7 +62,7 @@ export class CompetitionsExternalComponent implements OnInit{
             .subscribe(
                 /* happy path */ externalsystems => {
                     this.externalsystems = externalsystems.filter(
-                        externalsystem => externalsystem.hasAvailableExportClass( Competition.classname )
+                        externalsystem => externalsystem.hasAvailableExportClass( this.classname )
                     );
                 },
                 /* error path */ e => {},
@@ -115,7 +118,6 @@ export class CompetitionsExternalComponent implements OnInit{
         this.message = null;
         const modalRef = this.modalService.open(CompetitionAddExternalModalContent, { backdrop : 'static' } );
 
-
         modalRef.componentInstance.competitions = this.competitions.filter(
             competition => !competition.hasExternalid( externalcompetition.getId().toString(), this.externalsystem )
         );
@@ -124,12 +126,7 @@ export class CompetitionsExternalComponent implements OnInit{
             this.externalObjectRepository.createObject( this.repos.getUrlpostfix(), competition, externalcompetition.getId().toString(), this.externalsystem )
                 .subscribe(
                     /* happy path */ externalobject => {
-                        // @todo following code should move to service
-                        // add to internal
-                        competition.getExternals().push(externalobject);
-                        // add to external
-                        let jsonExternal = { "externalid" : competition.getId(), "externalsystem": null };
-                        externalcompetition.addExternals(this.externalObjectRepository.jsonToArrayHelper([jsonExternal],externalcompetition));
+                        this.onAddExternalHelper( competition, externalobject, externalcompetition );
                         this.message = { "type": "success", "message": "externe competitie "+externalcompetition.getName()+" gekoppeld aan ("+competition.getName()+") toegevoegd"};
                     },
                     /* error path */ e => { this.message = { "type": "success", "message": e}; this.loading = false; },
@@ -139,6 +136,15 @@ export class CompetitionsExternalComponent implements OnInit{
         }/*, (reason) => {
          modalRef.closeResult = reason;
          }*/);
+    }
+
+    onAddExternalHelper( competition: Competition, externalobject: ExternalObject, externalcompetition: Competition ): void {
+        // @todo following code should move to service
+        // add to internal
+        competition.getExternals().push(externalobject);
+        // add to external
+        let jsonExternal = { "externalid" : competition.getId(), "externalsystem": null };
+        externalcompetition.addExternals(this.externalObjectRepository.jsonToArrayHelper([jsonExternal],externalcompetition));
     }
 
     onRemove( externalObject: ExternalObject ): void
@@ -171,9 +177,47 @@ export class CompetitionsExternalComponent implements OnInit{
 
                     this.message = { "type": "success", "message": "externe competitie "+externalObject.getImportableObject().getName()+" ontkoppeld van ("+internalcompetition.getName()+") toegevoegd"};
                 },
-                /* error path */ e => { this.message = { "type": "success", "message": e}; this.loading = false; },
+                /* error path */ e => { this.message = { "type": "danger", "message": e}; this.loading = false; },
                 /* onComplete */ () => this.loading = false
             );
+    }
+
+    onImportExternalAll(): void
+    {
+        for( let externalcompetition of this.externalcompetitions) {
+            this.onImportExternal(externalcompetition);
+        }
+    }
+
+    onImportExternal(externalcompetition): void
+    {
+        // check if has internal
+        // if ( false ) { // update internal
+        //     // update
+        // }
+        // else { // add
+
+            let json = { "name": externalcompetition.getName(), "abbreviation" : externalcompetition.getAbbreviation() };
+
+            this.repos.createObject( json )
+                .subscribe(
+                    /* happy path */ competition => {
+                        this.competitions.push(competition);
+
+                        this.externalObjectRepository.createObject( this.repos.getUrlpostfix(), competition, externalcompetition.getId().toString(), this.externalsystem )
+                            .subscribe(
+                                /* happy path */ externalobject => {
+                                    this.onAddExternalHelper( competition, externalobject, externalcompetition );
+                                },
+                                /* error path */ e => { this.message = { "type": "danger", "message": e}; this.loading = false; },
+                                /* onComplete */ () => this.loading = false
+                            );
+
+                    },
+                    /* error path */ e => { this.message = { "type": "danger", "message": e}; this.loading = false; },
+                    /* onComplete */ () => this.loading = false
+                );
+        // }
     }
 
     goBack(): void {

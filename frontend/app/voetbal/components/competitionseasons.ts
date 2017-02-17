@@ -33,7 +33,7 @@ export class CompetitionSeasonsComponent implements OnInit{
         private repos: CompetitionSeasonRepository,
         private route: ActivatedRoute,
         private location: Location,
-        private modalService: NgbModal
+        private modalService: NgbModal,
         // private globalEventsManger: GlobalEventsManager
     ) {}
 

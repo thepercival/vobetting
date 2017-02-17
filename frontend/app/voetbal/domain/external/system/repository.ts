@@ -9,6 +9,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { ExternalSystem } from '../system';
 import { ExternalSystemSoccerOdds } from './soccerodds';
+import { ExternalSystemSoccerSports } from './soccersports';
 
 @Injectable()
 export class ExternalSystemRepository {
@@ -88,9 +89,9 @@ export class ExternalSystemRepository {
         if ( name == "Soccer Odds" ) {
             externalSystem = new ExternalSystemSoccerOdds( name, this.http );
         }
-        // else if ( name == "Seasonstest" ) {
-        //     externalSystem = new ExternalSystemSeasonsTest( name, this.http );
-        // }
+        else if ( name == "Soccer - Sports Open Data" ) {
+             externalSystem = new ExternalSystemSoccerSports( name, this.http );
+        }
         else {
             externalSystem = new ExternalSystem( name );
         }

@@ -1,5 +1,5 @@
 /**
- * Created by coen on 30-1-17.
+ * Created by coen on 17-2-17.
  */
 
 import { Injectable } from '@angular/core';
@@ -9,18 +9,18 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { Competition } from '../../../competition';
 import { ExternalObjectRepository } from '../../object/repository';
-import { ExternalSystemSoccerOdds } from '../soccerodds';
+import { ExternalSystemSoccerSports } from '../soccersports';
 import { ExternalSystemRepository } from '../repository';
 
 @Injectable()
-export class ExternalSystemSoccerOddsRepository{
+export class ExternalSystemSoccerSportsRepository{
 
     private headers = new Headers({'Content-Type': 'application/json'});
     private http: Http;
     private externalObjectRepository: ExternalObjectRepository;
-    private externalSystem: ExternalSystemSoccerOdds;
+    private externalSystem: ExternalSystemSoccerSports;
 
-    constructor( http: Http, externalSystem: ExternalSystemSoccerOdds )
+    constructor( http: Http, externalSystem: ExternalSystemSoccerSports )
     {
         this.http = http;
         this.externalSystem = externalSystem;
@@ -46,7 +46,13 @@ export class ExternalSystemSoccerOddsRepository{
     {
         let url = this.externalSystem.getApiurl() + 'leagues';
         return this.http.get(url, new RequestOptions({ headers: this.getHeaders() }) )
-            .map((res) => this.jsonCompetitionsToArrayHelper(res.json(), appCompetitions ))
+            .map((res) => {
+                let json = res.json().data;
+                if ( json.errorCode != 0 ) {
+                    this.handleError(res);
+                }
+                return this.jsonCompetitionsToArrayHelper(json.leagues, appCompetitions )
+            })
             .catch( this.handleError );
     }
 
@@ -62,8 +68,16 @@ export class ExternalSystemSoccerOddsRepository{
 
     jsonCompetitionToObjectHelper( json : any, appCompetitions: Competition[] ): Competition
     {
+        // identifier: "8e7fa444c4b60383727fb61fcc6aa387",
+        // league_slug: "bundesliga",
+        // name: "Bundesliga",
+        // nation: "Germany",
+        // level: "1"
+        // cup: false,
+        // federation: "UEFA"
+
         let competition = new Competition(json.name);
-        competition.setId(json.leagueId);
+        competition.setId(json.league_slug);
         competition.setAbbreviation(competition.getName().substr(0,Competition.MAX_LENGTH_ABBREVIATION));
 
         let foundAppCompetitions = appCompetitions.filter( compFilter => compFilter.hasExternalid( competition.getId().toString(), this.externalSystem ) );
@@ -82,3 +96,4 @@ export class ExternalSystemSoccerOddsRepository{
         return Observable.throw( res.statusText );
     }
 }
+

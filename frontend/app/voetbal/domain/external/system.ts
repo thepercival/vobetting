@@ -79,8 +79,20 @@ export class ExternalSystem{
         this.apikey = apikey;
     };
 
-    hasAvailableExportClass( exportClass: string ): boolean
+    hasAvailableExportClass( exportclassparam: string ): boolean
     {
-        return false;
+        let x = this.getExportableClasses().filter( exportclass => exportclass.name == exportclassparam);
+        return x.length == 1;
+    }
+
+    hasAvailableExportClassAsSource( exportclassparam: string ): boolean
+    {
+        let x = this.getExportableClasses().filter( exportclass => exportclass.name == exportclassparam);
+        return x.length == 1 && x[0].source;
+    }
+
+    getExportableClasses(): any[]
+    {
+        return [];
     }
 }

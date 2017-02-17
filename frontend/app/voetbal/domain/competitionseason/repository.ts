@@ -20,8 +20,6 @@ export class CompetitionSeasonRepository {
     private http: Http;
     // private externalObjectRepository: ExternalObjectRepository;
 
-
-
     constructor( http: Http,
          private associationRepository: AssociationRepository,
          private competitionRepository: CompetitionRepository,

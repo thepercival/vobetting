@@ -28,13 +28,11 @@ export class CompetitionAddModalContent{
     }
 
     add(): boolean {
-        //console.log(this.model);
         this.model.name = this.model.name.trim();
         if (!this.model.name) { return false; }
         let json = { "name": this.model.name, "abbreviation" : this.model.abbreviation.trim() };
 
-        // this.activeModal.close( json);
-       this.repos.createObject( json )
+        this.repos.createObject( json )
             .subscribe(
                 /* happy path */ competition => {
                     this.activeModal.close( competition);
