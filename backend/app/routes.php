@@ -1,12 +1,7 @@
 <?php
 
 // Routes
-$app->group('/voetbal', function () use ($app) {
-	$app->get('/associations', 'Voetbal\Action\Association:fetch');
-	$app->get('/associations/{id}', 'Voetbal\Action\Association:fetchOne');
-	$app->post('/associations', 'Voetbal\Action\Association:add');
-	$app->put('/associations/{id}', 'Voetbal\Action\Association:edit');
-	$app->delete('/associations/{id}', 'Voetbal\Action\Association:remove');
+/*$app->group('/voetbal', function () use ($app) {
 
     $app->get('/seasons', 'Voetbal\Action\Season:fetch');
     $app->get('/seasons/{id}', 'Voetbal\Action\Season:fetchOne');
@@ -25,9 +20,11 @@ $app->group('/voetbal', function () use ($app) {
     $app->post('/competitionseasons', 'Voetbal\Action\Competitionseason:add');
     $app->put('/competitionseasons/{id}', 'Voetbal\Action\Competitionseason:edit');
     $app->delete('/competitionseasons/{id}', 'Voetbal\Action\Competitionseason:remove');
-});
+});*/
 
-$app->group('/voetbal/external', function () use ($app) {
+$app->any('/voetbal/{resourceType}[/{id}]', \Voetbal\Action\Handler::class );
+
+/*$app->group('/voetbal/external', function () use ($app) {
     $app->get('/systems', 'Voetbal\Action\External\System:fetch');
     $app->get('/systems/{id}', 'Voetbal\Action\External\System:fetchOne');
     $app->post('/systems', 'Voetbal\Action\External\System:add');
@@ -38,7 +35,7 @@ $app->group('/voetbal/external', function () use ($app) {
     $app->get('/{resourceType}/{id}', 'Voetbal\Action\External\Object:fetchOne');
     $app->post('/{resourceType}', 'Voetbal\Action\External\Object:add');
     $app->delete('/{resourceType}/{id}', 'Voetbal\Action\External\Object:remove');
-});
+});*/
 
 $app->group('/auth', function () use ($app) {
 	$app->post('/register', 'App\Action\Auth:register');

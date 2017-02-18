@@ -10,10 +10,6 @@ use \Slim\Middleware\JwtAuthentication;
 
 $container = $app->getContainer();
 
-/*$container['savewww'] = function ($c) {
-	return $c->get('settings')['www']['url'];
-};*/
-
 // view renderer
 $container['renderer'] = function ($c) {
     $settings = $c->get('settings')['renderer'];
@@ -71,6 +67,13 @@ $container['serializer'] = function( $c ) {
 	return new Serializer($normalizers, $encoders);
 };
 
+// symfony serializer
+$container['voetbal'] = function( $c ) {
+    $voetbalService = new Voetbal\Service($c->get('em'));
+
+    return $voetbalService;
+};
+
 // JWTAuthentication
 $container['jwtauth'] = function( $c ) {
     $settings = $c->get('settings');
@@ -103,30 +106,24 @@ $container['App\Action\Auth\User'] = function ($c) {
 	return new App\Action\Auth\User($repos,$c->get('serializer'),$c->get('settings'));
 };
 
-$container['Voetbal\Action\Association'] = function ($c) {
-	$em = $c->get('em');
-    $repos = new Voetbal\Repository\Association($em,$em->getClassMetaData(Voetbal\Association::class));
-	return new Voetbal\Action\Association($repos,$c->get('serializer'));
-};
-
 $container['Voetbal\Action\Season'] = function ($c) {
     $em = $c->get('em');
-    $repos = new Voetbal\Repository\Season($em,$em->getClassMetaData(Voetbal\Season::class));
+    $repos = new Voetbal\Season\Repository($em,$em->getClassMetaData(Voetbal\Season::class));
     return new Voetbal\Action\Season($repos,$c->get('serializer'));
 };
 
 $container['Voetbal\Action\Competition'] = function ($c) {
     $em = $c->get('em');
-    $repos = new Voetbal\Repository\Competition($em,$em->getClassMetaData(Voetbal\Competition::class));
+    $repos = new Voetbal\Competition\Repository($em,$em->getClassMetaData(Voetbal\Competition::class));
     return new Voetbal\Action\Competition($repos,$c->get('serializer'));
 };
 
 $container['Voetbal\Action\Competitionseason'] = function ($c) {
     $em = $c->get('em');
-    $repos = new Voetbal\Repository\Competitionseason($em,$em->getClassMetaData(Voetbal\Competitionseason::class));
-    $competitionRepos = new Voetbal\Repository\Competition($em,$em->getClassMetaData(Voetbal\Competition::class));
-    $seasonRepos = new Voetbal\Repository\Season($em,$em->getClassMetaData(Voetbal\Season::class));
-    $associationRepos = new Voetbal\Repository\Association($em,$em->getClassMetaData(Voetbal\Association::class));
+    $repos = new Voetbal\Competitionseason\Repository($em,$em->getClassMetaData(Voetbal\Competitionseason::class));
+    $competitionRepos = new Voetbal\Competition\Repository($em,$em->getClassMetaData(Voetbal\Competition::class));
+    $seasonRepos = new Voetbal\Season\Repository($em,$em->getClassMetaData(Voetbal\Season::class));
+    $associationRepos = new Voetbal\Association\Repository($em,$em->getClassMetaData(Voetbal\Association::class));
     return new Voetbal\Action\Competitionseason(
         $repos,
         $competitionRepos,
@@ -138,7 +135,7 @@ $container['Voetbal\Action\Competitionseason'] = function ($c) {
 
 $container['Voetbal\Action\External\System'] = function ($c) {
     $em = $c->get('em');
-    $externalsystemRepository = new Voetbal\Repository\External\System($em,$em->getClassMetaData(Voetbal\External\System::class));
+    $externalsystemRepository = new Voetbal\External\System\Repository($em,$em->getClassMetaData(Voetbal\External\System::class));
     return new Voetbal\Action\External\System($externalsystemRepository,$c->get('serializer'));
 };
 
