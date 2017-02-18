@@ -30,7 +30,7 @@ export class ExternalSystemSoccerOddsRepository{
 
     getToken(): string
     {
-        return this.externalSystem.getApikey(); // 0UcAt1xsSWmshJ5q1s0jjHZ6iWO3p1euSe0jsnrSR3odKAKsWU
+        return this.externalSystem.getApikey();
     }
 
     getHeaders(): Headers
