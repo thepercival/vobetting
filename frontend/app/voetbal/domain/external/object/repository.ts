@@ -74,6 +74,7 @@ export class ExternalObjectRepository {
     {
         let json = {"importableobjectid":object.getId(), "externalid":externalid, "externalsystemid":externalSystem.getId()};
         let url = this.url + '/'+urlpostfix;
+        console.log(json);
         return this.http
             .post(url, json, new RequestOptions({ headers: this.getHeaders() }))
             // ...and calling .json() on the response to return data

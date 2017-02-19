@@ -8,17 +8,25 @@ import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { Association } from '../association';
+import { ExternalObjectRepository } from '../external/object/repository';
 
 @Injectable()
 export class AssociationRepository {
 
-    private headers = new Headers({'Content-Type': 'application/json'});
-    private url : string = "http://localhost:2999/voetbal/associations";
+    private url : string;
     private http: Http;
+    private externalObjectRepository: ExternalObjectRepository;
 
-    constructor( http: Http )
+    constructor( http: Http, externalObjectRepository: ExternalObjectRepository )
     {
         this.http = http;
+        this.externalObjectRepository = externalObjectRepository;
+        this.url = "http://localhost:2999/voetbal/" + this.getUrlpostfix();
+    }
+
+    getUrlpostfix(): string
+    {
+        return 'associations';
     }
 
     getToken(): string
@@ -32,7 +40,7 @@ export class AssociationRepository {
 
     getHeaders(): Headers
     {
-        let headers = new Headers(this.headers);
+        let headers = new Headers({'Content-Type': 'application/json;charset=utf-8'});
         if ( this.getToken() != null ) {
             headers.append( 'Authorization', 'Bearer ' + this.getToken() );
         }
@@ -80,6 +88,7 @@ export class AssociationRepository {
     {
         let association = new Association(json.name);
         association.setId(json.id);
+        association.addExternals(this.externalObjectRepository.jsonToArrayHelper(json.externals,association));
         return association;
     }
 

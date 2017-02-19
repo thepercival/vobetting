@@ -40,7 +40,7 @@ export class CompetitionRepository {
 
     getHeaders(): Headers
     {
-        let headers = new Headers({'Content-Type': 'application/json; charset=utf-8'});
+        let headers = new Headers({'Content-Type': 'application/json;charset=utf-8'});
         if ( this.getToken() != null ) {
             headers.append( 'Authorization', 'Bearer ' + this.getToken() );
         }

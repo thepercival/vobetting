@@ -24,6 +24,8 @@ import { AssociationsComponent }  from './voetbal/components/associations';
 import { AssociationRepository }  from './voetbal/domain/association/repository';
 import { AssociationAddModalContent } from './voetbal/components/association/modal/add';
 import { AssociationEditModalContent } from './voetbal/components/association/modal/edit';
+import { AssociationAddExternalModalContent } from './voetbal/components/association/modal/addexternal';
+import { AssociationsExternalComponent } from './voetbal/components/association/external';
 import { CompetitionsComponent }  from './voetbal/components/competitions';
 import { CompetitionRepository }  from './voetbal/domain/competition/repository';
 import { CompetitionAddModalContent } from './voetbal/components/competition/modal/add';
@@ -60,6 +62,7 @@ import { ExternalObjectRepository }  from './voetbal/domain/external/object/repo
         AdminComponent,
         RegisterComponent, ActivateComponent, LoginComponent, LogoutComponent, PasswordResetComponent, PasswordChangeComponent, UsersComponent,
         AssociationsComponent, AssociationAddModalContent, AssociationEditModalContent,
+        AssociationAddExternalModalContent, AssociationsExternalComponent,
         CompetitionsComponent, CompetitionAddModalContent, CompetitionEditModalContent,
         CompetitionAddExternalModalContent, CompetitionsExternalComponent,
         SeasonsComponent, SeasonAddModalContent, SeasonEditModalContent,
@@ -68,12 +71,11 @@ import { ExternalObjectRepository }  from './voetbal/domain/external/object/repo
     ],
 
     entryComponents: [
-        AssociationAddModalContent, AssociationEditModalContent,
-        CompetitionAddModalContent, CompetitionEditModalContent,
+        AssociationAddModalContent, AssociationEditModalContent, AssociationAddExternalModalContent,
+        CompetitionAddModalContent, CompetitionEditModalContent, CompetitionAddExternalModalContent,
         SeasonAddModalContent, SeasonEditModalContent,
         ExternalSystemAddModalContent, ExternalSystemEditModalContent,
-        CompetitionSeasonAddModalContent, CompetitionSeasonEditModalContent,        
-        CompetitionAddExternalModalContent
+        CompetitionSeasonAddModalContent, CompetitionSeasonEditModalContent
     ],
     providers:    [
         AuthGuard,

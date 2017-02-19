@@ -8,6 +8,7 @@ import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { Competition } from '../../../competition';
+import { Association } from '../../../association';
 import { ExternalObjectRepository } from '../../object/repository';
 import { ExternalSystemSoccerSports } from '../soccersports';
 import { ExternalSystemRepository } from '../repository';
@@ -87,6 +88,56 @@ export class ExternalSystemSoccerSportsRepository{
             competition.addExternals(this.externalObjectRepository.jsonToArrayHelper([jsonExternal],competition));
         }
         return competition;
+    }
+
+    getAssociations( appAssociations: Association[] ): Observable<Association[]>
+    {
+        let url = this.externalSystem.getApiurl() + 'leagues';
+        return this.http.get(url, new RequestOptions({ headers: this.getHeaders() }) )
+            .map((res) => {
+                let json = res.json().data;
+                if ( json.errorCode != 0 ) {
+                    this.handleError(res);
+                }
+                return this.jsonAssociationsToArrayHelper(json.leagues, appAssociations )
+            })
+            .catch( this.handleError );
+    }
+
+    jsonAssociationsToArrayHelper( jsonArray : any, appAssociations: Association[] ): Association[]
+    {
+        let associations: Association[] = [];
+        for (let json of jsonArray) {
+            let object = this.jsonAssociationToObjectHelper(json,appAssociations);
+            let foundObjects = associations.filter( assFilter => assFilter.getId() == object.getId() );
+            if ( foundObjects.length > 0 ){
+                continue;
+            }
+            associations.push( object );
+        }
+        return associations;
+    }
+
+    jsonAssociationToObjectHelper( json : any, appAssociations: Association[] ): Association
+    {
+        // identifier: "8e7fa444c4b60383727fb61fcc6aa387",
+        // league_slug: "bundesliga",
+        // name: "Bundesliga",
+        // nation: "Germany",
+        // level: "1"
+        // cup: false,
+        // federation: "UEFA"
+
+        let association = new Association(json.federation);
+        association.setId(json.federation);
+
+        let foundAppAssociations = appAssociations.filter( assFilter => assFilter.hasExternalid( association.getId().toString(), this.externalSystem ) );
+        let foundAppAssociation = foundAppAssociations.shift();
+        if ( foundAppAssociation ){
+            let jsonExternal = { "externalid" : foundAppAssociation.getId(), "externalsystem": null };
+            association.addExternals(this.externalObjectRepository.jsonToArrayHelper([jsonExternal],association));
+        }
+        return association;
     }
 
     // this could also be a private method of the component class

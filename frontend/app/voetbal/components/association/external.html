@@ -1,6 +1,6 @@
 
-<div class="competitions-external">
-    <h2>competities importeren</h2>
+<div class="associations-external">
+    <h2>bonden importeren</h2>
     <div *ngIf="message" class="alert alert-{{message.type}}" role="alert">{{message.message}}</div>
     <div class="row">
         <div class="col-xs-12 col-sm-6">
@@ -18,25 +18,25 @@
                 </tr>
                 </thead>
                 <tbody>
-                <template ngFor let-competition [ngForOf]="competitions">
-                    <template [ngIf]="competition.getExternals().length >= 1">
-                    <tr *ngFor="let external of competition.getExternals(); let first = first">
-                        <td *ngIf="first" [attr.rowspan]="competition.getExternals().length">
-                            <button type="button" class="btn btn-secondary" (click)="onEdit(competition)" title="item wijzigen"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                <template ngFor let-association [ngForOf]="associations">
+                    <template [ngIf]="association.getExternals().length >= 1">
+                    <tr *ngFor="let external of association.getExternals(); let first = first">
+                        <td *ngIf="first" [attr.rowspan]="association.getExternals().length">
+                            <button type="button" class="btn btn-secondary" (click)="onEdit(association)" title="item wijzigen"><i class="fa fa-pencil" aria-hidden="true"></i></button>
                         </td>
-                        <td *ngIf="first" [attr.rowspan]="competition.getExternals().length">
-                            {{competition.getName()}}
+                        <td *ngIf="first" [attr.rowspan]="association.getExternals().length">
+                            {{association.getName()}}
                         </td>
                         <td>{{external.getExternalSystem().getName()}}</td>
                         <td>#{{external.getExternalid()}}</td>
                     </tr>
                     </template>
-                    <tr *ngIf="competition.getExternals().length == 0">
+                    <tr *ngIf="association.getExternals().length == 0">
                         <td>
-                            <button type="button" class="btn btn-secondary" (click)="onEdit(competition)"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                            <button type="button" class="btn btn-secondary" (click)="onEdit(association)"><i class="fa fa-pencil" aria-hidden="true"></i></button>
                         </td>
                         <td>
-                            {{competition.getName()}}
+                            {{association.getName()}}
                         </td>
                         <td></td>
                     </tr>
@@ -56,32 +56,29 @@
             </div>
             <table *ngIf="externalsystem" class="table">
                 <thead>
-                    <tr>
+                    <tr style="text-align: right">
                         <th *ngIf="externalsystem.hasAvailableExportClassAsSource(classname)">
                             <button type="button" class="btn btn-secondary" (click)="onImportExternalAll()" title="alle items importeren"><i class="fa fa-long-arrow-left" aria-hidden="true"></i></button>
                         </th>
                         <th style="text-align: right">intern</th>
                         <th style="text-align: center">acties</th>
-                        <th style="text-align: right" colspan="2">extern</th>
+                        <th style="text-align: right">extern</th>
                     </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let externalcompetition of externalcompetitions" style="text-align: right">
-                    <td *ngIf="externalsystem.hasAvailableExportClassAsSource(classname) && externalcompetition.getExternals().length == 0">
-                        <button type="button" class="btn btn-secondary" (click)="onImportExternal(externalcompetition)" title="item importeren"><i class="fa fa-long-arrow-left" aria-hidden="true"></i></button>
+                <tr *ngFor="let externalassociation of externalassociations" style="text-align: right">
+                    <td *ngIf="externalsystem.hasAvailableExportClassAsSource(classname) && externalassociation.getExternals().length == 0">
+                        <button type="button" class="btn btn-secondary" (click)="onImportExternal(externalassociation)" title="item importeren"><i class="fa fa-long-arrow-left" aria-hidden="true"></i></button>
                     </td>
                     <td>
-                        <span *ngIf="externalcompetition.getExternals().length == 1">{{getCompetitionName(externalcompetition)}}</span>
+                        <span *ngIf="externalassociation.getExternals().length == 1">{{getAssociationName(externalassociation)}}</span>
                     </td>
                     <td style="text-align: center">
-                        <button type="button" *ngIf="externalcompetition.getExternals().length == 0" class="btn btn-secondary" (click)="onAddExternal(externalcompetition)" title="item koppelen"><i class="fa fa-link" aria-hidden="true"></i></button>
-                        <button type="button" *ngIf="externalcompetition.getExternals().length == 1" class="btn btn-secondary" (click)="onRemove(externalcompetition.getExternals()[0])" title="item ontkoppelen"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                        <button type="button" *ngIf="externalassociation.getExternals().length == 0" class="btn btn-secondary" (click)="onAddExternal(externalassociation)" title="item koppelen"><i class="fa fa-link" aria-hidden="true"></i></button>
+                        <button type="button" *ngIf="externalassociation.getExternals().length == 1" class="btn btn-secondary" (click)="onRemove(externalassociation.getExternals()[0])" title="item ontkoppelen"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                     </td>
                     <td>
-                        {{externalcompetition.getName()}}
-                    </td>
-                    <td>
-                        #{{externalcompetition.getId()}}
+                        {{externalassociation.getName()}}(#{{externalassociation.getId()}})
                     </td>
                 </tr>
                 </tbody>
