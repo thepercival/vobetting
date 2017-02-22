@@ -54,7 +54,7 @@ export class CompetitionsExternalComponent implements OnInit{
                 /* happy path */ competitions => {
                     this.competitions = competitions;
                 },
-                /* error path */ e => {},
+                /* error path */ e => { this.message = { "type": "danger", "message": e}; },
                 /* onComplete */ () => {}
             );
 
@@ -65,7 +65,7 @@ export class CompetitionsExternalComponent implements OnInit{
                         externalsystem => externalsystem.hasAvailableExportClass( this.classname )
                     );
                 },
-                /* error path */ e => {},
+                /* error path */ e => { this.message = { "type": "danger", "message": e}; },
                 /* onComplete */ () => {}
             );
     }
@@ -78,7 +78,7 @@ export class CompetitionsExternalComponent implements OnInit{
                 /* happy path */ competitions => {
                     this.externalcompetitions = competitions;
                 },
-                /* error path */ e => {},
+                /* error path */ e => { this.message = { "type": "danger", "message": e}; },
                 /* onComplete */ () => {}
             );
     }

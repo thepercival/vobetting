@@ -8,16 +8,19 @@ import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { Season } from '../season';
+import { ExternalObjectRepository } from '../external/object/repository';
 
 @Injectable()
 export class SeasonRepository {
 
     private url : string;
     private http: Http;
+    private externalObjectRepository: ExternalObjectRepository;
 
-    constructor( http: Http )
+    constructor( http: Http, externalObjectRepository: ExternalObjectRepository )
     {
         this.http = http;
+        this.externalObjectRepository = externalObjectRepository;
         this.url = "http://localhost:2999/voetbal/" + this.getUrlpostfix();
     }
 
@@ -73,11 +76,13 @@ export class SeasonRepository {
 
     jsonToObjectHelper( json : any ): Season
     {
-        console.log(json);
         let season = new Season(json.name);
         season.setId(json.id);
         season.setStartdate(new Date(json.startdate.timestamp*1000));
         season.setEnddate(new Date(json.enddate.timestamp*1000));
+        season.addExternals(this.externalObjectRepository.jsonToArrayHelper(json.externals,season));
+        console.log(json.externals);
+        console.log(season);
         return season;
     }
 
@@ -94,7 +99,6 @@ export class SeasonRepository {
     editObject( object: Season ): Observable<Season>
     {
         let url = this.url + '/'+object.getId();
-console.log(this.objectToJsonHelper(object));
         return this.http
             .put(url, JSON.stringify( this.objectToJsonHelper(object) ), { headers: this.getHeaders() })
             // ...and calling .json() on the response to return data

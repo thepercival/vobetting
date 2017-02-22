@@ -67,8 +67,8 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let externalassociation of externalassociations" style="text-align: right">
-                    <td *ngIf="externalsystem.hasAvailableExportClassAsSource(classname) && externalassociation.getExternals().length == 0">
-                        <button type="button" class="btn btn-secondary" (click)="onImportExternal(externalassociation)" title="item importeren"><i class="fa fa-long-arrow-left" aria-hidden="true"></i></button>
+                    <td *ngIf="externalsystem.hasAvailableExportClassAsSource(classname)">
+                        <button *ngIf="externalassociation.getExternals().length == 0" type="button" class="btn btn-secondary" (click)="onImportExternal(externalassociation)" title="item importeren"><i class="fa fa-long-arrow-left" aria-hidden="true"></i></button>
                     </td>
                     <td>
                         <span *ngIf="externalassociation.getExternals().length == 1">{{getAssociationName(externalassociation)}}</span>

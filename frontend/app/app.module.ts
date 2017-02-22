@@ -36,6 +36,8 @@ import { SeasonsComponent }  from './voetbal/components/seasons';
 import { SeasonRepository }  from './voetbal/domain/season/repository';
 import { SeasonAddModalContent } from './voetbal/components/season/modal/add';
 import { SeasonEditModalContent } from './voetbal/components/season/modal/edit';
+import { SeasonAddExternalModalContent } from './voetbal/components/season/modal/addexternal';
+import { SeasonsExternalComponent } from './voetbal/components/season/external';
 import { CompetitionSeasonsComponent }  from './voetbal/components/competitionseasons';
 import { CompetitionSeasonRepository }  from './voetbal/domain/competitionseason/repository';
 import { CompetitionSeasonAddModalContent } from './voetbal/components/competitionseason/modal/add';
@@ -66,6 +68,7 @@ import { ExternalObjectRepository }  from './voetbal/domain/external/object/repo
         CompetitionsComponent, CompetitionAddModalContent, CompetitionEditModalContent,
         CompetitionAddExternalModalContent, CompetitionsExternalComponent,
         SeasonsComponent, SeasonAddModalContent, SeasonEditModalContent,
+        SeasonAddExternalModalContent, SeasonsExternalComponent,
         CompetitionSeasonsComponent, CompetitionSeasonAddModalContent, CompetitionSeasonEditModalContent,
         ExternalSystemsComponent, ExternalSystemAddModalContent, ExternalSystemEditModalContent
     ],
@@ -73,7 +76,7 @@ import { ExternalObjectRepository }  from './voetbal/domain/external/object/repo
     entryComponents: [
         AssociationAddModalContent, AssociationEditModalContent, AssociationAddExternalModalContent,
         CompetitionAddModalContent, CompetitionEditModalContent, CompetitionAddExternalModalContent,
-        SeasonAddModalContent, SeasonEditModalContent,
+        SeasonAddModalContent, SeasonEditModalContent, SeasonAddExternalModalContent,
         ExternalSystemAddModalContent, ExternalSystemEditModalContent,
         CompetitionSeasonAddModalContent, CompetitionSeasonEditModalContent
     ],

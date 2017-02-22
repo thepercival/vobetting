@@ -9,11 +9,12 @@ import { PasswordResetComponent, PasswordChangeComponent }  from './user/passwor
 import { UsersComponent }  from './user/users.component';
 import { AdminComponent }  from './admin/component';
 import { AssociationsComponent }  from './voetbal/components/associations';
-import { CompetitionsComponent }  from './voetbal/components/competitions';
-import { SeasonsComponent }  from './voetbal/components/seasons';
-import { CompetitionSeasonsComponent }  from './voetbal/components/competitionseasons';
-import { CompetitionsExternalComponent }  from './voetbal/components/competition/external';
 import { AssociationsExternalComponent }  from './voetbal/components/association/external';
+import { CompetitionsComponent }  from './voetbal/components/competitions';
+import { CompetitionsExternalComponent }  from './voetbal/components/competition/external';
+import { SeasonsComponent }  from './voetbal/components/seasons';
+import { SeasonsExternalComponent }  from './voetbal/components/season/external';
+import { CompetitionSeasonsComponent }  from './voetbal/components/competitionseasons';
 import { ExternalSystemsComponent }  from './voetbal/components/external/systems';
 import { AuthGuard }  from './auth/guard';
 const routes: Routes = [
@@ -31,6 +32,7 @@ const routes: Routes = [
     { path: 'competitions', component: CompetitionsComponent, canActivate: [AuthGuard] },
     { path: 'competitions/external', component: CompetitionsExternalComponent, canActivate: [AuthGuard] },
     { path: 'seasons', component: SeasonsComponent, canActivate: [AuthGuard] },
+    { path: 'seasons/external', component: SeasonsExternalComponent, canActivate: [AuthGuard] },
     { path: 'externalsystems', component: ExternalSystemsComponent, canActivate: [AuthGuard] },
     { path: 'competitionseasons', component: CompetitionSeasonsComponent, canActivate: [AuthGuard] },
     { path: '', redirectTo: '/home', pathMatch: 'full' },

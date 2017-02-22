@@ -7,11 +7,11 @@ import { ActivatedRoute, Params }   from '@angular/router';
 import { Location }                 from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { Association } from '../../domain/association';
-import { AssociationRepository } from '../../domain/association/repository';
-import { AssociationAddModalContent } from './modal/add';
-import { AssociationEditModalContent } from './modal/edit';
-import { AssociationAddExternalModalContent } from './modal/addexternal';
+import { Season } from '../../domain/season';
+import { SeasonRepository } from '../../domain/season/repository';
+import { SeasonAddModalContent } from './modal/add';
+import { SeasonEditModalContent } from './modal/edit';
+import { SeasonAddExternalModalContent } from './modal/addexternal';
 import { ExternalSystem } from '../../domain/external/system';
 import { ExternalObject } from '../../domain/external/object';
 import { ExternalSystemRepository } from '../../domain/external/system/repository';
@@ -19,16 +19,16 @@ import { ExternalObjectRepository } from '../../domain/external/object/repositor
 
 @Component({
     moduleId: module.id,
-    selector: 'associations-external',
+    selector: 'seasons-external',
     templateUrl: 'external.html'/*,
-     styleUrls: [ 'association.css' ]*/
+     styleUrls: [ 'season.css' ]*/
 
 })
 
-export class AssociationsExternalComponent implements OnInit{
+export class SeasonsExternalComponent implements OnInit{
     @Input()
-    associations: Association[];
-    externalassociations: Association[] = [];
+    seasons: Season[];
+    externalseasons: Season[] = [];
     externalsystem: ExternalSystem;
     externalsystems: ExternalSystem[];
     loading: boolean = false;
@@ -36,7 +36,7 @@ export class AssociationsExternalComponent implements OnInit{
     classname: string;
 
     constructor(
-        private repos: AssociationRepository,
+        private repos: SeasonRepository,
         private route: ActivatedRoute,
         private location: Location,
         private modalService: NgbModal,
@@ -44,15 +44,15 @@ export class AssociationsExternalComponent implements OnInit{
         private externalObjectRepository: ExternalObjectRepository
         // private globalEventsManger: GlobalEventsManager
     ) {
-        this.classname = Association.classname;
+        this.classname = Season.classname;
     }
 
     ngOnInit(): void {
 
         this.repos.getObjects()
             .subscribe(
-                /* happy path */ associations => {
-                    this.associations = associations;
+                /* happy path */ seasons => {
+                    this.seasons = seasons;
                 },
                 /* error path */ e => { this.message = { "type": "danger", "message": e}; },
                 /* onComplete */ () => {}
@@ -73,10 +73,10 @@ export class AssociationsExternalComponent implements OnInit{
     onSelectExternalSystem( externalSystem: any ): void {
         this.externalsystem = externalSystem;
 
-        externalSystem.getAssociations(this.associations)
+        externalSystem.getSeasons(this.seasons)
             .subscribe(
-                /* happy path */ associations => {
-                    this.externalassociations = associations;
+                /* happy path */ seasons => {
+                    this.externalseasons = seasons;
                 },
                 /* error path */ e => { this.message = { "type": "danger", "message": e}; },
                 /* onComplete */ () => {}
@@ -85,49 +85,49 @@ export class AssociationsExternalComponent implements OnInit{
 
     onAdd(): void {
         this.message = null;
-        const modalRef = this.modalService.open(AssociationAddModalContent, { backdrop : 'static' } );
+        const modalRef = this.modalService.open(SeasonAddModalContent, { backdrop : 'static' } );
 
-        modalRef.result.then((association) => {
-            this.associations.push( association );
-            this.message = { "type": "success", "message": "bond("+association.getName()+") toegevoegd"};
+        modalRef.result.then((season) => {
+            this.seasons.push( season );
+            this.message = { "type": "success", "message": "het seizoen("+season.getName()+") toegevoegd"};
         }/*, (reason) => {
          modalRef.closeResult = reason;
          }*/);
     }
 
-    onEdit( association: Association ): void {
+    onEdit( season: Season ): void {
         this.message = null;
-        /*let association = this.associations.find( function(item: Association) {
-         return ( item.getId() == associationId );
-         }, associationId);*/
+        /*let season = this.seasons.find( function(item: Season) {
+         return ( item.getId() == seasonId );
+         }, seasonId);*/
 
-        if ( association == null) {
-            this.message = { "type": "danger", "message": "de bond kan niet gewijzigd worden"};
+        if ( season == null) {
+            this.message = { "type": "danger", "message": "het seizoen kan niet gewijzigd worden"};
         }
 
-        const modalRef = this.modalService.open(AssociationEditModalContent, { backdrop : 'static' } );
-        modalRef.componentInstance.association = association;
-        modalRef.result.then((association) => {
-            this.message = { "type": "success", "message": "bond("+association.getName()+") gewijzigd"};
+        const modalRef = this.modalService.open(SeasonEditModalContent, { backdrop : 'static' } );
+        modalRef.componentInstance.season = season;
+        modalRef.result.then((season) => {
+            this.message = { "type": "success", "message": "het seizoen("+season.getName()+") is gewijzigd"};
         }/*, (reason) => {
          modalRef.closeResult = reason;
          }*/);
     }
 
-    onAddExternal( externalassociation: Association): void {
+    onAddExternal( externalseason: Season): void {
         this.message = null;
-        const modalRef = this.modalService.open(AssociationAddExternalModalContent, { backdrop : 'static' } );
+        const modalRef = this.modalService.open(SeasonAddExternalModalContent, { backdrop : 'static' } );
 
-        modalRef.componentInstance.associations = this.associations.filter(
-            association => !association.hasExternalid( externalassociation.getId().toString(), this.externalsystem )
+        modalRef.componentInstance.seasons = this.seasons.filter(
+            season => !season.hasExternalid( externalseason.getId().toString(), this.externalsystem )
         );
 
-        modalRef.result.then((association) => {
-            this.externalObjectRepository.createObject( this.repos.getUrlpostfix(), association, externalassociation.getId().toString(), this.externalsystem )
+        modalRef.result.then((season) => {
+            this.externalObjectRepository.createObject( this.repos.getUrlpostfix(), season, externalseason.getId().toString(), this.externalsystem )
                 .subscribe(
                     /* happy path */ externalobject => {
-                        this.onAddExternalHelper( association, externalobject, externalassociation );
-                        this.message = { "type": "success", "message": "externe bond "+externalassociation.getName()+" gekoppeld aan ("+association.getName()+") toegevoegd"};
+                        this.onAddExternalHelper( season, externalobject, externalseason );
+                        this.message = { "type": "success", "message": "extern seizoen "+externalseason.getName()+" gekoppeld aan ("+season.getName()+") toegevoegd"};
                     },
                     /* error path */ e => { this.message = { "type": "success", "message": e}; this.loading = false; },
                     /* onComplete */ () => this.loading = false
@@ -138,34 +138,34 @@ export class AssociationsExternalComponent implements OnInit{
          }*/);
     }
 
-    onAddExternalHelper( association: Association, externalobject: ExternalObject, externalassociation: Association ): void {
+    onAddExternalHelper( season: Season, externalobject: ExternalObject, externalseason: Season ): void {
         // @todo following code should move to service
         // add to internal
-        association.getExternals().push(externalobject);
+        season.getExternals().push(externalobject);
         // add to external
-        let jsonExternal = { "externalid" : association.getId(), "externalsystem": null };
-        externalassociation.addExternals(this.externalObjectRepository.jsonToArrayHelper([jsonExternal],externalassociation));
+        let jsonExternal = { "externalid" : season.getId(), "externalsystem": null };
+        externalseason.addExternals(this.externalObjectRepository.jsonToArrayHelper([jsonExternal],externalseason));
     }
 
     onRemove( externalObject: ExternalObject ): void
     {
         // @todo following code should move to service
         // remove from internal
-        let internalassociation = this.getAssociation( externalObject.getImportableObject() );
-        if ( internalassociation == null ) {
-            this.message = { "type": "danger", "message": "interne bond niet gevonden"};
+        let internalseason = this.getSeason( externalObject.getImportableObject() );
+        if ( internalseason == null ) {
+            this.message = { "type": "danger", "message": "intern seizoen niet gevonden"};
             return;
         }
 
-        let internalexternal = internalassociation.getExternal(externalObject.getImportableObject().getId(), this.externalsystem);
+        let internalexternal = internalseason.getExternal(externalObject.getImportableObject().getId(), this.externalsystem);
 
         this.externalObjectRepository.removeObject( this.repos.getUrlpostfix(), internalexternal )
             .subscribe(
                 /* happy path */ retval => {
 
-                    let indextmp = internalassociation.getExternals().indexOf(internalexternal);
+                    let indextmp = internalseason.getExternals().indexOf(internalexternal);
                     if (indextmp > -1) {
-                        internalassociation.getExternals().splice(indextmp, 1);
+                        internalseason.getExternals().splice(indextmp, 1);
                     }
 
                     // remove from external
@@ -175,7 +175,7 @@ export class AssociationsExternalComponent implements OnInit{
                         externals.splice(index, 1);
                     }
 
-                    this.message = { "type": "success", "message": "externe bond "+externalObject.getImportableObject().getName()+" ontkoppeld van ("+internalassociation.getName()+") toegevoegd"};
+                    this.message = { "type": "success", "message": "extern seizoen "+externalObject.getImportableObject().getName()+" ontkoppeld van ("+internalseason.getName()+") toegevoegd"};
                 },
                 /* error path */ e => { this.message = { "type": "danger", "message": e}; this.loading = false; },
                 /* onComplete */ () => this.loading = false
@@ -184,12 +184,12 @@ export class AssociationsExternalComponent implements OnInit{
 
     onImportExternalAll(): void
     {
-        for( let externalassociation of this.externalassociations) {
-            this.onImportExternal(externalassociation);
+        for( let externalseason of this.externalseasons) {
+            this.onImportExternal(externalseason);
         }
     }
 
-    onImportExternal(externalassociation): void
+    onImportExternal(externalseason): void
     {
         // check if has internal
         // if ( false ) { // update internal
@@ -197,17 +197,17 @@ export class AssociationsExternalComponent implements OnInit{
         // }
         // else { // add
 
-            let json = { "name": externalassociation.getName() };
+            let json = { "name": externalseason.getName(), "startdate": externalseason.getStartdate(), "enddate": externalseason.getEnddate() };
 
             this.repos.createObject( json )
                 .subscribe(
-                    /* happy path */ association => {
-                        this.associations.push(association);
+                    /* happy path */ season => {
+                        this.seasons.push(season);
 
-                        this.externalObjectRepository.createObject( this.repos.getUrlpostfix(), association, externalassociation.getId().toString(), this.externalsystem )
+                        this.externalObjectRepository.createObject( this.repos.getUrlpostfix(), season, externalseason.getId().toString(), this.externalsystem )
                             .subscribe(
                                 /* happy path */ externalobject => {
-                                    this.onAddExternalHelper( association, externalobject, externalassociation );
+                                    this.onAddExternalHelper( season, externalobject, externalseason );
                                 },
                                 /* error path */ e => { this.message = { "type": "danger", "message": e}; this.loading = false; },
                                 /* onComplete */ () => this.loading = false
@@ -224,30 +224,30 @@ export class AssociationsExternalComponent implements OnInit{
         this.location.back();
     }
 
-    private getAssociation( externalassociation: Association): Association
+    private getSeason( externalseason: Season): Season
     {
-        let externals = externalassociation.getExternals();
+        let externals = externalseason.getExternals();
         if ( externals.length != 1 ){
             return;
         }
 
         let externalid = externals[0].getExternalid();
 
-        let foundAssociations = this.associations.filter(
-            association => association.getId().toString() == externalid
+        let foundSeasons = this.seasons.filter(
+            season => season.getId().toString() == externalid
         );
-        if ( foundAssociations.length != 1 ){
+        if ( foundSeasons.length != 1 ){
             return;
         }
-        return foundAssociations[0];
+        return foundSeasons[0];
     }
 
-    getAssociationName( externalassociation: Association): string
+    getSeasonName( externalseason: Season): string
     {
-        let internalassociation = this.getAssociation(externalassociation);
-        if ( internalassociation == null ){
+        let internalseason = this.getSeason(externalseason);
+        if ( internalseason == null ){
             return;
         }
-        return internalassociation.getName();
+        return internalseason.getName();
     }
 }

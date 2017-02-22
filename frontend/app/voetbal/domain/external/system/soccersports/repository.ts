@@ -9,6 +9,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { Competition } from '../../../competition';
 import { Association } from '../../../association';
+import { Season } from '../../../season';
 import { ExternalObjectRepository } from '../../object/repository';
 import { ExternalSystemSoccerSports } from '../soccersports';
 import { ExternalSystemRepository } from '../repository';
@@ -140,11 +141,76 @@ export class ExternalSystemSoccerSportsRepository{
         return association;
     }
 
+    getSeasons( appSeasons: Season[] ): Observable<Season[]>
+    {
+        let url = this.externalSystem.getApiurl() + 'leagues' + '/premier-league/seasons';
+        return this.http.get(url, new RequestOptions({ headers: this.getHeaders() }) )
+            .map((res) => {
+                let json = res.json().data;
+                if ( json.errorCode != 0 ) {
+                    this.handleError(res);
+                }
+                return this.jsonSeasonsToArrayHelper(json.seasons, appSeasons )
+            })
+            .catch( this.handleError );
+    }
+
+    jsonSeasonsToArrayHelper( jsonArray : any, appSeasons: Season[] ): Season[]
+    {
+        let seasons: Season[] = [];
+        for (let json of jsonArray) {
+            let object = this.jsonSeasonToObjectHelper(json,appSeasons);
+            let foundObjects = seasons.filter( assFilter => assFilter.getId() == object.getId() );
+            if ( foundObjects.length > 0 ){
+                continue;
+            }
+            seasons.push( object );
+        }
+        return seasons;
+    }
+
+    jsonSeasonToObjectHelper( json : any, appSeasons: Season[] ): Season
+    {
+        // "identifier": "ef5f67b10885e37c43bccb02c70b6e1d",
+        // "league_identifier": "726a53a8c50d6c7a66fe0ab16bdf9bb1",
+        // "season_slug": "15-16",
+        // "name": "2015-2016",
+        // "season_start": "2015-07-01T00:00:00+0200",
+        // "season_end": "2016-06-30T00:00:00+0200"
+
+        let season = new Season(json.name);
+        season.setId(json.season_slug);
+        let startDate = new Date(json.season_start);
+        if ( startDate == null){
+            throw new Error("het geimporteerde seizoen heeft geen startdatum");
+        }
+        season.setStartdate(startDate);
+        let endDate = new Date(json.season_end);
+        if ( endDate == null){
+            throw new Error("het geimporteerde seizoen heeft geen einddatum");
+        }
+        season.setEnddate(endDate);
+
+        let foundAppSeasons = appSeasons.filter( seasonFilter => seasonFilter.hasExternalid( season.getId().toString(), this.externalSystem ) );
+        let foundAppSeason = foundAppSeasons.shift();
+        if ( foundAppSeason ){
+            let jsonExternal = { "externalid" : foundAppSeason.getId(), "externalsystem": null };
+            season.addExternals(this.externalObjectRepository.jsonToArrayHelper([jsonExternal],season));
+        }
+        return season;
+    }
+
     // this could also be a private method of the component class
-    handleError(res: Response): Observable<any> {
-        console.error( res );
+    handleError(error: any): Observable<any> {
+        let message = null;
+        if ( error.message != null){
+            message = error.message;
+        }
+        else if ( error.statusText != null){
+            message = error.statusText;
+        }
         // throw an application level error
-        return Observable.throw( res.statusText );
+        return Observable.throw( message );
     }
 }
 
