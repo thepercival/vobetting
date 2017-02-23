@@ -5,6 +5,8 @@
 import { Association } from './association';
 import { Competition } from './competition';
 import { Season } from './season';
+import { ExternalObject} from './external/object';
+import { ExternalSystem} from './external/system';
 
 export class CompetitionSeason {
     protected id: number;
@@ -13,7 +15,7 @@ export class CompetitionSeason {
     protected season: Season;
     protected state: number;
     protected qualificationrule: number;
-    // protected externals: ExternalObject[] = [];
+    protected externals: ExternalObject[] = [];
 
     static readonly classname = "CompetitionSeason";
 
@@ -90,7 +92,7 @@ export class CompetitionSeason {
         return this.getCompetition().getName() + ' ' + this.getSeason().getName();
     }
 
-    /*getExternals(): ExternalObject[] {
+    getExternals(): ExternalObject[] {
         return this.externals;
     };
 
@@ -110,5 +112,5 @@ export class CompetitionSeason {
 
     hasExternalid( externalid: string, externalsystem: ExternalSystem ): boolean {
         return this.getExternal(externalid, externalsystem) != null;
-    }*/
+    }
 }

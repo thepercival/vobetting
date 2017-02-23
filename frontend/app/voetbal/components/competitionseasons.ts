@@ -26,7 +26,6 @@ import { CompetitionSeasonEditModalContent } from './competitionseason/modal/edi
 export class CompetitionSeasonsComponent implements OnInit{
     association: Association;
     competitionseasons: CompetitionSeason[];
-
     message: any = null;
 
     constructor(
@@ -45,7 +44,21 @@ export class CompetitionSeasonsComponent implements OnInit{
         this.repos.getObjects()
             .subscribe(
                 /* happy path */ competitionseasons => {
-                    this.competitionseasons = competitionseasons;
+                    this.competitionseasons = competitionseasons.sort((n1,n2)=> {
+                        if (n1.getCompetition().getName() > n2.getCompetition().getName()) {
+                            return 1;
+                        }
+                        if (n1.getCompetition().getName() < n2.getCompetition().getName()) {
+                            return -1;
+                        }
+                        if (n1.getSeason().getName() < n2.getSeason().getName()) {
+                            return 1;
+                        }
+                        if (n1.getSeason().getName() > n2.getSeason().getName()) {
+                            return -1;
+                        }
+                        return 0;
+                    });
                 },
                 /* error path */ e => {},
                 /* onComplete */ () => {}

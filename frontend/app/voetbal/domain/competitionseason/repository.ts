@@ -11,24 +11,24 @@ import { CompetitionSeason } from '../competitionseason';
 import { AssociationRepository } from '../association/repository';
 import { CompetitionRepository } from '../competition/repository';
 import { SeasonRepository } from '../season/repository';
-// import { ExternalObjectRepository } from '../external/object/repository';
+import { ExternalObjectRepository } from '../external/object/repository';
 
 @Injectable()
 export class CompetitionSeasonRepository {
 
     private url : string;
     private http: Http;
-    // private externalObjectRepository: ExternalObjectRepository;
+    private externalObjectRepository: ExternalObjectRepository;
 
     constructor( http: Http,
          private associationRepository: AssociationRepository,
          private competitionRepository: CompetitionRepository,
          private seasonRepository: SeasonRepository,
-         /*externalObjectRepository: ExternalObjectRepository,*/
+         externalObjectRepository: ExternalObjectRepository,
     )
     {
         this.http = http;
-        //this.externalObjectRepository = externalObjectRepository;
+        this.externalObjectRepository = externalObjectRepository;
         this.url = "http://localhost:2999/voetbal/" + this.getUrlpostfix();
     }
 
@@ -84,7 +84,7 @@ export class CompetitionSeasonRepository {
 
     jsonToObjectHelper( json : any ): CompetitionSeason
     {
-        console.log(json);
+        // console.log(json);
         let association = this.associationRepository.jsonToObjectHelper(json.association);
         let competition = this.competitionRepository.jsonToObjectHelper(json.competition);
         let season = this.seasonRepository.jsonToObjectHelper(json.season);
@@ -93,7 +93,7 @@ export class CompetitionSeasonRepository {
         competitionseason.setId(json.id);
         competitionseason.setState(json.state);
         competitionseason.setQualificationrule(json.qualificationrule);
-        // competitionseason.addExternals(this.externalObjectRepository.jsonToArrayHelper(json.externals,competition));
+        competitionseason.addExternals(this.externalObjectRepository.jsonToArrayHelper(json.externals,competitionseason));
         return competitionseason;
     }
 

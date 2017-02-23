@@ -1,0 +1,90 @@
+
+<div class="competitionseasons-external">
+    <h2>competitieseizoenen importeren</h2>
+    <div *ngIf="message" class="alert alert-{{message.type}}" role="alert">{{message.message}}</div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <div>
+                <label>intern systeem</label>
+            </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>
+                        <button type="button" class="btn btn-secondary" (click)="onAdd()" title="item toevoegen"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                    </th>
+                    <th>intern</th>
+                    <th colspan="2">extern</th>
+                </tr>
+                </thead>
+                <tbody>
+                <template ngFor let-competitionseason [ngForOf]="competitionseasons">
+                    <template [ngIf]="competitionseason.getExternals().length >= 1">
+                    <tr *ngFor="let external of competitionseason.getExternals(); let first = first">
+                        <td *ngIf="first" [attr.rowspan]="competitionseason.getExternals().length">
+                            <button type="button" class="btn btn-secondary" (click)="onEdit(competitionseason)" title="item wijzigen"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                        </td>
+                        <td *ngIf="first" [attr.rowspan]="competitionseason.getExternals().length">
+                            {{competitionseason.getName()}}
+                        </td>
+                        <td>{{external.getExternalSystem().getName()}}</td>
+                        <td>#{{external.getExternalid()}}</td>
+                    </tr>
+                    </template>
+                    <tr *ngIf="competitionseason.getExternals().length == 0">
+                        <td>
+                            <button type="button" class="btn btn-secondary" (click)="onEdit(competitionseason)"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                        </td>
+                        <td>
+                            {{competitionseason.getName()}}
+                        </td>
+                        <td></td>
+                    </tr>
+                </template>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div>
+                <label>extern systeem</label>
+                <div ngbDropdown class="d-inline-block">
+                    <button class="btn btn-outline-primary" id="dropdownMenu1" ngbDropdownToggle>{{ externalsystem ? externalsystem.getName() : 'selecteer extern systeem' }}</button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <button *ngFor="let externalsystemit of externalsystems"  class="dropdown-item" (click)="onSelectExternalSystem(externalsystemit)">{{externalsystemit.getName()}}</button>
+                    </div>
+                </div>
+            </div>
+            <table *ngIf="externalsystem" class="table">
+                <thead>
+                    <tr style="text-align: right">
+                        <th *ngIf="externalsystem.hasAvailableExportClassAsSource(classname)">
+                            <button type="button" class="btn btn-secondary" (click)="onImportExternalAll()" title="alle items importeren"><i class="fa fa-long-arrow-left" aria-hidden="true"></i></button>
+                        </th>
+                        <th style="text-align: right">intern</th>
+                        <th style="text-align: center">acties</th>
+                        <th style="text-align: right">extern</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let externalcompetitionseason of externalcompetitionseasons" style="text-align: right">
+                    <td *ngIf="externalsystem.hasAvailableExportClassAsSource(classname)">
+                        <button *ngIf="externalcompetitionseason.getExternals().length == 0" type="button" class="btn btn-secondary" (click)="onImportExternal(externalcompetitionseason)" title="item importeren"><i class="fa fa-long-arrow-left" aria-hidden="true"></i></button>
+                    </td>
+                    <td>
+                        <span *ngIf="externalcompetitionseason.getExternals().length == 1">{{getCompetitionseasonName(externalcompetitionseason)}}</span>
+                    </td>
+                    <td style="text-align: center">
+                        <button type="button" *ngIf="externalcompetitionseason.getExternals().length == 0" class="btn btn-secondary" (click)="onAddExternal(externalcompetitionseason)" title="item koppelen"><i class="fa fa-link" aria-hidden="true"></i></button>
+                        <button type="button" *ngIf="externalcompetitionseason.getExternals().length == 1" class="btn btn-secondary" (click)="onRemove(externalcompetitionseason.getExternals()[0])" title="item ontkoppelen"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                    </td>
+                    <td>
+                        {{externalcompetitionseason.getName()}}(#{{externalcompetitionseason.getId()}})
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<hr>
+<a href="#" class="btn btn-secondary" (click)="goBack()">ga terug</a>

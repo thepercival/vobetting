@@ -7,6 +7,7 @@
     <tr>
         <th style="text-align: center">{{competitionseasons?.length}}</th>
         <th>naam</th>
+        <th>seizoen</th>
         <th>status</th>
         <th class="hidden-xs-down">bond</th>
         <th style="text-align: center"><button type="button" class="btn btn-secondary" (click)="onAdd()"><i class="fa fa-plus" aria-hidden="true"></i></button></th>
@@ -15,7 +16,8 @@
     <tbody>
     <tr *ngFor="let competitionseason of competitionseasons">
         <td style="text-align: center"><a type="button" [class.disabled]="true" href="javascript:void(0)" class="btn btn-secondary" (click)="onEdit(competitionseason)"><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
-        <td>{{competitionseason.getName()}}</td>
+        <td>{{competitionseason.getCompetition().getName()}}</td>
+        <td>{{competitionseason.getSeason().getName()}}</td>
         <td>{{competitionseason.getStateDescription()}}</td>
         <td class="hidden-xs-down">{{competitionseason.getAssociation().getName()}}</td>
         <td style="text-align: center"><a type="button" href="javascript:void(0)" class="btn btn-secondary" (click)="onRemove(competitionseason)"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
