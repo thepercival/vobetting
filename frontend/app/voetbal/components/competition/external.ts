@@ -77,10 +77,22 @@ export class CompetitionsExternalComponent implements OnInit{
             .subscribe(
                 /* happy path */ competitions => {
                     this.externalcompetitions = competitions;
+                    this.selectExternalSystemHelper(competitions, this.competitions);
                 },
                 /* error path */ e => { this.message = { "type": "danger", "message": e}; },
                 /* onComplete */ () => {}
             );
+    }
+
+    selectExternalSystemHelper( externalObjects, internalObjects ) {
+        for( let externalObject of externalObjects ) {
+            let foundAppAssociations = internalObjects.filter( objectFilter => objectFilter.hasExternalid( externalObject.getId().toString(), this.externalsystem ) );
+            let foundAppAssociation = foundAppAssociations.shift();
+            if ( foundAppAssociation ){
+                let jsonExternal = { "externalid" : foundAppAssociation.getId(), "externalsystem": null };
+                externalObject.addExternals(this.externalObjectRepository.jsonToArrayHelper([jsonExternal],externalObject));
+            }
+        }
     }
 
     onAdd(): void {

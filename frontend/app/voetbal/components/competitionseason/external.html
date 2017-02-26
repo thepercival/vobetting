@@ -71,7 +71,7 @@
                         <button *ngIf="externalcompetitionseason.getExternals().length == 0" type="button" class="btn btn-secondary" (click)="onImportExternal(externalcompetitionseason)" title="item importeren"><i class="fa fa-long-arrow-left" aria-hidden="true"></i></button>
                     </td>
                     <td>
-                        <span *ngIf="externalcompetitionseason.getExternals().length == 1">{{getCompetitionseasonName(externalcompetitionseason)}}</span>
+                        <span *ngIf="externalcompetitionseason.getExternals().length == 1">{{getCompetitionSeasonName(externalcompetitionseason)}}</span>
                     </td>
                     <td style="text-align: center">
                         <button type="button" *ngIf="externalcompetitionseason.getExternals().length == 0" class="btn btn-secondary" (click)="onAddExternal(externalcompetitionseason)" title="item koppelen"><i class="fa fa-link" aria-hidden="true"></i></button>

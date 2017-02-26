@@ -9,7 +9,7 @@ import { ExternalObject} from './external/object';
 import { ExternalSystem} from './external/system';
 
 export class CompetitionSeason {
-    protected id: number;
+    protected id: any;
     protected association: Association;
     protected competition: Competition;
     protected season: Season;
@@ -29,11 +29,11 @@ export class CompetitionSeason {
         this.setSeason(season);
     }
 
-    getId(): number {
+    getId(): any {
         return this.id;
     };
 
-    setId( id: number): void {
+    setId( id: any): void {
         this.id = id;
     };
 

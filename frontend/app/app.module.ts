@@ -44,6 +44,12 @@ import { CompetitionSeasonAddModalContent } from './voetbal/components/competiti
 import { CompetitionSeasonEditModalContent } from './voetbal/components/competitionseason/modal/edit';
 import { CompetitionSeasonAddExternalModalContent } from './voetbal/components/competitionseason/modal/addexternal';
 import { CompetitionSeasonsExternalComponent } from './voetbal/components/competitionseason/external';
+import { TeamsComponent }  from './voetbal/components/teams';
+import { TeamRepository }  from './voetbal/domain/team/repository';
+import { TeamAddModalContent } from './voetbal/components/team/modal/add';
+import { TeamEditModalContent } from './voetbal/components/team/modal/edit';
+import { TeamAddExternalModalContent } from './voetbal/components/team/modal/addexternal';
+import { TeamsExternalComponent } from './voetbal/components/team/external';
 import { ExternalSystemsComponent }  from './voetbal/components/external/systems';
 import { ExternalSystemRepository }  from './voetbal/domain/external/system/repository';
 import { ExternalSystemAddModalContent } from './voetbal/components/external/system/modal/add';
@@ -73,6 +79,8 @@ import { ExternalObjectRepository }  from './voetbal/domain/external/object/repo
         SeasonAddExternalModalContent, SeasonsExternalComponent,
         CompetitionSeasonsComponent, CompetitionSeasonAddModalContent, CompetitionSeasonEditModalContent,
         CompetitionSeasonAddExternalModalContent, CompetitionSeasonsExternalComponent,
+        TeamsComponent, TeamAddModalContent, TeamEditModalContent,
+        TeamAddExternalModalContent, TeamsExternalComponent,
         ExternalSystemsComponent, ExternalSystemAddModalContent, ExternalSystemEditModalContent
     ],
 
@@ -81,6 +89,7 @@ import { ExternalObjectRepository }  from './voetbal/domain/external/object/repo
         CompetitionAddModalContent, CompetitionEditModalContent, CompetitionAddExternalModalContent,
         SeasonAddModalContent, SeasonEditModalContent, SeasonAddExternalModalContent,
         CompetitionSeasonAddModalContent, CompetitionSeasonEditModalContent, CompetitionSeasonAddExternalModalContent,
+        TeamAddModalContent, TeamEditModalContent, TeamAddExternalModalContent,
         ExternalSystemAddModalContent, ExternalSystemEditModalContent,
     ],
     providers:    [
@@ -92,6 +101,7 @@ import { ExternalObjectRepository }  from './voetbal/domain/external/object/repo
         CompetitionRepository,
         SeasonRepository,
         CompetitionSeasonRepository,
+        TeamRepository,
         ExternalSystemRepository,
         ExternalObjectRepository
     ],

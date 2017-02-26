@@ -22,6 +22,7 @@ export class ExternalSystemSoccerSportsRepository{
     private http: Http;
     private externalObjectRepository: ExternalObjectRepository;
     private externalSystem: ExternalSystemSoccerSports;
+    private asspociationsByCompetitionId: any = {};
 
     constructor( http: Http,externalSystem: ExternalSystemSoccerSports )
     {
@@ -45,7 +46,7 @@ export class ExternalSystemSoccerSportsRepository{
         return headers;
     }
 
-    getAssociations( appAssociations: Association[] ): Observable<Association[]>
+    getAssociations(): Observable<Association[]>
     {
         let url = this.externalSystem.getApiurl() + 'leagues';
         return this.http.get(url, new RequestOptions({ headers: this.getHeaders() }) )
@@ -54,16 +55,16 @@ export class ExternalSystemSoccerSportsRepository{
                 if ( json.errorCode != 0 ) {
                     this.handleError(res);
                 }
-                return this.jsonAssociationsToArrayHelper(json.leagues, appAssociations )
+                return this.jsonAssociationsToArrayHelper(json.leagues )
             })
             .catch( this.handleError );
     }
 
-    jsonAssociationsToArrayHelper( jsonArray : any, appAssociations: Association[] ): Association[]
+    jsonAssociationsToArrayHelper( jsonArray : any): Association[]
     {
         let associations: Association[] = [];
         for (let json of jsonArray) {
-            let object = this.jsonAssociationToObjectHelper(json,appAssociations);
+            let object = this.jsonAssociationToObjectHelper(json);
             let foundObjects = associations.filter( assFilter => assFilter.getId() == object.getId() );
             if ( foundObjects.length > 0 ){
                 continue;
@@ -73,7 +74,7 @@ export class ExternalSystemSoccerSportsRepository{
         return associations;
     }
 
-    jsonAssociationToObjectHelper( json : any, appAssociations: Association[] ): Association
+    jsonAssociationToObjectHelper( json : any): Association
     {
         // identifier: "8e7fa444c4b60383727fb61fcc6aa387",
         // league_slug: "bundesliga",
@@ -85,17 +86,10 @@ export class ExternalSystemSoccerSportsRepository{
 
         let association = new Association(json.federation);
         association.setId(json.federation);
-
-        let foundAppAssociations = appAssociations.filter( assFilter => assFilter.hasExternalid( association.getId().toString(), this.externalSystem ) );
-        let foundAppAssociation = foundAppAssociations.shift();
-        if ( foundAppAssociation ){
-            let jsonExternal = { "externalid" : foundAppAssociation.getId(), "externalsystem": null };
-            association.addExternals(this.externalObjectRepository.jsonToArrayHelper([jsonExternal],association));
-        }
         return association;
     }
 
-    getCompetitions( appCompetitions: Competition[] ): Observable<Competition[]>
+    getCompetitions(): Observable<Competition[]>
     {
         let url = this.externalSystem.getApiurl() + 'leagues';
         return this.http.get(url, new RequestOptions({ headers: this.getHeaders() }) )
@@ -104,22 +98,22 @@ export class ExternalSystemSoccerSportsRepository{
                 if ( json.errorCode != 0 ) {
                     this.handleError(res);
                 }
-                return this.jsonCompetitionsToArrayHelper(json.leagues, appCompetitions )
+                return this.jsonCompetitionsToArrayHelper(json.leagues )
             })
             .catch( this.handleError );
     }
 
-    jsonCompetitionsToArrayHelper( jsonArray : any, appCompetitions: Competition[] ): Competition[]
+    jsonCompetitionsToArrayHelper( jsonArray : any ): Competition[]
     {
         let competitions: Competition[] = [];
         for (let json of jsonArray) {
-            let object = this.jsonCompetitionToObjectHelper(json,appCompetitions);
+            let object = this.jsonCompetitionToObjectHelper(json);
             competitions.push( object );
         }
         return competitions;
     }
 
-    jsonCompetitionToObjectHelper( json : any, appCompetitions: Competition[] ): Competition
+    jsonCompetitionToObjectHelper( json : any ): Competition
     {
         // identifier: "8e7fa444c4b60383727fb61fcc6aa387",
         // league_slug: "bundesliga",
@@ -132,17 +126,12 @@ export class ExternalSystemSoccerSportsRepository{
         let competition = new Competition(json.name);
         competition.setId(json.league_slug);
         competition.setAbbreviation(competition.getName().substr(0,Competition.MAX_LENGTH_ABBREVIATION));
+        this.setAsspociationByCompetitionId( competition.getId(), this.jsonAssociationToObjectHelper(json));
 
-        let foundAppCompetitions = appCompetitions.filter( compFilter => compFilter.hasExternalid( competition.getId().toString(), this.externalSystem ) );
-        let foundAppCompetition = foundAppCompetitions.shift();
-        if ( foundAppCompetition ){
-            let jsonExternal = { "externalid" : foundAppCompetition.getId(), "externalsystem": null };
-            competition.addExternals(this.externalObjectRepository.jsonToArrayHelper([jsonExternal],competition));
-        }
         return competition;
     }
 
-    getSeasons( appSeasons: Season[] ): Observable<Season[]>
+    getSeasons(): Observable<Season[]>
     {
         let url = this.externalSystem.getApiurl() + 'leagues' + '/premier-league/seasons';
         return this.http.get(url, new RequestOptions({ headers: this.getHeaders() }) )
@@ -151,16 +140,16 @@ export class ExternalSystemSoccerSportsRepository{
                 if ( json.errorCode != 0 ) {
                     this.handleError(res);
                 }
-                return this.jsonSeasonsToArrayHelper(json.seasons, appSeasons )
+                return this.jsonSeasonsToArrayHelper(json.seasons )
             })
             .catch( this.handleError );
     }
 
-    jsonSeasonsToArrayHelper( jsonArray : any, appSeasons: Season[] ): Season[]
+    jsonSeasonsToArrayHelper( jsonArray : any ): Season[]
     {
         let seasons: Season[] = [];
         for (let json of jsonArray) {
-            let object = this.jsonSeasonToObjectHelper(json,appSeasons);
+            let object = this.jsonSeasonToObjectHelper(json);
             let foundObjects = seasons.filter( assFilter => assFilter.getId() == object.getId() );
             if ( foundObjects.length > 0 ){
                 continue;
@@ -170,7 +159,7 @@ export class ExternalSystemSoccerSportsRepository{
         return seasons;
     }
 
-    jsonSeasonToObjectHelper( json : any, appSeasons: Season[] ): Season
+    jsonSeasonToObjectHelper( json : any ): Season
     {
         // "identifier": "ef5f67b10885e37c43bccb02c70b6e1d",
         // "league_identifier": "726a53a8c50d6c7a66fe0ab16bdf9bb1",
@@ -192,57 +181,67 @@ export class ExternalSystemSoccerSportsRepository{
         }
         season.setEnddate(endDate);
 
-        let foundAppSeasons = appSeasons.filter( seasonFilter => seasonFilter.hasExternalid( season.getId().toString(), this.externalSystem ) );
-        let foundAppSeason = foundAppSeasons.shift();
-        if ( foundAppSeason ){
-            let jsonExternal = { "externalid" : foundAppSeason.getId(), "externalsystem": null };
-            season.addExternals(this.externalObjectRepository.jsonToArrayHelper([jsonExternal],season));
-        }
+        // let foundAppSeasons = appSeasons.filter( seasonFilter => seasonFilter.hasExternalid( season.getId().toString(), this.externalSystem ) );
+        // let foundAppSeason = foundAppSeasons.shift();
+        // if ( foundAppSeason ){
+        //     let jsonExternal = { "externalid" : foundAppSeason.getId(), "externalsystem": null };
+        //     season.addExternals(this.externalObjectRepository.jsonToArrayHelper([jsonExternal],season));
+        // }
         return season;
     }
 
-    getCompetitionSeasons( appCompetitionSeasons: CompetitionSeason[] ): Observable<CompetitionSeason[]>
+    getCompetitionSeasons(): Observable<CompetitionSeason[]>
     {
-        let appCompetitions: Competition[] = [];
-        for( let appCompetitionSeason of appCompetitionSeasons){
-            let foundCompetitions = appCompetitions.filter( compFilter => compFilter.getId() == appCompetitionSeason.getCompetition().getId() );
-            if ( foundCompetitions.length == 0 ) {
-                appCompetitions.push( appCompetitionSeason.getCompetition() );
-            }
-        }
+        return Observable.create(observer => {
 
-        let competitionseasons: CompetitionSeason[] = [];
-        {
-            let competitionsObservable: Observable<Competition[]> = this.getCompetitions(appCompetitions);
-
+            let competitionsObservable: Observable<Competition[]> = this.getCompetitions();
 
             competitionsObservable.forEach(externalcompetitions => {
-                let externalcompetition = externalcompetitions[0];
+                for (let externalcompetition of externalcompetitions) {
 
-                //for( let observableCompetitionSeasonsIt of observableCompetitionSeasons ) {
-                    //observableCompetitionSeasonsIt.forEach( competitionseasonsIt => {
-                        // competitionseasons.add( competitionseasons )
-                       // console.log(competitionseasonsIt);
-                   // } );
-               // }
-
-                //if ( externalcompetition.getId().toString() == 'premier-league') {
-                let observableCompetitionSeasonsTmp = this.getCompetitionSeasonsHelper(externalcompetition, appCompetitionSeasons);
-                observableCompetitionSeasonsTmp.forEach( competitionseasonsIt => {
-                    for ( let competitionseasonIt of competitionseasonsIt ){
-                        competitionseasons.push( competitionseasonIt );
+                    if (externalcompetition.getId().toString() != 'premier-league' && externalcompetition.getId().toString() != 'eredivisie') {
+                        continue;
                     }
-                } );
-            });
-        }
 
-        return Observable.create(observer => {
-            observer.next(competitionseasons);
-            observer.complete();
+                    let observableCompetitionSeasonsTmp = this.getCompetitionSeasonsHelper(externalcompetition);
+                    observableCompetitionSeasonsTmp.forEach(competitionseasonsIt => {
+                        observer.next(competitionseasonsIt);
+                    });
+                }
+            });
+
+            setTimeout(() => {
+                observer.complete();
+            }, 5000);
+
         });
+
+        // return Observable.create(observer => {
+        //
+        //     let competitionsObservable: Observable<Competition[]> = this.getCompetitions();
+        //
+        //     competitionsObservable.forEach(externalcompetitions => {
+        //         for (let externalcompetition of externalcompetitions) {
+        //
+        //             if (externalcompetition.getId().toString() != 'premier-league' && externalcompetition.getId().toString() != 'bundesliga') {
+        //                 continue;
+        //             }
+        //
+        //             let observableCompetitionSeasonsTmp = this.getCompetitionSeasonsHelper(externalcompetition);
+        //             observableCompetitionSeasonsTmp.forEach(competitionseasonsIt => {
+        //                 observer.next(competitionseasonsIt);
+        //             });
+        //         }
+        //     });
+        //
+        //     setTimeout(() => {
+        //         observer.complete();
+        //     }, 5000);
+        //
+        // });
     }
 
-    getCompetitionSeasonsHelper( externalcompetition: Competition, appCompetitionSeasons: CompetitionSeason[] ): Observable<CompetitionSeason[]>
+    getCompetitionSeasonsHelper( externalcompetition: Competition ): Observable<CompetitionSeason[]>
     {
         let url = this.externalSystem.getApiurl() + 'leagues/'+externalcompetition.getId()+'/seasons';
         return this.http.get(url, new RequestOptions({ headers: this.getHeaders() }) )
@@ -251,22 +250,22 @@ export class ExternalSystemSoccerSportsRepository{
                 if ( json.errorCode != 0 ) {
                     this.handleError(res);
                 }
-                return this.jsonCompetitionSeasonsToArrayHelper(json.seasons, externalcompetition, appCompetitionSeasons )
+                return this.jsonCompetitionSeasonsToArrayHelper(json.seasons, externalcompetition )
             })
             .catch( this.handleError );
     }
 
-    jsonCompetitionSeasonsToArrayHelper( jsonArray : any, externalcompetition: Competition, appCompetitionSeasons: CompetitionSeason[] ): CompetitionSeason[]
+    jsonCompetitionSeasonsToArrayHelper( jsonArray : any, externalcompetition: Competition ): CompetitionSeason[]
     {
         let competitionseasons: CompetitionSeason[] = [];
         for (let json of jsonArray) {
-            let object = this.jsonCompetitionSeasonToObjectHelper(json, externalcompetition, appCompetitionSeasons);
+            let object = this.jsonCompetitionSeasonToObjectHelper(json, externalcompetition);
             competitionseasons.push( object );
         }
         return competitionseasons;
     }
 
-    jsonCompetitionSeasonToObjectHelper( json : any, externalcompetition: Competition, appCompetitionSeasons: CompetitionSeason[] ): CompetitionSeason
+    jsonCompetitionSeasonToObjectHelper( json : any, competition: Competition ): CompetitionSeason
     {
         // "identifier": "ef5f67b10885e37c43bccb02c70b6e1d",
         // "league_identifier": "726a53a8c50d6c7a66fe0ab16bdf9bb1",
@@ -275,29 +274,22 @@ export class ExternalSystemSoccerSportsRepository{
         // "season_start": "2015-07-01T00:00:00+0200",
         // "season_end": "2016-06-30T00:00:00+0200"
 
-        // let foundCompetitionSeasons = appCompetitionSeasons.filter( compSeasonFilter => compSeasonFilter.getCompetition().getId() == externalcompetition.getId() );
-        // let competition = if ( foundCompetitionSeasons.length == 0 ) {
-                // appCompetitions.push( appCompetitionSeason.getCompetition() );
-           //  }
-        // }
+        let season: Season = this.jsonSeasonToObjectHelper( json );
+        let association = this.getAsspociationByCompetitionId( competition.getId());
+        // console.log(association);
+        let competitionseason = new CompetitionSeason(association, competition, season);
+        competitionseason.setId( association.getId().toString() + '_' + competition.getId().toString() + '_' + season.getId().toString() );
 
-        let appSeasons: Season[] = [];
-        let season: Season = this.jsonSeasonToObjectHelper( json, appSeasons );
-
-        let association = new Association('asdasd');
-        let competitionseason = new CompetitionSeason(association, externalcompetition,season);
-
-        // //competitionseason.setId(json.league_slug);
-        // //competitionseason.setAbbreviation(competition.getName().substr(0,Competition.MAX_LENGTH_ABBREVIATION));
-        //
-        // let foundAppCompetitionSeasons = appCompetitionSeasons.filter( compseasonFilter => compseasonFilter.hasExternalid( competitionseason.getId().toString(), this.externalSystem ) );
-        // let foundAppCompetitionSeason = foundAppCompetitionSeasons.shift();
-        // if ( foundAppCompetitionSeason ){
-        //     let jsonExternal = { "externalid" : foundAppCompetitionSeason.getId(), "externalsystem": null };
-        //     competitionseason.addExternals(this.externalObjectRepository.jsonToArrayHelper([jsonExternal],competitionseason));
-        // }
         return competitionseason;
     }
+
+    getAsspociationByCompetitionId( competitionId ){
+        return this.asspociationsByCompetitionId[competitionId];
+    }
+    setAsspociationByCompetitionId( competitionId, association){
+        this.asspociationsByCompetitionId[competitionId] = association;
+    }
+
 
     // this could also be a private method of the component class
     handleError(error: any): Observable<any> {

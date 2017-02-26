@@ -15,10 +15,10 @@ import {Observable} from 'rxjs/Rx';
 export class ExternalSystemSoccerSports extends ExternalSystem implements ExternalSystemCompetitionInterface{
     protected website: string;
     protected repos: ExternalSystemSoccerSportsRepository;
-    protected associations: Association[];
-    protected competitions: Competition[];
-    protected seasons: Season[];
-    protected competitionseasons: CompetitionSeason[];
+    // protected associations: Association[];
+    // protected competitions: Competition[];
+    // protected seasons: Season[];
+    // protected competitionseasons: CompetitionSeason[];
 
     // constructor
     constructor( name: string, http: Http )
@@ -37,23 +37,23 @@ export class ExternalSystemSoccerSports extends ExternalSystem implements Extern
         ];
     }
 
-    getAssociations( appAssociations: Association[] ): Observable<Association[]>
+    getAssociations(): Observable<Association[]>
     {
-        return this.repos.getAssociations( appAssociations )
+        return this.repos.getAssociations()
     }
 
-    getCompetitions( appCompetitions: Competition[] ): Observable<Competition[]>
+    getCompetitions(): Observable<Competition[]>
     {
-        return this.repos.getCompetitions( appCompetitions )
+        return this.repos.getCompetitions()
     }
 
-    getSeasons( appSeasons: Season[] ): Observable<Season[]>
+    getSeasons(): Observable<Season[]>
     {
-        return this.repos.getSeasons( appSeasons )
+        return this.repos.getSeasons()
     }
 
-    getCompetitionSeasons( appCompetitionSeasons: CompetitionSeason[] ): Observable<CompetitionSeason[]>
+    getCompetitionSeasons(): Observable<CompetitionSeason[]>
     {
-        return this.repos.getCompetitionSeasons( appCompetitionSeasons )
+        return this.repos.getCompetitionSeasons()
     }
 }
