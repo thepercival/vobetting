@@ -16,6 +16,8 @@ import { ExternalSystem } from '../../domain/external/system';
 import { ExternalObject } from '../../domain/external/object';
 import { ExternalSystemRepository } from '../../domain/external/system/repository';
 import { ExternalObjectRepository } from '../../domain/external/object/repository';
+import { CompetitionSeasonRepository } from '../../domain/competitionseason/repository';
+import { CompetitionSeason } from '../../domain/competitionseason';
 
 @Component({
     moduleId: module.id,
@@ -28,6 +30,8 @@ import { ExternalObjectRepository } from '../../domain/external/object/repositor
 export class TeamsExternalComponent implements OnInit{
     @Input()
     teams: Team[];
+    competitionseasons: CompetitionSeason[];
+    competitionseason: CompetitionSeason;
     externalteams: Team[] = [];
     externalsystem: ExternalSystem;
     externalsystems: ExternalSystem[];
@@ -41,7 +45,8 @@ export class TeamsExternalComponent implements OnInit{
         private location: Location,
         private modalService: NgbModal,
         private reposExternalSystem: ExternalSystemRepository,
-        private externalObjectRepository: ExternalObjectRepository
+        private externalObjectRepository: ExternalObjectRepository,
+        private competitionseasonRepos: CompetitionSeasonRepository,
         // private globalEventsManger: GlobalEventsManager
     ) {
         this.classname = Team.classname;
@@ -49,10 +54,10 @@ export class TeamsExternalComponent implements OnInit{
 
     ngOnInit(): void {
 
-        this.repos.getObjects()
+        this.competitionseasonRepos.getObjects()
             .subscribe(
-                /* happy path */ teams => {
-                    this.teams = teams;
+                /* happy path */ competitionseasons => {
+                    this.competitionseasons = competitionseasons;
                 },
                 /* error path */ e => { this.message = { "type": "danger", "message": e}; },
                 /* onComplete */ () => {}
@@ -68,6 +73,19 @@ export class TeamsExternalComponent implements OnInit{
                 /* error path */ e => { this.message = { "type": "danger", "message": e}; },
                 /* onComplete */ () => {}
             );
+    }
+
+    onSelectCompetitionSeason( competitionseason: CompetitionSeason ): void {
+        this.competitionseason = competitionseason;
+        this.teams = competitionseason.getTeams();
+        // this.repos.getObjects()
+        //     .subscribe(
+        //         /* happy path */ teams => {
+        //             this.teams = teams;
+        //         },
+        //         /* error path */ e => { this.message = { "type": "danger", "message": e}; },
+        //         /* onComplete */ () => {}
+        //     );
     }
 
     onSelectExternalSystem( externalSystem: any ): void {

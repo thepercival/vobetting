@@ -46,7 +46,7 @@ export class TeamsComponent implements OnInit{
                 /* happy path */ teams => {
                     this.teams = teams;
                 },
-                /* error path */ e => {},
+                /* error path */ e => { this.message = { "type": "danger", "message": e}; },
                 /* onComplete */ () => {}
             );
     }

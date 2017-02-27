@@ -91,24 +91,36 @@ export class TeamRepository {
 
     createObject( jsonObject: any ): Observable<Team>
     {
-        return this.http
-            .post(this.url, jsonObject, new RequestOptions({ headers: this.getHeaders() }))
-            // ...and calling .json() on the response to return data
-            .map((res) => this.jsonToObjectHelper(res.json()))
-            //...errors if any
-            .catch(this.handleError);
+        try {
+            return this.http
+                .post(this.url, jsonObject, new RequestOptions({ headers: this.getHeaders() }))
+                // ...and calling .json() on the response to return data
+                .map((res) => this.jsonToObjectHelper(res.json()))
+                //...errors if any
+                .catch(this.handleError);
+        }
+        catch( e ) {
+            console.log(e);
+            return Observable.throw( e );
+        }
     }
 
     editObject( object: Team ): Observable<Team>
     {
         let url = this.url + '/'+object.getId();
 
-        return this.http
-            .put(url, JSON.stringify( object ), { headers: this.getHeaders() })
-            // ...and calling .json() on the response to return data
-            .map((res) => { console.log(res.json()); return this.jsonToObjectHelper(res.json()); })
-            //...errors if any
-            .catch(this.handleError);
+        try {
+            return this.http
+                .put(url, this.objectToJsonHelper( object ), { headers: this.getHeaders() })
+                // ...and calling .json() on the response to return data
+                .map((res) => { console.log(res.json()); return this.jsonToObjectHelper(res.json()); })
+                //...errors if any
+                .catch(this.handleError);
+        }
+        catch( e ) {
+            console.log(e);
+            return Observable.throw( e );
+        }
     }
 
     removeObject( object: Team): Observable<void>
@@ -120,6 +132,17 @@ export class TeamRepository {
             .map((res:Response) => res)
             //...errors if any
             .catch(this.handleError);
+    }
+
+    objectToJsonHelper( object : Team ): any
+    {
+        let json = {
+            "id":object.getId(),
+            "name":object.getName(),
+            "abbreviation":object.getAbbreviation(),
+            "associationid":object.getAssociation().getId()
+        };
+        return json;
     }
 
     // this could also be a private method of the component class

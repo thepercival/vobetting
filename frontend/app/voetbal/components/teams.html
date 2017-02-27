@@ -6,6 +6,7 @@
         <th style="text-align: center">{{teams?.length}}</th>
         <th>naam</th>
         <th>afkorting</th>
+        <th>bond</th>
         <th style="text-align: center"><button type="button" class="btn btn-secondary" (click)="onAdd()"><i class="fa fa-plus" aria-hidden="true"></i></button></th>
     </tr>
     </thead>
@@ -14,6 +15,7 @@
         <td style="text-align: center"><a type="button" href="javascript:void(0)" class="btn btn-secondary" (click)="onEdit(team)"><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
         <td>{{team.getName()}}</td>
         <td>{{team.getAbbreviation()}}</td>
+        <td>{{team.getAssociation().getName()}}</td>
         <td style="text-align: center"><a type="button" href="javascript:void(0)" class="btn btn-secondary" (click)="onRemove(team)"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
     </tr>
     </tbody>

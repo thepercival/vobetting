@@ -5,6 +5,9 @@
 import { Association } from './association';
 import { Competition } from './competition';
 import { Season } from './season';
+import { Round } from './competitionseason/round';
+import { Team } from './team';
+
 import { ExternalObject} from './external/object';
 import { ExternalSystem} from './external/system';
 
@@ -15,6 +18,9 @@ export class CompetitionSeason {
     protected season: Season;
     protected state: number;
     protected qualificationrule: number;
+
+    protected rounds: Round[] = [];
+
     protected externals: ExternalObject[] = [];
 
     static readonly classname = "CompetitionSeason";
@@ -92,6 +98,7 @@ export class CompetitionSeason {
         return this.getCompetition().getName() + ' ' + this.getSeason().getName();
     }
 
+    /********************* External start *******************/
     getExternals(): ExternalObject[] {
         return this.externals;
     };
@@ -113,4 +120,19 @@ export class CompetitionSeason {
     hasExternalid( externalid: string, externalsystem: ExternalSystem ): boolean {
         return this.getExternal(externalid, externalsystem) != null;
     }
+    /********************* External end *******************/
+
+    /********************* Structure start *******************/
+    getRounds(): Round[]{
+        return this.rounds;
+    }
+
+    getTeams(): Team[]{
+        let round = this.getRounds()[0];
+        if ( round == null ){
+            return [];
+        }
+        return round.getTeams();
+    }
+    /********************* Structure end *******************/
 }

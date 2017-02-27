@@ -6,16 +6,24 @@
 </div>
 <form class="card card-block" name="formTeamAdd" (ngSubmit)="f.form.valid && add() && false" #f="ngForm" novalidate>
     <div class="modal-body">
+        <div *ngIf="error" class="alert alert-danger" role="alert">{{error}}</div>
         <div class="form-group">
             <label for="name">naam</label>
             <input class="form-control" id="name" name="name" type="text" placeholder="naam" maxlength="{{maxvalues.name}}" required [(ngModel)]="model.name" #name="ngModel" />
         </div>
         <div class="form-group">
             <label for="abbreviation">afkorting</label>
-            <input class="form-control" id="abbreviation" name="abbreviation" type="text" maxlength="{{maxvalues.abbreviation}}" placeholder="afk" required [(ngModel)]="model.abbreviation" #abbreviation="ngModel"/>
+            <input class="form-control" id="abbreviation" name="abbreviation" type="text" maxlength="{{maxvalues.abbreviation}}" placeholder="afk" [(ngModel)]="model.abbreviation" #abbreviation="ngModel"/>
         </div>
+        <div class="form-group">
+            <label for="association">bond</label>
+            <select [(ngModel)]="model.association" id="association" name="association" #association="ngModel" class="form-control" required>
+                <option *ngFor="let association of associations" [ngValue]="association">{{association.getName()}}</option>
+            </select>
+        </div>
+
         <div *ngIf="f.submitted && !name.valid" class="alert alert-danger">naam is verplicht</div>
-        <div *ngIf="f.submitted && !abbreviation.valid" class="alert alert-danger">afkorting is verplicht</div>
+        <div *ngIf="f.submitted && !association.valid" class="alert alert-danger">de bond is verplicht</div>
         <div *ngIf="error" class="alert alert-danger" role="alert">{{error}}</div>
     </div>
     <div class="modal-footer">
