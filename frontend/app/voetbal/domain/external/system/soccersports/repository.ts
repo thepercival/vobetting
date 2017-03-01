@@ -11,6 +11,7 @@ import { Association } from '../../../association';
 import { Competition } from '../../../competition';
 import { Season } from '../../../season';
 import { CompetitionSeason } from '../../../competitionseason';
+import { Team } from '../../../team';
 import { ExternalObjectRepository } from '../../object/repository';
 import { ExternalSystemSoccerSports } from '../soccersports';
 import { ExternalSystemRepository } from '../repository';
@@ -215,30 +216,6 @@ export class ExternalSystemSoccerSportsRepository{
             }, 5000);
 
         });
-
-        // return Observable.create(observer => {
-        //
-        //     let competitionsObservable: Observable<Competition[]> = this.getCompetitions();
-        //
-        //     competitionsObservable.forEach(externalcompetitions => {
-        //         for (let externalcompetition of externalcompetitions) {
-        //
-        //             if (externalcompetition.getId().toString() != 'premier-league' && externalcompetition.getId().toString() != 'bundesliga') {
-        //                 continue;
-        //             }
-        //
-        //             let observableCompetitionSeasonsTmp = this.getCompetitionSeasonsHelper(externalcompetition);
-        //             observableCompetitionSeasonsTmp.forEach(competitionseasonsIt => {
-        //                 observer.next(competitionseasonsIt);
-        //             });
-        //         }
-        //     });
-        //
-        //     setTimeout(() => {
-        //         observer.complete();
-        //     }, 5000);
-        //
-        // });
     }
 
     getCompetitionSeasonsHelper( externalcompetition: Competition ): Observable<CompetitionSeason[]>
@@ -281,6 +258,49 @@ export class ExternalSystemSoccerSportsRepository{
         competitionseason.setId( association.getId().toString() + '_' + competition.getId().toString() + '_' + season.getId().toString() );
 
         return competitionseason;
+    }
+
+    getTeams( competitionSeason: CompetitionSeason ): Observable<Team[]>
+    {
+        let url = this.externalSystem.getApiurl() + 'leagues' + '/' + competitionSeason.getCompetition().getId() + '/seasons/' + competitionSeason.getSeason().getId() + '/teams';
+
+        return this.http.get(url, new RequestOptions({ headers: this.getHeaders() }) )
+            .map((res) => {
+                let json = res.json().data;
+                if ( json.errorCode != 0 ) {
+                    this.handleError(res);
+                }
+                return this.jsonTeamsToArrayHelper(json.teams, competitionSeason.getCompetition() );
+            })
+            .catch( this.handleError );
+    }
+
+    jsonTeamsToArrayHelper( jsonArray : any, competition: Competition ): Team[]
+    {
+        let objects: Team[] = [];
+        for (let json of jsonArray) {
+            let object = this.jsonTeamToObjectHelper(json, competition);
+            let foundObjects = objects.filter( objFilter => objFilter.getId() == object.getId() );
+            if ( foundObjects.length > 0 ){
+                continue;
+            }
+            objects.push( object );
+        }
+        return objects;
+    }
+
+    jsonTeamToObjectHelper( json : any, competition: Competition ): Team
+    {
+        // "identifier": "r4xhp8c6tpedhrd9v14valjgye847oa5",
+        // "team_slug": "ado",
+        // "name": "ADO",
+        // "flag": "",
+        // "notes": ""
+
+        let team = new Team(json.name);
+        team.setId(json.team_slug);
+        team.setAssociation( this.getAsspociationByCompetitionId( competition.getId() ) );
+        return team;
     }
 
     getAsspociationByCompetitionId( competitionId ){

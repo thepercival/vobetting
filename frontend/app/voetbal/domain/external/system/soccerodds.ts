@@ -5,6 +5,7 @@
 import { ExternalSystemCompetitionInterface } from './interface';
 import { ExternalSystem } from './../system';
 import { Competition } from './../../competition';
+import { Team } from './../../team';
 import { ExternalSystemSoccerOddsRepository } from './soccerodds/repository';
 import { Http } from '@angular/http';
 import {Observable} from 'rxjs/Rx';
@@ -24,7 +25,8 @@ export class ExternalSystemSoccerOdds extends ExternalSystem implements External
     getExportableClasses(): any[]
     {
         return [
-            { "name": Competition.classname, "source": false }
+            { "name": Competition.classname, "source": false },
+            { "name": Team.classname, "source": false }
         ];
     }
 

@@ -18,6 +18,8 @@ import { ExternalSystemRepository } from '../../domain/external/system/repositor
 import { ExternalObjectRepository } from '../../domain/external/object/repository';
 import { CompetitionSeasonRepository } from '../../domain/competitionseason/repository';
 import { CompetitionSeason } from '../../domain/competitionseason';
+import { AssociationRepository } from '../../domain/association/repository';
+import { Association } from '../../domain/association';
 
 @Component({
     moduleId: module.id,
@@ -30,10 +32,11 @@ import { CompetitionSeason } from '../../domain/competitionseason';
 export class TeamsExternalComponent implements OnInit{
     @Input()
     teams: Team[];
-    competitionseasons: CompetitionSeason[];
-    competitionseason: CompetitionSeason;
+    externalcompetitionseasons: CompetitionSeason[];
+    externalcompetitionseason: CompetitionSeason;
+    associations: Association[];
     externalteams: Team[] = [];
-    externalsystem: ExternalSystem;
+    externalsystem: any;
     externalsystems: ExternalSystem[];
     loading: boolean = false;
     message: any = null;
@@ -46,7 +49,7 @@ export class TeamsExternalComponent implements OnInit{
         private modalService: NgbModal,
         private reposExternalSystem: ExternalSystemRepository,
         private externalObjectRepository: ExternalObjectRepository,
-        private competitionseasonRepos: CompetitionSeasonRepository,
+        private associationRepos: AssociationRepository
         // private globalEventsManger: GlobalEventsManager
     ) {
         this.classname = Team.classname;
@@ -54,10 +57,10 @@ export class TeamsExternalComponent implements OnInit{
 
     ngOnInit(): void {
 
-        this.competitionseasonRepos.getObjects()
+        this.repos.getObjects()
             .subscribe(
-                /* happy path */ competitionseasons => {
-                    this.competitionseasons = competitionseasons;
+                /* happy path */ teams => {
+                    this.teams = teams;
                 },
                 /* error path */ e => { this.message = { "type": "danger", "message": e}; },
                 /* onComplete */ () => {}
@@ -73,25 +76,39 @@ export class TeamsExternalComponent implements OnInit{
                 /* error path */ e => { this.message = { "type": "danger", "message": e}; },
                 /* onComplete */ () => {}
             );
-    }
 
-    onSelectCompetitionSeason( competitionseason: CompetitionSeason ): void {
-        this.competitionseason = competitionseason;
-        this.teams = competitionseason.getTeams();
-        // this.repos.getObjects()
-        //     .subscribe(
-        //         /* happy path */ teams => {
-        //             this.teams = teams;
-        //         },
-        //         /* error path */ e => { this.message = { "type": "danger", "message": e}; },
-        //         /* onComplete */ () => {}
-        //     );
+        this.associationRepos.getObjects()
+            .subscribe(
+                /* happy path */ associations => {
+                    this.associations = associations;
+                },
+                /* error path */ e => { this.message = { "type": "danger", "message": e}; },
+                /* onComplete */ () => {}
+            );
     }
 
     onSelectExternalSystem( externalSystem: any ): void {
         this.externalsystem = externalSystem;
+        this.externalcompetitionseasons = [];
 
-        externalSystem.getTeams(this.teams)
+        externalSystem.getCompetitionSeasons()
+            .subscribe(
+                /* happy path */ competitionseasons => {
+                    for( let competitionseason of competitionseasons ){
+                        this.externalcompetitionseasons.push(competitionseason);
+                    }
+                },
+                /* error path */ e => { this.message = { "type": "danger", "message": e}; },
+                /* onComplete */ () => {}
+            );
+
+
+    }
+
+    onSelectCompetitionSeason( competitionseason: CompetitionSeason ): void {
+        this.externalcompetitionseason = competitionseason;
+
+        this.externalsystem.getTeams(this.externalcompetitionseason)
             .subscribe(
                 /* happy path */ teams => {
                     this.externalteams = teams;
@@ -215,11 +232,21 @@ export class TeamsExternalComponent implements OnInit{
     onImportExternalAll(): void
     {
         for( let externalteam of this.externalteams) {
-            this.onImportExternal(externalteam);
+            this.importExternalHelper(externalteam);
         }
     }
 
     onImportExternal(externalteam): void
+    {
+        try {
+            this.importExternalHelper(externalteam);
+        }
+        catch( e ){
+            this.message = { "type": "danger", "message": e};
+        }
+    }
+
+    importExternalHelper(externalteam: Team): void
     {
         // check if has internal
         // if ( false ) { // update internal
@@ -227,7 +254,16 @@ export class TeamsExternalComponent implements OnInit{
         // }
         // else { // add
 
-        let json = { "name": externalteam.getName(), "abbreviation" : externalteam.getAbbreviation() };
+        let externalAssociationId = externalteam.getAssociation().getId().toString();
+        let appAssociation = this.associations.filter(
+            association => association.hasExternalid( externalAssociationId, this.externalsystem )
+        ).shift();
+        if ( appAssociation == null ){
+            throw new Error("de bond, voor externid "+externalAssociationId+" en het externe systeem "+this.externalsystem.getName()+", kan niet gevonden worden, importeer eerst de bonden");
+        }
+
+        let json = { "name": externalteam.getName(), "abbreviation" : externalteam.getAbbreviation(), "associationid": appAssociation.getId() };
+        console.log(json);
 
         this.repos.createObject( json )
             .subscribe(
