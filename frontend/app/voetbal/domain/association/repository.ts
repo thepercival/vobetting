@@ -16,6 +16,7 @@ export class AssociationRepository {
     private url : string;
     private http: Http;
     private externalObjectRepository: ExternalObjectRepository;
+    private objects: Association[];
 
     constructor( http: Http, externalObjectRepository: ExternalObjectRepository )
     {
@@ -49,8 +50,18 @@ export class AssociationRepository {
 
     getObjects(): Observable<Association[]>
     {
+        if ( this.objects != null ){
+            return Observable.create(observer => {
+                observer.next(this.objects);
+                observer.complete();
+            });
+        }
         return this.http.get(this.url, new RequestOptions({ headers: this.getHeaders() }) )
-            .map((res) => this.jsonArrayToObject(res.json()))
+            .map((res) => {
+                let objects = this.jsonArrayToObject(res.json());
+                this.objects = objects;
+                return this.objects;
+            })
             .catch( this.handleError );
     }
 

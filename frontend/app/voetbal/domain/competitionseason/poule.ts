@@ -11,7 +11,7 @@ export class Poule {
     protected round: Round;
     protected number: number;
     protected name: string;
-    protected pouleplaces: PoulePlace[] = [];
+    protected places: PoulePlace[] = [];
 
     static readonly classname = "Poule";
 
@@ -53,13 +53,13 @@ export class Poule {
         this.name = name;
     };
 
-    getPoulePlaces(): PoulePlace[] {
-        return this.pouleplaces;
+    getPlaces(): PoulePlace[] {
+        return this.places;
     }
 
     getTeams(): Team[]{
         let teams: Team[] = [];
-        for( let pouleplace of this.getPoulePlaces() ){
+        for( let pouleplace of this.getPlaces() ){
             teams.push(pouleplace.getTeam());
         }
         return teams;

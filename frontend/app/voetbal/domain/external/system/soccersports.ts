@@ -8,6 +8,7 @@ import { Association } from './../../association';
 import { Competition } from './../../competition';
 import { Season } from './../../season';
 import { CompetitionSeason } from './../../competitionseason';
+import { Round } from './../../competitionseason/round';
 import { Team } from './../../team';
 import { ExternalSystemSoccerSportsRepository } from './soccersports/repository';
 import { Http } from '@angular/http';
@@ -35,7 +36,8 @@ export class ExternalSystemSoccerSports extends ExternalSystem implements Extern
             { "name": Competition.classname, "source": true },
             { "name": Season.classname, "source": true },
             { "name": CompetitionSeason.classname, "source": true },
-            { "name": Team.classname, "source": true }
+            { "name": Team.classname, "source": true },
+            { "name": Round.classname, "source": true }
         ];
     }
 
@@ -62,5 +64,10 @@ export class ExternalSystemSoccerSports extends ExternalSystem implements Extern
     getTeams( competitionSeason: CompetitionSeason ): Observable<Team[]>
     {
         return this.repos.getTeams( competitionSeason );
+    }
+
+    getStructure( competitionSeason: CompetitionSeason ): Observable<Round[]>
+    {
+        return this.repos.getStructure( competitionSeason );
     }
 }

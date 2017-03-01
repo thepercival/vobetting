@@ -31,6 +31,8 @@ export class CompetitionSeasonStructureComponent implements OnInit{
 
     }
 
+    // do getStructure( competitionseason ) from SoccerSports
+
     ngOnInit(): void {
 
         this.route.params

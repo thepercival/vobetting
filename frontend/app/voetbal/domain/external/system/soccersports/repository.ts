@@ -12,6 +12,9 @@ import { Competition } from '../../../competition';
 import { Season } from '../../../season';
 import { CompetitionSeason } from '../../../competitionseason';
 import { Team } from '../../../team';
+import { Round } from '../../../competitionseason/round';
+import { Poule } from '../../../competitionseason/poule';
+import { PoulePlace } from '../../../competitionseason/pouleplace';
 import { ExternalObjectRepository } from '../../object/repository';
 import { ExternalSystemSoccerSports } from '../soccersports';
 import { ExternalSystemRepository } from '../repository';
@@ -301,6 +304,48 @@ export class ExternalSystemSoccerSportsRepository{
         team.setId(json.team_slug);
         team.setAssociation( this.getAsspociationByCompetitionId( competition.getId() ) );
         return team;
+    }
+
+    getStructure( competitionSeason: CompetitionSeason ): Observable<Round[]>
+    {
+        return Observable.create(observer => {
+
+            let rounds: Round[] = [];
+            let firstroundNumber: number = 1;
+            let round = new Round(competitionSeason, firstroundNumber);
+            {
+                round.setId(firstroundNumber);
+
+                let firstpouleNumber: number = 1;
+                let poule = new Poule(round, firstpouleNumber);
+                {
+                    poule.setId(firstpouleNumber);
+                    let pouleplaces = poule.getPlaces();
+
+                    this.getTeams(competitionSeason)
+                        .subscribe(
+                            /* happy path */ teams => {
+                                let counter = 0;
+                                for( let team of teams){
+                                    let pouleplace = new PoulePlace(poule, ++counter);
+                                    pouleplace.setId(counter);
+                                    pouleplace.setTeam(team);
+                                    pouleplaces.push(pouleplace);
+                                }
+                            },
+                            /* error path */ e => {},
+                            /* onComplete */ () => {}
+                        );
+
+                    round.getPoules().push(poule);
+                }
+
+                rounds.push(round);
+            }
+
+            observer.next(rounds);
+            observer.complete();
+        });
     }
 
     getAsspociationByCompetitionId( competitionId ){
