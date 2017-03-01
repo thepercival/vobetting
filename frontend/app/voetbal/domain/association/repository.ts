@@ -56,6 +56,7 @@ export class AssociationRepository {
                 observer.complete();
             });
         }
+
         return this.http.get(this.url, new RequestOptions({ headers: this.getHeaders() }) )
             .map((res) => {
                 let objects = this.jsonArrayToObject(res.json());
@@ -67,12 +68,12 @@ export class AssociationRepository {
 
     jsonArrayToObject( jsonArray: any ): Association[]
     {
-        let associations: Association[] = [];
+        let objects: Association[] = [];
         for (let json of jsonArray) {
             let object = this.jsonToObjectHelper(json);
-            associations.push( object );
+            objects.push( object );
         }
-        return associations;
+        return objects;
     }
 
     getObject( id: number): Observable<Association>

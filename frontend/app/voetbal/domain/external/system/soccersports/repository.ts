@@ -23,17 +23,17 @@ import { ExternalSystemRepository } from '../repository';
 export class ExternalSystemSoccerSportsRepository{
 
     private headers = new Headers({'Content-Type': 'application/json'});
-    private http: Http;
-    private externalObjectRepository: ExternalObjectRepository;
-    private externalSystem: ExternalSystemSoccerSports;
     private asspociationsByCompetitionId: any = {};
 
-    constructor( http: Http,externalSystem: ExternalSystemSoccerSports )
+    private competitionseasons: CompetitionSeason[];
+
+    constructor(
+        private http: Http,
+        private externalSystem: ExternalSystemSoccerSports,
+        private externalSystemRepository: ExternalSystemRepository
+    )
     {
-        this.http = http;
-        this.externalSystem = externalSystem;
-        let externalSystemRepository = new ExternalSystemRepository(http);
-        this.externalObjectRepository = new ExternalObjectRepository(http, externalSystemRepository );
+        console.log('constructor ExternalSystemSoccerSportsRepository');
     }
 
     getToken(): string
@@ -196,6 +196,15 @@ export class ExternalSystemSoccerSportsRepository{
 
     getCompetitionSeasons(): Observable<CompetitionSeason[]>
     {
+        if ( this.competitionseasons != null ){
+            return Observable.create(observer => {
+                observer.next(this.competitionseasons);
+                observer.complete();
+            });
+        }
+
+        this.competitionseasons = [];
+
         return Observable.create(observer => {
 
             let competitionsObservable: Observable<Competition[]> = this.getCompetitions();
@@ -209,6 +218,9 @@ export class ExternalSystemSoccerSportsRepository{
 
                     let observableCompetitionSeasonsTmp = this.getCompetitionSeasonsHelper(externalcompetition);
                     observableCompetitionSeasonsTmp.forEach(competitionseasonsIt => {
+                        for( let competitionseasonIt of competitionseasonsIt){
+                            this.competitionseasons.push(competitionseasonIt);
+                        }
                         observer.next(competitionseasonsIt);
                     });
                 }

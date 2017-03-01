@@ -13,6 +13,7 @@ import { Team } from './../../team';
 import { ExternalSystemSoccerSportsRepository } from './soccersports/repository';
 import { Http } from '@angular/http';
 import {Observable} from 'rxjs/Rx';
+import { ExternalSystemRepository } from './repository';
 
 export class ExternalSystemSoccerSports extends ExternalSystem implements ExternalSystemCompetitionInterface{
     protected website: string;
@@ -23,10 +24,11 @@ export class ExternalSystemSoccerSports extends ExternalSystem implements Extern
     // protected competitionseasons: CompetitionSeason[];
 
     // constructor
-    constructor( name: string, http: Http )
+    constructor( name: string, http: Http, externalSystemRepository: ExternalSystemRepository )
     {
         super(name);
-        this.repos = new ExternalSystemSoccerSportsRepository( http, this );
+
+        this.repos = new ExternalSystemSoccerSportsRepository( http, this, externalSystemRepository );
     }
 
     getExportableClasses(): any[]

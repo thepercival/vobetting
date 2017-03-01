@@ -9,6 +9,7 @@ import { Team } from './../../team';
 import { ExternalSystemSoccerOddsRepository } from './soccerodds/repository';
 import { Http } from '@angular/http';
 import {Observable} from 'rxjs/Rx';
+import { ExternalSystemRepository } from './repository';
 
 export class ExternalSystemSoccerOdds extends ExternalSystem implements ExternalSystemCompetitionInterface{
     protected website: string;
@@ -16,10 +17,10 @@ export class ExternalSystemSoccerOdds extends ExternalSystem implements External
     protected competitions: Competition[];
 
     // constructor
-    constructor( name: string, http: Http )
+    constructor( name: string, http: Http, externalSystemRepository: ExternalSystemRepository )
     {
         super(name);
-        this.repos = new ExternalSystemSoccerOddsRepository( http, this );
+        this.repos = new ExternalSystemSoccerOddsRepository( http, this, externalSystemRepository );
     }
 
     getExportableClasses(): any[]
@@ -31,8 +32,8 @@ export class ExternalSystemSoccerOdds extends ExternalSystem implements External
     }
 
 
-    getCompetitions( appCompetitions: Competition[] ): Observable<Competition[]>
+    getCompetitions(): Observable<Competition[]>
     {
-        return this.repos.getCompetitions( appCompetitions )
+        return this.repos.getCompetitions()
     }
 }

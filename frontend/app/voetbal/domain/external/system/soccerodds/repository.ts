@@ -16,16 +16,13 @@ import { ExternalSystemRepository } from '../repository';
 export class ExternalSystemSoccerOddsRepository{
 
     private headers = new Headers({'Content-Type': 'application/json'});
-    private http: Http;
-    private externalObjectRepository: ExternalObjectRepository;
-    private externalSystem: ExternalSystemSoccerOdds;
 
-    constructor( http: Http, externalSystem: ExternalSystemSoccerOdds )
+    constructor(
+        private http: Http,
+        private externalSystem: ExternalSystemSoccerOdds,
+        private externalSystemRepository: ExternalSystemRepository
+    )
     {
-        this.http = http;
-        this.externalSystem = externalSystem;
-        let externalSystemRepository = new ExternalSystemRepository(http);
-        this.externalObjectRepository = new ExternalObjectRepository(http, externalSystemRepository );
     }
 
     getToken(): string
@@ -42,36 +39,30 @@ export class ExternalSystemSoccerOddsRepository{
         return headers;
     }
 
-    getCompetitions( appCompetitions: Competition[] ): Observable<Competition[]>
+    getCompetitions(): Observable<Competition[]>
     {
         let url = this.externalSystem.getApiurl() + 'leagues';
         return this.http.get(url, new RequestOptions({ headers: this.getHeaders() }) )
-            .map((res) => this.jsonCompetitionsToArrayHelper(res.json(), appCompetitions ))
+            .map((res) => this.jsonCompetitionsToArrayHelper(res.json() ))
             .catch( this.handleError );
     }
 
-    jsonCompetitionsToArrayHelper( jsonArray : any, appCompetitions: Competition[] ): Competition[]
+    jsonCompetitionsToArrayHelper( jsonArray : any ): Competition[]
     {
         let competitions: Competition[] = [];
         for (let json of jsonArray) {
-            let object = this.jsonCompetitionToObjectHelper(json,appCompetitions);
+            let object = this.jsonCompetitionToObjectHelper(json);
             competitions.push( object );
         }
         return competitions;
     }
 
-    jsonCompetitionToObjectHelper( json : any, appCompetitions: Competition[] ): Competition
+    jsonCompetitionToObjectHelper( json : any ): Competition
     {
         let competition = new Competition(json.name);
         competition.setId(json.leagueId);
         competition.setAbbreviation(competition.getName().substr(0,Competition.MAX_LENGTH_ABBREVIATION));
 
-        let foundAppCompetitions = appCompetitions.filter( compFilter => compFilter.hasExternalid( competition.getId().toString(), this.externalSystem ) );
-        let foundAppCompetition = foundAppCompetitions.shift();
-        if ( foundAppCompetition ){
-            let jsonExternal = { "externalid" : foundAppCompetition.getId(), "externalsystem": null };
-            competition.addExternals(this.externalObjectRepository.jsonToArrayHelper([jsonExternal],competition));
-        }
         return competition;
     }
 

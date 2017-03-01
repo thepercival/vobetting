@@ -20,13 +20,9 @@ import { ExternalSystem } from '../system';
 export class ExternalObjectRepository {
 
     private url : string = "http://localhost:2999/voetbal/external";
-    private http: Http;
-    private externalSystemRepository: ExternalSystemRepository;
 
-    constructor( http: Http, externalSystemRepository: ExternalSystemRepository )
+    constructor( private http: Http, private externalSystemRepository: ExternalSystemRepository )
     {
-        this.http = http;
-        this.externalSystemRepository = externalSystemRepository;
     }
 
     getToken(): string

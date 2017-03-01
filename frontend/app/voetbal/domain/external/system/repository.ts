@@ -17,10 +17,13 @@ export class ExternalSystemRepository {
     private headers = new Headers({'Content-Type': 'application/json'});
     private url : string = "http://localhost:2999/voetbal/external/systems";
     private http: Http;
+    private objects: ExternalSystem[];
+    private specificObjects: ExternalSystem[] = [];
 
     constructor( http: Http )
     {
         this.http = http;
+        console.log('ExternalSystemRepository constructor');
     }
 
     getToken(): string
@@ -43,12 +46,23 @@ export class ExternalSystemRepository {
 
     getObjects(): Observable<ExternalSystem[]>
     {
+
+        if ( this.objects != null ){
+            return Observable.create(observer => {
+                observer.next(this.objects);
+                observer.complete();
+            });
+        }
         return this.http.get(this.url, new RequestOptions({ headers: this.getHeaders() }) )
-            .map( (res) => this.jsonToArrayHelper(res.json()) )
+            .map((res) => {
+                let objects = this.jsonArrayToObject(res.json());
+                this.objects = objects;
+                return this.objects;
+            })
             .catch( this.handleError );
     }
 
-    jsonToArrayHelper( jsonArray : any ): ExternalSystem[]
+    jsonArrayToObject( jsonArray: any ): ExternalSystem[]
     {
         let objects: ExternalSystem[] = [];
         for (let json of jsonArray) {
@@ -60,6 +74,7 @@ export class ExternalSystemRepository {
 
     getObject( id: number): Observable<ExternalSystem>
     {
+        console.log('getObject');
         let url = this.url + '/'+id;
         return this.http.get(url)
         // ...and calling .json() on the response to return data
@@ -85,15 +100,23 @@ export class ExternalSystemRepository {
 
     private getObjectByName( name: string): ExternalSystem
     {
+        let foundObjects = this.specificObjects.filter( objectFilter => objectFilter.getName() == name );
+        let foundObject = foundObjects.shift();
+        if ( foundObject ){
+            return foundObject;
+        }
         let externalSystem;
         if ( name == "Soccer Odds" ) {
-            externalSystem = new ExternalSystemSoccerOdds( name, this.http );
+            externalSystem = new ExternalSystemSoccerOdds( name, this.http, this );
         }
         else if ( name == "Soccer Sports" ) {
-             externalSystem = new ExternalSystemSoccerSports( name, this.http );
+             externalSystem = new ExternalSystemSoccerSports( name, this.http, this );
         }
         else {
             externalSystem = new ExternalSystem( name );
+        }
+        if ( externalSystem != null ){
+            this.specificObjects.push(externalSystem);
         }
         return externalSystem;
     }
