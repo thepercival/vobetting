@@ -121,10 +121,10 @@ export class TeamsExternalComponent implements OnInit{
 
     selectExternalSystemHelper( externalObjects, internalObjects ) {
         for( let externalObject of externalObjects ) {
-            let foundAppAssociations = internalObjects.filter( objectFilter => objectFilter.hasExternalid( externalObject.getId().toString(), this.externalsystem ) );
-            let foundAppAssociation = foundAppAssociations.shift();
-            if ( foundAppAssociation ){
-                let jsonExternal = { "externalid" : foundAppAssociation.getId(), "externalsystem": null };
+            let foundInternalObjects = internalObjects.filter( objectFilter => objectFilter.hasExternalid( externalObject.getId().toString(), this.externalsystem ) );
+            let foundInternalObject = foundInternalObjects.shift();
+            if ( foundInternalObject ){
+                let jsonExternal = { "externalid" : foundInternalObject.getId(), "externalsystem": null };
                 externalObject.addExternals(this.externalObjectRepository.jsonToArrayHelper([jsonExternal],externalObject));
             }
         }

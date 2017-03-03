@@ -147,6 +147,16 @@ export class ExternalSystemRepository {
             .catch(this.handleError);
     }
 
+    objectsToJsonHelper( objects: any[] ): any[]
+    {
+        let jsonArray: any[] = [];
+        for (let object of objects) {
+            let json = this.objectToJsonHelper(object);
+            jsonArray.push( json );
+        }
+        return jsonArray;
+    }
+
     objectToJsonHelper( object : ExternalSystem ): any
     {
         let json = {

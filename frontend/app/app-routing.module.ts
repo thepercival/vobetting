@@ -16,7 +16,7 @@ import { SeasonsComponent }  from './voetbal/components/seasons';
 import { SeasonsExternalComponent }  from './voetbal/components/season/external';
 import { CompetitionSeasonsComponent }  from './voetbal/components/competitionseasons';
 import { CompetitionSeasonsExternalComponent }  from './voetbal/components/competitionseason/external';
-import { CompetitionSeasonStructureComponent } from './voetbal/components/competitionseason/structure';
+import { CompetitionSeasonStructureComponent } from './voetbal/components/competitionseason/structure/external';
 import { TeamsComponent }  from './voetbal/components/teams';
 import { TeamsExternalComponent }  from './voetbal/components/team/external';
 import { ExternalSystemsComponent }  from './voetbal/components/external/systems';

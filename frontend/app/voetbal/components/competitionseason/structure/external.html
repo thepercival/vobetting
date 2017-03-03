@@ -1,0 +1,70 @@
+<div *ngIf="competitionseason != null" class="competitionseason-structure-external">
+    <h2>competitieseizoenen importeren</h2>
+    <div *ngIf="message" class="alert alert-{{message.type}}" role="alert">{{message.message}}</div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <div>
+                <label>intern systeem</label>
+            </div>
+            <h2>structuur competitieseizoen {{competitionseason?.getName()}}</h2>
+            <div *ngIf="competitionseason.getRounds().length == 0" class="alert alert-danger" role="alert">geen structuur aanwezig</div>
+            <div *ngIf="competitionseason.getRounds().length > 0">
+                <button type="button" class="btn btn-secondary" (click)="onRemove(competitionseason)" title="structuur verwijderen"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                <ul>
+                    <li *ngFor="let round of competitionseason.getRounds()">
+                        ronde x
+                        <ul>
+                            <li *ngFor="let poule of round.getPoules()">
+                                poule y
+                                <ul>
+                                    <li *ngFor="let pouleplace of poule.getPoulePlaces()">
+                                        <span>{{pouleplace.getTeam() ? pouleplace.getTeam().getName() : null }}</span>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div>
+                <label>extern systeem</label>
+                <div ngbDropdown class="d-inline-block">
+                    <button class="btn btn-outline-primary" id="dropdownMenu1" ngbDropdownToggle>{{ externalsystem ? externalsystem.getName() : 'selecteer extern systeem' }}</button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <button *ngFor="let externalsystemit of externalsystems"  class="dropdown-item" (click)="onSelectExternalSystem(externalsystemit)">{{externalsystemit.getName()}}</button>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="externalsystem && externalrounds.length > 0" class="table">
+                <div *ngIf="externalsystem.hasAvailableExportClassAsSource(classname)">
+
+
+                    <div *ngIf="externalsystem.hasAvailableExportClassAsSource(classname)">
+                        <button *ngIf="competitionseason.getRounds().length == 0 && externalrounds.length > 0" type="button" class="btn btn-secondary" (click)="onImportExternal(externalrounds)" title="item importeren"><i class="fa fa-long-arrow-left" aria-hidden="true"></i></button>
+                    </div>
+
+                    <ul>
+                        <li *ngFor="let round of externalrounds">
+                            ronde x
+                            <ul>
+                                <li *ngFor="let poule of round.getPoules()">
+                                    poule y
+                                    <ul>
+                                        <li *ngFor="let pouleplace of poule.getPlaces()">
+                                            <span>{{pouleplace.getTeam() ? pouleplace.getTeam().getName() : null }}</span>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<hr>
+<a href="#" class="btn btn-secondary" (click)="goBack()">ga terug</a>

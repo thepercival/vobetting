@@ -110,7 +110,7 @@ export class CompetitionSeason {
     };
 
     getExternal( externalid: string, externalsystem: ExternalSystem ): ExternalObject {
-        let foundExternals = this.getExternals().filter( external => external.getExternalid() == externalid && ( ( external.getExternalSystem() == null && externalsystem == null ) || external.getExternalSystem().getId() == externalsystem.getId() ) );
+        let foundExternals = this.getExternals().filter( external => ( externalid == null || external.getExternalid() == externalid ) && ( ( external.getExternalSystem() == null && externalsystem == null ) || external.getExternalSystem().getId() == externalsystem.getId() ) );
         if ( foundExternals.length != 1 ) {
             return null;
         }

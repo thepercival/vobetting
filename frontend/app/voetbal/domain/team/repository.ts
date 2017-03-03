@@ -85,7 +85,6 @@ export class TeamRepository {
         team.setAbbreviation(json.abbreviation);
         team.setAssociation(association);
         team.addExternals(this.externalObjectRepository.jsonToArrayHelper(json.externals,team));
-        console.log(team);
         return team;
     }
 
