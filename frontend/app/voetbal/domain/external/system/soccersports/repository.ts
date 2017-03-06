@@ -12,9 +12,9 @@ import { Competition } from '../../../competition';
 import { Season } from '../../../season';
 import { CompetitionSeason } from '../../../competitionseason';
 import { Team } from '../../../team';
-import { Round } from '../../../competitionseason/round';
-import { Poule } from '../../../competitionseason/poule';
-import { PoulePlace } from '../../../competitionseason/pouleplace';
+import { Round } from '../../../round';
+import { Poule } from '../../../poule';
+import { PoulePlace } from '../../../pouleplace';
 import { ExternalObjectRepository } from '../../object/repository';
 import { ExternalSystemSoccerSports } from '../soccersports';
 import { ExternalSystemRepository } from '../repository';
@@ -27,6 +27,12 @@ export class ExternalSystemSoccerSportsRepository{
 
     private competitionseasons: CompetitionSeason[];
 
+
+
+    // localStorage.setItem('user', JSON.stringify({ id: json.user.id, token: json.token }));
+// var user = JSON.parse(localStorage.getItem('user'));
+
+// maak hier een cache voor, omdat er maar weinig api-calls mogelijk zijn
     constructor(
         private http: Http,
         private externalSystem: ExternalSystemSoccerSports,
@@ -41,6 +47,32 @@ export class ExternalSystemSoccerSportsRepository{
         return this.externalSystem.getApikey();
     }
 
+    getCacheName( cachename ): string
+    {
+        return this.externalSystem.getName().toLowerCase().replace(" ","") + '-' + cachename;
+    }
+
+    getCacheItem( cachename: string ): string
+    {
+        let valueAsString = localStorage.getItem( this.getCacheName(cachename) );
+        if ( valueAsString == null ){
+            return null;
+        }
+        let json = JSON.parse(valueAsString);
+        if ( json.expiredate < (new Date()) ) {
+            localStorage.removeItem(this.getCacheName(cachename));
+            return null;
+        }
+
+        return JSON.parse(json.value);
+    }
+
+    setCacheItem( cachename: string, value: string, expireDate: Date ): void
+    {
+        let json = { "expiredate": expireDate.toJSON(), "value": value};
+        localStorage.setItem( this.getCacheName(cachename), JSON.stringify(json));
+    }
+
     getHeaders(): Headers
     {
         let headers = new Headers(this.headers);
@@ -52,17 +84,33 @@ export class ExternalSystemSoccerSportsRepository{
 
     getAssociations(): Observable<Association[]>
     {
+        let cacheName = Association.classname;
+        let jsonObjects = this.getCacheItem( cacheName );
+        if ( jsonObjects != null ){
+            return Observable.create(observer => {
+                observer.next( this.jsonAssociationsToArrayHelper( jsonObjects ) );
+                observer.complete();
+            });
+        }
+
         let url = this.externalSystem.getApiurl() + 'leagues';
         return this.http.get(url, new RequestOptions({ headers: this.getHeaders() }) )
             .map((res) => {
                 let json = res.json().data;
-                if ( json.errorCode != 0 ) {
-                    this.handleError(res);
-                }
-                return this.jsonAssociationsToArrayHelper(json.leagues )
+                let associations = this.jsonAssociationsToArrayHelper(json.leagues )
+                this.setCacheItem(cacheName, JSON.stringify(json.leagues), this.getExpireDate(Association.classname) );
+                return associations;
             })
             .catch( this.handleError );
     }
+
+    // identifier: "8e7fa444c4b60383727fb61fcc6aa387",
+    // league_slug: "bundesliga",
+    // name: "Bundesliga",
+    // nation: "Germany",
+    // level: "1"
+    // cup: false,
+    // federation: "UEFA"
 
     jsonAssociationsToArrayHelper( jsonArray : any): Association[]
     {
@@ -80,29 +128,44 @@ export class ExternalSystemSoccerSportsRepository{
 
     jsonAssociationToObjectHelper( json : any): Association
     {
-        // identifier: "8e7fa444c4b60383727fb61fcc6aa387",
-        // league_slug: "bundesliga",
-        // name: "Bundesliga",
-        // nation: "Germany",
-        // level: "1"
-        // cup: false,
-        // federation: "UEFA"
-
         let association = new Association(json.federation);
         association.setId(json.federation);
         return association;
     }
 
+    getExpireDate( className: string ): Date
+    {
+        let expireDate = new Date();
+        // if ( className == Association.classname ){
+        //     expireDate.setDate(expireDate.getDate() + 14);
+        // }
+        // else if ( className == Competition.classname ){
+        //     expireDate.setDate(expireDate.getDate() + 14);
+        // }
+        expireDate.setDate(expireDate.getDate() + 14);
+
+
+        return expireDate;
+    }
+
     getCompetitions(): Observable<Competition[]>
     {
+        let cacheName = Competition.classname;
+        let jsonObjects = this.getCacheItem( cacheName );
+        if ( jsonObjects != null ){
+            return Observable.create(observer => {
+                observer.next( this.jsonCompetitionsToArrayHelper( jsonObjects ) );
+                observer.complete();
+            });
+        }
+
         let url = this.externalSystem.getApiurl() + 'leagues';
         return this.http.get(url, new RequestOptions({ headers: this.getHeaders() }) )
             .map((res) => {
                 let json = res.json().data;
-                if ( json.errorCode != 0 ) {
-                    this.handleError(res);
-                }
-                return this.jsonCompetitionsToArrayHelper(json.leagues )
+                let objects = this.jsonCompetitionsToArrayHelper(json.leagues )
+                this.setCacheItem(cacheName, JSON.stringify(json.leagues), this.getExpireDate(Competition.classname) );
+                return objects;
             })
             .catch( this.handleError );
     }
@@ -137,14 +200,22 @@ export class ExternalSystemSoccerSportsRepository{
 
     getSeasons(): Observable<Season[]>
     {
+        let cacheName = Season.classname;
+        let jsonObjects = this.getCacheItem( cacheName );
+        if ( jsonObjects != null ){
+            return Observable.create(observer => {
+                observer.next( this.jsonSeasonsToArrayHelper( jsonObjects ) );
+                observer.complete();
+            });
+        }
+
         let url = this.externalSystem.getApiurl() + 'leagues' + '/premier-league/seasons';
         return this.http.get(url, new RequestOptions({ headers: this.getHeaders() }) )
             .map((res) => {
                 let json = res.json().data;
-                if ( json.errorCode != 0 ) {
-                    this.handleError(res);
-                }
-                return this.jsonSeasonsToArrayHelper(json.seasons )
+                let objects = this.jsonSeasonsToArrayHelper(json.seasons )
+                this.setCacheItem(cacheName, JSON.stringify(json.seasons), this.getExpireDate(Season.classname) );
+                return objects;
             })
             .catch( this.handleError );
     }
@@ -154,7 +225,7 @@ export class ExternalSystemSoccerSportsRepository{
         let seasons: Season[] = [];
         for (let json of jsonArray) {
             let object = this.jsonSeasonToObjectHelper(json);
-            let foundObjects = seasons.filter( assFilter => assFilter.getId() == object.getId() );
+            let foundObjects = seasons.filter( seasonFilter => seasonFilter.getId() == object.getId() );
             if ( foundObjects.length > 0 ){
                 continue;
             }
@@ -185,25 +256,21 @@ export class ExternalSystemSoccerSportsRepository{
         }
         season.setEnddate(endDate);
 
-        // let foundAppSeasons = appSeasons.filter( seasonFilter => seasonFilter.hasExternalid( season.getId().toString(), this.externalSystem ) );
-        // let foundAppSeason = foundAppSeasons.shift();
-        // if ( foundAppSeason ){
-        //     let jsonExternal = { "externalid" : foundAppSeason.getId(), "externalsystem": null };
-        //     season.addExternals(this.externalObjectRepository.jsonToArrayHelper([jsonExternal],season));
-        // }
         return season;
     }
 
     getCompetitionSeasons(): Observable<CompetitionSeason[]>
     {
-        if ( this.competitionseasons != null ){
+        let cacheName = CompetitionSeason.classname;
+        let jsonObjects = this.getCacheItem( cacheName );
+        if ( jsonObjects != null ){
             return Observable.create(observer => {
-                observer.next(this.competitionseasons);
+                observer.next( this.jsonSeasonsToArrayHelper( jsonObjects ) );
                 observer.complete();
             });
         }
 
-        this.competitionseasons = [];
+        let competitionseasons = [];
 
         return Observable.create(observer => {
 
@@ -219,7 +286,7 @@ export class ExternalSystemSoccerSportsRepository{
                     let observableCompetitionSeasonsTmp = this.getCompetitionSeasonsHelper(externalcompetition);
                     observableCompetitionSeasonsTmp.forEach(competitionseasonsIt => {
                         for( let competitionseasonIt of competitionseasonsIt){
-                            this.competitionseasons.push(competitionseasonIt);
+                            competitionseasons.push(competitionseasonIt);
                         }
                         observer.next(competitionseasonsIt);
                     });
@@ -235,14 +302,22 @@ export class ExternalSystemSoccerSportsRepository{
 
     getCompetitionSeasonsHelper( externalcompetition: Competition ): Observable<CompetitionSeason[]>
     {
+        let cacheName = CompetitionSeason.classname + '-' + Competition.classname + '-' + externalcompetition.getId();
+        let jsonObjects = this.getCacheItem( cacheName );
+        if ( jsonObjects != null ){
+            return Observable.create(observer => {
+                observer.next( this.jsonCompetitionSeasonsToArrayHelper( jsonObjects, externalcompetition ) );
+                observer.complete();
+            });
+        }
+
         let url = this.externalSystem.getApiurl() + 'leagues/'+externalcompetition.getId()+'/seasons';
         return this.http.get(url, new RequestOptions({ headers: this.getHeaders() }) )
             .map((res: Response) => {
                 let json = res.json().data;
-                if ( json.errorCode != 0 ) {
-                    this.handleError(res);
-                }
-                return this.jsonCompetitionSeasonsToArrayHelper(json.seasons, externalcompetition )
+                let objects = this.jsonCompetitionSeasonsToArrayHelper(json.seasons, externalcompetition )
+                this.setCacheItem(cacheName, JSON.stringify(json.seasons), this.getExpireDate(CompetitionSeason.classname) );
+                return objects;
             })
             .catch( this.handleError );
     }
@@ -277,15 +352,22 @@ export class ExternalSystemSoccerSportsRepository{
 
     getTeams( competitionSeason: CompetitionSeason ): Observable<Team[]>
     {
-        let url = this.externalSystem.getApiurl() + 'leagues' + '/' + competitionSeason.getCompetition().getId() + '/seasons/' + competitionSeason.getSeason().getId() + '/teams';
+        let cacheName = Team.classname + '-' + CompetitionSeason.classname + '-' + competitionSeason.getId();
+        let jsonObjects = this.getCacheItem( cacheName );
+        if ( jsonObjects != null ){
+            return Observable.create(observer => {
+                observer.next( this.jsonTeamsToArrayHelper( jsonObjects, competitionSeason.getCompetition() ) );
+                observer.complete();
+            });
+        }
 
+        let url = this.externalSystem.getApiurl() + 'leagues' + '/' + competitionSeason.getCompetition().getId() + '/seasons/' + competitionSeason.getSeason().getId() + '/teams';
         return this.http.get(url, new RequestOptions({ headers: this.getHeaders() }) )
             .map((res) => {
                 let json = res.json().data;
-                if ( json.errorCode != 0 ) {
-                    this.handleError(res);
-                }
-                return this.jsonTeamsToArrayHelper(json.teams, competitionSeason.getCompetition() );
+                let objects = this.jsonTeamsToArrayHelper(json.teams, competitionSeason.getCompetition() );
+                this.setCacheItem(cacheName, JSON.stringify(json.teams), this.getExpireDate(Team.classname) );
+                return objects;
             })
             .catch( this.handleError );
     }

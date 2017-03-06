@@ -104,6 +104,15 @@ export class AssociationRepository {
         return association;
     }
 
+    objectToJsonHelper( object : Association ): any
+    {
+        let json = {
+            "id":object.getId(),
+            "name":object.getName()
+        };
+        return json;
+    }
+
     editObject( object: Association ): Observable<Association>
     {
         let url = this.url + '/'+object.getId();

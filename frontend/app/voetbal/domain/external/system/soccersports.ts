@@ -8,7 +8,7 @@ import { Association } from './../../association';
 import { Competition } from './../../competition';
 import { Season } from './../../season';
 import { CompetitionSeason } from './../../competitionseason';
-import { Round } from './../../competitionseason/round';
+import { Round } from '../../round';
 import { Team } from './../../team';
 import { ExternalSystemSoccerSportsRepository } from './soccersports/repository';
 import { Http } from '@angular/http';

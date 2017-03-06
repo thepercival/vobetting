@@ -97,6 +97,19 @@ export class CompetitionSeasonRepository {
         return competitionseason;
     }
 
+    objectToJsonHelper( object : CompetitionSeason ): any
+    {
+        let json = {
+            "id":object.getId(),
+            "state":object.getState(),
+            "qualificationrule":object.getQualificationrule(),
+            "association":this.associationRepository.objectToJsonHelper(object.getAssociation()),
+            "competition":this.competitionRepository.objectToJsonHelper(object.getCompetition()),
+            "season":this.seasonRepository.objectToJsonHelper(object.getSeason())
+        };
+        return json;
+    }
+
     createObject( jsonObject: any ): Observable<CompetitionSeason>
     {
         return this.http

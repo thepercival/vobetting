@@ -7,17 +7,17 @@ import { Headers, Http, Response, RequestOptions } from '@angular/http';
 import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-import { CompetitionSeason } from '../../competitionseason';
-import { PouleRepository } from '../poule/repository';
-import { Round } from '../round';
+import { PoulePlace } from '../pouleplace';
+import { Poule } from '../poule';
+import { TeamRepository } from '../team/repository';
 
 @Injectable()
-export class RoundRepository {
+export class PoulePlaceRepository {
 
     private url : string;
     private http: Http;
 
-    constructor( http: Http, private pouleRepos: PouleRepository )
+    constructor( http: Http, private teamRepos: TeamRepository )
     {
         this.http = http;
         this.url = "http://localhost:2999/voetbal/" + this.getUrlpostfix();
@@ -25,7 +25,7 @@ export class RoundRepository {
 
     getUrlpostfix(): string
     {
-        return 'rounds';
+        return 'pouleplaces';
     }
 
     // getToken(): string
@@ -47,23 +47,24 @@ export class RoundRepository {
     // }
 
 
-    jsonArrayToObject( jsonArray: any, competitionSeason: CompetitionSeason ): Round[]
+    jsonArrayToObject( jsonArray: any, poule: Poule ): PoulePlace[]
     {
-        let objects: Round[] = [];
+        let objects: PoulePlace[] = [];
         for (let json of jsonArray) {
-            let object = this.jsonToObjectHelper(json, competitionSeason);
+            let object = this.jsonToObjectHelper(json, poule);
             objects.push( object );
         }
         return objects;
     }
 
-    jsonToObjectHelper( json : any, competitionseason: CompetitionSeason ): Round
+    jsonToObjectHelper( json : any, poule: Poule ): PoulePlace
     {
-        let round = new Round(competitionseason, json.number);
-        round.setName(json.name);
-        this.pouleRepos.jsonArrayToObject( json.poules, round );
-        competitionseason.getRounds().push(round);
-        return round;
+        let pouleplace = new PoulePlace(poule, json.number);
+        poule.setName(json.name);
+        let team = this.teamRepos.jsonToObjectHelper(json.team);
+        pouleplace.setTeam(team);
+        poule.getPlaces().push(pouleplace);
+        return pouleplace;
     }
 
     objectsToJsonHelper( objects: any[] ): any[]
@@ -76,16 +77,17 @@ export class RoundRepository {
         return jsonArray;
     }
 
-    objectToJsonHelper( object : Round ): any
+    objectToJsonHelper( object : PoulePlace ): any
     {
         let json = {
             "id":object.getId(),
             "number":object.getNumber(),
             "name":object.getName(),
-            "poules":this.pouleRepos.objectsToJsonHelper(object.getPoules())
+            "team":this.teamRepos.objectToJsonHelper(object.getTeam())
         };
         return json;
     }
+
 
     // this could also be a private method of the component class
     handleError(res: Response): Observable<any> {

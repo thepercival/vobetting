@@ -2,9 +2,9 @@
  * Created by coen on 27-2-17.
  */
 
-import { CompetitionSeason } from '../competitionseason';
+import { CompetitionSeason } from './competitionseason';
 import { Poule } from './poule';
-import { Team } from '../team';
+import { Team } from './team';
 
 export class Round {
     protected id: number;

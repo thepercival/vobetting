@@ -4,7 +4,7 @@
 
 import { Round } from './round';
 import { PoulePlace } from './pouleplace';
-import { Team } from '../team';
+import { Team } from './team';
 
 export class Poule {
     protected id: number;

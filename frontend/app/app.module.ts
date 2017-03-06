@@ -45,9 +45,9 @@ import { CompetitionSeasonEditModalContent } from './voetbal/components/competit
 import { CompetitionSeasonAddExternalModalContent } from './voetbal/components/competitionseason/modal/addexternal';
 import { CompetitionSeasonsExternalComponent } from './voetbal/components/competitionseason/external';
 import { CompetitionSeasonStructureComponent } from './voetbal/components/competitionseason/structure/external';
-import { RoundRepository }  from './voetbal/domain/competitionseason/round/repository';
-import { PouleRepository }  from './voetbal/domain/competitionseason/poule/repository';
-import { PoulePlaceRepository }  from './voetbal/domain/competitionseason/pouleplace/repository';
+import { RoundRepository }  from './voetbal/domain/round/repository';
+import { PouleRepository }  from './voetbal/domain/poule/repository';
+import { PoulePlaceRepository }  from './voetbal/domain/pouleplace/repository';
 import { TeamsComponent }  from './voetbal/components/teams';
 import { TeamRepository }  from './voetbal/domain/team/repository';
 import { TeamAddModalContent } from './voetbal/components/team/modal/add';
@@ -59,6 +59,7 @@ import { ExternalSystemRepository }  from './voetbal/domain/external/system/repo
 import { ExternalSystemAddModalContent } from './voetbal/components/external/system/modal/add';
 import { ExternalSystemEditModalContent } from './voetbal/components/external/system/modal/edit';
 import { ExternalObjectRepository }  from './voetbal/domain/external/object/repository';
+
 
 @NgModule({
    imports:      [

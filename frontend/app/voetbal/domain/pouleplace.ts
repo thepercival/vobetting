@@ -3,7 +3,7 @@
  */
 
 import { Poule } from './poule';
-import { Team } from '../team';
+import { Team } from './team';
 
 export class PoulePlace {
     protected id: number;

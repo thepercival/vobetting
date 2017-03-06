@@ -83,6 +83,16 @@ export class CompetitionRepository {
         return competition;
     }
 
+    objectToJsonHelper( object : Competition ): any
+    {
+        let json = {
+            "id":object.getId(),
+            "name":object.getName(),
+            "abbreviation":object.getAbbreviation()
+        };
+        return json;
+    }
+
     createObject( jsonObject: any ): Observable<Competition>
     {
         return this.http

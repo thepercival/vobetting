@@ -13,9 +13,8 @@ import { ExternalSystem } from '../../../domain/external/system';
 import { ExternalObject } from '../../../domain/external/object';
 import { ExternalSystemRepository } from '../../../domain/external/system/repository';
 import { TeamRepository } from '../../../domain/team/repository';
-import { Round } from '../../../domain/competitionseason/round';
-import { RoundRepository } from '../../../domain/competitionseason/round/repository';
-import { Team } from '../../../domain/team';
+import { Round } from '../../../domain/round';
+import { RoundRepository } from '../../../domain/round/repository';
 
 @Component({
     moduleId: module.id,
@@ -27,6 +26,7 @@ import { Team } from '../../../domain/team';
 
 export class CompetitionSeasonStructureComponent implements OnInit{
     @Input() competitionseason: CompetitionSeason;
+    rounds: Round[] = [];
     externalrounds: Round[];
     externalsystem: ExternalSystem;
     externalsystems: ExternalSystem[];
@@ -51,9 +51,18 @@ export class CompetitionSeasonStructureComponent implements OnInit{
         this.route.params
             .switchMap((params: Params) => this.repos.getObject(+params['id']))
             .subscribe(competitionseason => {
-                    this.competitionseason = competitionseason
+                    this.competitionseason = competitionseason;
+
+                    this.roundRepos.getObjects( competitionseason )
+                        .subscribe(
+                            /* happy path */ (rounds: Round[]) => {
+                                this.rounds = rounds;
+                            },
+                            /* error path */ e => { this.message = { "type": "danger", "message": e}; },
+                            /* onComplete */ () => {}
+                        );
                 },
-                    e => { this.message = { "type": "danger", "message": e}; }
+                e => { this.message = { "type": "danger", "message": e}; }
             );
 
         this.reposExternalSystem.getObjects()
@@ -138,40 +147,28 @@ export class CompetitionSeasonStructureComponent implements OnInit{
             console.log('converted teams');
 
             console.log('convert structure to json');
-            let json = this.roundRepos.objectsToJsonHelper(externalrounds);
-            console.log(json);
+            let jsonRounds: any[] = this.roundRepos.objectsToJsonHelper(externalrounds);
+            console.log(jsonRounds);
             // call repos ->add structure
             console.log('add structure to cs');
+
+            for( let jsonRound of jsonRounds ) {
+                this.roundRepos.createObject( jsonRound, this.competitionseason )
+                    .subscribe(
+                        /* happy path */ round => {
+                            this.rounds.push( round );
+                        },
+                        /* error path */ e => { this.message = { "type": "danger", "message": e}; this.loading = false; },
+                        /* onComplete */ () => this.loading = false
+                    );
+            }
+
         } );
 
 
 
-        //
-        // let json = {
-        //     "associationid": appAssociation.getId(),
-        //     "competitionid": appCompetition.getId(),
-        //     "seasonid": appSeason.getId()
-        // };
-        //
-        // this.repos.createObject( json )
-        //     .subscribe(
-        //         /* happy path */ competitionseason => {
-        //             this.competitionseasons.push(competitionseason);
-        //
-        //             this.externalObjectRepository.createObject( this.repos.getUrlpostfix(), competitionseason, externalcompetitionseason.getId().toString(), this.externalsystem )
-        //                 .subscribe(
-        //                     /* happy path */ externalobject => {
-        //                         this.onAddExternalHelper( competitionseason, externalobject, externalcompetitionseason );
-        //                     },
-        //                     /* error path */ e => { this.message = { "type": "danger", "message": e}; this.loading = false; },
-        //                     /* onComplete */ () => this.loading = false
-        //                 );
-        //
-        //         },
-        //         /* error path */ e => { this.message = { "type": "danger", "message": e}; this.loading = false; },
-        //         /* onComplete */ () => this.loading = false
-        //     );
-        // // }
+
+
 
 
     }
