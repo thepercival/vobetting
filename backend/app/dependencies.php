@@ -1,11 +1,7 @@
 <?php
 // DIC configuration
 
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+use \JMS\Serializer\SerializerBuilder;
 use \Slim\Middleware\JwtAuthentication;
 
 $container = $app->getContainer();
@@ -48,23 +44,18 @@ $container['em'] = function ($c) {
 
 // symfony serializer
 $container['serializer'] = function( $c ) {
-	$encoders = array( new JsonEncoder() );
+    $settings = $c->get('settings');
 
-	$normalizer = new ObjectNormalizer();
-    $normalizer->setIgnoredAttributes(array('password'));
-	$normalizer->setCircularReferenceHandler(function ($object) {
-		return $object->getId();
-	});
+    $serializer = SerializerBuilder::create()
+        ->setDebug($settings['displayErrorDetails'])
+        /*->setCacheDir($settings['serializer']['cache_dir'])*/;
 
-    //$normalizerGetSet = new GetSetMethodNormalizer();
-    /*$normalizer->setCallbacks(array('createdAt' => function ($dateTime) {
-        return $dateTime instanceof \DateTime
-            ? $dateTime->getTimestamp()
-            : null;
-    }));*/
+    foreach( $settings['serializer']['yml_dir'] as $ymlnamespace => $ymldir ){
+        $serializer->addMetadataDir($ymldir,$ymlnamespace);
+    }
 
-	$normalizers = array( $normalizer );
-	return new Serializer($normalizers, $encoders);
+
+    return $serializer->build();
 };
 
 // symfony serializer

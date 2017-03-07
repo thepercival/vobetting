@@ -14,6 +14,14 @@ return [
         'renderer' => [
             'template_path' => __DIR__ . '/../templates/',
         ],
+        // Serializer(JMS)
+        'serializer' => [
+            'cache_dir' =>  __DIR__.'/../cache/serializer',
+            'yml_dir' => [
+                "Voetbal" =>__DIR__.'/../vendor/thepercival/voetbal/serialization/yml',
+                "VOBetting" => __DIR__.'/../serialization/yml'
+            ]
+        ],
 
         // Monolog settings
         'logger' => [
