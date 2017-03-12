@@ -8,9 +8,6 @@ import { Season } from './season';
 import { Round } from './round';
 import { Team } from './team';
 
-import { ExternalObject} from './external/object';
-import { ExternalSystem} from './external/system';
-
 export class CompetitionSeason {
     protected id: any;
     protected association: Association;
@@ -18,8 +15,6 @@ export class CompetitionSeason {
     protected season: Season;
     protected state: number;
     protected qualificationrule: number;
-
-    protected externals: ExternalObject[] = [];
 
     static readonly classname = "CompetitionSeason";
 
@@ -95,28 +90,4 @@ export class CompetitionSeason {
     getName(): string {
         return this.getCompetition().getName() + ' ' + this.getSeason().getName();
     }
-
-    /********************* External start *******************/
-    getExternals(): ExternalObject[] {
-        return this.externals;
-    };
-
-    addExternals( externals: ExternalObject[] ): void  {
-        for (let external of externals ) {
-            this.externals.push(external);
-        }
-    };
-
-    getExternal( externalid: string, externalsystem: ExternalSystem ): ExternalObject {
-        let foundExternals = this.getExternals().filter( external => ( externalid == null || external.getExternalid() == externalid ) && ( ( external.getExternalSystem() == null && externalsystem == null ) || external.getExternalSystem().getId() == externalsystem.getId() ) );
-        if ( foundExternals.length != 1 ) {
-            return null;
-        }
-        return foundExternals[0];
-    }
-
-    hasExternalid( externalid: string, externalsystem: ExternalSystem ): boolean {
-        return this.getExternal(externalid, externalsystem) != null;
-    }
-    /********************* External end *******************/
 }

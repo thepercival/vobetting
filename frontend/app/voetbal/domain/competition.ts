@@ -2,14 +2,10 @@
  * Created by coen on 10-2-17.
  */
 
-import { ExternalObject} from './external/object';
-import { ExternalSystem} from './external/system';
-
 export class Competition {
     protected id: number;
     protected name: string;
     protected abbreviation: string;
-    protected externals: ExternalObject[] = [];
 
     static readonly classname = "Competition";
 
@@ -45,26 +41,4 @@ export class Competition {
     setAbbreviation(abbreviation: string): void {
         this.abbreviation = abbreviation;
     };
-
-    getExternals(): ExternalObject[] {
-        return this.externals;
-    };
-
-    addExternals( externals: ExternalObject[] ): void  {
-        for (let external of externals ) {
-            this.externals.push(external);
-        }
-    };
-
-    getExternal( externalid: string, externalsystem: ExternalSystem ): ExternalObject {
-        let foundExternals = this.getExternals().filter( external => external.getExternalid() == externalid && ( ( external.getExternalSystem() == null && externalsystem == null ) || external.getExternalSystem().getId() == externalsystem.getId() ) );
-        if ( foundExternals.length != 1 ) {
-            return null;
-        }
-        return foundExternals[0];
-    }
-
-    hasExternalid( externalid: string, externalsystem: ExternalSystem ): boolean {
-        return this.getExternal(externalid, externalsystem) != null;
-    }
 }

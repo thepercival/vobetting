@@ -2,9 +2,6 @@
  * Created by coen on 30-1-17.
  */
 
-import { ExternalObject} from './external/object';
-import { ExternalSystem} from './external/system';
-
 export class Association{
     protected id: number;
     protected name: string;
