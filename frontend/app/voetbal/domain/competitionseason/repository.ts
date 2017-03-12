@@ -11,24 +11,20 @@ import { CompetitionSeason } from '../competitionseason';
 import { AssociationRepository } from '../association/repository';
 import { CompetitionRepository } from '../competition/repository';
 import { SeasonRepository } from '../season/repository';
-import { ExternalObjectRepository } from '../external/object/repository';
 
 @Injectable()
 export class CompetitionSeasonRepository {
 
     private url : string;
     private http: Http;
-    private externalObjectRepository: ExternalObjectRepository;
 
     constructor( http: Http,
          private associationRepository: AssociationRepository,
          private competitionRepository: CompetitionRepository,
-         private seasonRepository: SeasonRepository,
-         externalObjectRepository: ExternalObjectRepository,
+         private seasonRepository: SeasonRepository
     )
     {
         this.http = http;
-        this.externalObjectRepository = externalObjectRepository;
         this.url = "http://localhost:2999/voetbal/" + this.getUrlpostfix();
     }
 
@@ -93,7 +89,6 @@ export class CompetitionSeasonRepository {
         competitionseason.setId(json.id);
         competitionseason.setState(json.state);
         competitionseason.setQualificationrule(json.qualificationrule);
-        competitionseason.addExternals(this.externalObjectRepository.jsonArrayToObject(json.externals,competitionseason));
         return competitionseason;
     }
 

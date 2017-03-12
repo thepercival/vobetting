@@ -8,7 +8,6 @@ import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { Team } from '../team';
-import { ExternalObjectRepository } from '../external/object/repository';
 import { AssociationRepository } from '../association/repository';
 import { Association } from '../association';
 
@@ -17,12 +16,10 @@ export class TeamRepository {
 
     private url : string;
     private http: Http;
-    private externalObjectRepository: ExternalObjectRepository;
 
-    constructor( http: Http, externalObjectRepository: ExternalObjectRepository, private associationRepository: AssociationRepository )
+    constructor( http: Http, private associationRepository: AssociationRepository )
     {
         this.http = http;
-        this.externalObjectRepository = externalObjectRepository;
         this.url = "http://localhost:2999/voetbal/" + this.getUrlpostfix();
     }
 
@@ -84,7 +81,6 @@ export class TeamRepository {
         team.setId(json.id);
         team.setAbbreviation(json.abbreviation);
         team.setAssociation(association);
-        team.addExternals(this.externalObjectRepository.jsonArrayToObject(json.externals,team));
         return team;
     }
 
@@ -139,7 +135,7 @@ export class TeamRepository {
             "id":object.getId(),
             "name":object.getName(),
             "abbreviation":object.getAbbreviation(),
-            "associationid":object.getAssociation().getId()
+            "association": this.associationRepository.objectToJsonHelper(object.getAssociation())
         };
         return json;
     }

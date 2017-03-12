@@ -8,19 +8,16 @@ import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { Season } from '../season';
-import { ExternalObjectRepository } from '../external/object/repository';
 
 @Injectable()
 export class SeasonRepository {
 
     private url : string;
     private http: Http;
-    private externalObjectRepository: ExternalObjectRepository;
 
-    constructor( http: Http, externalObjectRepository: ExternalObjectRepository )
+    constructor( http: Http )
     {
         this.http = http;
-        this.externalObjectRepository = externalObjectRepository;
         this.url = "http://localhost:2999/voetbal/" + this.getUrlpostfix();
     }
 
@@ -80,7 +77,6 @@ export class SeasonRepository {
         season.setId(json.id);
         season.setStartdate(new Date(json.startdate.timestamp*1000));
         season.setEnddate(new Date(json.enddate.timestamp*1000));
-        season.addExternals(this.externalObjectRepository.jsonArrayToObject(json.externals,season));
         //console.log(json.externals);
         //console.log(season);
         return season;

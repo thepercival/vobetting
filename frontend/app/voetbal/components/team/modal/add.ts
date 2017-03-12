@@ -48,7 +48,9 @@ export class TeamAddModalContent{
     add(): boolean {
         this.model.name = this.model.name.trim();
         if (!this.model.name) { return false; }
-        let json = { "name": this.model.name, "associationid": this.model.association.getId(), "abbreviation" : this.model.abbreviation.trim() };
+        let json = { "name": this.model.name,
+            "association": this.associationRepos.objectToJsonHelper(this.model.association),
+            "abbreviation" : this.model.abbreviation.trim() };
 
         this.repos.createObject( json )
             .subscribe(

@@ -262,8 +262,9 @@ export class TeamsExternalComponent implements OnInit{
             throw new Error("de bond, voor externid "+externalAssociationId+" en het externe systeem "+this.externalsystem.getName()+", kan niet gevonden worden, importeer eerst de bonden");
         }
 
-        let json = { "name": externalteam.getName(), "abbreviation" : externalteam.getAbbreviation(), "associationid": appAssociation.getId() };
-        console.log(json);
+        let json = { "name": externalteam.getName(),
+            "abbreviation" : externalteam.getAbbreviation(),
+            "association": this.associationRepos.objectToJsonHelper( appAssociation ) };
 
         this.repos.createObject( json )
             .subscribe(

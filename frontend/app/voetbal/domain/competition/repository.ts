@@ -8,19 +8,16 @@ import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { Competition } from '../competition';
-import { ExternalObjectRepository } from '../external/object/repository';
 
 @Injectable()
 export class CompetitionRepository {
 
     private url : string;
     private http: Http;
-    private externalObjectRepository: ExternalObjectRepository;
 
-    constructor( http: Http, externalObjectRepository: ExternalObjectRepository )
+    constructor( http: Http )
     {
         this.http = http;
-        this.externalObjectRepository = externalObjectRepository;
         this.url = "http://localhost:2999/voetbal/" + this.getUrlpostfix();
     }
 
@@ -79,7 +76,6 @@ export class CompetitionRepository {
         let competition = new Competition(json.name);
         competition.setId(json.id);
         competition.setAbbreviation(json.abbreviation);
-        competition.addExternals(this.externalObjectRepository.jsonArrayToObject(json.externals,competition));
         return competition;
     }
 
