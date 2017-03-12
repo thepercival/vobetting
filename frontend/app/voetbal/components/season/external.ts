@@ -90,7 +90,7 @@ export class SeasonsExternalComponent implements OnInit{
             let foundAppAssociation = foundAppAssociations.shift();
             if ( foundAppAssociation ){
                 let jsonExternal = { "externalid" : foundAppAssociation.getId(), "externalsystem": null };
-                externalObject.addExternals(this.externalObjectRepository.jsonToArrayHelper([jsonExternal],externalObject));
+                externalObject.addExternals(this.externalObjectRepository.jsonArrayToObject([jsonExternal],externalObject));
             }
         }
     }
@@ -156,7 +156,7 @@ export class SeasonsExternalComponent implements OnInit{
         season.getExternals().push(externalobject);
         // add to external
         let jsonExternal = { "externalid" : season.getId(), "externalsystem": null };
-        externalseason.addExternals(this.externalObjectRepository.jsonToArrayHelper([jsonExternal],externalseason));
+        externalseason.addExternals(this.externalObjectRepository.jsonArrayToObject([jsonExternal],externalseason));
     }
 
     onRemove( externalObject: ExternalObject ): void

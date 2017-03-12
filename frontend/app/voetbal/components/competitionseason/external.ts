@@ -137,7 +137,7 @@ export class CompetitionSeasonsExternalComponent implements OnInit{
             let foundAppObject = foundAppObjects.shift();
             if ( foundAppObject ){
                 let jsonExternal = { "externalid" : foundAppObject.getId(), "externalsystem": null };
-                externalObject.addExternals(this.externalObjectRepository.jsonToArrayHelper([jsonExternal],externalObject));
+                externalObject.addExternals(this.externalObjectRepository.jsonArrayToObject([jsonExternal],externalObject));
             }
 
         }
@@ -204,7 +204,7 @@ export class CompetitionSeasonsExternalComponent implements OnInit{
         competitionseason.getExternals().push(externalobject);
         // add to external
         let jsonExternal = { "externalid" : competitionseason.getId(), "externalsystem": null };
-        externalcompetitionseason.addExternals(this.externalObjectRepository.jsonToArrayHelper([jsonExternal],externalcompetitionseason));
+        externalcompetitionseason.addExternals(this.externalObjectRepository.jsonArrayToObject([jsonExternal],externalcompetitionseason));
     }
 
     onRemove( externalObject: ExternalObject ): void
@@ -269,7 +269,7 @@ export class CompetitionSeasonsExternalComponent implements OnInit{
 
         let externalAssociationId = externalcompetitionseason.getAssociation().getId().toString();
         let appAssociation = this.associations.filter(
-            association => association.hasExternalid( externalAssociationId, this.externalsystem )
+            association => false /*association.hasExternalid( externalAssociationId, this.externalsystem )*/
         ).shift();
         if ( appAssociation == null ){
             throw new Error("de bond, voor externid "+externalAssociationId+" en het externe systeem "+this.externalsystem.getName()+", kan niet gevonden worden, importeer eerst de bonden");

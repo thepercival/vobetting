@@ -6,6 +6,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Params }   from '@angular/router';
 import { Location }                 from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {Observable} from 'rxjs/Rx';
 
 import { Association } from '../../domain/association';
 import { AssociationRepository } from '../../domain/association/repository';
@@ -31,6 +32,7 @@ export class AssociationsExternalComponent implements OnInit{
     externalassociations: Association[] = [];
     externalsystem: ExternalSystem;
     externalsystems: ExternalSystem[];
+    externalobjects: ExternalObject[];
     loading: boolean = false;
     message: any = null;
     classname: string;
@@ -49,50 +51,93 @@ export class AssociationsExternalComponent implements OnInit{
 
     ngOnInit(): void {
 
-        this.repos.getObjects()
-            .subscribe(
-                /* happy path */ associations => {
-                    this.associations = associations;
-                },
-                /* error path */ e => { this.message = { "type": "danger", "message": e}; },
-                /* onComplete */ () => {}
-            );
+        let observables = Observable.create(observer => {
+            this.repos.getObjects()
+                .subscribe(
+                    /* happy path */ associations => {
+                        this.associations = associations;
+                        observer.next(this.associations );
+                        if ( this.externalsystems != null ){
+                            observer.complete();
+                        }
+                    },
+                    /* error path */ e => {
+                        this.message = {"type": "danger", "message": e};
+                    }
+                );
 
-        this.reposExternalSystem.getObjects()
+            this.reposExternalSystem.getObjects()
+                .subscribe(
+                    /* happy path */ externalsystems => {
+                        this.externalsystems = externalsystems.filter(
+                            externalsystem => externalsystem.hasAvailableExportClass(this.classname)
+                        );
+                        observer.next(this.externalsystems );
+                        if ( this.associations != null ){
+                            observer.complete();
+                        }
+                    },
+                    /* error path */ e => {
+                        this.message = {"type": "danger", "message": e};
+                    }
+                );
+        });
+
+        observables
             .subscribe(
-                /* happy path */ externalsystems => {
-                    this.externalsystems = externalsystems.filter(
-                        externalsystem => externalsystem.hasAvailableExportClass( this.classname )
-                    );
+                /* happy path */ test => {
+                    if ( this.associations != null && this.externalsystems != null && this.externalobjects == null ){
+                        this.externalObjectRepository.getObjects(this.repos)
+                            .subscribe(
+                                /* happy path */ externalobjects => {
+                                    this.externalobjects = externalobjects;
+                                    console.log(externalobjects);
+                                },
+                                /* error path */ e => {
+                                    this.message = {"type": "danger", "message": e};
+                                },
+                                /* onComplete */ () => {
+                                }
+                            );
+                        //
+                    }
                 },
-                /* error path */ e => { this.message = { "type": "danger", "message": e}; },
-                /* onComplete */ () => {}
+                /* error path */ e => {
+                    this.message = {"type": "danger", "message": e};
+                },
+                /* onComplete */ () => {
+                }
             );
+    }
+
+    getExternalObjects(association: Association): ExternalObject[] {
+        if ( this.externalobjects == null){
+            return [];
+        }
+        return this.externalobjects.filter(
+            extobjIt => extobjIt.getImportableObject() == association
+        );
+    }
+
+    getExternalObject(externalsystem: any, externalid: string, importableObject: any): ExternalObject {
+        return this.externalobjects.filter(
+            extobjIt => extobjIt.getExternalSystem() == externalsystem
+                && ( externalid == null || extobjIt.getExternalid() == externalid )
+                && ( importableObject == null || extobjIt.getExternalid() == externalid )
+        ).shift();
     }
 
     onSelectExternalSystem( externalSystem: any ): void {
         this.externalsystem = externalSystem;
 
-        externalSystem.getAssociations(this.associations)
+        externalSystem.getAssociations()
             .subscribe(
                 /* happy path */ associations => {
                     this.externalassociations = associations;
-                    this.selectExternalSystemHelper(associations, this.associations);
                 },
                 /* error path */ e => { this.message = { "type": "danger", "message": e}; },
                 /* onComplete */ () => {}
             );
-    }
-
-    selectExternalSystemHelper( externalObjects, internalObjects ) {
-        for( let externalObject of externalObjects ) {
-            let foundAppAssociations = internalObjects.filter( objectFilter => objectFilter.hasExternalid( externalObject.getId().toString(), this.externalsystem ) );
-            let foundAppAssociation = foundAppAssociations.shift();
-            if ( foundAppAssociation ){
-                let jsonExternal = { "externalid" : foundAppAssociation.getId(), "externalsystem": null };
-                externalObject.addExternals(this.externalObjectRepository.jsonToArrayHelper([jsonExternal],externalObject));
-            }
-        }
     }
 
     onAdd(): void {
@@ -130,64 +175,40 @@ export class AssociationsExternalComponent implements OnInit{
         this.message = null;
         const modalRef = this.modalService.open(AssociationAddExternalModalContent, { backdrop : 'static' } );
 
+        // alle bonden die nog niet gekoppeld zijn
         modalRef.componentInstance.associations = this.associations.filter(
-            association => !association.hasExternalid( externalassociation.getId().toString(), this.externalsystem )
+            associationIt => this.getExternalObject(this.externalsystem, externalassociation.getId().toString(), associationIt ) == null
         );
 
         modalRef.result.then((association) => {
-            this.externalObjectRepository.createObject( this.repos.getUrlpostfix(), association, externalassociation.getId().toString(), this.externalsystem )
+            this.externalObjectRepository.createObject( this.repos, association, externalassociation.getId().toString(), this.externalsystem )
                 .subscribe(
-                    /* happy path */ externalobject => {
-                        this.onAddExternalHelper( association, externalobject, externalassociation );
+                    /* happy path */ externalObject => {
+                        console.log(externalObject);
+                        this.externalobjects.push(externalObject);
                         this.message = { "type": "success", "message": "externe bond "+externalassociation.getName()+" gekoppeld aan ("+association.getName()+") toegevoegd"};
                     },
                     /* error path */ e => { this.message = { "type": "success", "message": e}; this.loading = false; },
                     /* onComplete */ () => this.loading = false
                 );
 
-        }/*, (reason) => {
-         modalRef.closeResult = reason;
-         }*/);
-    }
-
-    onAddExternalHelper( association: Association, externalobject: ExternalObject, externalassociation: Association ): void {
-        // @todo following code should move to service
-        // add to internal
-        association.getExternals().push(externalobject);
-        // add to external
-        let jsonExternal = { "externalid" : association.getId(), "externalsystem": null };
-        externalassociation.addExternals(this.externalObjectRepository.jsonToArrayHelper([jsonExternal],externalassociation));
+        }, (reason) => {
+         // modalRef.closeResult = reason;
+         });
     }
 
     onRemove( externalObject: ExternalObject ): void
     {
-        // @todo following code should move to service
-        // remove from internal
-        let internalassociation = this.getAssociation( externalObject.getImportableObject() );
-        if ( internalassociation == null ) {
-            this.message = { "type": "danger", "message": "interne bond niet gevonden"};
-            return;
-        }
-
-        let internalexternal = internalassociation.getExternal(externalObject.getImportableObject().getId(), this.externalsystem);
-
-        this.externalObjectRepository.removeObject( this.repos.getUrlpostfix(), internalexternal )
+        this.externalObjectRepository.removeObject( this.repos.getUrlpostfix(), externalObject )
             .subscribe(
                 /* happy path */ retval => {
 
-                    let indextmp = internalassociation.getExternals().indexOf(internalexternal);
-                    if (indextmp > -1) {
-                        internalassociation.getExternals().splice(indextmp, 1);
-                    }
-
-                    // remove from external
-                    let externals = externalObject.getImportableObject().getExternals();
-                    let index = externals.indexOf(externalObject);
+                    let index = this.externalobjects.indexOf(externalObject);
                     if (index > -1) {
-                        externals.splice(index, 1);
+                        this.externalobjects.splice(index, 1);
                     }
 
-                    this.message = { "type": "success", "message": "externe bond "+externalObject.getImportableObject().getName()+" ontkoppeld van ("+internalassociation.getName()+") toegevoegd"};
+                    this.message = { "type": "success", "message": "externe bond "+externalObject.getExternalid()+" ontkoppeld van "+externalObject.getImportableObject().getName()};
                 },
                 /* error path */ e => { this.message = { "type": "danger", "message": e}; this.loading = false; },
                 /* onComplete */ () => this.loading = false
@@ -203,33 +224,33 @@ export class AssociationsExternalComponent implements OnInit{
 
     onImportExternal(externalassociation): void
     {
-        // check if has internal
-        // if ( false ) { // update internal
-        //     // update
-        // }
-        // else { // add
-
-            let json = { "name": externalassociation.getName() };
-
-            this.repos.createObject( json )
-                .subscribe(
-                    /* happy path */ association => {
-                        this.associations.push(association);
-
-                        this.externalObjectRepository.createObject( this.repos.getUrlpostfix(), association, externalassociation.getId().toString(), this.externalsystem )
-                            .subscribe(
-                                /* happy path */ externalobject => {
-                                    this.onAddExternalHelper( association, externalobject, externalassociation );
-                                },
-                                /* error path */ e => { this.message = { "type": "danger", "message": e}; this.loading = false; },
-                                /* onComplete */ () => this.loading = false
-                            );
-
-                    },
-                    /* error path */ e => { this.message = { "type": "danger", "message": e}; this.loading = false; },
-                    /* onComplete */ () => this.loading = false
-                );
-        // }
+        // // check if has internal
+        // // if ( false ) { // update internal
+        // //     // update
+        // // }
+        // // else { // add
+        //
+        //     let json = { "name": externalassociation.getName() };
+        //
+        //     this.repos.createObject( json )
+        //         .subscribe(
+        //             /* happy path */ association => {
+        //                 this.associations.push(association);
+        //
+        //                 this.externalObjectRepository.createObject( this.repos.getUrlpostfix(), association, externalassociation.getId().toString(), this.externalsystem )
+        //                     .subscribe(
+        //                         /* happy path */ externalobject => {
+        //                             this.onAddExternalHelper( association, externalobject, externalassociation );
+        //                         },
+        //                         /* error path */ e => { this.message = { "type": "danger", "message": e}; this.loading = false; },
+        //                         /* onComplete */ () => this.loading = false
+        //                     );
+        //
+        //             },
+        //             /* error path */ e => { this.message = { "type": "danger", "message": e}; this.loading = false; },
+        //             /* onComplete */ () => this.loading = false
+        //         );
+        // // }
     }
 
     goBack(): void {
@@ -238,20 +259,11 @@ export class AssociationsExternalComponent implements OnInit{
 
     private getAssociation( externalassociation: Association): Association
     {
-        let externals = externalassociation.getExternals();
-        if ( externals.length != 1 ){
-            return;
+        let externalObject = this.getExternalObject(this.externalsystem, externalassociation.getId().toString(), null);
+        if ( externalObject == null ){
+            return null;
         }
-
-        let externalid = externals[0].getExternalid();
-
-        let foundAssociations = this.associations.filter(
-            association => association.getId().toString() == externalid
-        );
-        if ( foundAssociations.length != 1 ){
-            return;
-        }
-        return foundAssociations[0];
+        return externalObject.getImportableObject();
     }
 
     getAssociationName( externalassociation: Association): string

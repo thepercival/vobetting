@@ -90,7 +90,7 @@ export class CompetitionsExternalComponent implements OnInit{
             let foundAppAssociation = foundAppAssociations.shift();
             if ( foundAppAssociation ){
                 let jsonExternal = { "externalid" : foundAppAssociation.getId(), "externalsystem": null };
-                externalObject.addExternals(this.externalObjectRepository.jsonToArrayHelper([jsonExternal],externalObject));
+                externalObject.addExternals(this.externalObjectRepository.jsonArrayToObject([jsonExternal],externalObject));
             }
         }
     }
@@ -156,7 +156,7 @@ export class CompetitionsExternalComponent implements OnInit{
         competition.getExternals().push(externalobject);
         // add to external
         let jsonExternal = { "externalid" : competition.getId(), "externalsystem": null };
-        externalcompetition.addExternals(this.externalObjectRepository.jsonToArrayHelper([jsonExternal],externalcompetition));
+        externalcompetition.addExternals(this.externalObjectRepository.jsonArrayToObject([jsonExternal],externalcompetition));
     }
 
     onRemove( externalObject: ExternalObject ): void

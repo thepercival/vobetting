@@ -10,7 +10,6 @@ export class Association{
     protected name: string;
     protected description: string;
     protected parent: Association;
-    protected externals: ExternalObject[] = [];
 
     static classname = "Association";
 
@@ -50,26 +49,4 @@ export class Association{
     setParent(parent: Association): void {
         this.parent = parent;
     };
-
-    getExternals(): ExternalObject[] {
-        return this.externals;
-    };
-
-    addExternals( externals: ExternalObject[] ): void  {
-        for (let external of externals ) {
-            this.externals.push(external);
-        }
-    };
-
-    getExternal( externalid: string, externalsystem: ExternalSystem ): ExternalObject {
-        let foundExternals = this.getExternals().filter( external => external.getExternalid() == externalid && ( ( external.getExternalSystem() == null && externalsystem == null ) || external.getExternalSystem().getId() == externalsystem.getId() ) );
-        if ( foundExternals.length != 1 ) {
-            return null;
-        }
-        return foundExternals[0];
-    }
-
-    hasExternalid( externalid: string, externalsystem: ExternalSystem ): boolean {
-        return this.getExternal(externalid, externalsystem) != null;
-    }
 }

@@ -79,7 +79,7 @@ export class CompetitionRepository {
         let competition = new Competition(json.name);
         competition.setId(json.id);
         competition.setAbbreviation(json.abbreviation);
-        competition.addExternals(this.externalObjectRepository.jsonToArrayHelper(json.externals,competition));
+        competition.addExternals(this.externalObjectRepository.jsonArrayToObject(json.externals,competition));
         return competition;
     }
 

@@ -80,7 +80,7 @@ export class SeasonRepository {
         season.setId(json.id);
         season.setStartdate(new Date(json.startdate.timestamp*1000));
         season.setEnddate(new Date(json.enddate.timestamp*1000));
-        season.addExternals(this.externalObjectRepository.jsonToArrayHelper(json.externals,season));
+        season.addExternals(this.externalObjectRepository.jsonArrayToObject(json.externals,season));
         //console.log(json.externals);
         //console.log(season);
         return season;

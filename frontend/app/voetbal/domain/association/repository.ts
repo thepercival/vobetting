@@ -8,20 +8,17 @@ import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { Association } from '../association';
-import { ExternalObjectRepository } from '../external/object/repository';
 
 @Injectable()
 export class AssociationRepository {
 
     private url : string;
     private http: Http;
-    private externalObjectRepository: ExternalObjectRepository;
     private objects: Association[];
 
-    constructor( http: Http, externalObjectRepository: ExternalObjectRepository )
+    constructor( http: Http )
     {
         this.http = http;
-        this.externalObjectRepository = externalObjectRepository;
         this.url = "http://localhost:2999/voetbal/" + this.getUrlpostfix();
     }
 
@@ -98,9 +95,17 @@ export class AssociationRepository {
 
     jsonToObjectHelper( json : any ): Association
     {
+        if ( this.objects != null ){
+            let foundObjects = this.objects.filter(
+                objectIt => objectIt.getId() == json.id
+            );
+            if ( foundObjects.length == 1) {
+                return foundObjects.shift();
+            }
+        }
+
         let association = new Association(json.name);
         association.setId(json.id);
-        association.addExternals(this.externalObjectRepository.jsonToArrayHelper(json.externals,association));
         return association;
     }
 

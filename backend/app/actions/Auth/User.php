@@ -9,16 +9,30 @@
 namespace App\Action\Auth;
 
 use Slim\ServerRequestInterface;
-use Symfony\Component\Serializer\Serializer;
+use JMS\Serializer\Serializer;
+use VOBettingRepository\Auth\User as UserRepository;
 use VOBetting\Auth;
 
 final class User
 {
+    /**
+     * @var UserRepository
+     */
 	private $userRepository;
+    /**
+     * @var Auth\Service
+     */
+    private $authService;
+    /**
+     * @var Serializer
+     */
 	protected $serializer;
+    /**
+     * @var array
+     */
 	protected $settings;
 
-	public function __construct(\VOBettingRepository\Auth\User $userRepository, Serializer $serializer, $settings )
+	public function __construct(UserRepository $userRepository, Serializer $serializer, $settings )
 	{
 		$this->userRepository = $userRepository;
 		$this->authService = new Auth\Service($userRepository);

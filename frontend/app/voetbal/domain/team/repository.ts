@@ -84,7 +84,7 @@ export class TeamRepository {
         team.setId(json.id);
         team.setAbbreviation(json.abbreviation);
         team.setAssociation(association);
-        team.addExternals(this.externalObjectRepository.jsonToArrayHelper(json.externals,team));
+        team.addExternals(this.externalObjectRepository.jsonArrayToObject(json.externals,team));
         return team;
     }
 

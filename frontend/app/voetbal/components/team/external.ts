@@ -125,7 +125,7 @@ export class TeamsExternalComponent implements OnInit{
             let foundInternalObject = foundInternalObjects.shift();
             if ( foundInternalObject ){
                 let jsonExternal = { "externalid" : foundInternalObject.getId(), "externalsystem": null };
-                externalObject.addExternals(this.externalObjectRepository.jsonToArrayHelper([jsonExternal],externalObject));
+                externalObject.addExternals(this.externalObjectRepository.jsonArrayToObject([jsonExternal],externalObject));
             }
         }
     }
@@ -191,7 +191,7 @@ export class TeamsExternalComponent implements OnInit{
         team.getExternals().push(externalobject);
         // add to external
         let jsonExternal = { "externalid" : team.getId(), "externalsystem": null };
-        externalteam.addExternals(this.externalObjectRepository.jsonToArrayHelper([jsonExternal],externalteam));
+        externalteam.addExternals(this.externalObjectRepository.jsonArrayToObject([jsonExternal],externalteam));
     }
 
     onRemove( externalObject: ExternalObject ): void
@@ -256,7 +256,7 @@ export class TeamsExternalComponent implements OnInit{
 
         let externalAssociationId = externalteam.getAssociation().getId().toString();
         let appAssociation = this.associations.filter(
-            association => association.hasExternalid( externalAssociationId, this.externalsystem )
+            association => false /*association.hasExternalid( externalAssociationId, this.externalsystem )*/
         ).shift();
         if ( appAssociation == null ){
             throw new Error("de bond, voor externid "+externalAssociationId+" en het externe systeem "+this.externalsystem.getName()+", kan niet gevonden worden, importeer eerst de bonden");

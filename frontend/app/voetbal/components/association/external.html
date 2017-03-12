@@ -19,19 +19,19 @@
                 </thead>
                 <tbody>
                 <template ngFor let-association [ngForOf]="associations">
-                    <template [ngIf]="association.getExternals().length >= 1">
-                    <tr *ngFor="let external of association.getExternals(); let first = first">
-                        <td *ngIf="first" [attr.rowspan]="association.getExternals().length">
+                    <template [ngIf]="getExternalObjects(association).length >= 1">
+                    <tr *ngFor="let external of getExternalObjects(association); let first = first">
+                        <td *ngIf="first" [attr.rowspan]="getExternalObjects(association).length">
                             <button type="button" class="btn btn-secondary" (click)="onEdit(association)" title="item wijzigen"><i class="fa fa-pencil" aria-hidden="true"></i></button>
                         </td>
-                        <td *ngIf="first" [attr.rowspan]="association.getExternals().length">
+                        <td *ngIf="first" [attr.rowspan]="getExternalObjects(association).length">
                             {{association.getName()}}
                         </td>
                         <td>{{external.getExternalSystem().getName()}}</td>
                         <td>#{{external.getExternalid()}}</td>
                     </tr>
                     </template>
-                    <tr *ngIf="association.getExternals().length == 0">
+                    <tr *ngIf="getExternalObjects(association).length == 0">
                         <td>
                             <button type="button" class="btn btn-secondary" (click)="onEdit(association)"><i class="fa fa-pencil" aria-hidden="true"></i></button>
                         </td>
@@ -66,16 +66,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let externalassociation of externalassociations" style="text-align: right">
+                <tr *ngFor="let externalassociation of externalassociations;" style="text-align: right">
                     <td *ngIf="externalsystem.hasAvailableExportClassAsSource(classname)">
-                        <button *ngIf="externalassociation.getExternals().length == 0" type="button" class="btn btn-secondary" (click)="onImportExternal(externalassociation)" title="item importeren"><i class="fa fa-long-arrow-left" aria-hidden="true"></i></button>
+                        <button *ngIf="getExternalObject(externalsystem, externalassociation.getId(), null ) == null" type="button" class="btn btn-secondary" (click)="onImportExternal(externalassociation)" title="item importeren"><i class="fa fa-long-arrow-left" aria-hidden="true"></i></button>
                     </td>
                     <td>
-                        <span *ngIf="externalassociation.getExternals().length == 1">{{getAssociationName(externalassociation)}}</span>
+                        <span *ngIf="getExternalObject(externalsystem, externalassociation.getId(), null ) != null">{{getAssociationName(externalassociation)}}</span>
                     </td>
                     <td style="text-align: center">
-                        <button type="button" *ngIf="externalassociation.getExternals().length == 0" class="btn btn-secondary" (click)="onAddExternal(externalassociation)" title="item koppelen"><i class="fa fa-link" aria-hidden="true"></i></button>
-                        <button type="button" *ngIf="externalassociation.getExternals().length == 1" class="btn btn-secondary" (click)="onRemove(externalassociation.getExternals()[0])" title="item ontkoppelen"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                        <button type="button" *ngIf="getExternalObject(externalsystem, externalassociation.getId(), null ) == null" class="btn btn-secondary" (click)="onAddExternal(externalassociation)" title="item koppelen"><i class="fa fa-link" aria-hidden="true"></i></button>
+                        <button type="button" *ngIf="getExternalObject(externalsystem, externalassociation.getId(), null ) != null" class="btn btn-secondary" (click)="onRemove(getExternalObject(externalsystem, externalassociation.getId(), null ))" title="item ontkoppelen"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                     </td>
                     <td>
                         {{externalassociation.getName()}}(#{{externalassociation.getId()}})

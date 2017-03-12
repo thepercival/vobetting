@@ -93,7 +93,7 @@ export class CompetitionSeasonRepository {
         competitionseason.setId(json.id);
         competitionseason.setState(json.state);
         competitionseason.setQualificationrule(json.qualificationrule);
-        competitionseason.addExternals(this.externalObjectRepository.jsonToArrayHelper(json.externals,competitionseason));
+        competitionseason.addExternals(this.externalObjectRepository.jsonArrayToObject(json.externals,competitionseason));
         return competitionseason;
     }
 

@@ -43,38 +43,48 @@ export class ExternalObjectRepository {
         return headers;
     }
 
-    jsonToArrayHelper( jsonArray : any, importableObject: any ): ExternalObject[]
+    getObjects( importableObjectRepository:any ): Observable<ExternalObject[]>
+    {
+        let url = this.url + '/'+importableObjectRepository.getUrlpostfix();
+        return this.http.get(url, new RequestOptions({ headers: this.getHeaders() }) )
+            .map((res) => {
+                return this.jsonArrayToObject(res.json(), importableObjectRepository);
+            })
+            .catch( this.handleError );
+    }
+
+    jsonArrayToObject( jsonArray : any, importableObjectRepository: any ): ExternalObject[]
     {
         let externalObjects: ExternalObject[] = [];
-        if ( jsonArray == null ){
-            return externalObjects;
-        }
         for (let json of jsonArray) {
-            externalObjects.push( this.jsonToObjectHelper(json,importableObject) );
+            externalObjects.push( this.jsonToObjectHelper(json, importableObjectRepository) );
         }
         return externalObjects;
     }
 
-    jsonToObjectHelper( json : any, importableObject: any ): ExternalObject
+    jsonToObjectHelper( json : any, importableObjectRepository:any ): ExternalObject
     {
         let externalSystem = null;
         if ( json.externalsystem != null ){
             externalSystem = this.externalSystemRepository.jsonToObjectHelper( json.externalsystem );
+        }
+        let importableObject = null;
+        if ( json.importableobject != null ){
+            importableObject = importableObjectRepository.jsonToObjectHelper( json.importableobject );
         }
         let externalObject = new ExternalObject(importableObject, externalSystem, json.externalid );
         externalObject.setId(json.id);
         return externalObject;
     }
 
-    createObject( urlpostfix:string, object: any, externalid: string, externalSystem: ExternalSystem ): Observable<ExternalObject>
+    createObject( importableObjectRepository:any, object: any, externalid: string, externalSystem: ExternalSystem ): Observable<ExternalObject>
     {
         let json = {"importableobjectid":object.getId(), "externalid":externalid, "externalsystemid":externalSystem.getId()};
-        let url = this.url + '/'+urlpostfix;
-        console.log(json);
+        let url = this.url + '/'+importableObjectRepository.getUrlpostfix();
         return this.http
             .post(url, json, new RequestOptions({ headers: this.getHeaders() }))
             // ...and calling .json() on the response to return data
-            .map((res) => this.jsonToObjectHelper(res.json(),object))
+            .map((res) => this.jsonToObjectHelper(res.json(),importableObjectRepository))
             //...errors if any
             .catch(this.handleError);
     }

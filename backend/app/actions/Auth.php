@@ -9,22 +9,36 @@
 namespace App\Action;
 
 use Slim\ServerRequestInterface;
-use Symfony\Component\Serializer\Serializer;
+use JMS\Serializer\Serializer;
 use VOBetting\Auth\User;
 use \Firebase\JWT\JWT;
+use VOBettingRepository\Auth\User as UserRepository;
+use \VOBetting\Auth\Service as AuthService;
 use \Slim\Middleware\JwtAuthentication;
 
 final class Auth
 {
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
+    /**
+     * @var AuthService
+     */
 	private $authService;
-	private $userRepository;
-	protected $serializer;
+    /**
+     * @var Serializer
+     */
+    protected $serializer;
+    /**
+     * @var array
+     */
 	protected $settings;
 
-	public function __construct(\VOBettingRepository\Auth\User $userRepository, Serializer $serializer, $settings )
+	public function __construct(UserRepository $userRepository, Serializer $serializer, $settings )
 	{
 		$this->userRepository = $userRepository;
-		$this->authService = new \VOBetting\Auth\Service($userRepository);
+		$this->authService = new AuthService($userRepository);
 		$this->serializer = $serializer;
 		$this->settings = $settings;
 	}
