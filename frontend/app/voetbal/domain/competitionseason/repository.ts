@@ -54,11 +54,11 @@ export class CompetitionSeasonRepository {
     getObjects(): Observable<CompetitionSeason[]>
     {
         return this.http.get(this.url, new RequestOptions({ headers: this.getHeaders() }) )
-            .map((res) => this.jsonToArrayHelper(res.json()))
+            .map((res) => this.jsonArrayToObject(res.json()))
             .catch( this.handleError );
     }
 
-    jsonToArrayHelper( jsonArray : any ): CompetitionSeason[]
+    jsonArrayToObject( jsonArray : any ): CompetitionSeason[]
     {
         let competitionseasons: CompetitionSeason[] = [];
         for (let json of jsonArray) {

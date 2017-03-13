@@ -16,7 +16,7 @@ import { ExternalSystem } from '../../domain/external/system';
 import { ExternalObject } from '../../domain/external/object';
 import { ExternalSystemRepository } from '../../domain/external/system/repository';
 import { ExternalObjectRepository } from '../../domain/external/object/repository';
-import { CompetitionSeasonRepository } from '../../domain/competitionseason/repository';
+import {Observable} from 'rxjs/Rx';
 import { CompetitionSeason } from '../../domain/competitionseason';
 import { AssociationRepository } from '../../domain/association/repository';
 import { Association } from '../../domain/association';
@@ -38,6 +38,8 @@ export class TeamsExternalComponent implements OnInit{
     externalteams: Team[] = [];
     externalsystem: any;
     externalsystems: ExternalSystem[];
+    externalobjects: ExternalObject[];
+    externalAssociationObjects: ExternalObject[];
     loading: boolean = false;
     message: any = null;
     classname: string;
@@ -57,33 +59,57 @@ export class TeamsExternalComponent implements OnInit{
 
     ngOnInit(): void {
 
-        this.repos.getObjects()
-            .subscribe(
-                /* happy path */ teams => {
-                    this.teams = teams;
-                },
-                /* error path */ e => { this.message = { "type": "danger", "message": e}; },
-                /* onComplete */ () => {}
-            );
+        let observables = Observable.create(observer => {
+            this.repos.getObjects()
+                .subscribe(
+                    /* happy path */ teams => {
+                        this.teams = teams;
+                        observer.next(this.teams );
+                        if ( this.externalsystems != null ){
+                            observer.complete();
+                        }
+                    },
+                    /* error path */ e => {
+                        this.message = {"type": "danger", "message": e};
+                    }
+                );
 
-        this.reposExternalSystem.getObjects()
-            .subscribe(
-                /* happy path */ externalsystems => {
-                    this.externalsystems = externalsystems.filter(
-                        externalsystem => externalsystem.hasAvailableExportClass( this.classname )
-                    );
-                },
-                /* error path */ e => { this.message = { "type": "danger", "message": e}; },
-                /* onComplete */ () => {}
-            );
+            this.reposExternalSystem.getObjects()
+                .subscribe(
+                    /* happy path */ externalsystems => {
+                        this.externalsystems = externalsystems.filter(
+                            externalsystem => externalsystem.hasAvailableExportClass(this.classname)
+                        );
+                        observer.next(this.externalsystems );
+                        if ( this.associations != null ){
+                            observer.complete();
+                        }
+                    },
+                    /* error path */ e => {
+                        this.message = {"type": "danger", "message": e};
+                    }
+                );
+        });
 
-        this.associationRepos.getObjects()
+        observables
             .subscribe(
-                /* happy path */ associations => {
-                    this.associations = associations;
+                /* happy path */ test => {
+                    if ( this.teams != null && this.externalsystems != null && this.externalobjects == null ){
+                        this.externalObjectRepository.getObjects(this.repos)
+                            .subscribe(
+                                /* happy path */ externalobjects => {
+                                    this.externalobjects = externalobjects;
+                                },
+                                /* error path */ e => { this.message = {"type": "danger", "message": e}; },
+                                /* onComplete */ () => {}
+                            );
+                    }
                 },
-                /* error path */ e => { this.message = { "type": "danger", "message": e}; },
-                /* onComplete */ () => {}
+                /* error path */ e => {
+                    this.message = {"type": "danger", "message": e};
+                },
+                /* onComplete */ () => {
+                }
             );
     }
 
@@ -102,6 +128,16 @@ export class TeamsExternalComponent implements OnInit{
                 /* onComplete */ () => {}
             );
 
+        this.externalObjectRepository.getObjects(this.associationRepos)
+            .subscribe(
+                /* happy path */ externalobjects => {
+                    this.externalAssociationObjects = externalobjects;
+                    console.log(externalobjects);
+                },
+                /* error path */ e => { this.message = {"type": "danger", "message": e}; },
+                /* onComplete */ () => {}
+            );
+
 
     }
 
@@ -112,22 +148,10 @@ export class TeamsExternalComponent implements OnInit{
             .subscribe(
                 /* happy path */ teams => {
                     this.externalteams = teams;
-                    this.selectExternalSystemHelper(teams, this.teams);
                 },
                 /* error path */ e => { this.message = { "type": "danger", "message": e}; },
                 /* onComplete */ () => {}
             );
-    }
-
-    selectExternalSystemHelper( externalObjects, internalObjects ) {
-        for( let externalObject of externalObjects ) {
-            let foundInternalObjects = internalObjects.filter( objectFilter => objectFilter.hasExternalid( externalObject.getId().toString(), this.externalsystem ) );
-            let foundInternalObject = foundInternalObjects.shift();
-            if ( foundInternalObject ){
-                let jsonExternal = { "externalid" : foundInternalObject.getId(), "externalsystem": null };
-                externalObject.addExternals(this.externalObjectRepository.jsonArrayToObject([jsonExternal],externalObject));
-            }
-        }
     }
 
     onAdd(): void {
@@ -156,9 +180,9 @@ export class TeamsExternalComponent implements OnInit{
         modalRef.componentInstance.team = team;
         modalRef.result.then((team) => {
             this.message = { "type": "success", "message": "team("+team.getName()+") gewijzigd"};
-        }/*, (reason) => {
-         modalRef.closeResult = reason;
-         }*/);
+        }, (reason) => {
+            this.message = { "type": "danger", "message": reason};
+        });
     }
 
     onAddExternal( externalteam: Team): void {
@@ -166,63 +190,35 @@ export class TeamsExternalComponent implements OnInit{
         const modalRef = this.modalService.open(TeamAddExternalModalContent, { backdrop : 'static' } );
 
         modalRef.componentInstance.teams = this.teams.filter(
-            team => !team.hasExternalid( externalteam.getId().toString(), this.externalsystem )
+            teamIt => this.getExternalObject(null, teamIt ) == null
         );
 
         modalRef.result.then((team) => {
-            this.externalObjectRepository.createObject( this.repos.getUrlpostfix(), team, externalteam.getId().toString(), this.externalsystem )
+            this.externalObjectRepository.createObject( this.repos, team, externalteam.getId().toString(), this.externalsystem )
                 .subscribe(
-                    /* happy path */ externalobject => {
-                        this.onAddExternalHelper( team, externalobject, externalteam );
-                        this.message = { "type": "success", "message": "externe team "+externalteam.getName()+" gekoppeld aan ("+team.getName()+") toegevoegd"};
+                    /* happy path */ externalObject => {
+                        this.externalobjects.push(externalObject);
+                        this.message = { "type": "success", "message": "extern team "+externalteam.getName()+" gekoppeld aan ("+team.getName()+") toegevoegd"};
                     },
                     /* error path */ e => { this.message = { "type": "success", "message": e}; this.loading = false; },
                     /* onComplete */ () => this.loading = false
                 );
 
-        }/*, (reason) => {
-         modalRef.closeResult = reason;
-         }*/);
-    }
-
-    onAddExternalHelper( team: Team, externalobject: ExternalObject, externalteam: Team ): void {
-        // @todo following code should move to service
-        // add to internal
-        team.getExternals().push(externalobject);
-        // add to external
-        let jsonExternal = { "externalid" : team.getId(), "externalsystem": null };
-        externalteam.addExternals(this.externalObjectRepository.jsonArrayToObject([jsonExternal],externalteam));
+        }, (reason) => {
+            this.message = { "type": "danger", "message": reason};
+        });
     }
 
     onRemove( externalObject: ExternalObject ): void
     {
-        // @todo following code should move to service
-        // remove from internal
-        let internalteam = this.getTeam( externalObject.getImportableObject() );
-        if ( internalteam == null ) {
-            this.message = { "type": "danger", "message": "interne team niet gevonden"};
-            return;
-        }
-
-        let internalexternal = internalteam.getExternal(externalObject.getImportableObject().getId(), this.externalsystem);
-
-        this.externalObjectRepository.removeObject( this.repos.getUrlpostfix(), internalexternal )
+        this.externalObjectRepository.removeObject( this.repos.getUrlpostfix(), externalObject )
             .subscribe(
                 /* happy path */ retval => {
-
-                    let indextmp = internalteam.getExternals().indexOf(internalexternal);
-                    if (indextmp > -1) {
-                        internalteam.getExternals().splice(indextmp, 1);
-                    }
-
-                    // remove from external
-                    let externals = externalObject.getImportableObject().getExternals();
-                    let index = externals.indexOf(externalObject);
+                    let index = this.externalobjects.indexOf(externalObject);
                     if (index > -1) {
-                        externals.splice(index, 1);
+                        this.externalobjects.splice(index, 1);
                     }
-
-                    this.message = { "type": "success", "message": "externe team "+externalObject.getImportableObject().getName()+" ontkoppeld van ("+internalteam.getName()+") toegevoegd"};
+                    this.message = { "type": "success", "message": "extern team "+externalObject.getExternalid()+" ontkoppeld van "+externalObject.getImportableObject().getName()};
                 },
                 /* error path */ e => { this.message = { "type": "danger", "message": e}; this.loading = false; },
                 /* onComplete */ () => this.loading = false
@@ -248,33 +244,36 @@ export class TeamsExternalComponent implements OnInit{
 
     importExternalHelper(externalteam: Team): void
     {
-        // check if has internal
-        // if ( false ) { // update internal
-        //     // update
-        // }
-        // else { // add
-
+        // // check if has internal
+        // // if ( false ) { // update internal
+        // //     // update
+        // // }
+        // // else { // add
+        //
         let externalAssociationId = externalteam.getAssociation().getId().toString();
-        let appAssociation = this.associations.filter(
-            association => false /*association.hasExternalid( externalAssociationId, this.externalsystem )*/
-        ).shift();
-        if ( appAssociation == null ){
+        let foundExternalAssociationObject = this.externalObjectRepository.getExternalObject(
+            this.externalAssociationObjects,
+            this.externalsystem,
+            externalAssociationId,
+            null);
+
+        if ( foundExternalAssociationObject == null ){
             throw new Error("de bond, voor externid "+externalAssociationId+" en het externe systeem "+this.externalsystem.getName()+", kan niet gevonden worden, importeer eerst de bonden");
         }
 
         let json = { "name": externalteam.getName(),
             "abbreviation" : externalteam.getAbbreviation(),
-            "association": this.associationRepos.objectToJsonHelper( appAssociation ) };
+            "association": this.associationRepos.objectToJsonHelper( foundExternalAssociationObject.getImportableObject() ) };
 
         this.repos.createObject( json )
             .subscribe(
                 /* happy path */ team => {
                     this.teams.push(team);
 
-                    this.externalObjectRepository.createObject( this.repos.getUrlpostfix(), team, externalteam.getId().toString(), this.externalsystem )
+                    this.externalObjectRepository.createObject( this.repos, team, externalteam.getId().toString(), this.externalsystem )
                         .subscribe(
                             /* happy path */ externalobject => {
-                                this.onAddExternalHelper( team, externalobject, externalteam );
+                                this.externalobjects.push(externalobject);
                             },
                             /* error path */ e => { this.message = { "type": "danger", "message": e}; this.loading = false; },
                             /* onComplete */ () => this.loading = false
@@ -291,27 +290,33 @@ export class TeamsExternalComponent implements OnInit{
         this.location.back();
     }
 
+    getExternalObjects(importableObject: any): ExternalObject[] {
+        return this.externalObjectRepository.getExternalObjects(
+            this.externalobjects,
+            importableObject);
+    }
+
+    getExternalObject(externalid: string, importableObject: any): ExternalObject {
+        return this.externalObjectRepository.getExternalObject(
+            this.externalobjects,
+            this.externalsystem,
+            externalid,
+            importableObject);
+    }
+
     private getTeam( externalteam: Team): Team
     {
-        let externals = externalteam.getExternals();
-        if ( externals.length != 1 ){
-            return;
+        let externalObject = this.getExternalObject(externalteam.getId().toString(), null);
+        if ( externalObject == null ){
+            return null;
         }
-
-        let externalid = externals[0].getExternalid();
-
-        let foundTeams = this.teams.filter(
-            team => team.getId().toString() == externalid
-        );
-        if ( foundTeams.length != 1 ){
-            return;
-        }
-        return foundTeams[0];
+        return externalObject.getImportableObject();
     }
 
     getTeamName( externalteam: Team): string
     {
         let internalteam = this.getTeam(externalteam);
+
         if ( internalteam == null ){
             return;
         }

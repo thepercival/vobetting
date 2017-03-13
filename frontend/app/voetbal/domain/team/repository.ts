@@ -16,6 +16,7 @@ export class TeamRepository {
 
     private url : string;
     private http: Http;
+    private objects: Team[];
 
     constructor( http: Http, private associationRepository: AssociationRepository )
     {
@@ -48,12 +49,23 @@ export class TeamRepository {
 
     getObjects(): Observable<Team[]>
     {
+        if ( this.objects != null ){
+            return Observable.create(observer => {
+                observer.next(this.objects);
+                observer.complete();
+            });
+        }
+
         return this.http.get(this.url, new RequestOptions({ headers: this.getHeaders() }) )
-            .map((res) => this.jsonToArrayHelper(res.json()))
+            .map((res) => {
+                let objects = this.jsonArrayToObject(res.json());
+                this.objects = objects;
+                return this.objects;
+            })
             .catch( this.handleError );
     }
 
-    jsonToArrayHelper( jsonArray : any ): Team[]
+    jsonArrayToObject( jsonArray : any ): Team[]
     {
         let teams: Team[] = [];
         for (let json of jsonArray) {
@@ -75,6 +87,15 @@ export class TeamRepository {
 
     jsonToObjectHelper( json : any ): Team
     {
+        if ( this.objects != null ){
+            let foundObjects = this.objects.filter(
+                objectIt => objectIt.getId() == json.id
+            );
+            if ( foundObjects.length == 1) {
+                return foundObjects.shift();
+            }
+        }
+
         let association = this.associationRepository.jsonToObjectHelper(json.association);
 
         let team = new Team(json.name);

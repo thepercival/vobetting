@@ -107,5 +107,22 @@ export class ExternalObjectRepository {
         // throw an application level error
         return Observable.throw( res.statusText );
     }
+
+    getExternalObjects(externalobjects: ExternalObject[], importableObject: any): ExternalObject[] {
+        if ( externalobjects == null){
+            return [];
+        }
+        return externalobjects.filter(
+            extobjIt => extobjIt.getImportableObject() == importableObject
+        );
+    }
+
+    getExternalObject(externalobjects: ExternalObject[], externalsystem: any, externalid: string, importableObject: any): ExternalObject {
+        return externalobjects.filter(
+            extobjIt => extobjIt.getExternalSystem() == externalsystem
+            && ( externalid == null || extobjIt.getExternalid() == externalid )
+            && ( importableObject == null || extobjIt.getImportableObject() == importableObject )
+        ).shift();
+    }
 }
 

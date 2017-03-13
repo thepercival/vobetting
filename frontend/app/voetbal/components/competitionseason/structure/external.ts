@@ -81,7 +81,8 @@ export class CompetitionSeasonStructureComponent implements OnInit{
         this.externalsystem = externalSystem;
         this.externalrounds = [];
 
-        let externalObject: ExternalObject = this.competitionseason.getExternal(null,externalSystem);
+        // @TODO
+        let externalObject: ExternalObject = null; // this.competitionseason.getExternal(null,externalSystem);
         if ( externalObject == null){
             this.message = { "type": "danger", "message": "voor deze competitie is er geen externe variant gevonden"};
         }
@@ -131,9 +132,10 @@ export class CompetitionSeasonStructureComponent implements OnInit{
                     for (let k = 0; k < pouleplaces.length; k++) {
                         let pouleplace = pouleplaces[k];
                         let externalTeamId = pouleplace.getTeam().getId().toString();
-                        let appTeam = teams.filter(
-                            team => team.hasExternalid(externalTeamId, this.externalsystem)
-                        ).shift();
+                        let appTeam = null; // @TODO
+                        // let appTeam = teams.filter(
+                        //     team => team.hasExternalid(externalTeamId, this.externalsystem)
+                        // ).shift();
                         if (appTeam == null) {
                             let message = "het team , voor externid " + externalTeamId + " en het externe systeem " + this.externalsystem.getName() + ", kan niet gevonden worden, importeer eerst het team";
                             this.message = { "type": "danger", "message": message};

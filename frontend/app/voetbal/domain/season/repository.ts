@@ -47,11 +47,11 @@ export class SeasonRepository {
     getObjects(): Observable<Season[]>
     {
         return this.http.get(this.url, new RequestOptions({ headers: this.getHeaders() }) )
-            .map((res) => this.jsonToArrayHelper(res.json()))
+            .map((res) => this.jsonArrayToObject(res.json()))
             .catch( this.handleError );
     }
 
-    jsonToArrayHelper( jsonArray : any ): Season[]
+    jsonArrayToObject( jsonArray : any ): Season[]
     {
         let seasons: Season[] = [];
         for (let json of jsonArray) {

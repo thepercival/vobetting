@@ -31,6 +31,7 @@ export class SeasonsExternalComponent implements OnInit{
     externalseasons: Season[] = [];
     externalsystem: ExternalSystem;
     externalsystems: ExternalSystem[];
+    externalobjects: ExternalObject[];
     loading: boolean = false;
     message: any = null;
     classname: string;
@@ -128,70 +129,70 @@ export class SeasonsExternalComponent implements OnInit{
 
     onAddExternal( externalseason: Season): void {
         this.message = null;
-        const modalRef = this.modalService.open(SeasonAddExternalModalContent, { backdrop : 'static' } );
-
-        modalRef.componentInstance.seasons = this.seasons.filter(
-            season => !season.hasExternalid( externalseason.getId().toString(), this.externalsystem )
-        );
-
-        modalRef.result.then((season) => {
-            this.externalObjectRepository.createObject( this.repos.getUrlpostfix(), season, externalseason.getId().toString(), this.externalsystem )
-                .subscribe(
-                    /* happy path */ externalobject => {
-                        this.onAddExternalHelper( season, externalobject, externalseason );
-                        this.message = { "type": "success", "message": "extern seizoen "+externalseason.getName()+" gekoppeld aan ("+season.getName()+") toegevoegd"};
-                    },
-                    /* error path */ e => { this.message = { "type": "success", "message": e}; this.loading = false; },
-                    /* onComplete */ () => this.loading = false
-                );
-
-        }/*, (reason) => {
-         modalRef.closeResult = reason;
-         }*/);
+        // const modalRef = this.modalService.open(SeasonAddExternalModalContent, { backdrop : 'static' } );
+        //
+        // modalRef.componentInstance.seasons = this.seasons.filter(
+        //     season => !season.hasExternalid( externalseason.getId().toString(), this.externalsystem )
+        // );
+        //
+        // modalRef.result.then((season) => {
+        //     this.externalObjectRepository.createObject( this.repos.getUrlpostfix(), season, externalseason.getId().toString(), this.externalsystem )
+        //         .subscribe(
+        //             /* happy path */ externalobject => {
+        //                 this.onAddExternalHelper( season, externalobject, externalseason );
+        //                 this.message = { "type": "success", "message": "extern seizoen "+externalseason.getName()+" gekoppeld aan ("+season.getName()+") toegevoegd"};
+        //             },
+        //             /* error path */ e => { this.message = { "type": "success", "message": e}; this.loading = false; },
+        //             /* onComplete */ () => this.loading = false
+        //         );
+        //
+        // }, (reason) => {
+        //  // modalRef.closeResult = reason;
+        //  });
     }
 
-    onAddExternalHelper( season: Season, externalobject: ExternalObject, externalseason: Season ): void {
-        // @todo following code should move to service
-        // add to internal
-        season.getExternals().push(externalobject);
-        // add to external
-        let jsonExternal = { "externalid" : season.getId(), "externalsystem": null };
-        externalseason.addExternals(this.externalObjectRepository.jsonArrayToObject([jsonExternal],externalseason));
-    }
+    // onAddExternalHelper( season: Season, externalobject: ExternalObject, externalseason: Season ): void {
+    //     // @todo following code should move to service
+    //     // add to internal
+    //     season.getExternals().push(externalobject);
+    //     // add to external
+    //     let jsonExternal = { "externalid" : season.getId(), "externalsystem": null };
+    //     externalseason.addExternals(this.externalObjectRepository.jsonArrayToObject([jsonExternal],externalseason));
+    // }
 
     onRemove( externalObject: ExternalObject ): void
     {
-        // @todo following code should move to service
-        // remove from internal
-        let internalseason = this.getSeason( externalObject.getImportableObject() );
-        if ( internalseason == null ) {
-            this.message = { "type": "danger", "message": "intern seizoen niet gevonden"};
-            return;
-        }
-
-        let internalexternal = internalseason.getExternal(externalObject.getImportableObject().getId(), this.externalsystem);
-
-        this.externalObjectRepository.removeObject( this.repos.getUrlpostfix(), internalexternal )
-            .subscribe(
-                /* happy path */ retval => {
-
-                    let indextmp = internalseason.getExternals().indexOf(internalexternal);
-                    if (indextmp > -1) {
-                        internalseason.getExternals().splice(indextmp, 1);
-                    }
-
-                    // remove from external
-                    let externals = externalObject.getImportableObject().getExternals();
-                    let index = externals.indexOf(externalObject);
-                    if (index > -1) {
-                        externals.splice(index, 1);
-                    }
-
-                    this.message = { "type": "success", "message": "extern seizoen "+externalObject.getImportableObject().getName()+" ontkoppeld van ("+internalseason.getName()+") toegevoegd"};
-                },
-                /* error path */ e => { this.message = { "type": "danger", "message": e}; this.loading = false; },
-                /* onComplete */ () => this.loading = false
-            );
+        // // @todo following code should move to service
+        // // remove from internal
+        // let internalseason = this.getSeason( externalObject.getImportableObject() );
+        // if ( internalseason == null ) {
+        //     this.message = { "type": "danger", "message": "intern seizoen niet gevonden"};
+        //     return;
+        // }
+        //
+        // let internalexternal = internalseason.getExternal(externalObject.getImportableObject().getId(), this.externalsystem);
+        //
+        // this.externalObjectRepository.removeObject( this.repos.getUrlpostfix(), internalexternal )
+        //     .subscribe(
+        //         /* happy path */ retval => {
+        //
+        //             let indextmp = internalseason.getExternals().indexOf(internalexternal);
+        //             if (indextmp > -1) {
+        //                 internalseason.getExternals().splice(indextmp, 1);
+        //             }
+        //
+        //             // remove from external
+        //             let externals = externalObject.getImportableObject().getExternals();
+        //             let index = externals.indexOf(externalObject);
+        //             if (index > -1) {
+        //                 externals.splice(index, 1);
+        //             }
+        //
+        //             this.message = { "type": "success", "message": "extern seizoen "+externalObject.getImportableObject().getName()+" ontkoppeld van ("+internalseason.getName()+") toegevoegd"};
+        //         },
+        //         /* error path */ e => { this.message = { "type": "danger", "message": e}; this.loading = false; },
+        //         /* onComplete */ () => this.loading = false
+        //     );
     }
 
     onImportExternalAll(): void
@@ -203,55 +204,60 @@ export class SeasonsExternalComponent implements OnInit{
 
     onImportExternal(externalseason): void
     {
-        // check if has internal
-        // if ( false ) { // update internal
-        //     // update
-        // }
-        // else { // add
-
-            let json = { "name": externalseason.getName(), "startdate": externalseason.getStartdate(), "enddate": externalseason.getEnddate() };
-
-            this.repos.createObject( json )
-                .subscribe(
-                    /* happy path */ season => {
-                        this.seasons.push(season);
-
-                        this.externalObjectRepository.createObject( this.repos.getUrlpostfix(), season, externalseason.getId().toString(), this.externalsystem )
-                            .subscribe(
-                                /* happy path */ externalobject => {
-                                    this.onAddExternalHelper( season, externalobject, externalseason );
-                                },
-                                /* error path */ e => { this.message = { "type": "danger", "message": e}; this.loading = false; },
-                                /* onComplete */ () => this.loading = false
-                            );
-
-                    },
-                    /* error path */ e => { this.message = { "type": "danger", "message": e}; this.loading = false; },
-                    /* onComplete */ () => this.loading = false
-                );
-        // }
+        // // check if has internal
+        // // if ( false ) { // update internal
+        // //     // update
+        // // }
+        // // else { // add
+        //
+        //     let json = { "name": externalseason.getName(), "startdate": externalseason.getStartdate(), "enddate": externalseason.getEnddate() };
+        //
+        //     this.repos.createObject( json )
+        //         .subscribe(
+        //             /* happy path */ season => {
+        //                 this.seasons.push(season);
+        //
+        //                 this.externalObjectRepository.createObject( this.repos.getUrlpostfix(), season, externalseason.getId().toString(), this.externalsystem )
+        //                     .subscribe(
+        //                         /* happy path */ externalobject => {
+        //                             this.onAddExternalHelper( season, externalobject, externalseason );
+        //                         },
+        //                         /* error path */ e => { this.message = { "type": "danger", "message": e}; this.loading = false; },
+        //                         /* onComplete */ () => this.loading = false
+        //                     );
+        //
+        //             },
+        //             /* error path */ e => { this.message = { "type": "danger", "message": e}; this.loading = false; },
+        //             /* onComplete */ () => this.loading = false
+        //         );
+        // // }
     }
 
     goBack(): void {
         this.location.back();
     }
 
+    getExternalObjects(importableObject: any): ExternalObject[] {
+        return this.externalObjectRepository.getExternalObjects(
+            this.externalobjects,
+            importableObject);
+    }
+
+    getExternalObject(externalid: string, importableObject: any): ExternalObject {
+        return this.externalObjectRepository.getExternalObject(
+            this.externalobjects,
+            this.externalsystem,
+            importableObject != null ? importableObject.getId().toString() : null,
+            null)
+    }
+
     private getSeason( externalseason: Season): Season
     {
-        let externals = externalseason.getExternals();
-        if ( externals.length != 1 ){
-            return;
+        let externalObject = this.getExternalObject(externalseason.getId().toString(),null);
+        if ( externalObject == null ){
+            return null;
         }
-
-        let externalid = externals[0].getExternalid();
-
-        let foundSeasons = this.seasons.filter(
-            season => season.getId().toString() == externalid
-        );
-        if ( foundSeasons.length != 1 ){
-            return;
-        }
-        return foundSeasons[0];
+        return externalObject.getImportableObject();
     }
 
     getSeasonName( externalseason: Season): string

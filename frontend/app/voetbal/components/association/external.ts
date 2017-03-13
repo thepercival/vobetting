@@ -110,22 +110,7 @@ export class AssociationsExternalComponent implements OnInit{
             );
     }
 
-    getExternalObjects(association: Association): ExternalObject[] {
-        if ( this.externalobjects == null){
-            return [];
-        }
-        return this.externalobjects.filter(
-            extobjIt => extobjIt.getImportableObject() == association
-        );
-    }
 
-    getExternalObject(externalsystem: any, externalid: string, importableObject: any): ExternalObject {
-        return this.externalobjects.filter(
-            extobjIt => extobjIt.getExternalSystem() == externalsystem
-                && ( externalid == null || extobjIt.getExternalid() == externalid )
-                && ( importableObject == null || extobjIt.getExternalid() == externalid )
-        ).shift();
-    }
 
     onSelectExternalSystem( externalSystem: any ): void {
         this.externalsystem = externalSystem;
@@ -177,14 +162,13 @@ export class AssociationsExternalComponent implements OnInit{
 
         // alle bonden die nog niet gekoppeld zijn
         modalRef.componentInstance.associations = this.associations.filter(
-            associationIt => this.getExternalObject(this.externalsystem, externalassociation.getId().toString(), associationIt ) == null
+            associationIt => this.getExternalObject(null, associationIt ) == null
         );
 
         modalRef.result.then((association) => {
             this.externalObjectRepository.createObject( this.repos, association, externalassociation.getId().toString(), this.externalsystem )
                 .subscribe(
                     /* happy path */ externalObject => {
-                        console.log(externalObject);
                         this.externalobjects.push(externalObject);
                         this.message = { "type": "success", "message": "externe bond "+externalassociation.getName()+" gekoppeld aan ("+association.getName()+") toegevoegd"};
                     },
@@ -193,8 +177,8 @@ export class AssociationsExternalComponent implements OnInit{
                 );
 
         }, (reason) => {
-         // modalRef.closeResult = reason;
-         });
+            this.message = { "type": "danger", "message": reason};
+        });
     }
 
     onRemove( externalObject: ExternalObject ): void
@@ -202,12 +186,10 @@ export class AssociationsExternalComponent implements OnInit{
         this.externalObjectRepository.removeObject( this.repos.getUrlpostfix(), externalObject )
             .subscribe(
                 /* happy path */ retval => {
-
                     let index = this.externalobjects.indexOf(externalObject);
                     if (index > -1) {
                         this.externalobjects.splice(index, 1);
                     }
-
                     this.message = { "type": "success", "message": "externe bond "+externalObject.getExternalid()+" ontkoppeld van "+externalObject.getImportableObject().getName()};
                 },
                 /* error path */ e => { this.message = { "type": "danger", "message": e}; this.loading = false; },
@@ -229,37 +211,51 @@ export class AssociationsExternalComponent implements OnInit{
         // //     // update
         // // }
         // // else { // add
-        //
-        //     let json = { "name": externalassociation.getName() };
-        //
-        //     this.repos.createObject( json )
-        //         .subscribe(
-        //             /* happy path */ association => {
-        //                 this.associations.push(association);
-        //
-        //                 this.externalObjectRepository.createObject( this.repos.getUrlpostfix(), association, externalassociation.getId().toString(), this.externalsystem )
-        //                     .subscribe(
-        //                         /* happy path */ externalobject => {
-        //                             this.onAddExternalHelper( association, externalobject, externalassociation );
-        //                         },
-        //                         /* error path */ e => { this.message = { "type": "danger", "message": e}; this.loading = false; },
-        //                         /* onComplete */ () => this.loading = false
-        //                     );
-        //
-        //             },
-        //             /* error path */ e => { this.message = { "type": "danger", "message": e}; this.loading = false; },
-        //             /* onComplete */ () => this.loading = false
-        //         );
-        // // }
+
+            let json = { "name": externalassociation.getName() };
+
+            this.repos.createObject( json )
+                .subscribe(
+                    /* happy path */ association => {
+                        this.associations.push(association);
+
+                        this.externalObjectRepository.createObject( this.repos, association, externalassociation.getId().toString(), this.externalsystem )
+                            .subscribe(
+                                /* happy path */ externalobject => {
+                                    this.externalobjects.push(externalobject);
+                                },
+                                /* error path */ e => { this.message = { "type": "danger", "message": e}; this.loading = false; },
+                                /* onComplete */ () => this.loading = false
+                            );
+
+                    },
+                    /* error path */ e => { this.message = { "type": "danger", "message": e}; this.loading = false; },
+                    /* onComplete */ () => this.loading = false
+                );
+        // }
     }
 
     goBack(): void {
         this.location.back();
     }
 
+    getExternalObjects(importableObject: any): ExternalObject[] {
+        return this.externalObjectRepository.getExternalObjects(
+            this.externalobjects,
+            importableObject);
+    }
+
+    getExternalObject(externalid: string, importableObject: any): ExternalObject {
+        return this.externalObjectRepository.getExternalObject(
+            this.externalobjects,
+            this.externalsystem,
+            externalid,
+            importableObject);
+    }
+
     private getAssociation( externalassociation: Association): Association
     {
-        let externalObject = this.getExternalObject(this.externalsystem, externalassociation.getId().toString(), null);
+        let externalObject = this.getExternalObject(externalassociation.getId().toString(),null);
         if ( externalObject == null ){
             return null;
         }
