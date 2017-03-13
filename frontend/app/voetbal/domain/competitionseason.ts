@@ -5,8 +5,6 @@
 import { Association } from './association';
 import { Competition } from './competition';
 import { Season } from './season';
-import { Round } from './round';
-import { Team } from './team';
 
 export class CompetitionSeason {
     protected id: any;

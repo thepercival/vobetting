@@ -14,6 +14,7 @@ export class CompetitionRepository {
 
     private url : string;
     private http: Http;
+    private objects: Competition[];
 
     constructor( http: Http )
     {
@@ -46,19 +47,30 @@ export class CompetitionRepository {
 
     getObjects(): Observable<Competition[]>
     {
+        if ( this.objects != null ){
+            return Observable.create(observer => {
+                observer.next(this.objects);
+                observer.complete();
+            });
+        }
+
         return this.http.get(this.url, new RequestOptions({ headers: this.getHeaders() }) )
-            .map((res) => this.jsonToArrayHelper(res.json()))
+            .map((res) => {
+                let objects = this.jsonArrayToObject(res.json());
+                this.objects = objects;
+                return this.objects;
+            })
             .catch( this.handleError );
     }
 
-    jsonToArrayHelper( jsonArray : any ): Competition[]
+    jsonArrayToObject( jsonArray : any ): Competition[]
     {
-        let competitions: Competition[] = [];
+        let objects: Competition[] = [];
         for (let json of jsonArray) {
             let object = this.jsonToObjectHelper(json);
-            competitions.push( object );
+            objects.push( object );
         }
-        return competitions;
+        return objects;
     }
 
     getObject( id: number): Observable<Competition>
@@ -73,6 +85,15 @@ export class CompetitionRepository {
 
     jsonToObjectHelper( json : any ): Competition
     {
+        if ( this.objects != null ){
+            let foundObjects = this.objects.filter(
+                objectIt => objectIt.getId() == json.id
+            );
+            if ( foundObjects.length == 1) {
+                return foundObjects.shift();
+            }
+        }
+
         let competition = new Competition(json.name);
         competition.setId(json.id);
         competition.setAbbreviation(json.abbreviation);

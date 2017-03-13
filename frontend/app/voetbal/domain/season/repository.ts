@@ -14,6 +14,7 @@ export class SeasonRepository {
 
     private url : string;
     private http: Http;
+    private objects: Season[];
 
     constructor( http: Http )
     {
@@ -46,8 +47,19 @@ export class SeasonRepository {
 
     getObjects(): Observable<Season[]>
     {
+        if ( this.objects != null ){
+            return Observable.create(observer => {
+                observer.next(this.objects);
+                observer.complete();
+            });
+        }
+
         return this.http.get(this.url, new RequestOptions({ headers: this.getHeaders() }) )
-            .map((res) => this.jsonArrayToObject(res.json()))
+            .map((res) => {
+                let objects = this.jsonArrayToObject(res.json());
+                this.objects = objects;
+                return this.objects;
+            })
             .catch( this.handleError );
     }
 
@@ -73,12 +85,20 @@ export class SeasonRepository {
 
     jsonToObjectHelper( json : any ): Season
     {
+        if ( this.objects != null ){
+            let foundObjects = this.objects.filter(
+                objectIt => objectIt.getId() == json.id
+            );
+            if ( foundObjects.length == 1) {
+                return foundObjects.shift();
+            }
+        }
+
         let season = new Season(json.name);
         season.setId(json.id);
-        season.setStartdate(new Date(json.startdate.timestamp*1000));
-        season.setEnddate(new Date(json.enddate.timestamp*1000));
-        //console.log(json.externals);
-        //console.log(season);
+        // season.setStartdate(new Date(json.startdate.timestamp*1000));
+        season.setStartdate(new Date(json.startdate));
+        season.setEnddate(new Date(json.enddate));
         return season;
     }
 

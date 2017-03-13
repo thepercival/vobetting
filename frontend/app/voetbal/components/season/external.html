@@ -19,19 +19,19 @@
                 </thead>
                 <tbody>
                 <template ngFor let-season [ngForOf]="seasons">
-                    <template [ngIf]="season.getExternals().length >= 1">
-                    <tr *ngFor="let external of season.getExternals(); let first = first">
-                        <td *ngIf="first" [attr.rowspan]="season.getExternals().length">
+                    <template [ngIf]="getExternalObjects(season).length >= 1">
+                    <tr *ngFor="let external of getExternalObjects(season); let first = first">
+                        <td *ngIf="first" [attr.rowspan]="getExternalObjects(season).length">
                             <button type="button" class="btn btn-secondary" (click)="onEdit(season)" title="item wijzigen"><i class="fa fa-pencil" aria-hidden="true"></i></button>
                         </td>
-                        <td *ngIf="first" [attr.rowspan]="season.getExternals().length">
+                        <td *ngIf="first" [attr.rowspan]="getExternalObjects(season).length">
                             {{season.getName()}}
                         </td>
                         <td>{{external.getExternalSystem().getName()}}</td>
                         <td>#{{external.getExternalid()}}</td>
                     </tr>
                     </template>
-                    <tr *ngIf="season.getExternals().length == 0">
+                    <tr *ngIf="getExternalObjects(season).length == 0">
                         <td>
                             <button type="button" class="btn btn-secondary" (click)="onEdit(season)"><i class="fa fa-pencil" aria-hidden="true"></i></button>
                         </td>
@@ -68,14 +68,14 @@
                 <tbody>
                 <tr *ngFor="let externalseason of externalseasons" style="text-align: right">
                     <td *ngIf="externalsystem.hasAvailableExportClassAsSource(classname)">
-                        <button *ngIf="externalseason.getExternals().length == 0" type="button" class="btn btn-secondary" (click)="onImportExternal(externalseason)" title="item importeren"><i class="fa fa-long-arrow-left" aria-hidden="true"></i></button>
+                        <button *ngIf="getExternalObject(externalseason.getId(), null ) == null" type="button" class="btn btn-secondary" (click)="onImportExternal(externalseason)" title="item importeren"><i class="fa fa-long-arrow-left" aria-hidden="true"></i></button>
                     </td>
                     <td>
-                        <span *ngIf="externalseason.getExternals().length == 1">{{getSeasonName(externalseason)}}</span>
+                        <span *ngIf="getExternalObject(externalseason.getId(), null ) != null">{{getSeasonName(externalseason)}}</span>
                     </td>
                     <td style="text-align: center">
-                        <button type="button" *ngIf="externalseason.getExternals().length == 0" class="btn btn-secondary" (click)="onAddExternal(externalseason)" title="item koppelen"><i class="fa fa-link" aria-hidden="true"></i></button>
-                        <button type="button" *ngIf="externalseason.getExternals().length == 1" class="btn btn-secondary" (click)="onRemove(externalseason.getExternals()[0])" title="item ontkoppelen"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                        <button type="button" *ngIf="getExternalObject(externalseason.getId(), null ) == null" class="btn btn-secondary" (click)="onAddExternal(externalseason)" title="item koppelen"><i class="fa fa-link" aria-hidden="true"></i></button>
+                        <button type="button" *ngIf="getExternalObject(externalseason.getId(), null ) != null" class="btn btn-secondary" (click)="onRemove(getExternalObject(externalseason.getId(), null ))" title="item ontkoppelen"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                     </td>
                     <td>
                         {{externalseason.getName()}}(#{{externalseason.getId()}})

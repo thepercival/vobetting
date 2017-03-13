@@ -19,19 +19,19 @@
                 </thead>
                 <tbody>
                 <template ngFor let-competition [ngForOf]="competitions">
-                    <template [ngIf]="competition.getExternals().length >= 1">
-                    <tr *ngFor="let external of competition.getExternals(); let first = first">
-                        <td *ngIf="first" [attr.rowspan]="competition.getExternals().length">
+                    <template [ngIf]="getExternalObjects(competition).length >= 1">
+                    <tr *ngFor="let external of getExternalObjects(competition); let first = first">
+                        <td *ngIf="first" [attr.rowspan]="getExternalObjects(competition).length">
                             <button type="button" class="btn btn-secondary" (click)="onEdit(competition)" title="item wijzigen"><i class="fa fa-pencil" aria-hidden="true"></i></button>
                         </td>
-                        <td *ngIf="first" [attr.rowspan]="competition.getExternals().length">
+                        <td *ngIf="first" [attr.rowspan]="getExternalObjects(competition).length">
                             {{competition.getName()}}
                         </td>
                         <td>{{external.getExternalSystem().getName()}}</td>
                         <td>#{{external.getExternalid()}}</td>
                     </tr>
                     </template>
-                    <tr *ngIf="competition.getExternals().length == 0">
+                    <tr *ngIf="getExternalObjects(competition).length == 0">
                         <td>
                             <button type="button" class="btn btn-secondary" (click)="onEdit(competition)"><i class="fa fa-pencil" aria-hidden="true"></i></button>
                         </td>
@@ -68,14 +68,14 @@
                 <tbody>
                 <tr *ngFor="let externalcompetition of externalcompetitions" style="text-align: right">
                     <td *ngIf="externalsystem.hasAvailableExportClassAsSource(classname)">
-                        <button *ngIf="externalcompetition.getExternals().length == 0" type="button" class="btn btn-secondary" (click)="onImportExternal(externalcompetition)" title="item importeren"><i class="fa fa-long-arrow-left" aria-hidden="true"></i></button>
+                        <button *ngIf="getExternalObject(externalcompetition.getId(), null ) == null" type="button" class="btn btn-secondary" (click)="onImportExternal(externalcompetition)" title="item importeren"><i class="fa fa-long-arrow-left" aria-hidden="true"></i></button>
                     </td>
                     <td>
-                        <span *ngIf="externalcompetition.getExternals().length == 1">{{getCompetitionName(externalcompetition)}}</span>
+                        <span *ngIf="getExternalObject(externalcompetition.getId(), null ) != null">{{getCompetitionName(externalcompetition)}}</span>
                     </td>
                     <td style="text-align: center">
-                        <button type="button" *ngIf="externalcompetition.getExternals().length == 0" class="btn btn-secondary" (click)="onAddExternal(externalcompetition)" title="item koppelen"><i class="fa fa-link" aria-hidden="true"></i></button>
-                        <button type="button" *ngIf="externalcompetition.getExternals().length == 1" class="btn btn-secondary" (click)="onRemove(externalcompetition.getExternals()[0])" title="item ontkoppelen"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                        <button type="button" *ngIf="getExternalObject(externalcompetition.getId(), null ) == null" class="btn btn-secondary" (click)="onAddExternal(externalcompetition)" title="item koppelen"><i class="fa fa-link" aria-hidden="true"></i></button>
+                        <button type="button" *ngIf="getExternalObject(externalcompetition.getId(), null ) != null" class="btn btn-secondary" (click)="onRemove(getExternalObject(externalcompetition.getId(), null ))" title="item ontkoppelen"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                     </td>
                     <td>
                         {{externalcompetition.getName()}}

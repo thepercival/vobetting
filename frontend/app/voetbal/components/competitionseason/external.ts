@@ -44,6 +44,9 @@ export class CompetitionSeasonsExternalComponent implements OnInit{
     externalsystem: ExternalSystem;
     externalsystems: ExternalSystem[];
     externalobjects: ExternalObject[];
+    externalAssociationObjects: ExternalObject[];
+    externalCompetitionObjects: ExternalObject[];
+    externalSeasonObjects: ExternalObject[];
     loading: boolean = false;
     message: any = null;
     classname: string;
@@ -65,52 +68,102 @@ export class CompetitionSeasonsExternalComponent implements OnInit{
 
     ngOnInit(): void {
 
-        this.repos.getObjects()
+        let observables = Observable.create(observer => {
+            this.associationRepos.getObjects()
+                .subscribe(
+                    /* happy path */ associations => {
+                        this.associations = associations;
+                        if ( this.seasons != null && this.competitions != null && this.associations != null ){
+                            observer.next(true);
+                            observer.complete();
+                        }
+                    },
+                    /* error path */ e => { this.message = { "type": "danger", "message": e}; },
+                    /* onComplete */ () => {}
+                );
+
+            this.competitionRepos.getObjects()
+                .subscribe(
+                    /* happy path */ competitions => {
+                        this.competitions = competitions;
+                        if ( this.seasons != null && this.competitions != null && this.associations != null ){
+                            observer.next(true);
+                            observer.complete();
+                        }
+                    },
+                    /* error path */ e => { this.message = { "type": "danger", "message": e}; },
+                    /* onComplete */ () => {}
+                );
+
+            this.seasonRepos.getObjects()
+                .subscribe(
+                    /* happy path */ seasons => {
+                        this.seasons = seasons;
+                        if ( this.seasons != null && this.competitions != null && this.associations != null ){
+                            observer.next(true);
+                            observer.complete();
+                        }
+                    },
+                    /* error path */ e => { this.message = { "type": "danger", "message": e}; },
+                    /* onComplete */ () => {}
+                );
+        });
+
+        let observablesExt = Observable.create(observer => {
+            observables
+                .subscribe(
+                    /* happy path */ test => {
+                        this.repos.getObjects()
+                            .subscribe(
+                                /* happy path */ competitionseasons => {
+                                    this.competitionseasons = competitionseasons;
+                                    if ( this.competitionseasons != null && this.externalsystems != null ){
+                                        observer.next(true);
+                                        observer.complete();
+                                    }
+                                },
+                                /* error path */ e => { this.message = { "type": "danger", "message": e}; },
+                                /* onComplete */ () => {}
+                            );
+                    },
+                    /* error path */ e => { this.message = {"type": "danger", "message": e}; },
+                    /* onComplete */ () => { }
+                );
+
+            this.reposExternalSystem.getObjects()
+                .subscribe(
+                    /* happy path */ externalsystems => {
+                        this.externalsystems = externalsystems.filter(
+                            externalsystem => externalsystem.hasAvailableExportClass( this.classname )
+                        );
+                        if ( this.competitionseasons != null && this.externalsystems != null ){
+                            observer.next(true);
+                            observer.complete();
+                        }
+                    },
+                    /* error path */ e => { this.message = { "type": "danger", "message": e}; },
+                    /* onComplete */ () => {}
+                );
+        });
+
+        observablesExt
             .subscribe(
-                /* happy path */ competitionseasons => {
-                    this.competitionseasons = competitionseasons;
+                /* happy path */ test => {
+                    this.externalObjectRepository.getObjects(this.repos)
+                        .subscribe(
+                            /* happy path */ externalobjects => {
+                                this.externalobjects = externalobjects;
+                            },
+                            /* error path */ e => { this.message = {"type": "danger", "message": e}; },
+                            /* onComplete */ () => {}
+                        );
+
                 },
-                /* error path */ e => { this.message = { "type": "danger", "message": e}; },
-                /* onComplete */ () => {}
+                /* error path */ e => { this.message = {"type": "danger", "message": e}; },
+                /* onComplete */ () => { }
             );
 
-        this.reposExternalSystem.getObjects()
-            .subscribe(
-                /* happy path */ externalsystems => {
-                    this.externalsystems = externalsystems.filter(
-                        externalsystem => externalsystem.hasAvailableExportClass( this.classname )
-                    );
-                },
-                /* error path */ e => { this.message = { "type": "danger", "message": e}; },
-                /* onComplete */ () => {}
-            );
 
-        this.associationRepos.getObjects()
-            .subscribe(
-                /* happy path */ associations => {
-                    this.associations = associations;
-                },
-                /* error path */ e => { this.message = { "type": "danger", "message": e}; },
-                /* onComplete */ () => {}
-            );
-
-        this.competitionRepos.getObjects()
-            .subscribe(
-                /* happy path */ competitions => {
-                    this.competitions = competitions;
-                },
-                /* error path */ e => { this.message = { "type": "danger", "message": e}; },
-                /* onComplete */ () => {}
-            );
-
-        this.seasonRepos.getObjects()
-            .subscribe(
-                /* happy path */ seasons => {
-                    this.seasons = seasons;
-                },
-                /* error path */ e => { this.message = { "type": "danger", "message": e}; },
-                /* onComplete */ () => {}
-            );
     }
 
     onSelectExternalSystem( externalSystem: any ): void {
@@ -122,26 +175,37 @@ export class CompetitionSeasonsExternalComponent implements OnInit{
                     for( let competitionseason of competitionseasons ) {
                         this.externalcompetitionseasons.push(competitionseason);
                     }
-                    this.selectExternalSystemHelper( competitionseasons, this.competitionseasons);
                 },
                 /* error path */ e => { this.message = { "type": "danger", "message": e}; },
                 /* onComplete */ () => { console.log('complete'); }
             );
-    }
 
-    selectExternalSystemHelper( externalObjects, internalObjects ) {
+        this.externalObjectRepository.getObjects(this.associationRepos)
+            .subscribe(
+                /* happy path */ externalobjects => {
+                    this.externalAssociationObjects = externalobjects;
+                },
+                /* error path */ e => { this.message = {"type": "danger", "message": e}; },
+                /* onComplete */ () => {}
+            );
 
-        for( let externalObject of externalObjects ) {
-            console.log(externalObject.getId());
-            let foundAppObjects = internalObjects.filter( objectFilter => objectFilter.hasExternalid( externalObject.getId().toString(), this.externalsystem ) );
+        this.externalObjectRepository.getObjects(this.competitionRepos)
+            .subscribe(
+                /* happy path */ externalobjects => {
+                    this.externalCompetitionObjects = externalobjects;
+                },
+                /* error path */ e => { this.message = {"type": "danger", "message": e}; },
+                /* onComplete */ () => {}
+            );
 
-            let foundAppObject = foundAppObjects.shift();
-            if ( foundAppObject ){
-                let jsonExternal = { "externalid" : foundAppObject.getId(), "externalsystem": null };
-                externalObject.addExternals(this.externalObjectRepository.jsonArrayToObject([jsonExternal],externalObject));
-            }
-
-        }
+        this.externalObjectRepository.getObjects(this.seasonRepos)
+            .subscribe(
+                /* happy path */ externalobjects => {
+                    this.externalSeasonObjects = externalobjects;
+                },
+                /* error path */ e => { this.message = {"type": "danger", "message": e}; },
+                /* onComplete */ () => {}
+            );
     }
 
     onAdd(): void {
@@ -158,12 +222,8 @@ export class CompetitionSeasonsExternalComponent implements OnInit{
 
     onEdit( competitionseason: CompetitionSeason ): void {
         this.message = null;
-        /*let competitionseason = this.competitionseasons.find( function(item: CompetitionSeason) {
-         return ( item.getId() == competitionseasonId );
-         }, competitionseasonId);*/
-
         if ( competitionseason == null) {
-            this.message = { "type": "danger", "message": "de competitieseizoen kan niet gewijzigd worden"};
+            this.message = { "type": "danger", "message": "het competitieseizoen kan niet gewijzigd worden"};
         }
 
         const modalRef = this.modalService.open(CompetitionSeasonEditModalContent, { backdrop : 'static' } );
@@ -177,70 +237,42 @@ export class CompetitionSeasonsExternalComponent implements OnInit{
 
     onAddExternal( externalcompetitionseason: CompetitionSeason): void {
         this.message = null;
-        // const modalRef = this.modalService.open(CompetitionSeasonAddExternalModalContent, { backdrop : 'static' } );
-        //
-        // modalRef.componentInstance.competitionseasons = this.competitionseasons.filter(
-        //     competitionseason => !competitionseason.hasExternalid( externalcompetitionseason.getId().toString(), this.externalsystem )
-        // );
-        //
-        // modalRef.result.then((competitionseason) => {
-        //     this.externalObjectRepository.createObject( this.repos.getUrlpostfix(), competitionseason, externalcompetitionseason.getId().toString(), this.externalsystem )
-        //         .subscribe(
-        //             /* happy path */ externalobject => {
-        //                 this.onAddExternalHelper( competitionseason, externalobject, externalcompetitionseason );
-        //                 this.message = { "type": "success", "message": "externe competitieseizoen "+externalcompetitionseason.getName()+" gekoppeld aan ("+competitionseason.getName()+") toegevoegd"};
-        //             },
-        //             /* error path */ e => { this.message = { "type": "success", "message": e}; this.loading = false; },
-        //             /* onComplete */ () => this.loading = false
-        //         );
-        //
-        // }/*, (reason) => {
-        //  modalRef.closeResult = reason;
-        //  }*/);
-    }
+        const modalRef = this.modalService.open(CompetitionSeasonAddExternalModalContent, { backdrop : 'static' } );
 
-    // onAddExternalHelper( competitionseason: CompetitionSeason, externalobject: ExternalObject, externalcompetitionseason: CompetitionSeason ): void {
-    //     // @todo following code should move to service
-    //     // add to internal
-    //     competitionseason.getExternals().push(externalobject);
-    //     // add to external
-    //     let jsonExternal = { "externalid" : competitionseason.getId(), "externalsystem": null };
-    //     externalcompetitionseason.addExternals(this.externalObjectRepository.jsonArrayToObject([jsonExternal],externalcompetitionseason));
-    // }
+        modalRef.componentInstance.competitionseasons = this.competitionseasons.filter(
+            competitionseasonIt => this.getExternalObject(null, competitionseasonIt ) == null
+        );
+
+        modalRef.result.then((competitionseason) => {
+            this.externalObjectRepository.createObject( this.repos, competitionseason, externalcompetitionseason.getId().toString(), this.externalsystem )
+                .subscribe(
+                    /* happy path */ externalobject => {
+                        this.externalobjects.push(externalobject);
+                        this.message = { "type": "success", "message": "extern competitieseizoen "+externalcompetitionseason.getName()+" gekoppeld aan "+competitionseason.getName()};
+                    },
+                    /* error path */ e => { this.message = { "type": "success", "message": e}; this.loading = false; },
+                    /* onComplete */ () => this.loading = false
+                );
+
+        }, (reason) => {
+            this.message = { "type": "danger", "message": reason};
+        });
+    }
 
     onRemove( externalObject: ExternalObject ): void
     {
-        // // @todo following code should move to service
-        // // remove from internal
-        // let internalcompetitionseason = this.getCompetitionSeason( externalObject.getImportableObject() );
-        // if ( internalcompetitionseason == null ) {
-        //     this.message = { "type": "danger", "message": "interne competitieseizoen niet gevonden"};
-        //     return;
-        // }
-        //
-        // let internalexternal = internalcompetitionseason.getExternal(externalObject.getImportableObject().getId(), this.externalsystem);
-        //
-        // this.externalObjectRepository.removeObject( this.repos.getUrlpostfix(), internalexternal )
-        //     .subscribe(
-        //         /* happy path */ retval => {
-        //
-        //             let indextmp = internalcompetitionseason.getExternals().indexOf(internalexternal);
-        //             if (indextmp > -1) {
-        //                 internalcompetitionseason.getExternals().splice(indextmp, 1);
-        //             }
-        //
-        //             // remove from external
-        //             let externals = externalObject.getImportableObject().getExternals();
-        //             let index = externals.indexOf(externalObject);
-        //             if (index > -1) {
-        //                 externals.splice(index, 1);
-        //             }
-        //
-        //             this.message = { "type": "success", "message": "externe competitieseizoen "+externalObject.getImportableObject().getName()+" ontkoppeld van ("+internalcompetitionseason.getName()+") toegevoegd"};
-        //         },
-        //         /* error path */ e => { this.message = { "type": "danger", "message": e}; this.loading = false; },
-        //         /* onComplete */ () => this.loading = false
-        //     );
+        this.externalObjectRepository.removeObject( this.repos.getUrlpostfix(), externalObject )
+            .subscribe(
+                /* happy path */ retval => {
+                    let index = this.externalobjects.indexOf(externalObject);
+                    if (index > -1) {
+                        this.externalobjects.splice(index, 1);
+                    }
+                    this.message = { "type": "success", "message": "extern competitieseizoen "+externalObject.getExternalid()+" ontkoppeld van "+externalObject.getImportableObject().getName()};
+                },
+                /* error path */ e => { this.message = { "type": "danger", "message": e}; this.loading = false; },
+                /* onComplete */ () => this.loading = false
+            );
     }
 
     onImportExternalAll(): void
@@ -268,56 +300,62 @@ export class CompetitionSeasonsExternalComponent implements OnInit{
         // // }
         // // else { // add
         //
-        // let externalAssociationId = externalcompetitionseason.getAssociation().getId().toString();
-        // let appAssociation = this.associations.filter(
-        //     association => false /*association.hasExternalid( externalAssociationId, this.externalsystem )*/
-        // ).shift();
-        // if ( appAssociation == null ){
-        //     throw new Error("de bond, voor externid "+externalAssociationId+" en het externe systeem "+this.externalsystem.getName()+", kan niet gevonden worden, importeer eerst de bonden");
-        // }
-        //
-        // let externalCompetitionId = externalcompetitionseason.getCompetition().getId().toString();
-        // let appCompetition = this.competitions.filter(
-        //     competition => competition.hasExternalid( externalCompetitionId, this.externalsystem )
-        // ).shift();
-        // if ( appCompetition == null ){
-        //     throw new Error("de competitie, voor externid "+externalCompetitionId+" en het externe systeem "+this.externalsystem.getName()+", kan niet gevonden worden, importeer eerst de competities");
-        // }
-        //
-        //
-        // let externalSeasonId = externalcompetitionseason.getSeason().getId().toString();
-        // let appSeason = this.seasons.filter(
-        //     season => season.hasExternalid( externalSeasonId, this.externalsystem )
-        // ).shift();
-        // if ( appSeason == null ){
-        //     throw new Error("het seizoen, voor externid "+externalSeasonId+" en het externe systeem "+this.externalsystem.getName()+", kan niet gevonden worden, importeer eerst de seizoenen");
-        // }
-        //
-        // let json = {
-        //     "associationid": appAssociation.getId(),
-        //     "competitionid": appCompetition.getId(),
-        //     "seasonid": appSeason.getId()
-        // };
-        //
-        // this.repos.createObject( json )
-        //     .subscribe(
-        //         /* happy path */ competitionseason => {
-        //             this.competitionseasons.push(competitionseason);
-        //
-        //             this.externalObjectRepository.createObject( this.repos.getUrlpostfix(), competitionseason, externalcompetitionseason.getId().toString(), this.externalsystem )
-        //                 .subscribe(
-        //                     /* happy path */ externalobject => {
-        //                         this.onAddExternalHelper( competitionseason, externalobject, externalcompetitionseason );
-        //                     },
-        //                     /* error path */ e => { this.message = { "type": "danger", "message": e}; this.loading = false; },
-        //                     /* onComplete */ () => this.loading = false
-        //                 );
-        //
-        //         },
-        //         /* error path */ e => { this.message = { "type": "danger", "message": e}; this.loading = false; },
-        //         /* onComplete */ () => this.loading = false
-        //     );
-        // // }
+
+        let externalAssociationId = externalcompetitionseason.getAssociation().getId().toString();
+        let foundExternalAssociationObject = this.externalObjectRepository.getExternalObject(
+            this.externalAssociationObjects,
+            this.externalsystem,
+            externalAssociationId,
+            null);
+        if ( foundExternalAssociationObject == null ){
+            throw new Error("de bond, voor externid "+externalAssociationId+" en het externe systeem "+this.externalsystem.getName()+", kan niet gevonden worden, importeer eerst de bonden");
+        }
+
+        let externalCompetitionId = externalcompetitionseason.getCompetition().getId().toString();
+        let foundExternalCompetitionObject = this.externalObjectRepository.getExternalObject(
+            this.externalCompetitionObjects,
+            this.externalsystem,
+            externalCompetitionId,
+            null);
+        if ( foundExternalCompetitionObject == null ){
+            throw new Error("de bond, voor externid "+externalCompetitionId+" en het externe systeem "+this.externalsystem.getName()+", kan niet gevonden worden, importeer eerst de competities");
+        }
+
+        let externalSeasonId = externalcompetitionseason.getSeason().getId().toString();
+        let foundExternalSeasonObject = this.externalObjectRepository.getExternalObject(
+            this.externalSeasonObjects,
+            this.externalsystem,
+            externalSeasonId,
+            null);
+        if ( foundExternalSeasonObject == null ){
+            throw new Error("de bond, voor externid "+externalSeasonId+" en het externe systeem "+this.externalsystem.getName()+", kan niet gevonden worden, importeer eerst de seizoen");
+        }
+
+
+        let json = {
+            "association": this.associationRepos.objectToJsonHelper( foundExternalAssociationObject.getImportableObject() ),
+            "competition": this.competitionRepos.objectToJsonHelper( foundExternalCompetitionObject.getImportableObject() ),
+            "season": this.seasonRepos.objectToJsonHelper( foundExternalSeasonObject.getImportableObject() )
+        };
+
+        this.repos.createObject( json )
+            .subscribe(
+                /* happy path */ competitionseason => {
+                    this.competitionseasons.push(competitionseason);
+
+                    this.externalObjectRepository.createObject( this.repos, competitionseason, externalcompetitionseason.getId().toString(), this.externalsystem )
+                        .subscribe(
+                            /* happy path */ externalobject => {
+                                this.externalobjects.push(externalobject);
+                            },
+                            /* error path */ e => { this.message = { "type": "danger", "message": e}; this.loading = false; },
+                            /* onComplete */ () => this.loading = false
+                        );
+
+                },
+                /* error path */ e => { this.message = { "type": "danger", "message": e}; this.loading = false; },
+                /* onComplete */ () => this.loading = false
+            );
     }
 
     goBack(): void {
@@ -334,8 +372,8 @@ export class CompetitionSeasonsExternalComponent implements OnInit{
         return this.externalObjectRepository.getExternalObject(
             this.externalobjects,
             this.externalsystem,
-            importableObject != null ? importableObject.getId().toString() : null,
-            null)
+            externalid,
+            importableObject);
     }
 
     private getCompetitionSeason( externalcompetitionseason: CompetitionSeason): CompetitionSeason

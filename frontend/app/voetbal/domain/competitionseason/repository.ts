@@ -17,6 +17,7 @@ export class CompetitionSeasonRepository {
 
     private url : string;
     private http: Http;
+    private objects: CompetitionSeason[];
 
     constructor( http: Http,
          private associationRepository: AssociationRepository,
@@ -53,8 +54,19 @@ export class CompetitionSeasonRepository {
 
     getObjects(): Observable<CompetitionSeason[]>
     {
+        if ( this.objects != null ){
+            return Observable.create(observer => {
+                observer.next(this.objects);
+                observer.complete();
+            });
+        }
+
         return this.http.get(this.url, new RequestOptions({ headers: this.getHeaders() }) )
-            .map((res) => this.jsonArrayToObject(res.json()))
+            .map((res) => {
+                let objects = this.jsonArrayToObject(res.json());
+                this.objects = objects;
+                return this.objects;
+            })
             .catch( this.handleError );
     }
 
@@ -80,7 +92,15 @@ export class CompetitionSeasonRepository {
 
     jsonToObjectHelper( json : any ): CompetitionSeason
     {
-        // console.log(json);
+        if ( this.objects != null ){
+            let foundObjects = this.objects.filter(
+                objectIt => objectIt.getId() == json.id
+            );
+            if ( foundObjects.length == 1) {
+                return foundObjects.shift();
+            }
+        }
+
         let association = this.associationRepository.jsonToObjectHelper(json.association);
         let competition = this.competitionRepository.jsonToObjectHelper(json.competition);
         let season = this.seasonRepository.jsonToObjectHelper(json.season);

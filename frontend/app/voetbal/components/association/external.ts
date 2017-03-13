@@ -56,14 +56,12 @@ export class AssociationsExternalComponent implements OnInit{
                 .subscribe(
                     /* happy path */ associations => {
                         this.associations = associations;
-                        observer.next(this.associations );
-                        if ( this.externalsystems != null ){
+                        if ( this.associations != null && this.externalsystems  ){
+                            observer.next(true);
                             observer.complete();
                         }
                     },
-                    /* error path */ e => {
-                        this.message = {"type": "danger", "message": e};
-                    }
+                    /* error path */ e => { this.message = {"type": "danger", "message": e}; }
                 );
 
             this.reposExternalSystem.getObjects()
@@ -72,41 +70,30 @@ export class AssociationsExternalComponent implements OnInit{
                         this.externalsystems = externalsystems.filter(
                             externalsystem => externalsystem.hasAvailableExportClass(this.classname)
                         );
-                        observer.next(this.externalsystems );
-                        if ( this.associations != null ){
+                        if ( this.associations != null && this.externalsystems  ){
+                            observer.next(true);
                             observer.complete();
                         }
                     },
-                    /* error path */ e => {
-                        this.message = {"type": "danger", "message": e};
-                    }
+                    /* error path */ e => { this.message = {"type": "danger", "message": e}; }
                 );
         });
 
         observables
             .subscribe(
-                /* happy path */ test => {
-                    if ( this.associations != null && this.externalsystems != null && this.externalobjects == null ){
-                        this.externalObjectRepository.getObjects(this.repos)
-                            .subscribe(
-                                /* happy path */ externalobjects => {
-                                    this.externalobjects = externalobjects;
-                                    console.log(externalobjects);
-                                },
-                                /* error path */ e => {
-                                    this.message = {"type": "danger", "message": e};
-                                },
-                                /* onComplete */ () => {
-                                }
-                            );
-                        //
-                    }
+                /* happy path */ result => {
+                    this.externalObjectRepository.getObjects(this.repos)
+                        .subscribe(
+                            /* happy path */ externalobjects => {
+                                this.externalobjects = externalobjects;
+                            },
+                            /* error path */ e => { this.message = {"type": "danger", "message": e}; },
+                            /* onComplete */ () => {}
+                        );
+
                 },
-                /* error path */ e => {
-                    this.message = {"type": "danger", "message": e};
-                },
-                /* onComplete */ () => {
-                }
+                /* error path */ e => { this.message = {"type": "danger", "message": e}; },
+                /* onComplete */ () => { }
             );
     }
 
@@ -132,16 +119,13 @@ export class AssociationsExternalComponent implements OnInit{
         modalRef.result.then((association) => {
             this.associations.push( association );
             this.message = { "type": "success", "message": "bond("+association.getName()+") toegevoegd"};
-        }/*, (reason) => {
-         modalRef.closeResult = reason;
-         }*/);
+        }, (reason) => {
+            this.message = { "type": "danger", "message": reason};
+        });
     }
 
     onEdit( association: Association ): void {
         this.message = null;
-        /*let association = this.associations.find( function(item: Association) {
-         return ( item.getId() == associationId );
-         }, associationId);*/
 
         if ( association == null) {
             this.message = { "type": "danger", "message": "de bond kan niet gewijzigd worden"};

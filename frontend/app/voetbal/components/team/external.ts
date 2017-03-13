@@ -64,14 +64,12 @@ export class TeamsExternalComponent implements OnInit{
                 .subscribe(
                     /* happy path */ teams => {
                         this.teams = teams;
-                        observer.next(this.teams );
-                        if ( this.externalsystems != null ){
+                        if ( this.teams != null && this.externalsystems  ){
+                            observer.next(true);
                             observer.complete();
                         }
                     },
-                    /* error path */ e => {
-                        this.message = {"type": "danger", "message": e};
-                    }
+                    /* error path */ e => { this.message = {"type": "danger", "message": e}; }
                 );
 
             this.reposExternalSystem.getObjects()
@@ -80,36 +78,29 @@ export class TeamsExternalComponent implements OnInit{
                         this.externalsystems = externalsystems.filter(
                             externalsystem => externalsystem.hasAvailableExportClass(this.classname)
                         );
-                        observer.next(this.externalsystems );
-                        if ( this.associations != null ){
+                        if ( this.teams != null && this.externalsystems  ){
+                            observer.next(true);
                             observer.complete();
                         }
                     },
-                    /* error path */ e => {
-                        this.message = {"type": "danger", "message": e};
-                    }
+                    /* error path */ e => { this.message = {"type": "danger", "message": e}; }
                 );
         });
 
         observables
             .subscribe(
                 /* happy path */ test => {
-                    if ( this.teams != null && this.externalsystems != null && this.externalobjects == null ){
-                        this.externalObjectRepository.getObjects(this.repos)
-                            .subscribe(
-                                /* happy path */ externalobjects => {
-                                    this.externalobjects = externalobjects;
-                                },
-                                /* error path */ e => { this.message = {"type": "danger", "message": e}; },
-                                /* onComplete */ () => {}
-                            );
-                    }
+                    this.externalObjectRepository.getObjects(this.repos)
+                        .subscribe(
+                            /* happy path */ externalobjects => {
+                                this.externalobjects = externalobjects;
+                            },
+                            /* error path */ e => { this.message = {"type": "danger", "message": e}; },
+                            /* onComplete */ () => {}
+                        );
                 },
-                /* error path */ e => {
-                    this.message = {"type": "danger", "message": e};
-                },
-                /* onComplete */ () => {
-                }
+                /* error path */ e => { this.message = {"type": "danger", "message": e}; },
+                /* onComplete */ () => {}
             );
     }
 
@@ -132,13 +123,10 @@ export class TeamsExternalComponent implements OnInit{
             .subscribe(
                 /* happy path */ externalobjects => {
                     this.externalAssociationObjects = externalobjects;
-                    console.log(externalobjects);
                 },
                 /* error path */ e => { this.message = {"type": "danger", "message": e}; },
                 /* onComplete */ () => {}
             );
-
-
     }
 
     onSelectCompetitionSeason( competitionseason: CompetitionSeason ): void {
@@ -263,7 +251,8 @@ export class TeamsExternalComponent implements OnInit{
 
         let json = { "name": externalteam.getName(),
             "abbreviation" : externalteam.getAbbreviation(),
-            "association": this.associationRepos.objectToJsonHelper( foundExternalAssociationObject.getImportableObject() ) };
+            "association": this.associationRepos.objectToJsonHelper( foundExternalAssociationObject.getImportableObject() )
+        };
 
         this.repos.createObject( json )
             .subscribe(

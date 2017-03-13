@@ -38,13 +38,11 @@ export class SeasonsComponent implements OnInit{
 
     ngOnInit(): void {
 
-        // this.repos.getObjects().forEach( seasons => this.seasons = seasons);
-        // this.error = null;
-
         this.repos.getObjects()
             .subscribe(
                 /* happy path */ seasons => {
                     this.seasons = seasons;
+                    console.log(seasons);
                 },
                 /* error path */ e => {},
                 /* onComplete */ () => {}
