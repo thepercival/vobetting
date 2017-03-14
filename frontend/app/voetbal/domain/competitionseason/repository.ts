@@ -82,12 +82,20 @@ export class CompetitionSeasonRepository {
 
     getObject( id: number): Observable<CompetitionSeason>
     {
-        let url = this.url + '/'+id;
-        return this.http.get(url)
-        // ...and calling .json() on the response to return data
-            .map((res) => this.jsonToObjectHelper(res.json()))
-            //...errors if any
-            .catch((error:any) => Observable.throw(error.message || 'Server error' ));
+        let observable = Observable.create(observer => {
+            this.getObjects().subscribe(
+                /* happy path */ competitionseasons => {
+                    let competitionseason = competitionseasons.filter(
+                        competitionseasonsIt => competitionseasonsIt.getId() == id
+                    ).shift();
+                    observer.next(competitionseason);
+                    observer.complete();
+                },
+                /* error path */ e => { this.handleError(e) },
+                /* onComplete */ () => { }
+            );
+        });
+        return observable;
     }
 
     jsonToObjectHelper( json : any ): CompetitionSeason

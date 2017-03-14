@@ -10,6 +10,7 @@ export class Round {
     protected id: number;
     protected competitionseason: CompetitionSeason;
     protected number: number;
+    protected nrofheadtoheadmatches: number;
     protected name: string;
     protected poules: Poule[] = [];
 
@@ -43,6 +44,14 @@ export class Round {
 
     setNumber( number: number): void {
         this.number = number;
+    };
+
+    getNrofheadtoheadmatches(): number {
+        return this.nrofheadtoheadmatches;
+    };
+
+    setNrofheadtoheadmatches( nrofheadtoheadmatches: number): void {
+        this.nrofheadtoheadmatches = nrofheadtoheadmatches;
     };
 
     getName(): string {

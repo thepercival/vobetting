@@ -19,11 +19,15 @@ export class CompetitionSeason {
     static readonly STATE_CREATED = 1;
     static readonly STATE_PUBLISHED = 2;
 
+    static readonly QUALIFICATION_RULE_WC = 1;
+    static readonly QUALIFICATION_RULE_EC = 2;
+
     // constructor
     constructor( association: Association, competition: Competition, season: Season ){
         this.setAssociation(association);
         this.setCompetition(competition);
         this.setSeason(season);
+        this.setQualificationrule(CompetitionSeason.QUALIFICATION_RULE_WC);
     }
 
     getId(): any {

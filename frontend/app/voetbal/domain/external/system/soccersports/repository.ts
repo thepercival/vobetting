@@ -409,6 +409,8 @@ export class ExternalSystemSoccerSportsRepository{
             let round = new Round(competitionSeason, firstroundNumber);
             {
                 round.setId(firstroundNumber);
+                // @TODO CALCULATE WITH NROFTEAMS AND NROFGAMEROUNDS
+                round.setNrofheadtoheadmatches(2);
 
                 let firstpouleNumber: number = 1;
                 let poule = new Poule(round, firstpouleNumber);
