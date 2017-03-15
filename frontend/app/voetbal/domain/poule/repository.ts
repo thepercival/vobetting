@@ -82,7 +82,7 @@ export class PouleRepository {
             "id":object.getId(),
             "number":object.getNumber(),
             "name":object.getName(),
-            "poules":this.pouleplaceRepos.objectsToJsonHelper(object.getPlaces())
+            "places":this.pouleplaceRepos.objectsToJsonHelper(object.getPlaces())
         };
         return json;
     }
