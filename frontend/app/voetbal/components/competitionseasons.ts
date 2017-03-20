@@ -59,6 +59,7 @@ export class CompetitionSeasonsComponent implements OnInit{
                         }
                         return 0;
                     });
+                    console.log( this.competitionseasons );
                 },
                 /* error path */ e => {},
                 /* onComplete */ () => {}

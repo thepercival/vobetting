@@ -153,6 +153,8 @@ export class CompetitionSeasonStructureComponent implements OnInit{
 
     onImportExternal(externalrounds): void
     {
+        console.log(this.externalTeamObjects);
+
         for( let i = 0 ; i < externalrounds.length ; i++ ) {
             let round = externalrounds[i];
             let poules = round.getPoules();
@@ -164,6 +166,7 @@ export class CompetitionSeasonStructureComponent implements OnInit{
                     let externalTeamId = pouleplace.getTeam().getId().toString();
                     let appTeam = null;
 
+                    console.log(pouleplace.getTeam());
                     let externalTeamObject = this.externalObjectRepository.getExternalObject(
                         this.externalTeamObjects,
                         this.externalsystem,
@@ -191,6 +194,9 @@ export class CompetitionSeasonStructureComponent implements OnInit{
                 .subscribe(
                     /* happy path */ round => {
                         this.rounds.push( round );
+                        console.log(this.rounds);
+                        // reset external teams
+                        this.onSelectExternalSystem( this.externalsystem );
                     },
                     /* error path */ e => {
                         this.message = { "type": "danger", "message": e};

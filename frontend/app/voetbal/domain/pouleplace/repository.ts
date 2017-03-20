@@ -61,8 +61,9 @@ export class PoulePlaceRepository {
     {
         let pouleplace = new PoulePlace(poule, json.number);
         poule.setName(json.name);
-        let team = this.teamRepos.jsonToObjectHelper(json.team);
-        pouleplace.setTeam(team);
+        if (json.team){
+            pouleplace.setTeam(this.teamRepos.jsonToObjectHelper(json.team));
+        }
         poule.getPlaces().push(pouleplace);
         return pouleplace;
     }

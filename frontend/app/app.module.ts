@@ -48,6 +48,7 @@ import { CompetitionSeasonStructureComponent } from './voetbal/components/compet
 import { RoundRepository }  from './voetbal/domain/round/repository';
 import { PouleRepository }  from './voetbal/domain/poule/repository';
 import { PoulePlaceRepository }  from './voetbal/domain/pouleplace/repository';
+import { GameRepository }  from './voetbal/domain/game/repository';
 import { TeamsComponent }  from './voetbal/components/teams';
 import { TeamRepository }  from './voetbal/domain/team/repository';
 import { TeamAddModalContent } from './voetbal/components/team/modal/add';
@@ -108,6 +109,7 @@ import { ExternalObjectRepository }  from './voetbal/domain/external/object/repo
         SeasonRepository,
         CompetitionSeasonRepository,
         RoundRepository, PouleRepository, PoulePlaceRepository,
+        GameRepository,
         TeamRepository,
         ExternalSystemRepository,
         ExternalObjectRepository

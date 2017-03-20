@@ -17,7 +17,7 @@
                             <li *ngFor="let poule of round.getPoules()">
                                 poule y
                                 <ul>
-                                    <li *ngFor="let pouleplace of poule.getPoulePlaces()">
+                                    <li *ngFor="let pouleplace of poule.getPlaces()">
                                         <span>{{pouleplace.getTeam() ? pouleplace.getTeam().getName() : null }}</span>
                                     </li>
                                 </ul>

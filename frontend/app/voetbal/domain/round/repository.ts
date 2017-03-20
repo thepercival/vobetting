@@ -78,7 +78,7 @@ export class RoundRepository {
         round.setId(json.id);
         round.setNrofheadtoheadmatches(json.nrofheadtoheadmatches);
         round.setName(json.name);
-        // this.pouleRepos.jsonArrayToObject( json.poules, round );
+        this.pouleRepos.jsonArrayToObject( json.poules, round );
         return round;
     }
 
