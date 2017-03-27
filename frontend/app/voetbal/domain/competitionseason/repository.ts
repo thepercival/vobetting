@@ -82,6 +82,7 @@ export class CompetitionSeasonRepository {
 
     getObject( id: number): Observable<CompetitionSeason>
     {
+        console.log('id',id);
         let observable = Observable.create(observer => {
             this.getObjects().subscribe(
                 /* happy path */ competitionseasons => {

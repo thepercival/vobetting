@@ -4,6 +4,7 @@
 
 import { Poule } from './poule';
 import { Team } from './team';
+import { Game } from './game';
 
 export class PoulePlace {
     protected id: number;
@@ -59,4 +60,8 @@ export class PoulePlace {
     setTeam( team: Team): void {
         this.team = team;
     };
+
+    getGames(): Game[]{
+        return this.getPoule().getGames().filter( (gameIt) => gameIt.getHomePoulePlace() == this || gameIt.getAwayPoulePlace() == this );
+    }
 }

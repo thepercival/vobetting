@@ -45,6 +45,7 @@ import { CompetitionSeasonEditModalContent } from './voetbal/components/competit
 import { CompetitionSeasonAddExternalModalContent } from './voetbal/components/competitionseason/modal/addexternal';
 import { CompetitionSeasonsExternalComponent } from './voetbal/components/competitionseason/external';
 import { CompetitionSeasonStructureComponent } from './voetbal/components/competitionseason/structure/external';
+import { CompetitionSeasonPlanningComponent } from './voetbal/components/competitionseason/planning/external';
 import { RoundRepository }  from './voetbal/domain/round/repository';
 import { PouleRepository }  from './voetbal/domain/poule/repository';
 import { PoulePlaceRepository }  from './voetbal/domain/pouleplace/repository';
@@ -60,6 +61,7 @@ import { ExternalSystemRepository }  from './voetbal/domain/external/system/repo
 import { ExternalSystemAddModalContent } from './voetbal/components/external/system/modal/add';
 import { ExternalSystemEditModalContent } from './voetbal/components/external/system/modal/edit';
 import { ExternalObjectRepository }  from './voetbal/domain/external/object/repository';
+import { StructureService } from './voetbal/domain/structure/service';
 
 
 @NgModule({
@@ -85,7 +87,7 @@ import { ExternalObjectRepository }  from './voetbal/domain/external/object/repo
         SeasonAddExternalModalContent, SeasonsExternalComponent,
         CompetitionSeasonsComponent, CompetitionSeasonAddModalContent, CompetitionSeasonEditModalContent,
         CompetitionSeasonAddExternalModalContent, CompetitionSeasonsExternalComponent,
-        CompetitionSeasonStructureComponent,
+        CompetitionSeasonStructureComponent, CompetitionSeasonPlanningComponent,
         TeamsComponent, TeamAddModalContent, TeamEditModalContent,
         TeamAddExternalModalContent, TeamsExternalComponent,
         ExternalSystemsComponent, ExternalSystemAddModalContent, ExternalSystemEditModalContent
@@ -112,7 +114,8 @@ import { ExternalObjectRepository }  from './voetbal/domain/external/object/repo
         GameRepository,
         TeamRepository,
         ExternalSystemRepository,
-        ExternalObjectRepository
+        ExternalObjectRepository,
+        StructureService
     ],
     bootstrap:    [
         AppComponent

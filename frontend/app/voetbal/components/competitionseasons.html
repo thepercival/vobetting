@@ -17,7 +17,7 @@
     <tr *ngFor="let competitionseason of competitionseasons">
         <td style="text-align: center"><a type="button" [class.disabled]="true" href="javascript:void(0)" class="btn btn-secondary" (click)="onEdit(competitionseason)"><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
         <td style="text-align: center"><a type="button" href="#" [routerLink]="['/competitionseason/structure', competitionseason.getId()]" class="btn btn-secondary"><i class="fa fa-industry" aria-hidden="true"></i></a></td>
-        <td style="text-align: center"><a *ngIf="competitionseason.hasStructure()" type="button" href="#" [routerLink]="['/competitionseason/games', competitionseason.getId()]" class="btn btn-secondary"><i class="fa fa-calendar" aria-hidden="true"></i></a></td>
+        <td style="text-align: center"><a *ngIf="competitionseason.hasStructure()" type="button" href="#" [routerLink]="['/competitionseason/planning', competitionseason.getId()]" class="btn btn-secondary"><i class="fa fa-calendar" aria-hidden="true"></i></a></td>
         <td>{{competitionseason.getCompetition().getName()}}</td>
         <td>{{competitionseason.getSeason().getName()}}</td>
         <td>{{competitionseason.getStateDescription()}}</td>

@@ -9,6 +9,8 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { PoulePlaceRepository } from '../pouleplace/repository';
 import { Poule } from '../poule';
+import { GameRepository } from '../game/repository';
+import { Game } from '../game';
 import { Round } from '../round';
 
 @Injectable()
@@ -17,7 +19,7 @@ export class PouleRepository {
     private url : string;
     private http: Http;
 
-    constructor( http: Http, private pouleplaceRepos: PoulePlaceRepository )
+    constructor( http: Http, private pouleplaceRepos: PoulePlaceRepository, private gameRepos: GameRepository )
     {
         this.http = http;
         this.url = "http://localhost:2999/voetbal/" + this.getUrlpostfix();
@@ -62,6 +64,7 @@ export class PouleRepository {
         let poule = new Poule(round, json.number);
         poule.setName(json.name);
         this.pouleplaceRepos.jsonArrayToObject( json.places, poule );
+        this.gameRepos.jsonArrayToObject( json.games, poule );
         round.getPoules().push(poule);
         return poule;
     }

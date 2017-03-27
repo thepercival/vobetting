@@ -5,6 +5,7 @@
 import { Round } from './round';
 import { PoulePlace } from './pouleplace';
 import { Team } from './team';
+import { Game } from './game';
 
 export class Poule {
     protected id: number;
@@ -12,6 +13,7 @@ export class Poule {
     protected number: number;
     protected name: string;
     protected places: PoulePlace[] = [];
+    protected games: Game[];
 
     static readonly classname = "Poule";
 
@@ -63,5 +65,9 @@ export class Poule {
             teams.push(pouleplace.getTeam());
         }
         return teams;
+    }
+
+    getGames(): Game[] {
+        return this.games;
     }
 }

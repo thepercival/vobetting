@@ -5,6 +5,7 @@
 import { CompetitionSeason } from './competitionseason';
 import { Poule } from './poule';
 import { Team } from './team';
+import { Game } from './game';
 
 export class Round {
     protected id: number;
@@ -75,5 +76,16 @@ export class Round {
             }
         }
         return teams;
+    }
+
+    getGames(): Game[]
+    {
+        let games = [];
+        this.getPoules().forEach( function( poule ){
+            poule.getGames().forEach( function( game ){
+                games.push(game);
+            });
+        });
+        return games;
     }
 }

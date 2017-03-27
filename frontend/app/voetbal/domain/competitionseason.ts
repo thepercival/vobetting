@@ -101,4 +101,6 @@ export class CompetitionSeason {
     getName(): string {
         return this.getCompetition().getName() + ' ' + this.getSeason().getName();
     }
+
+
 }
