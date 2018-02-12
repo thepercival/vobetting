@@ -1,0 +1,16 @@
+<div class="container-fluid home">
+  <div class="row justify-content-center">
+    <div class="col-xs-12 col-sm-8 col-md-8 col-lg-6">
+      <h1 align="center">
+        startpagina
+      </h1>
+      <p *ngIf="alert">
+        <ngb-alert [type]="alert.type" (close)="alert = undefined;">{{ alert.message }}</ngb-alert>
+      </p>
+
+      <button *ngIf="isLoggedIn()" routerLink="/admin/home" routerLinkActive="active" class="btn btn-primary" type="button" style="cursor:pointer;">
+        ga naar admin-gedeelte
+      </button>
+    </div>
+  </div>
+</div>
