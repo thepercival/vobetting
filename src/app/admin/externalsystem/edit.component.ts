@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IExternalSystem, ExternalSystem, ExternalSystemRepository } from 'ngx-sport';
+import { ExternalSystem, ExternalSystemRepository, IExternalSystem } from 'ngx-sport';
 import { Subscription } from 'rxjs/Subscription';
 
 import { IAlert } from '../../app.definitions';
@@ -14,7 +14,6 @@ import { IAlert } from '../../app.definitions';
 export class ExternalSystemEditComponent implements OnInit {
 
   protected sub: Subscription;
-  loading = false;
   returnUrl: string;
   returnUrlParam: number;
   returnUrlQueryParamKey: string;
@@ -62,10 +61,10 @@ export class ExternalSystemEditComponent implements OnInit {
         .subscribe(
         /* happy path */(externalSystems: ExternalSystem[]) => {
           this.externalSystems = externalSystems;
-          this.postInit(+params.externalSystemId);
+          this.postInit(+params.id);
         },
         /* error path */ e => { },
-        /* onComplete */() => { }
+        /* onComplete */() => { this.processing = false; }
         );
     });
     this.route.queryParamMap.subscribe(params => {
@@ -138,7 +137,7 @@ export class ExternalSystemEditComponent implements OnInit {
   edit() {
     this.processing = true;
 
-    if (this.isNameDuplicate(this.customForm.controls.initials.value, this.externalSystem)) {
+    if (this.isNameDuplicate(this.customForm.controls.name.value, this.externalSystem)) {
       this.setAlert('danger', 'de naam bestaan al');
       this.processing = false;
       return;
@@ -185,28 +184,10 @@ export class ExternalSystemEditComponent implements OnInit {
   }
 
   isNameDuplicate(name: string, externalSystem?: ExternalSystem): boolean {
-    return true;
-    // const referees = this.externalSystemRepos.getCompetitionseason().getReferees();
-    // return referees.find(refereeIt => {
-    //   return (initials === refereeIt.getInitials() && (refereeId === undefined || refereeIt.getId() === undefined));
-    // }) !== undefined;
+    return this.externalSystems.find(externalSystemIt => {
+      return (name === externalSystemIt.getName() && (externalSystem === undefined || externalSystem !== externalSystemIt));
+    }) !== undefined;
   }
-
-  // setInitials(initials) {
-  //     this.error = undefined;
-  //     if (initials.length < this.validations.minlengthinitials || initials.length > this.validations.maxlengthinfo) {
-  //         return;
-  //     }
-  //     this.model.initials = initials;
-  // }
-
-  // setName(name) {
-  //     this.error = undefined;
-  //     if (name.length < this.validations.minlengthinitials || name.length > this.validations.maxlengthinfo) {
-  //         return;
-  //     }
-  //     this.model.name = name;
-  // }
 
   protected setAlert(type: string, message: string) {
     this.alert = { 'type': type, 'message': message };

@@ -1,6 +1,6 @@
 <div class="row justify-content-center mx-0" style="min-height:4.5rem;">
   <div class="col-xs-12 col-sm-8 col-md-8 col-lg-6 mt-1">
-    <h1 class="">externe systemen</h1>
+    <h1 class="">seizoen</h1>
     <ngb-alert *ngIf="alert" [type]="alert.type" [dismissible]="true" (close)="alert = undefined;">
       <i *ngIf="processing" class="fa fa-spinner fa-spin"></i> {{ alert.message }}</ngb-alert>
   </div>
@@ -12,6 +12,8 @@
         <tr>
           <th></th>
           <th>naam</th>
+          <th class="d-none d-sm-table-cell">start</th>
+          <th class="d-none d-sm-table-cell">eind</th>
           <th style="text-align: right;">
             <button type="button" class="btn btn-sm btn-outline-primary" (click)="add()" [disabled]="processing">
               <i class="fa fa-plus"></i>
@@ -20,17 +22,19 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let externalSystem of externalSystems">
+        <tr *ngFor="let season of seasons">
           <td>
-            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing" (click)="edit(externalSystem)">
+            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing" (click)="edit(season)">
               <span class="fa fa-pencil"></span>
             </button>
           </td>
           <td>
-            <span>{{externalSystem.getName()}}</span>
+            <span>{{season.getName()}}</span>
           </td>
+          <td class="d-none d-sm-table-cell">{{season.getStartDateTime() | date:"yyyy-MM-dd"}}</td>
+          <td class="d-none d-sm-table-cell">{{season.getEndDateTime() | date:"yyyy-MM-dd"}}</td>
           <td style="text-align: right;">
-            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing" (click)="remove(externalSystem);">
+            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing" (click)="remove(season);">
               <span class="fa fa-remove"></span>
             </button>
           </td>

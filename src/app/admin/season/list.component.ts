@@ -1,30 +1,30 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ExternalSystem, ExternalSystemRepository } from 'ngx-sport';
+import { Season, SeasonRepository } from 'ngx-sport';
 
 import { IAlert } from '../../app.definitions';
 
 @Component({
-  selector: 'app-externalsystem-list',
+  selector: 'app-season-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.css']
 })
-export class ExternalSystemListComponent implements OnInit {
+export class SeasonListComponent implements OnInit {
 
-  externalSystems: ExternalSystem[];
+  seasons: Season[];
   alert: IAlert;
   processing = true;
 
   constructor(
     private router: Router,
-    private externalSystemRepos: ExternalSystemRepository
+    private seasonRepos: SeasonRepository
   ) { }
 
   ngOnInit() {
-    this.externalSystemRepos.getObjects()
+    this.seasonRepos.getObjects()
       .subscribe(
-        /* happy path */(externalSystems: ExternalSystem[]) => {
-        this.externalSystems = externalSystems;
+        /* happy path */(seasons: Season[]) => {
+        this.seasons = seasons;
       },
         /* error path */ e => { },
         /* onComplete */() => { this.processing = false; }
@@ -35,31 +35,31 @@ export class ExternalSystemListComponent implements OnInit {
     this.linkToEdit();
   }
 
-  edit(externalSystem: ExternalSystem) {
-    this.linkToEdit(externalSystem);
+  edit(season: Season) {
+    this.linkToEdit(season);
   }
 
-  linkToEdit(externalSystem?: ExternalSystem) {
+  linkToEdit(season?: Season) {
     this.router.navigate(
-      ['/admin/externalsystem/edit', externalSystem ? externalSystem.getId() : 0],
+      ['/admin/season/edit', season ? season.getId() : 0],
       {
         queryParams: {
-          returnAction: '/admin/externalsystem'
+          returnAction: '/admin/season'
         }
       }
     );
   }
 
-  remove(externalSystem: ExternalSystem) {
-    this.setAlert('info', 'extern systeem verwijderen..');
+  remove(season: Season) {
+    this.setAlert('info', 'seizoen verwijderen..');
     this.processing = true;
 
-    this.externalSystemRepos.removeObject(externalSystem)
+    this.seasonRepos.removeObject(season)
       .subscribe(
-        /* happy path */ externalSystemRes => {
-        const index = this.externalSystems.indexOf(externalSystem);
+        /* happy path */ seasonRes => {
+        const index = this.seasons.indexOf(season);
         if (index > -1) {
-          this.externalSystems.splice(index, 1);
+          this.seasons.splice(index, 1);
         }
         this.resetAlert();
       },
