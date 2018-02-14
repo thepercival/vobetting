@@ -1,7 +1,7 @@
 <div class="row justify-content-center mx-0" style="min-height:4.5rem;">
   <div class="col-xs-12 col-sm-8 col-md-8 col-lg-6 mt-1">
     <h1 class="">
-      <span>externe systemen</span>
+      <span>bonden</span>
       <button routerLink="/admin/home" routerLinkActive="active" type="button" class="btn btn-outline-secondary btn-sm">
         <i class="fa fa-level-up fa-rotate-270"></i>
       </button>
@@ -17,6 +17,7 @@
         <tr>
           <th></th>
           <th>naam</th>
+          <th class="d-none d-sm-table-cell">parent</th>
           <th style="text-align: right;">
             <button type="button" class="btn btn-sm btn-outline-primary" (click)="add()" [disabled]="processing">
               <i class="fa fa-plus"></i>
@@ -25,17 +26,19 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let externalSystem of externalSystems">
+        <tr *ngFor="let association of associations">
           <td>
-            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing" (click)="edit(externalSystem)">
+            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing" (click)="edit(association)">
               <span class="fa fa-pencil"></span>
             </button>
           </td>
           <td>
-            <span>{{externalSystem.getName()}}</span>
+            <span>{{association.getName()}}</span>
           </td>
+          <td class="d-none d-sm-table-cell">{{association.getParent() ? association.getParent().getName(): ''}}</td>
           <td style="text-align: right;">
-            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing" (click)="remove(externalSystem);">
+            <button *ngIf="association.getChildren().length === 0" type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing"
+              (click)="remove(association);">
               <span class="fa fa-remove"></span>
             </button>
           </td>

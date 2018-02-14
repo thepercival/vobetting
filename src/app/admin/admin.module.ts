@@ -6,6 +6,8 @@ import { ExternalSystemRepository, SeasonRepository } from 'ngx-sport';
 
 import { UserRepository } from '../user/repository';
 import { AdminRoutingModule } from './admin-routing.module';
+import { AssociationEditComponent } from './association/edit.component';
+import { AssociationListComponent } from './association/list.component';
 import { ExternalSystemEditComponent } from './externalsystem/edit.component';
 import { ExternalSystemListComponent } from './externalsystem/list.component';
 import { HomeComponent } from './home/home.component';
@@ -23,6 +25,7 @@ import { SeasonListComponent } from './season/list.component';
   declarations: [HomeComponent,
     ExternalSystemListComponent, ExternalSystemEditComponent,
     SeasonListComponent, SeasonEditComponent,
+    AssociationListComponent, AssociationEditComponent,
     HomeComponent],
   providers: [UserRepository, ExternalSystemRepository, SeasonRepository]
 })

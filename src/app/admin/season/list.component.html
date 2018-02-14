@@ -1,6 +1,11 @@
 <div class="row justify-content-center mx-0" style="min-height:4.5rem;">
   <div class="col-xs-12 col-sm-8 col-md-8 col-lg-6 mt-1">
-    <h1 class="">seizoen</h1>
+    <h1 class="">
+      <span>seizoenen</span>
+      <button routerLink="/admin/home" routerLinkActive="active" type="button" class="btn btn-outline-secondary btn-sm">
+        <i class="fa fa-level-up fa-rotate-270"></i>
+      </button>
+    </h1>
     <ngb-alert *ngIf="alert" [type]="alert.type" [dismissible]="true" (close)="alert = undefined;">
       <i *ngIf="processing" class="fa fa-spinner fa-spin"></i> {{ alert.message }}</ngb-alert>
   </div>

@@ -3,8 +3,8 @@
     <div class="col-xs-12 col-sm-8 col-md-8 col-lg-6">
       <div class="mb-4">
         <h1>
-          <span>seizoen</span>
-          <span> {{season ? 'wijzigen' : 'toevoegen'}}</span>
+          <span>bond</span>
+          <span> {{association ? 'wijzigen' : 'toevoegen'}}</span>
           <button (click)="navigateBack()" type="button" class="btn btn-outline-secondary btn-sm">
             <i class="fa fa-level-up fa-rotate-270"></i>
           </button>
@@ -23,43 +23,31 @@
         </div>
         <div class="form-group row">
           <div class="col-3">
-            <label for="dp" class="col-form-label">startdatum</label>
+            <label for="description" class="col-form-label">omschrijving</label>
           </div>
           <div class="col-9">
-            <div class="input-group input-group-date">
-              <input class="form-control" placeholder="yyyy-mm-dd" id="dp" name="dp" [formControl]="customForm.controls.startDateTime"
-                [ngClass]="{ 'is-invalid': customForm.controls.startDateTime.invalid, 'is-valid': customForm.controls.startDateTime.valid }"
-                ngbDatepicker #d="ngbDatepicker" required>
-              <div class="input-group-append">
-                <span class="input-group-text" (click)="d.toggle()" style="cursor: pointer;">
-                  <i class="fa fa-calendar"></i>
-                </span>
-              </div>
-            </div>
+            <textarea class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.description.invalid, 'is-valid': customForm.controls.description.valid }"
+              name="description" id="description" [formControl]="customForm.controls.description" maxlength="{{validations.maxlengthdescription}}"
+              placeholder="max. {{validations.maxlengthdescription}} karakters"></textarea>
           </div>
         </div>
         <div class="form-group row">
           <div class="col-3">
-            <label for="dpEnd" class="col-form-label">einddatum</label>
+            <label for="parent" class="col-form-label">parent</label>
           </div>
           <div class="col-9">
-            <div class="input-group input-group-date">
-              <input class="form-control" placeholder="yyyy-mm-dd" id="dpEnd" name="dpEnd" [formControl]="customForm.controls.endDateTime"
-                [ngClass]="{ 'is-invalid': customForm.controls.endDateTime.invalid, 'is-valid': customForm.controls.endDateTime.valid }"
-                ngbDatepicker #dEnd="ngbDatepicker" required>
-              <div class="input-group-append">
-                <span class="input-group-text" (click)="dEnd.toggle()" style="cursor: pointer;">
-                  <i class="fa fa-calendar"></i>
-                </span>
-              </div>
-            </div>
+            <select id="parent" name="parent" class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.parent.invalid, 'is-valid': customForm.controls.parent.valid }"
+              [formControl]="customForm.controls.parent">
+              <option value="">kies..</option>
+              <option *ngFor="let associationIt of associations" [ngValue]="associationIt">{{associationIt.getName()}}</option>
+            </select>
           </div>
         </div>
         <ngb-alert *ngIf="alert" [type]="alert.type" style="width:100%;" [dismissible]="true" (close)="alert = undefined;">{{ alert.message }}</ngb-alert>
         <div class="form-group row justify-content-end">
           <div class="col-9">
             <button [disabled]="customForm.invalid" type="submit" class="btn btn-outline-primary">
-              <span>{{season ? 'wijzigen' : 'toevoegen'}}</span>
+              <span>{{association ? 'wijzigen' : 'toevoegen'}}</span>
               <i *ngIf="loading" class="fa fa-spinner fa-spin fa-fw"></i>
             </button>
           </div>
