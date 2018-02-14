@@ -2,17 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { Association, AssociationRepository, IAssociation } from 'ngx-sport';
+import { Competition, CompetitionRepository, ICompetition } from 'ngx-sport';
 import { Subscription } from 'rxjs/Subscription';
 
 import { IAlert } from '../../app.definitions';
 
 @Component({
-  selector: 'app-association-edit',
+  selector: 'app-competition-edit',
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.css']
 })
-export class AssociationEditComponent implements OnInit {
+export class CompetitionEditComponent implements OnInit {
 
   protected sub: Subscription;
   returnUrl: string;
@@ -22,17 +22,17 @@ export class AssociationEditComponent implements OnInit {
   public alert: IAlert;
   public processing = true;
   customForm: FormGroup;
-  associations: Association[];
-  association: Association;
+  competitions: Competition[];
+  competition: Competition;
 
-  validations: AssociationValidations = {
-    minlengthname: Association.MIN_LENGTH_NAME,
-    maxlengthname: Association.MAX_LENGTH_NAME,
-    maxlengthdescription: Association.MAX_LENGTH_DESCRIPTION
+  validations: CompetitionValidations = {
+    minlengthname: Competition.MIN_LENGTH_NAME,
+    maxlengthname: Competition.MAX_LENGTH_NAME,
+    maxlengthabbreviation: Competition.MAX_LENGTH_ABBREVIATION
   };
 
   constructor(
-    private associationRepos: AssociationRepository,
+    private competitionRepos: CompetitionRepository,
     private route: ActivatedRoute,
     private router: Router,
     fb: FormBuilder
@@ -43,17 +43,16 @@ export class AssociationEditComponent implements OnInit {
         Validators.minLength(this.validations.minlengthname),
         Validators.maxLength(this.validations.maxlengthname)
       ])],
-      description: ['', Validators.maxLength(this.validations.maxlengthdescription)],
-      parent: ['']
+      abbreviation: ['', Validators.maxLength(this.validations.maxlengthabbreviation)]
     });
   }
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
-      this.associationRepos.getObjects()
+      this.competitionRepos.getObjects()
         .subscribe(
-        /* happy path */(associations: Association[]) => {
-          this.associations = associations;
+        /* happy path */(competitions: Competition[]) => {
+          this.competitions = competitions;
           this.postInit(+params.id);
         },
         /* error path */ e => { },
@@ -74,17 +73,16 @@ export class AssociationEditComponent implements OnInit {
     if (id === undefined || id < 1) {
       return;
     }
-    this.association = this.associations.find(association => association.getId() === id);
-    if (this.association === undefined) {
+    this.competition = this.competitions.find(competition => competition.getId() === id);
+    if (this.competition === undefined) {
       return;
     }
-    this.customForm.controls.name.setValue(this.association.getName());
-    this.customForm.controls.description.setValue(this.association.getDescription());
-    this.customForm.controls.parent.setValue(this.association.getParent());
+    this.customForm.controls.name.setValue(this.competition.getName());
+    this.customForm.controls.abbreviation.setValue(this.competition.getAbbreviation());
   }
 
   save() {
-    if (this.association !== undefined) {
+    if (this.competition !== undefined) {
       this.edit();
     } else {
       this.add();
@@ -95,22 +93,20 @@ export class AssociationEditComponent implements OnInit {
     this.processing = true;
 
     const name = this.customForm.controls.name.value;
-    const description = this.customForm.controls.description.value;
-    const parent = this.customForm.controls.parent.value;
+    const abbreviation = this.customForm.controls.abbreviation.value;
 
     if (this.isNameDuplicate(this.customForm.controls.name.value)) {
       this.setAlert('danger', 'de naam bestaan al');
       this.processing = false;
       return;
     }
-    const association: IAssociation = {
+    const competition: ICompetition = {
       name: name,
-      description: description ? description : undefined,
-      parent: parent ? this.associationRepos.objectToJsonHelper(parent) : undefined
+      abbreviation: abbreviation ? abbreviation : undefined
     };
-    this.associationRepos.createObject(association)
+    this.competitionRepos.createObject(competition)
       .subscribe(
-        /* happy path */ associationRes => {
+        /* happy path */ competitionRes => {
         this.navigateBack();
       },
         /* error path */ e => { this.setAlert('danger', e); },
@@ -121,22 +117,20 @@ export class AssociationEditComponent implements OnInit {
   edit() {
     this.processing = true;
 
-    if (this.isNameDuplicate(this.customForm.controls.name.value, this.association)) {
+    if (this.isNameDuplicate(this.customForm.controls.name.value, this.competition)) {
       this.setAlert('danger', 'de naam bestaan al');
       this.processing = false;
       return;
     }
     const name = this.customForm.controls.name.value;
-    const description = this.customForm.controls.description.value;
-    const parent = this.customForm.controls.parent.value;
+    const abbreviation = this.customForm.controls.abbreviation.value;
 
-    this.association.setName(name);
-    this.association.setDescription(description ? description : undefined);
-    this.association.setParent(parent ? parent : undefined);
+    this.competition.setName(name);
+    this.competition.setAbbreviation(abbreviation ? abbreviation : undefined);
 
-    this.associationRepos.editObject(this.association)
+    this.competitionRepos.editObject(this.competition)
       .subscribe(
-        /* happy path */ associationRes => {
+        /* happy path */ competitionRes => {
         this.navigateBack();
       },
         /* error path */ e => { this.setAlert('danger', e); this.processing = false; },
@@ -161,9 +155,9 @@ export class AssociationEditComponent implements OnInit {
     this.router.navigate(this.getForwarUrl(), { queryParams: this.getForwarUrlQueryParams() });
   }
 
-  isNameDuplicate(name: string, association?: Association): boolean {
-    return this.associations.find(associationIt => {
-      return (name === associationIt.getName() && (association === undefined || association !== associationIt));
+  isNameDuplicate(name: string, competition?: Competition): boolean {
+    return this.competitions.find(competitionIt => {
+      return (name === competitionIt.getName() && (competition === undefined || competition !== competitionIt));
     }) !== undefined;
   }
 
@@ -184,8 +178,8 @@ export class AssociationEditComponent implements OnInit {
   }
 }
 
-export interface AssociationValidations {
+export interface CompetitionValidations {
   maxlengthname: number;
   minlengthname: number;
-  maxlengthdescription: number;
+  maxlengthabbreviation: number;
 }

@@ -4,6 +4,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthguardService } from '../auth/authguard.service';
 import { AssociationEditComponent } from './association/edit.component';
 import { AssociationListComponent } from './association/list.component';
+import { CompetitionEditComponent } from './competition/edit.component';
+import { CompetitionListComponent } from './competition/list.component';
 import { ExternalSystemEditComponent } from './externalsystem/edit.component';
 import { ExternalSystemListComponent } from './externalsystem/list.component';
 import { HomeComponent } from './home/home.component';
@@ -18,6 +20,8 @@ const routes: Routes = [
   { path: 'season/edit/:id', component: SeasonEditComponent, canActivate: [AuthguardService] },
   { path: 'association', component: AssociationListComponent, canActivate: [AuthguardService] },
   { path: 'association/edit/:id', component: AssociationEditComponent, canActivate: [AuthguardService] },
+  { path: 'competition', component: CompetitionListComponent, canActivate: [AuthguardService] },
+  { path: 'competition/edit/:id', component: CompetitionEditComponent, canActivate: [AuthguardService] },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', redirectTo: '' }
 ];
