@@ -78,6 +78,12 @@ export class AssociationEditComponent implements OnInit {
     if (this.association === undefined) {
       return;
     }
+    // remove association from all associations
+    const index = this.associations.indexOf(this.association);
+    if (index > -1) {
+      this.associations.splice(index, 1);
+    }
+
     this.customForm.controls.name.setValue(this.association.getName());
     this.customForm.controls.description.setValue(this.association.getDescription());
     this.customForm.controls.parent.setValue(this.association.getParent());
@@ -121,7 +127,7 @@ export class AssociationEditComponent implements OnInit {
   edit() {
     this.processing = true;
 
-    if (this.isNameDuplicate(this.customForm.controls.name.value, this.association)) {
+    if (this.isNameDuplicate(this.customForm.controls.name.value)) {
       this.setAlert('danger', 'de naam bestaan al');
       this.processing = false;
       return;
@@ -161,10 +167,18 @@ export class AssociationEditComponent implements OnInit {
     this.router.navigate(this.getForwarUrl(), { queryParams: this.getForwarUrlQueryParams() });
   }
 
-  isNameDuplicate(name: string, association?: Association): boolean {
-    return this.associations.find(associationIt => {
-      return (name === associationIt.getName() && (association === undefined || association !== associationIt));
-    }) !== undefined;
+  isNameDuplicate(name: string): boolean {
+    return this.associations.find(associationIt => name === associationIt.getName()) !== undefined;
+  }
+
+  getFilteredAssociation() {
+    if (this.association === undefined) {
+      return this.associations;
+    }
+    const ancestors = this.association.getAncestors();
+    return this.associations.filter(association => {
+      return ancestors.find(ancestor => ancestor === association) !== undefined;
+    });
   }
 
   protected setAlert(type: string, message: string) {

@@ -18,6 +18,7 @@
           <th></th>
           <th>naam</th>
           <th class="d-none d-sm-table-cell">afkorting</th>
+          <th class="d-none d-sm-table-cell">sport</th>
           <th style="text-align: right;">
             <button type="button" class="btn btn-sm btn-outline-primary" (click)="add()" [disabled]="processing">
               <i class="fa fa-plus"></i>
@@ -36,6 +37,7 @@
             <span>{{competition.getName()}}</span>
           </td>
           <td class="d-none d-sm-table-cell">{{competition.getAbbreviation()}}</td>
+          <td class="d-none d-sm-table-cell">{{competition.getSport()}}</td>
           <td style="text-align: right;">
             <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing" (click)="remove(competition);">
               <span class="fa fa-remove"></span>

@@ -10,25 +10,61 @@
           </button>
         </h1>
       </div>
-      <form name="form" (ngSubmit)="save() && false" [formGroup]="customForm" novalidate>
-        <!-- <div class="form-group row">
-          <div class="col-3">
-            <label for="name" class="col-form-label">naam</label>
-          </div>
-          <div class="col-9">
-            <input class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.name.invalid, 'is-valid': customForm.controls.name.valid }"
-              type="text" name="name" id="name" [formControl]="customForm.controls.name" maxlength="{{validations.maxlengthname}}"
-              placeholder="max. {{validations.maxlengthname}} karakters" autofocus>
-          </div>
-        </div> -->
+      <h1 *ngIf="processing" align="center">
+        <i class="fa fa-spinner fa-spin fa-fw"></i>
+      </h1>
+      <form *ngIf="!processing" name="form" (ngSubmit)="save() && false" [formGroup]="customForm" novalidate>
         <div class="form-group row">
           <div class="col-3">
-            <label for="sport" class="col-form-label">sport</label>
+            <label for="association" class="col-form-label">bond</label>
           </div>
           <div class="col-9">
-            <input class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.sport.invalid, 'is-valid': customForm.controls.sport.valid }"
-              type="text" name="sport" id="sport" [formControl]="customForm.controls.sport" maxlength="{{validations.maxlengthsport}}"
-              placeholder="max. {{validations.maxlengthsport}} karakters">
+            <select id="association" name="association" class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.association.invalid, 'is-valid': customForm.controls.association.valid }"
+              [formControl]="customForm.controls.association">
+              <option value="">kies..</option>
+              <option *ngFor="let association of associations" [ngValue]="association">{{association.getName()}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-3">
+            <label for="competition" class="col-form-label">competitie</label>
+          </div>
+          <div class="col-9">
+            <select id="competition" name="competition" class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.competition.invalid, 'is-valid': customForm.controls.competition.valid }"
+              [formControl]="customForm.controls.competition">
+              <option value="">kies..</option>
+              <option *ngFor="let competition of competitions" [ngValue]="competition">{{competition.getName()}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-3">
+            <label for="season" class="col-form-label">seizoen</label>
+          </div>
+          <div class="col-9">
+            <select id="season" name="season" class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.season.invalid, 'is-valid': customForm.controls.season.valid }"
+              [formControl]="customForm.controls.season" (ngModelChange)="updateStartDateTime($event)">
+              <option value="">kies..</option>
+              <option *ngFor="let season of seasons" [ngValue]="season">{{season.getName()}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-3">
+            <label for="dp" class="col-form-label">startdatum</label>
+          </div>
+          <div class="col-9">
+            <div class="input-group input-group-date">
+              <input class="form-control" placeholder="yyyy-mm-dd" id="dp" name="dp" [formControl]="customForm.controls.startDateTime"
+                [ngClass]="{ 'is-invalid': customForm.controls.startDateTime.invalid, 'is-valid': customForm.controls.startDateTime.valid }"
+                ngbDatepicker #d="ngbDatepicker" required>
+              <div class="input-group-append">
+                <span class="input-group-text" (click)="d.toggle()" style="cursor: pointer;">
+                  <i class="fa fa-calendar"></i>
+                </span>
+              </div>
+            </div>
           </div>
         </div>
         <ngb-alert *ngIf="alert" [type]="alert.type" style="width:100%;" [dismissible]="true" (close)="alert = undefined;">{{ alert.message }}</ngb-alert>

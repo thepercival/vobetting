@@ -23,6 +23,18 @@
         </div>
         <div class="form-group row">
           <div class="col-3">
+            <label for="sport" class="col-form-label">sport</label>
+          </div>
+          <div class="col-9">
+            <select id="sport" name="sport" class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.sport.invalid, 'is-valid': customForm.controls.sport.valid }"
+              [formControl]="customForm.controls.sport">
+              <option value="">kies..</option>
+              <option *ngFor="let sport of sports" [ngValue]="sport">{{sport}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-3">
             <label for="abbreviation" class="col-form-label">afkorting</label>
           </div>
           <div class="col-9">

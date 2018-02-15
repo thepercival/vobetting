@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { Competition, CompetitionRepository, ICompetition } from 'ngx-sport';
+import { Competition, CompetitionRepository, ICompetition, SportConfig } from 'ngx-sport';
 import { Subscription } from 'rxjs/Subscription';
 
 import { IAlert } from '../../app.definitions';
@@ -24,11 +24,13 @@ export class CompetitionEditComponent implements OnInit {
   customForm: FormGroup;
   competitions: Competition[];
   competition: Competition;
+  sports: string[];
 
   validations: CompetitionValidations = {
     minlengthname: Competition.MIN_LENGTH_NAME,
     maxlengthname: Competition.MAX_LENGTH_NAME,
-    maxlengthabbreviation: Competition.MAX_LENGTH_ABBREVIATION
+    maxlengthabbreviation: Competition.MAX_LENGTH_ABBREVIATION,
+    maxlengthsport: Competition.MAX_LENGTH_SPORT
   };
 
   constructor(
@@ -37,13 +39,15 @@ export class CompetitionEditComponent implements OnInit {
     private router: Router,
     fb: FormBuilder
   ) {
+    this.sports = SportConfig.getSports();
     this.customForm = fb.group({
       name: ['', Validators.compose([
         Validators.required,
         Validators.minLength(this.validations.minlengthname),
         Validators.maxLength(this.validations.maxlengthname)
       ])],
-      abbreviation: ['', Validators.maxLength(this.validations.maxlengthabbreviation)]
+      abbreviation: ['', Validators.maxLength(this.validations.maxlengthabbreviation)],
+      sport: ['', Validators.required]
     });
   }
 
@@ -79,6 +83,7 @@ export class CompetitionEditComponent implements OnInit {
     }
     this.customForm.controls.name.setValue(this.competition.getName());
     this.customForm.controls.abbreviation.setValue(this.competition.getAbbreviation());
+    this.customForm.controls.sport.setValue(this.competition.getSport());
   }
 
   save() {
@@ -94,6 +99,7 @@ export class CompetitionEditComponent implements OnInit {
 
     const name = this.customForm.controls.name.value;
     const abbreviation = this.customForm.controls.abbreviation.value;
+    const sport = this.customForm.controls.sport.value;
 
     if (this.isNameDuplicate(this.customForm.controls.name.value)) {
       this.setAlert('danger', 'de naam bestaan al');
@@ -102,7 +108,8 @@ export class CompetitionEditComponent implements OnInit {
     }
     const competition: ICompetition = {
       name: name,
-      abbreviation: abbreviation ? abbreviation : undefined
+      abbreviation: abbreviation ? abbreviation : undefined,
+      sport: sport,
     };
     this.competitionRepos.createObject(competition)
       .subscribe(
@@ -124,9 +131,11 @@ export class CompetitionEditComponent implements OnInit {
     }
     const name = this.customForm.controls.name.value;
     const abbreviation = this.customForm.controls.abbreviation.value;
+    const sport = this.customForm.controls.sport.value;
 
     this.competition.setName(name);
     this.competition.setAbbreviation(abbreviation ? abbreviation : undefined);
+    this.competition.setSport(sport);
 
     this.competitionRepos.editObject(this.competition)
       .subscribe(
@@ -182,4 +191,5 @@ export interface CompetitionValidations {
   maxlengthname: number;
   minlengthname: number;
   maxlengthabbreviation: number;
+  maxlengthsport: number;
 }
