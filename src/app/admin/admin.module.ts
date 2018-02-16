@@ -3,8 +3,14 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {
-  CompetitionRepository, ExternalSystemRepository, SeasonRepository,
-  CompetitionseasonRepository, FieldRepository, RefereeRepository
+  AssociationRepository,
+  CompetitionRepository,
+  CompetitionseasonRepository,
+  ExternalSystemRepository,
+  FieldRepository,
+  RefereeRepository,
+  SeasonRepository,
+  TeamRepository,
 } from 'ngx-sport';
 
 import { UserRepository } from '../user/repository';
@@ -20,6 +26,9 @@ import { ExternalSystemListComponent } from './externalsystem/list.component';
 import { HomeComponent } from './home/home.component';
 import { SeasonEditComponent } from './season/edit.component';
 import { SeasonListComponent } from './season/list.component';
+import { StructureEditComponent } from './structure/edit.component';
+import { TeamEditComponent } from './team/edit.component';
+import { TeamListComponent } from './team/list.component';
 
 @NgModule({
   imports: [
@@ -33,10 +42,12 @@ import { SeasonListComponent } from './season/list.component';
     ExternalSystemListComponent, ExternalSystemEditComponent,
     SeasonListComponent, SeasonEditComponent,
     AssociationListComponent, AssociationEditComponent,
+    TeamListComponent, TeamEditComponent,
     CompetitionEditComponent, CompetitionListComponent,
     CompetitionseasonEditComponent, CompetitionseasonListComponent,
+    StructureEditComponent,
     HomeComponent],
   providers: [UserRepository, ExternalSystemRepository, SeasonRepository, CompetitionRepository,
-    CompetitionseasonRepository, FieldRepository, RefereeRepository]
+    CompetitionseasonRepository, FieldRepository, RefereeRepository, TeamRepository, AssociationRepository]
 })
 export class AdminModule { }

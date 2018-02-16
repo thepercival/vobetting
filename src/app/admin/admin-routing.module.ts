@@ -13,6 +13,10 @@ import { ExternalSystemListComponent } from './externalsystem/list.component';
 import { HomeComponent } from './home/home.component';
 import { SeasonEditComponent } from './season/edit.component';
 import { SeasonListComponent } from './season/list.component';
+import { StructureEditComponent } from './structure/edit.component';
+import { TeamEditComponent } from './team/edit.component';
+import { TeamListComponent } from './team/list.component';
+
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [AuthguardService] },
@@ -22,10 +26,13 @@ const routes: Routes = [
   { path: 'season/edit/:id', component: SeasonEditComponent, canActivate: [AuthguardService] },
   { path: 'association', component: AssociationListComponent, canActivate: [AuthguardService] },
   { path: 'association/edit/:id', component: AssociationEditComponent, canActivate: [AuthguardService] },
+  { path: 'team', component: TeamListComponent, canActivate: [AuthguardService] },
+  { path: 'team/edit/:id', component: TeamEditComponent, canActivate: [AuthguardService] },
   { path: 'competition', component: CompetitionListComponent, canActivate: [AuthguardService] },
   { path: 'competition/edit/:id', component: CompetitionEditComponent, canActivate: [AuthguardService] },
   { path: 'competitionseason', component: CompetitionseasonListComponent, canActivate: [AuthguardService] },
   { path: 'competitionseason/edit/:id', component: CompetitionseasonEditComponent, canActivate: [AuthguardService] },
+  { path: 'structure/edit/:id', component: StructureEditComponent, canActivate: [AuthguardService] },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', redirectTo: '' }
 ];
