@@ -19,8 +19,8 @@ export class SeasonEditComponent implements OnInit, OnDestroy {
   returnUrlParam: number;
   returnUrlQueryParamKey: string;
   returnUrlQueryParamValue: string;
-  public alert: IAlert;
-  public processing = true;
+  alert: IAlert;
+  processing = true;
   customForm: FormGroup;
   seasons: Season[];
   season: Season;
