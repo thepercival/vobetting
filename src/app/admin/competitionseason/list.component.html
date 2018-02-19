@@ -16,7 +16,6 @@
       <thead>
         <tr>
           <th></th>
-          <th></th>
           <th>competitie</th>
           <th>seizoen</th>
           <th class="d-none d-sm-table-cell">bond</th>
@@ -32,11 +31,6 @@
           <td>
             <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing" (click)="edit(competitionseason)">
               <span class="fa fa-pencil"></span>
-            </button>
-          </td>
-          <td>
-            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing" [routerLink]="['/admin/structure/edit', competitionseason.getId()]">
-              <span class="fa fa-cubes"></span>
             </button>
           </td>
           <td>

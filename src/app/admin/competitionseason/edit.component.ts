@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
@@ -23,7 +23,7 @@ import { IAlert } from '../../app.definitions';
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.css']
 })
-export class CompetitionseasonEditComponent implements OnInit {
+export class CompetitionseasonEditComponent implements OnInit, OnDestroy {
 
   protected sub: Subscription;
   returnUrl: string;
@@ -119,6 +119,10 @@ export class CompetitionseasonEditComponent implements OnInit {
     this.customForm.controls.association.disable();
     this.customForm.controls.competition.disable();
     this.customForm.controls.season.disable();
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 
   save() {

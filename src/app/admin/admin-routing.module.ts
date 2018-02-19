@@ -5,16 +5,21 @@ import { AuthguardService } from '../auth/authguard.service';
 import { AssociationEditComponent } from './association/edit.component';
 import { AssociationListComponent } from './association/list.component';
 import { CompetitionEditComponent } from './competition/edit.component';
+import { CompetitionExternComponent } from './competition/extern.component';
 import { CompetitionListComponent } from './competition/list.component';
 import { CompetitionseasonEditComponent } from './competitionseason/edit.component';
+import { CompetitionseasonHomeComponent } from './competitionseason/home.component';
 import { CompetitionseasonListComponent } from './competitionseason/list.component';
 import { ExternalSystemEditComponent } from './externalsystem/edit.component';
 import { ExternalSystemListComponent } from './externalsystem/list.component';
+import { GameListComponent } from './games/list.component';
 import { HomeComponent } from './home/home.component';
+import { PoulePlaceEditComponent } from './pouleplace/edit.component';
 import { SeasonEditComponent } from './season/edit.component';
 import { SeasonListComponent } from './season/list.component';
 import { StructureEditComponent } from './structure/edit.component';
 import { TeamEditComponent } from './team/edit.component';
+import { TeamExternComponent } from './team/extern.component';
 import { TeamListComponent } from './team/list.component';
 
 
@@ -28,11 +33,16 @@ const routes: Routes = [
   { path: 'association/edit/:id', component: AssociationEditComponent, canActivate: [AuthguardService] },
   { path: 'team', component: TeamListComponent, canActivate: [AuthguardService] },
   { path: 'team/edit/:id', component: TeamEditComponent, canActivate: [AuthguardService] },
+  { path: 'team/extern/:id', component: TeamExternComponent, canActivate: [AuthguardService] },
   { path: 'competition', component: CompetitionListComponent, canActivate: [AuthguardService] },
   { path: 'competition/edit/:id', component: CompetitionEditComponent, canActivate: [AuthguardService] },
+  { path: 'competition/extern/:id', component: CompetitionExternComponent, canActivate: [AuthguardService] },
   { path: 'competitionseason', component: CompetitionseasonListComponent, canActivate: [AuthguardService] },
+  { path: 'competitionseason/home/:id', component: CompetitionseasonHomeComponent, canActivate: [AuthguardService] },
   { path: 'competitionseason/edit/:id', component: CompetitionseasonEditComponent, canActivate: [AuthguardService] },
-  { path: 'structure/edit/:id', component: StructureEditComponent, canActivate: [AuthguardService] },
+  { path: 'pouleplace/edit/:competitionseasonid/:id', component: PoulePlaceEditComponent, canActivate: [AuthguardService] },
+  { path: 'structure/:id', component: StructureEditComponent, canActivate: [AuthguardService] },
+  { path: 'games/:id', component: GameListComponent, canActivate: [AuthguardService] },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', redirectTo: '' }
 ];

@@ -32,16 +32,19 @@ export class CompetitionseasonListComponent implements OnInit {
   }
 
   add() {
-    this.linkToEdit();
+    this.router.navigate(
+      ['/admin/competitionseason/edit', 0],
+      {
+        queryParams: {
+          returnAction: '/admin/competitionseason'
+        }
+      }
+    );
   }
 
   edit(competitionseason: Competitionseason) {
-    this.linkToEdit(competitionseason);
-  }
-
-  linkToEdit(competitionseason?: Competitionseason) {
     this.router.navigate(
-      ['/admin/competitionseason/edit', competitionseason ? competitionseason.getId() : 0],
+      ['/admin/competitionseason/home', competitionseason.getId()],
       {
         queryParams: {
           returnAction: '/admin/competitionseason'

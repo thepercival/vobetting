@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
@@ -12,7 +12,7 @@ import { IAlert } from '../../app.definitions';
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.css']
 })
-export class AssociationEditComponent implements OnInit {
+export class AssociationEditComponent implements OnInit, OnDestroy {
 
   protected sub: Subscription;
   returnUrl: string;
@@ -195,6 +195,10 @@ export class AssociationEditComponent implements OnInit {
 
   convertDateBack(date: Date) {
     return { year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() };
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 }
 

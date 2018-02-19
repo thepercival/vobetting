@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
@@ -12,7 +12,7 @@ import { IAlert } from '../../app.definitions';
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.css']
 })
-export class CompetitionEditComponent implements OnInit {
+export class CompetitionEditComponent implements OnInit, OnDestroy {
 
   protected sub: Subscription;
   returnUrl: string;
@@ -71,6 +71,10 @@ export class CompetitionEditComponent implements OnInit {
       this.returnUrlQueryParamKey = params.get('returnQueryParamKey');
       this.returnUrlQueryParamValue = params.get('returnQueryParamValue');
     });
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 
   private postInit(id: number) {

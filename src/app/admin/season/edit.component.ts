@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
@@ -12,7 +12,7 @@ import { IAlert } from '../../app.definitions';
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.css']
 })
-export class SeasonEditComponent implements OnInit {
+export class SeasonEditComponent implements OnInit, OnDestroy {
 
   protected sub: Subscription;
   returnUrl: string;
@@ -80,6 +80,10 @@ export class SeasonEditComponent implements OnInit {
     this.customForm.controls.name.setValue(this.season.getName());
     this.customForm.controls.startDateTime.setValue(this.convertDateBack(this.season.getStartDateTime()));
     this.customForm.controls.endDateTime.setValue(this.convertDateBack(this.season.getEndDateTime()));
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 
   save() {

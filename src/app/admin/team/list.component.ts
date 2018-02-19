@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Team, TeamRepository } from 'ngx-sport';
+import { SportConfig, Team, TeamRepository } from 'ngx-sport';
 
 import { IAlert } from '../../app.definitions';
 
@@ -14,6 +14,7 @@ export class TeamListComponent implements OnInit {
   teams: Team[];
   alert: IAlert;
   processing = true;
+  useExternal = SportConfig.useExternal;
 
   constructor(
     private router: Router,
@@ -30,6 +31,18 @@ export class TeamListComponent implements OnInit {
         /* onComplete */() => { this.processing = false; }
       );
   }
+
+  linkToExtern(team: Team) {
+    this.router.navigate(
+      ['/admin/team/extern', team.getId()],
+      {
+        queryParams: {
+          returnAction: '/admin/team'
+        }
+      }
+    );
+  }
+
 
   add() {
     this.linkToEdit();

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ExternalSystem, ExternalSystemRepository, IExternalSystem } from 'ngx-sport';
@@ -11,7 +11,7 @@ import { IAlert } from '../../app.definitions';
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.css']
 })
-export class ExternalSystemEditComponent implements OnInit {
+export class ExternalSystemEditComponent implements OnInit, OnDestroy {
 
   protected sub: Subscription;
   returnUrl: string;
@@ -91,6 +91,10 @@ export class ExternalSystemEditComponent implements OnInit {
     this.customForm.controls.password.setValue(this.externalSystem.getPassword());
     this.customForm.controls.apiurl.setValue(this.externalSystem.getApiurl());
     this.customForm.controls.apikey.setValue(this.externalSystem.getApikey());
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 
   save() {

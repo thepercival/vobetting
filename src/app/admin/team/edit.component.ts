@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
@@ -12,7 +12,7 @@ import { IAlert } from '../../app.definitions';
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.css']
 })
-export class TeamEditComponent implements OnInit {
+export class TeamEditComponent implements OnInit, OnDestroy {
 
   protected sub: Subscription;
   returnUrl: string;
@@ -95,6 +95,10 @@ export class TeamEditComponent implements OnInit {
     this.customForm.controls.association.setValue(this.team.getAssociation());
 
     this.customForm.controls.association.disable();
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 
   save() {
