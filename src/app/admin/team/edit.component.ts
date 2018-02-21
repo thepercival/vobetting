@@ -131,7 +131,7 @@ export class TeamEditComponent implements OnInit, OnDestroy {
         /* happy path */ teamRes => {
         this.navigateBack();
       },
-        /* error path */ e => { this.setAlert('danger', e); },
+        /* error path */ e => { this.setAlert('danger', e); this.processing = false; },
         /* onComplete */() => this.processing = false
       );
   }
