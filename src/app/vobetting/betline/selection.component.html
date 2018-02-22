@@ -1,0 +1,53 @@
+<div class="row">
+  <form *ngIf="!processing" name="form" (ngSubmit)="process() && false" [formGroup]="customForm" novalidate>
+    <div class="form-group row">
+      <div class="col-3">
+        <label for="competition" class="col-form-label">competitie</label>
+      </div>
+      <div class="col-9">
+        <select id="competition" name="competition" class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.competition.invalid, 'is-valid': customForm.controls.competition.valid }"
+          [formControl]="customForm.controls.competition">
+          <option value="">kies..</option>
+          <option *ngFor="let competitionIt of getCompetitions()" [ngValue]="competitionIt">{{competitionIt.getName()}}</option>
+        </select>
+      </div>
+    </div>
+    <div *ngIf="customForm.controls.competition.value" class="form-group row">
+      <div class="col-3">
+        <label for="competitionseason" class="col-form-label">seizoen</label>
+      </div>
+      <div class="col-9">
+        <select id="competitionseason" name="competitionseason" class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.competitionseason.invalid, 'is-valid': customForm.controls.competitionseason.valid }"
+          [formControl]="customForm.controls.competitionseason">
+          <option value="">kies..</option>
+          <option *ngFor="let competitionseasonIt of getCompetitionseasons()" [ngValue]="competitionseasonIt">{{competitionseasonIt.getSeason().getName()}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group row">
+      <div class="col-3">
+        <label for="dp" class="col-form-label">einddatum</label>
+      </div>
+      <div class="col-9">
+        <div class="input-group input-group-date">
+          <input class="form-control" placeholder="yyyy-mm-dd" id="dp" name="dp" [formControl]="customForm.controls.endDateTime" [ngClass]="{ 'is-invalid': customForm.controls.endDateTime.invalid, 'is-valid': customForm.controls.endDateTime.valid }"
+            ngbDatepicker #d="ngbDatepicker" required>
+          <div class="input-group-append">
+            <span class="input-group-text" (click)="d.toggle()" style="cursor: pointer;">
+              <i class="fa fa-calendar"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ngb-alert *ngIf="alert" [type]="alert.type" style="width:100%;" [dismissible]="true" (close)="alert = undefined;">{{ alert.message }}</ngb-alert>
+    <div class="form-group row justify-content-end">
+      <div class="col-9">
+        <button [disabled]="customForm.invalid" type="submit" class="btn btn-outline-primary">
+          <span>toon betregels</span>
+          <i *ngIf="loading" class="fa fa-spinner fa-spin fa-fw"></i>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

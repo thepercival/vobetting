@@ -1,20 +1,12 @@
-import { AppRoutingModule } from './app-routing.module';
-
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import {
-  AssociationRepository,
-  CompetitionRepository,
-  CompetitionseasonRepository,
-  FieldRepository,
-  RefereeRepository,
-  SeasonRepository,
-} from 'ngx-sport';
+import { AssociationRepository, CompetitionRepository, CompetitionseasonRepository, SeasonRepository } from 'ngx-sport';
 
 import { AdminModule } from './admin/admin.module';
+import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthService } from './auth/auth.service';
 import { AuthguardService } from './auth/authguard.service';
