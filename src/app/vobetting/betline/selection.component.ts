@@ -46,7 +46,10 @@ export class BetLineSelectionComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
+    this.customForm.controls.competition.setValue(this.competitionseasons[this.competitionseasons.length - 1].getCompetition());
+    this.customForm.controls.competitionseason.setValue(this.competitionseasons[this.competitionseasons.length - 1]);
+    const date = new Date(); date.setMonth(date.getMonth() + 1);
+    this.customForm.controls.endDateTime.setValue(this.convertDateBack(date));
 
     // this.sub = this.route.params.subscribe(params => {
     //   this.competitionseasonRepos.getObject(+params.id)

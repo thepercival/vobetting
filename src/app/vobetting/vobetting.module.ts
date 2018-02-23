@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { CompetitionseasonRepository } from 'ngx-sport';
 
 import { BetLineChartComponent } from './betline/chart.component';
@@ -18,7 +19,8 @@ import { VOBettingRoutingModule } from './vobetting-routing.module';
     VOBettingRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    NgbModule
+    NgbModule,
+    NgxChartsModule,
   ],
   declarations: [BetLineMainComponent, BetLineSelectionComponent, BetLineChartComponent],
   providers: [CompetitionseasonRepository, BetLineRepository, LayBackRepository]

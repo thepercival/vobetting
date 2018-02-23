@@ -6,8 +6,6 @@ import { forkJoin } from 'rxjs/observable/forkJoin';
 
 import { IAlert } from '../../app.definitions';
 import { BetLine } from '../betline';
-import { LayBack } from '../layback';
-import { LayBackRepository } from '../layback/repository';
 import { BetLineFilter, BetLineRepository } from './repository';
 
 @Component({
@@ -33,7 +31,6 @@ export class BetLineMainComponent implements OnInit, OnDestroy {
     private competitionseasonRepos: CompetitionseasonRepository,
     private structureRepository: StructureRepository,
     private betLineRepository: BetLineRepository,
-    private layBackRepository: LayBackRepository,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -110,14 +107,6 @@ export class BetLineMainComponent implements OnInit, OnDestroy {
       results.forEach(betLines => {
         betLines.forEach(betLine => {
           this.betLines.push(betLine);
-          this.layBackRepository.getObjects(betLine)
-            .subscribe(
-              /* happy path */(layBacks: LayBack[]) => {
-              // laybacks are in betline now
-            },
-              /* error path */ e => { },
-              /* onComplete */() => { }
-            );
         });
       });
       this.processing = false;

@@ -1,7 +1,31 @@
 charts
 <div *ngIf="betLines">
   <div *ngFor="let betLine of betLines">
-    {{betLine.getGame().getId()}} voor elke betline een knop, wanneer druk op knop dan toon chart!!!
+    <div>
+      <span>{{betLine.getGame().getHomePoulePlace().getTeam().getName() }}</span>
+      <span> vs </span>
+      <span>{{betLine.getGame().getAwayPoulePlace().getTeam().getName() }}</span>
+    </div>
+    <div>
+      <span>{{getBetTypeDescription(betLine.getBetType())}}</span>
+      <button type="button" class="btn btn-outline-secondary" (click)="showChart(betLine)">
+        thuis
+      </button> -
+      <button type="button" class="btn btn-outline-secondary" (click)="showChart(betLine)">
+        gelijk
+      </button> -
+      <button type="button" class="btn btn-outline-secondary" (click)="showChart(betLine)">
+        uit
+      </button>
+      <br> dus dat betekent de betlines ophalen per game!!
+    </div>
+
+
+
+    <ngx-charts-line-chart *ngIf="betLine.getLayBacks().length > 0" [view]="view" [scheme]="colorScheme" [results]="allBetLineLayBacks[betLine.getId()]"
+      [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel"
+      [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [autoScale]="autoScale" (select)="onSelect($event)">
+    </ngx-charts-line-chart>
     <hr>
   </div>
 </div>
