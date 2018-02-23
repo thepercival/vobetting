@@ -1,1 +1,7 @@
-chart
+charts
+<div *ngIf="betLines">
+  <div *ngFor="let betLine of betLines">
+    {{betLine.getGame().getId()}} voor elke betline een knop, wanneer druk op knop dan toon chart!!!
+    <hr>
+  </div>
+</div>

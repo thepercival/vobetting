@@ -66,6 +66,7 @@ export class LayBack {
 
     setBetLine(betLine: BetLine): void {
         this.betLine = betLine;
+        this.betLine.getLayBacks().push(this);
     }
 
     getExternalSystem(): ExternalSystem {

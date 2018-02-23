@@ -22,7 +22,7 @@ export class TeamEditComponent implements OnInit, OnDestroy {
   public alert: IAlert;
   public processing = true;
   customForm: FormGroup;
-  teams: Team[];
+  teams: Team[] = [];
   team: Team;
   associations: Association[];
 
@@ -51,26 +51,27 @@ export class TeamEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.associationRepos.getObjects()
-      .subscribe(
-        /* happy path */(associations: Association[]) => {
-        this.associations = associations;
-      },
-        /* error path */ e => { },
-        /* onComplete */() => { }
-      );
-
     this.sub = this.route.params.subscribe(params => {
-      this.teamRepos.getObjects()
+      this.associationRepos.getObjects()
         .subscribe(
-        /* happy path */(teams: Team[]) => {
-          this.teams = teams;
-          this.postInit(+params.id);
+          /* happy path */(associations: Association[]) => {
+          this.associations = associations;
+          this.associations.forEach(association => {
+            this.teamRepos.getObjects(association)
+              .subscribe(
+                    /* happy path */(teams: Team[]) => {
+                this.teams = this.teams.concat(teams);
+              },
+                  /* error path */ e => { },
+                  /* onComplete */() => { }
+              );
+          });
         },
-        /* error path */ e => { },
-        /* onComplete */() => { this.processing = false; }
+          /* error path */ e => { },
+          /* onComplete */() => { this.processing = false; this.postInit(+params.id); }
         );
     });
+
     this.route.queryParamMap.subscribe(params => {
       this.returnUrl = params.get('returnAction');
       if (params.get('returnParam') !== null) {
@@ -123,10 +124,9 @@ export class TeamEditComponent implements OnInit, OnDestroy {
     }
     const team: ITeam = {
       name: name,
-      abbreviation: abbreviation ? abbreviation : undefined,
-      association: this.associationRepos.objectToJsonHelper(association)
+      abbreviation: abbreviation ? abbreviation : undefined
     };
-    this.teamRepos.createObject(team)
+    this.teamRepos.createObject(team, association)
       .subscribe(
         /* happy path */ teamRes => {
         this.navigateBack();

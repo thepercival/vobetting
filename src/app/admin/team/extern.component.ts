@@ -71,16 +71,16 @@ export class TeamExternComponent implements OnInit, OnDestroy {
         /* onComplete */() => { this.processing = false; }
         );
 
-      this.teamRepos.getObject(+params.id)
-        .subscribe(
-        /* happy path */(team: Team) => {
-          this.team = team;
-          this.customForm.controls.name.setValue(this.team.getName());
-          this.customForm.controls.name.disable();
-        },
-        /* error path */ e => { this.processing = false; },
-        /* onComplete */() => { this.processing = false; }
-        );
+      // this.teamRepos.getObject(+params.id)
+      //   .subscribe(
+      //   /* happy path */(team: Team) => {
+      //     this.team = team;
+      //     this.customForm.controls.name.setValue(this.team.getName());
+      //     this.customForm.controls.name.disable();
+      //   },
+      //   /* error path */ e => { this.processing = false; },
+      //   /* onComplete */() => { this.processing = false; }
+      //   );
     });
     this.route.queryParamMap.subscribe(params => {
       this.returnUrl = params.get('returnAction');

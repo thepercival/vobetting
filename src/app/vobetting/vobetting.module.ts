@@ -8,6 +8,7 @@ import { BetLineChartComponent } from './betline/chart.component';
 import { BetLineMainComponent } from './betline/main.component';
 import { BetLineRepository } from './betline/repository';
 import { BetLineSelectionComponent } from './betline/selection.component';
+import { LayBackRepository } from './layback/repository';
 import { VOBettingRoutingModule } from './vobetting-routing.module';
 
 
@@ -20,6 +21,6 @@ import { VOBettingRoutingModule } from './vobetting-routing.module';
     NgbModule
   ],
   declarations: [BetLineMainComponent, BetLineSelectionComponent, BetLineChartComponent],
-  providers: [CompetitionseasonRepository, BetLineRepository]
+  providers: [CompetitionseasonRepository, BetLineRepository, LayBackRepository]
 })
 export class VOBettingModule { }

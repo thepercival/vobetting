@@ -60,6 +60,17 @@ export class PoulePlaceEditComponent implements OnInit, OnDestroy {
         .subscribe(
         /* happy path */(competitionseason: Competitionseason) => {
           this.competitionseason = competitionseason;
+
+          this.teamRepos.getObjects(this.competitionseason.getAssociation())
+            .subscribe(
+            /* happy path */(teams: Team[]) => {
+              this.teams = teams;
+
+            },
+            /* error path */ e => { },
+            /* onComplete */() => { this.processing = false; }
+            );
+
           this.structureRepository.getObject(this.competitionseason)
             .subscribe(
               /* happy path */(roundRes: Round) => {
@@ -80,17 +91,6 @@ export class PoulePlaceEditComponent implements OnInit, OnDestroy {
         );
     });
 
-    this.route.params.subscribe(params => {
-      this.teamRepos.getObjects()
-        .subscribe(
-        /* happy path */(teams: Team[]) => {
-          this.teams = teams;
-
-        },
-        /* error path */ e => { },
-        /* onComplete */() => { this.processing = false; }
-        );
-    });
     this.route.queryParamMap.subscribe(params => {
       this.returnUrl = params.get('returnAction');
       if (params.get('returnParam') !== null) {

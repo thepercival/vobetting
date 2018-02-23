@@ -11,7 +11,7 @@ import { IAlert } from '../../app.definitions';
 })
 export class TeamListComponent implements OnInit {
 
-  teams: Team[];
+  teams: Team[] = [];
   alert: IAlert;
   processing = true;
   useExternal = SportConfig.useExternal;
@@ -22,14 +22,14 @@ export class TeamListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.teamRepos.getObjects()
-      .subscribe(
-        /* happy path */(teams: Team[]) => {
-        this.teams = teams;
-      },
-        /* error path */ e => { },
-        /* onComplete */() => { this.processing = false; }
-      );
+    // this.teamRepos.getObjects()
+    //   .subscribe(
+    //     /* happy path */(teams: Team[]) => {
+    //     this.teams = teams;
+    //   },
+    //     /* error path */ e => { },
+    //     /* onComplete */() => { this.processing = false; }
+    //   );
   }
 
   linkToExtern(team: Team) {

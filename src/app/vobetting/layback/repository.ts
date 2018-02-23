@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { ExternalSystemRepository, IExternalSystem, SportRepository } from 'ngx-sport';
@@ -27,7 +27,11 @@ export class LayBackRepository extends SportRepository {
     }
 
     getObjects(betLine: BetLine): Observable<LayBack[]> {
-        return this.http.get(this.url, { headers: super.getHeaders() }).pipe(
+        const options = {
+            headers: super.getHeaders(),
+            params: new HttpParams().set('betlineid', betLine.getId().toString())
+        };
+        return this.http.get(this.url, options).pipe(
             map((res: ILayBack[]) => this.jsonArrayToObject(res, betLine)),
             catchError((err) => this.handleError(err))
         );
@@ -35,7 +39,7 @@ export class LayBackRepository extends SportRepository {
 
     getObject(id: number, betLine: BetLine): Observable<LayBack> {
         const url = this.url + '/' + id;
-        return this.http.get(url).pipe(
+        return this.http.get(url, { headers: super.getHeaders() }).pipe(
             map((res: ILayBack) => this.jsonToObjectHelper(res, betLine)),
             catchError((err) => this.handleError(err))
         );

@@ -55,15 +55,23 @@ export class BetLineRepository extends SportRepository {
     }
 
     createObject(json: IBetLine, game: Game): Observable<BetLine> {
-        return this.http.post(this.url, json, { headers: super.getHeaders() }).pipe(
+        const options = {
+            headers: super.getHeaders(),
+            params: new HttpParams().set('gameid', game.getId().toString())
+        };
+        return this.http.post(this.url, json, options).pipe(
             map((res: IBetLine) => this.jsonToObjectHelper(res, game)),
             catchError((err) => this.handleError(err))
         );
     }
 
     editObject(betLine: BetLine): Observable<BetLine> {
+        const options = {
+            headers: super.getHeaders(),
+            params: new HttpParams().set('gameid', betLine.getGame().getId().toString())
+        };
         const url = this.url + '/' + betLine.getId();
-        return this.http.put(url, this.objectToJsonHelper(betLine), { headers: super.getHeaders() }).pipe(
+        return this.http.put(url, this.objectToJsonHelper(betLine), options).pipe(
             map((res: IBetLine) => this.jsonToObjectHelper(res, betLine.getGame(), betLine)),
             catchError((err) => this.handleError(err))
         );

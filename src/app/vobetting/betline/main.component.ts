@@ -6,6 +6,8 @@ import { forkJoin } from 'rxjs/observable/forkJoin';
 
 import { IAlert } from '../../app.definitions';
 import { BetLine } from '../betline';
+import { LayBack } from '../layback';
+import { LayBackRepository } from '../layback/repository';
 import { BetLineFilter, BetLineRepository } from './repository';
 
 @Component({
@@ -31,6 +33,7 @@ export class BetLineMainComponent implements OnInit, OnDestroy {
     private competitionseasonRepos: CompetitionseasonRepository,
     private structureRepository: StructureRepository,
     private betLineRepository: BetLineRepository,
+    private layBackRepository: LayBackRepository,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -63,7 +66,6 @@ export class BetLineMainComponent implements OnInit, OnDestroy {
   }
 
   processBetLinesFilter(betLineFilter: BetLineFilter) {
-    console.log('emitted follows');
     this.structureRepository.getObject(betLineFilter.competitionseason)
       .subscribe(
         /* happy path */(round: Round) => {
@@ -85,6 +87,7 @@ export class BetLineMainComponent implements OnInit, OnDestroy {
       );
   }
 
+
   getAllGames(round: Round, startDateTime: Date, endDateTime: Date) {
     let games = [];
     round.getPoules().forEach(poule => {
@@ -101,8 +104,22 @@ export class BetLineMainComponent implements OnInit, OnDestroy {
 
 
   protected processBetLinesFilterHelper(reposSearches: Observable<BetLine[]>[]) {
+    this.betLines = [];
     forkJoin(reposSearches).subscribe(results => {
       console.log(results);
+      results.forEach(betLines => {
+        betLines.forEach(betLine => {
+          this.betLines.push(betLine);
+          this.layBackRepository.getObjects(betLine)
+            .subscribe(
+              /* happy path */(layBacks: LayBack[]) => {
+              // laybacks are in betline now
+            },
+              /* error path */ e => { },
+              /* onComplete */() => { }
+            );
+        });
+      });
       this.processing = false;
     },
       err => {
