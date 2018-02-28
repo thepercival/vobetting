@@ -24,7 +24,8 @@ export class TeamEditComponent implements OnInit, OnDestroy {
   customForm: FormGroup;
   teams: Team[] = [];
   team: Team;
-  associations: Association[];
+  associations: Association[] = [];
+  association: Association;
 
   validations: TeamValidations = {
     minlengthname: Team.MIN_LENGTH_NAME,
@@ -52,20 +53,20 @@ export class TeamEditComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
-      this.associationRepos.getObjects()
+      this.associationRepos.getObject(+params.associationid)
         .subscribe(
-          /* happy path */(associations: Association[]) => {
-          this.associations = associations;
-          this.associations.forEach(association => {
-            this.teamRepos.getObjects(association)
-              .subscribe(
+          /* happy path */(association: Association) => {
+          this.associations.push(association);
+          this.association = association;
+          this.teamRepos.getObjects(association)
+            .subscribe(
                     /* happy path */(teams: Team[]) => {
-                this.teams = this.teams.concat(teams);
-              },
+              this.teams = teams;
+              this.postInit(+params.id);
+            },
                   /* error path */ e => { },
                   /* onComplete */() => { }
-              );
-          });
+            );
         },
           /* error path */ e => { },
           /* onComplete */() => { this.processing = false; this.postInit(+params.id); }
@@ -83,6 +84,8 @@ export class TeamEditComponent implements OnInit, OnDestroy {
   }
 
   private postInit(id: number) {
+    this.customForm.controls.association.setValue(this.association);
+    this.customForm.controls.association.disable();
     if (id === undefined || id < 1) {
       return;
     }
@@ -90,12 +93,8 @@ export class TeamEditComponent implements OnInit, OnDestroy {
     if (this.team === undefined) {
       return;
     }
-
     this.customForm.controls.name.setValue(this.team.getName());
     this.customForm.controls.abbreviation.setValue(this.team.getAbbreviation());
-    this.customForm.controls.association.setValue(this.team.getAssociation());
-
-    this.customForm.controls.association.disable();
   }
 
   ngOnDestroy() {

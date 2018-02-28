@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { SportConfig, Team, TeamRepository } from 'ngx-sport';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Association, AssociationRepository, SportConfig, Team, TeamRepository } from 'ngx-sport';
+import { Subscription } from 'rxjs/Subscription';
 
 import { IAlert } from '../../app.definitions';
 
@@ -9,35 +10,68 @@ import { IAlert } from '../../app.definitions';
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.css']
 })
-export class TeamListComponent implements OnInit {
+export class TeamListComponent implements OnInit, OnDestroy {
 
+  protected sub: Subscription;
   teams: Team[] = [];
   alert: IAlert;
   processing = true;
+  associations: Association[];
+  association: Association;
   useExternal = SportConfig.useExternal;
 
   constructor(
     private router: Router,
-    private teamRepos: TeamRepository
+    private route: ActivatedRoute,
+    private teamRepos: TeamRepository,
+    private associationRepos: AssociationRepository
   ) { }
 
   ngOnInit() {
-    // this.teamRepos.getObjects()
-    //   .subscribe(
-    //     /* happy path */(teams: Team[]) => {
-    //     this.teams = teams;
-    //   },
-    //     /* error path */ e => { },
-    //     /* onComplete */() => { this.processing = false; }
-    //   );
+    this.sub = this.route.params.subscribe(params => {
+      this.associationRepos.getObjects()
+        .subscribe(
+        /* happy path */(associations: Association[]) => {
+          this.associations = associations.filter(association => association.getChildren().length === 0);
+          const associationId = +params.associationid;
+          if (associationId > 0) {
+            this.association = this.associations.find(associationIt => associationIt.getId() === associationId);
+            this.onSelectAssociation(this.association);
+          } else {
+            this.processing = false;
+          }
+        },
+        /* error path */ e => { },
+        /* onComplete */() => { this.processing = false; }
+        );
+    });
+  }
+
+  onSelectAssociation(association: Association) {
+    this.association = association;
+    this.processing = true;
+    this.teamRepos.getObjects(association)
+      .subscribe(
+        /* happy path */(teams: Team[]) => {
+        this.teams = teams;
+      },
+        /* error path */ e => { this.processing = false; },
+        /* onComplete */() => { this.processing = false; }
+      );
+  }
+
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 
   linkToExtern(team: Team) {
     this.router.navigate(
-      ['/admin/team/extern', team.getId()],
+      ['/admin/team/extern', this.association.getId(), team.getId()],
       {
         queryParams: {
-          returnAction: '/admin/team'
+          returnAction: '/admin/team',
+          returnParam: this.association.getId()
         }
       }
     );
@@ -54,10 +88,11 @@ export class TeamListComponent implements OnInit {
 
   linkToEdit(team?: Team) {
     this.router.navigate(
-      ['/admin/team/edit', team ? team.getId() : 0],
+      ['/admin/team/edit', this.association.getId(), team ? team.getId() : 0],
       {
         queryParams: {
-          returnAction: '/admin/team'
+          returnAction: '/admin/team',
+          returnParam: this.association.getId()
         }
       }
     );
@@ -88,5 +123,4 @@ export class TeamListComponent implements OnInit {
   protected resetAlert(): void {
     this.alert = undefined;
   }
-
 }

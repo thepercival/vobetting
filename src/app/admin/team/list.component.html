@@ -8,36 +8,50 @@
     </h1>
     <ngb-alert *ngIf="alert" [type]="alert.type" [dismissible]="true" (close)="alert = undefined;">
       <i *ngIf="processing" class="fa fa-spinner fa-spin"></i> {{ alert.message }}</ngb-alert>
+    <form *ngIf="associations" name="form" #f="ngForm" (ngSubmit)="save() && false" novalidate>
+      <div class="form-group row">
+        <div class="col-4">
+          <label for="parent" class="col-form-label">kies bond</label>
+        </div>
+        <div class="col-8">
+          <select id="association" name="association" class="form-control" [ngModel]="association" (ngModelChange)="onSelectAssociation($event)">
+            <option value=" ">kies..</option>
+            <option *ngFor="let associationIt of associations" [ngValue]="associationIt">{{associationIt.getName()}}</option>
+          </select>
+        </div>
+      </div>
+    </form>
   </div>
 </div>
-per bond tonen
-<div class="row justify-content-center mx-0">
-  <div class="col-xs-12 col-sm-8 col-md-8 col-lg-6 px-0">
-    <table class="table">
+
+<h2 *ngIf="association && processing" class="fa fa-spinner fa-spin"></h2>
+<div *ngIf="teams" class="row justify-content-center mx-0 ">
+  <div class="col-xs-12 col-sm-8 col-md-8 col-lg-6 px-0 ">
+    <table class="table ">
       <thead>
         <tr>
           <th></th>
-          <th *ngIf="useExternal"></th>
+          <th *ngIf="useExternal "></th>
           <th>bond</th>
           <th>naam</th>
-          <th class="d-none d-sm-table-cell">afkorting</th>
-          <th style="text-align: right;">
-            <button type="button" class="btn btn-sm btn-outline-primary" (click)="add()" [disabled]="processing">
-              <i class="fa fa-plus"></i>
+          <th class="d-none d-sm-table-cell ">afkorting</th>
+          <th style="text-align: right; ">
+            <button type="button " class="btn btn-sm btn-outline-primary " (click)="add() " [disabled]="processing ">
+              <i class="fa fa-plus "></i>
             </button>
           </th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let team of teams">
+        <tr *ngFor="let team of teams ">
           <td>
-            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing" (click)="edit(team)">
-              <span class="fa fa-pencil"></span>
+            <button type="button " class="btn btn-sm btn-outline-primary " [disabled]="processing " (click)="edit(team) ">
+              <span class="fa fa-pencil "></span>
             </button>
           </td>
-          <td *ngIf="useExternal">
-            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing" (click)="linkToExtern(team)">
-              <span class="fa fa-cloud-download"></span>
+          <td *ngIf="useExternal ">
+            <button type="button " class="btn btn-sm btn-outline-primary " [disabled]="processing " (click)="linkToExtern(team) ">
+              <span class="fa fa-cloud-download "></span>
             </button>
           </td>
           <td>
@@ -46,10 +60,10 @@ per bond tonen
           <td>
             <span>{{team.getName()}}</span>
           </td>
-          <td class="d-none d-sm-table-cell">{{team.getAbbreviation()}}</td>
-          <td style="text-align: right;">
-            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing" (click)="remove(team);">
-              <span class="fa fa-remove"></span>
+          <td class="d-none d-sm-table-cell ">{{team.getAbbreviation()}}</td>
+          <td style="text-align: right; ">
+            <button type="button " class="btn btn-sm btn-outline-primary " [disabled]="processing " (click)="remove(team); ">
+              <span class="fa fa-remove "></span>
             </button>
           </td>
         </tr>

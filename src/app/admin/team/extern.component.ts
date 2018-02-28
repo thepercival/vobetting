@@ -2,6 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
+  Association,
+  AssociationRepository,
   ExternalObject,
   ExternalObjectRepository,
   ExternalSystem,
@@ -39,6 +41,7 @@ export class TeamExternComponent implements OnInit, OnDestroy {
 
   constructor(
     private teamRepos: TeamRepository,
+    private associationRepos: AssociationRepository,
     private externalSystemRepos: ExternalSystemRepository,
     private externalObjectRepos: ExternalObjectRepository,
     private route: ActivatedRoute,
@@ -71,16 +74,23 @@ export class TeamExternComponent implements OnInit, OnDestroy {
         /* onComplete */() => { this.processing = false; }
         );
 
-      // this.teamRepos.getObject(+params.id)
-      //   .subscribe(
-      //   /* happy path */(team: Team) => {
-      //     this.team = team;
-      //     this.customForm.controls.name.setValue(this.team.getName());
-      //     this.customForm.controls.name.disable();
-      //   },
-      //   /* error path */ e => { this.processing = false; },
-      //   /* onComplete */() => { this.processing = false; }
-      //   );
+      this.associationRepos.getObject(+params.associationid)
+        .subscribe(
+          /* happy path */(association: Association) => {
+          this.teamRepos.getObject(+params.id, association)
+            .subscribe(
+                    /* happy path */(team: Team) => {
+              this.team = team;
+              this.customForm.controls.name.setValue(this.team.getName());
+              this.customForm.controls.name.disable();
+            },
+                  /* error path */ e => { },
+                  /* onComplete */() => { }
+            );
+        },
+          /* error path */ e => { },
+          /* onComplete */() => { this.processing = false; }
+        );
     });
     this.route.queryParamMap.subscribe(params => {
       this.returnUrl = params.get('returnAction');
