@@ -26,15 +26,13 @@ export class BetLineRepository extends SportRepository {
         return 'betlines';
     }
 
-    getObjects(game: Game, filter?: BetLineFilter): Observable<BetLine[]> {
+    getObjects(game: Game, betTypes: number): Observable<BetLine[]> {
         const options = {
             headers: super.getHeaders(),
             params: new HttpParams().set('gameid', game.getId().toString())
         };
-        if (filter !== undefined) {
-            // options.params = options.params.append('startdatetime', filter.startDateTime.toISOString());
-            // options.params = options.params.append('enddatetime', filter.endDateTime.toISOString());
-            options.params = options.params.append('bettype', filter.betType.toString());
+        if (betTypes !== undefined) {
+            options.params = options.params.append('bettype', betTypes.toString());
         }
         return this.http.get(this.url, options).pipe(
             map((res: IBetLine[]) => this.jsonArrayToObject(res, game)),

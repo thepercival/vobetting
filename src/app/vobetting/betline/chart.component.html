@@ -1,31 +1,32 @@
 charts
-<div *ngIf="betLines">
-  <div *ngFor="let betLine of betLines">
+<div>
+  <div *ngFor="let game of games">
     <div>
-      <span>{{betLine.getGame().getHomePoulePlace().getTeam().getName() }}</span>
+      <span>{{game.getHomePoulePlace().getTeam().getName() }}</span>
       <span> vs </span>
-      <span>{{betLine.getGame().getAwayPoulePlace().getTeam().getName() }}</span>
+      <span>{{game.getAwayPoulePlace().getTeam().getName() }}</span>
     </div>
     <div>
-      <span>{{getBetTypeDescription(betLine.getBetType())}}</span>
-      <button type="button" class="btn btn-outline-secondary" (click)="showChart(betLine)">
-        thuis
-      </button> -
-      <button type="button" class="btn btn-outline-secondary" (click)="showChart(betLine)">
-        gelijk
-      </button> -
-      <button type="button" class="btn btn-outline-secondary" (click)="showChart(betLine)">
-        uit
-      </button>
-      <br> dus dat betekent de betlines ophalen per game!!
+      <div *ngFor="let betType of getBetTypes(game)">
+        <span>{{getBetTypeDescription(betType)}}</span>
+        <div *ngIf="betType === MatchOdds">
+          <button type="button" class="btn btn-outline-secondary" (click)="showChart(game, Home)">
+            thuis
+          </button> -
+          <button type="button" class="btn btn-outline-secondary" (click)="showChart(game)">
+            gelijk
+          </button> -
+          <button type="button" class="btn btn-outline-secondary" (click)="showChart(game, Away)">
+            uit
+          </button>
+        </div>
+        <!-- games.forEach(game => { betLinesUpdates.push(this.betLineRepository.getObjects(game, betLineFilter)); }); -->
+        <ngx-charts-line-chart *ngIf="matchOddsShowChart" [view]="view" [scheme]="colorScheme" [results]="allBetLineLayBacks[getBetLine(game, matchOddsHomeAway).getId()]"
+          [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel"
+          [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [autoScale]="autoScale" (select)="onSelect($event)">
+        </ngx-charts-line-chart>
+        <hr>
+      </div>
     </div>
-
-
-
-    <ngx-charts-line-chart *ngIf="betLine.getLayBacks().length > 0" [view]="view" [scheme]="colorScheme" [results]="allBetLineLayBacks[betLine.getId()]"
-      [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel"
-      [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [autoScale]="autoScale" (select)="onSelect($event)">
-    </ngx-charts-line-chart>
-    <hr>
   </div>
 </div>

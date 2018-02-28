@@ -1,12 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Competitionseason, CompetitionseasonRepository, Round, StructureRepository, StructureService } from 'ngx-sport';
-import { Observable } from 'rxjs/Observable';
-import { forkJoin } from 'rxjs/observable/forkJoin';
+import {
+  Competitionseason,
+  CompetitionseasonRepository,
+  Game,
+  Round,
+  StructureRepository,
+  StructureService,
+} from 'ngx-sport';
 
 import { IAlert } from '../../app.definitions';
-import { BetLine } from '../betline';
-import { BetLineFilter, BetLineRepository } from './repository';
+import { BetLineFilter } from './repository';
 
 @Component({
   selector: 'app-betline-main',
@@ -24,13 +28,13 @@ export class BetLineMainComponent implements OnInit, OnDestroy {
   public processing = true;
   competitionseasons: Competitionseason[];
   // competitionseason: Competitionseason;
-  betLines: BetLine[];
-
+  games: Game[];
+  structureService: StructureService;
+  betTypes: number;
 
   constructor(
     private competitionseasonRepos: CompetitionseasonRepository,
     private structureRepository: StructureRepository,
-    private betLineRepository: BetLineRepository,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -66,18 +70,13 @@ export class BetLineMainComponent implements OnInit, OnDestroy {
     this.structureRepository.getObject(betLineFilter.competitionseason)
       .subscribe(
         /* happy path */(round: Round) => {
-        const structureService = new StructureService(
+        this.structureService = new StructureService(
           betLineFilter.competitionseason,
           { min: 2, max: 64 },
           round
         );
-        const betLinesUpdates: Observable<BetLine[]>[] = [];
-        const games = this.getAllGames(structureService.getFirstRound(), betLineFilter.startDateTime, betLineFilter.endDateTime);
-        games.forEach(game => {
-          betLinesUpdates.push(this.betLineRepository.getObjects(game, betLineFilter));
-
-        });
-        this.processBetLinesFilterHelper(betLinesUpdates);
+        this.betTypes = betLineFilter.betType;
+        this.games = this.getAllGames(this.structureService.getFirstRound(), betLineFilter.startDateTime, betLineFilter.endDateTime);
       },
       /* error path */ e => { },
       /* onComplete */() => { }
@@ -96,26 +95,6 @@ export class BetLineMainComponent implements OnInit, OnDestroy {
       games = games.concat(this.getAllGames(childRound, startDateTime, endDateTime));
     });
     return games;
-  }
-
-
-
-  protected processBetLinesFilterHelper(reposSearches: Observable<BetLine[]>[]) {
-    this.betLines = [];
-    forkJoin(reposSearches).subscribe(results => {
-      console.log(results);
-      results.forEach(betLines => {
-        betLines.forEach(betLine => {
-          this.betLines.push(betLine);
-        });
-      });
-      this.processing = false;
-    },
-      err => {
-        this.setAlert('danger', 'volgorde niet gewijzigd: ' + err);
-        this.processing = false;
-      }
-    );
   }
 
   // private postInit(id: number) {

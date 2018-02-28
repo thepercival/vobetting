@@ -15,5 +15,10 @@
       "es2017",
       "dom"
     ]
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "preserveWhitespaces": false,
+    "strictInjectionParameters": true
   }
 }

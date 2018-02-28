@@ -14,7 +14,6 @@ export class LayBack {
     protected betLine: BetLine;
     protected externalSystem: ExternalSystem;
 
-    // constructor
     constructor(dateTime: Date, betLine: BetLine) {
         this.setDateTime(dateTime);
         this.setBetLine(betLine);
