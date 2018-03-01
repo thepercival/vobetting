@@ -16,15 +16,19 @@ import { BetLineRepository } from './repository';
 })
 export class BetLineChartComponent implements OnInit, OnDestroy, OnChanges {
 
-  @Input() betTypes: number;
-  @Input() games: Game[];
+  @Input() betType: number;
+  @Input() game: Game;
   @Input() structureService: StructureService;
   processing = true;
 
-  betLinesPerGame: any = {};
-  allBetLineLayBacks: any = {};
-  matchOddsShowChart;
-  matchOddsHomeAway;
+  showChart = false;
+  betLines: BetLine[];
+  chartLayBacks: any[];
+  filter: any = {
+    thuis: true,
+    gelijk: true,
+    uit: true
+  };
 
   // chart: start
   view: any[] = [700, 400];
@@ -75,30 +79,43 @@ export class BetLineChartComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.games !== undefined && changes.games.currentValue !== undefined) {
-      this.matchOddsShowChart = false;
-      this.betLinesPerGame = {};
-      const betLinesUpdates: Observable<BetLine[]>[] = [];
-
-      this.games.forEach(game => {
-        betLinesUpdates.push(this.betLineRepository.getObjects(game, this.betTypes));
-      });
-      this.processBetLinesFilterHelper(betLinesUpdates);
+    if (changes.game !== undefined && changes.game.currentValue !== undefined) {
+      this.betLineRepository.getObjects(this.game, this.betType).subscribe(betLines => {
+        this.betLines = betLines;
+      },
+        /* error path */ e => { this.processing = false; },
+        /* onComplete */() => { this.processing = false; }
+      );
     }
   }
 
-  protected processBetLinesFilterHelper(reposSearches: Observable<BetLine[]>[]) {
+  toggleChart() {
+    this.processing = true;
+    this.setLayBacks();
+    this.showChart = true;
+  }
 
-    forkJoin(reposSearches).subscribe(results => {
-      // console.log(results);
-      results.forEach(betLines => {
-        betLines.forEach(betLine => {
-          if (this.betLinesPerGame[betLine.getGame().getId()] === undefined) {
-            this.betLinesPerGame[betLine.getGame().getId()] = [];
-          }
-          this.betLinesPerGame[betLine.getGame().getId()].push(betLine);
+  setLayBacks() {
+    const obsLayBacks: Observable<LayBack[]>[] = [];
+
+    this.betLines.forEach(betLine => {
+      obsLayBacks.push(this.layBackRepository.getObjects(betLine));
+    });
+    this.processLayBacks(obsLayBacks);
+  }
+
+  protected processLayBacks(obsLayBacks: Observable<LayBack[]>[]) {
+    forkJoin(obsLayBacks).subscribe(results => {
+      results.forEach(layBacks => {
+        layBacks.forEach(layBack => {
+          // do nothing
         });
       });
+      let chartLayBacks: LayBack[] = [];
+      this.betLines.forEach((betLine) => {
+        chartLayBacks = chartLayBacks.concat(this.getLayBacks(betLine));
+      });
+      this.chartLayBacks = chartLayBacks;
       this.processing = false;
     },
       err => {
@@ -108,15 +125,6 @@ export class BetLineChartComponent implements OnInit, OnDestroy, OnChanges {
     );
   }
 
-  getGames() {
-    console.log(this.betLinesPerGame);
-    return this.betLinesPerGame.map(betLine => betLine.getGame());
-  }
-
-  getBetTypes() {
-    return [this.betTypes];
-  }
-
   getBetTypeDescription(betType: number) {
     if (betType === BetLine.MATCH_ODDS) {
       return 'MATCH_ODDS';
@@ -124,68 +132,52 @@ export class BetLineChartComponent implements OnInit, OnDestroy, OnChanges {
     return undefined;
   }
 
-  getDescription(betType: number, back: boolean) {
-    return this.getBetTypeDescription(betType) + ' - ' + (back ? 'back' : 'lay');
+  getDescription(betType: number, back: boolean, homeAway?: boolean) {
+    return this.getBetTypeDescription(betType) + ' - ' + this.getHomeAwayDescription(homeAway) + ' - ' + (back ? 'back' : 'lay');
   }
 
-  getHomeAwayDescription(betLine: BetLine) {
-    console.log(betLine.getPoulePlace());
-    return betLine.getGame().getHomePoulePlace() === betLine.getPoulePlace() ? 'thuiswinst' :
-      (betLine.getGame().getAwayPoulePlace() === betLine.getPoulePlace() ? 'uitwinst' : 'gelijkspel');
+  getHomeAway(betLine: BetLine): boolean {
+    return this.game.getHomeAway(betLine.getPoulePlace());
   }
 
-  showChart(game: Game, homeAway?: boolean) {
-    this.matchOddsShowChart = false;
-    const betLine: BetLine = this.getBetLine(game, homeAway);
-    if (betLine === undefined) {
-      // set alert
-      return;
-    }
-    this.matchOddsHomeAway = homeAway;
-    this.layBackRepository.getObjects(betLine)
-      .subscribe(
-              /* happy path */(layBacks: LayBack[]) => {
-        console.log(layBacks);
-        this.allBetLineLayBacks[betLine.getId()] = this.getLayBacks(betLine);
-        this.matchOddsShowChart = true;
-        console.log(this.allBetLineLayBacks);
-        // laybacks are in betline now
-      },
-              /* error path */ e => { },
-              /* onComplete */() => { }
-      );
+  getHomeAwayDescription(homeAway?: boolean) {
+    return homeAway === true ? 'thuis' : (homeAway === false ? 'uit' : 'gelijk');
   }
 
-  protected getBetLine(game: Game, homeAway?: boolean): BetLine {
-    const betLinesPerGame = this.betLinesPerGame[game.getId()];
-    if (betLinesPerGame === undefined) {
-      return betLinesPerGame;
-    }
-    const bl = betLinesPerGame.find(betLine => betLine.getGame().getPoulePlace(homeAway) === betLine.getPoulePlace());
-    console.log(bl); return bl;
+  updateFilter(betLine: BetLine) {
+    // update filter
+    // filter: any = {
+    //   thuis: true,
+    //   gelijk: true,
+    //   uit: true
+    // };
   }
 
-  getLayBacks(betLine: BetLine) {
+  protected getBetLine(homeAway?: boolean): BetLine {
+    return this.betLines.find(betLine => betLine.getGame().getPoulePlace(homeAway) === betLine.getPoulePlace());
+  }
+
+  getLayBacks(betLine: BetLine): any[] {
     return [
       {
-        name: this.getDescription(betLine.getBetType(), true),
-        series: this.getLayBacksHelper(betLine.getLayBacks(), true)
+        name: this.getDescription(betLine.getBetType(), true, this.getHomeAway(betLine)),
+        series: this.getLayBacksHelper(betLine, true)
       },
       {
-        name: this.getDescription(betLine.getBetType(), false),
-        series: this.getLayBacksHelper(betLine.getLayBacks(), false)
+        name: this.getDescription(betLine.getBetType(), false, this.getHomeAway(betLine)),
+        series: this.getLayBacksHelper(betLine, false)
       },
     ];
   }
 
-  protected getLayBacksHelper(layBacks: LayBack[], back: boolean) {
+  protected getLayBacksHelper(betLine: BetLine, back: boolean) {
+    const layBacks: LayBack[] = betLine.getLayBacks();
     const layBacksTmp = layBacks.filter(layBack => layBack.getBack() === back);
-    const x = layBacksTmp.map(layback => {
+    return layBacksTmp.map(layback => {
       return {
-        name: layback.getDateTime().toISOString(),
+        name: layback.getDateTime(),
         value: layback.getPrice()
       };
     });
-    console.log(x); return x;
   }
 }

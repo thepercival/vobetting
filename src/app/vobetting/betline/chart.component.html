@@ -1,32 +1,22 @@
-charts
-<div>
-  <div *ngFor="let game of games">
-    <div>
-      <span>{{game.getHomePoulePlace().getTeam().getName() }}</span>
-      <span> vs </span>
-      <span>{{game.getAwayPoulePlace().getTeam().getName() }}</span>
-    </div>
-    <div>
-      <div *ngFor="let betType of getBetTypes(game)">
-        <span>{{getBetTypeDescription(betType)}}</span>
-        <div *ngIf="betType === MatchOdds">
-          <button type="button" class="btn btn-outline-secondary" (click)="showChart(game, Home)">
-            thuis
-          </button> -
-          <button type="button" class="btn btn-outline-secondary" (click)="showChart(game)">
-            gelijk
-          </button> -
-          <button type="button" class="btn btn-outline-secondary" (click)="showChart(game, Away)">
-            uit
-          </button>
-        </div>
-        <!-- games.forEach(game => { betLinesUpdates.push(this.betLineRepository.getObjects(game, betLineFilter)); }); -->
-        <ngx-charts-line-chart *ngIf="matchOddsShowChart" [view]="view" [scheme]="colorScheme" [results]="allBetLineLayBacks[getBetLine(game, matchOddsHomeAway).getId()]"
-          [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel"
-          [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [autoScale]="autoScale" (select)="onSelect($event)">
-        </ngx-charts-line-chart>
-        <hr>
+<div class="container-fluid">
+  <h2 *ngIf="processing" class="fa fa-spinner fa-spin fa-fw"></h2>
+  <div *ngIf="showChart === false">
+    <button type="button" class="btn btn-primary" (click)="toggleChart()">toon grafiek</button>
+  </div>
+  <div *ngIf="showChart && !processing">
+    <span>{{getBetTypeDescription(betType)}}</span>
+    <span *ngIf="betType === MatchOdds && betLines">
+      <div class="btn-group btn-group-toggle">
+        <label *ngFor="let betLine of betLines" class="btn-primary" ngbButtonLabel>
+          <input type="checkbox" ngbButton (click)="updateFilter(betLine)"> {{getHomeAwayDescription(getHomeAway(betLine))}}
+        </label>
       </div>
-    </div>
+    </span>
+  </div>
+  <div *ngIf="showChart && !processing" class="row">
+    <ngx-charts-line-chart class="col" [view]="view" *ngIf="chartLayBacks" [results]="chartLayBacks" [gradient]="gradient" [xAxis]="showXAxis"
+      [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
+      [yAxisLabel]="yAxisLabel" [autoScale]="autoScale" timeline="true" (select)="onSelect($event)">
+    </ngx-charts-line-chart>
   </div>
 </div>
