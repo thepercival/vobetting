@@ -1,7 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap/alert/alert.module';
+import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap/collapse/collapse.module';
+import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap/datepicker/datepicker.module';
+import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap/popover/popover.module';
+import { NgbTimepickerModule } from '@ng-bootstrap/ng-bootstrap/timepicker/timepicker.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { CompetitionseasonRepository } from 'ngx-sport';
 
@@ -19,7 +23,7 @@ import { VOBettingRoutingModule } from './vobetting-routing.module';
     VOBettingRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    NgbModule,
+    NgbAlertModule, NgbCollapseModule, NgbDatepickerModule, NgbPopoverModule, NgbTimepickerModule,
     NgxChartsModule,
   ],
   declarations: [BetLineMainComponent, BetLineSelectionComponent, BetLineChartComponent],
