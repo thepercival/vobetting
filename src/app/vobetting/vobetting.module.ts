@@ -7,7 +7,7 @@ import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap/datepicker/datep
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap/popover/popover.module';
 import { NgbTimepickerModule } from '@ng-bootstrap/ng-bootstrap/timepicker/timepicker.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { CompetitionseasonRepository } from 'ngx-sport';
+import { CompetitionRepository } from 'ngx-sport';
 
 import { BetLineChartComponent } from './betline/chart.component';
 import { BetLineMainComponent } from './betline/main.component';
@@ -27,6 +27,6 @@ import { VOBettingRoutingModule } from './vobetting-routing.module';
     NgxChartsModule,
   ],
   declarations: [BetLineMainComponent, BetLineSelectionComponent, BetLineChartComponent],
-  providers: [CompetitionseasonRepository, BetLineRepository, LayBackRepository]
+  providers: [CompetitionRepository, BetLineRepository, LayBackRepository]
 })
 export class VOBettingModule { }

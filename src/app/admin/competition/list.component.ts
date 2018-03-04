@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Competition, CompetitionRepository, SportConfig } from 'ngx-sport';
+import { Competition, CompetitionRepository } from 'ngx-sport';
 
 import { IAlert } from '../../app.definitions';
 
@@ -14,7 +14,6 @@ export class CompetitionListComponent implements OnInit {
   competitions: Competition[];
   alert: IAlert;
   processing = true;
-  useExternal = SportConfig.useExternal;
 
   constructor(
     private router: Router,
@@ -33,16 +32,8 @@ export class CompetitionListComponent implements OnInit {
   }
 
   add() {
-    this.linkToEdit();
-  }
-
-  edit(competition: Competition) {
-    this.linkToEdit(competition);
-  }
-
-  linkToEdit(competition?: Competition) {
     this.router.navigate(
-      ['/admin/competition/edit', competition ? competition.getId() : 0],
+      ['/admin/competition/edit', 0],
       {
         queryParams: {
           returnAction: '/admin/competition'
@@ -51,9 +42,9 @@ export class CompetitionListComponent implements OnInit {
     );
   }
 
-  linkToExtern(competition: Competition) {
+  edit(competition: Competition) {
     this.router.navigate(
-      ['/admin/competition/extern', competition.getId()],
+      ['/admin/competition/home', competition.getId()],
       {
         queryParams: {
           returnAction: '/admin/competition'

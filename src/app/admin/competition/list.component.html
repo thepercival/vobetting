@@ -1,7 +1,7 @@
 <div class="row justify-content-center mx-0" style="min-height:4.5rem;">
   <div class="col-xs-12 col-sm-8 col-md-8 col-lg-6 mt-1">
     <h1 class="">
-      <span>competities</span>
+      <span>competitieseizoenen</span>
       <button routerLink="/admin/home" routerLinkActive="active" type="button" class="btn btn-outline-secondary btn-sm">
         <i class="fa fa-level-up fa-rotate-270"></i>
       </button>
@@ -16,10 +16,9 @@
       <thead>
         <tr>
           <th></th>
-          <th *ngIf="useExternal"></th>
-          <th>naam</th>
-          <th class="d-none d-sm-table-cell">afkorting</th>
-          <th class="d-none d-sm-table-cell">sport</th>
+          <th>competitie</th>
+          <th>seizoen</th>
+          <th class="d-none d-sm-table-cell">bond</th>
           <th style="text-align: right;">
             <button type="button" class="btn btn-sm btn-outline-primary" (click)="add()" [disabled]="processing">
               <i class="fa fa-plus"></i>
@@ -34,16 +33,15 @@
               <span class="fa fa-pencil"></span>
             </button>
           </td>
-          <td *ngIf="useExternal">
-            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing" (click)="linkToExtern(competition)">
-              <span class="fa fa-cloud-download"></span>
-            </button>
+          <td>
+            <span>{{competition.getLeague().getName()}}</span>
           </td>
           <td>
-            <span>{{competition.getName()}}</span>
+            <span>{{competition.getSeason().getName()}}</span>
           </td>
-          <td class="d-none d-sm-table-cell">{{competition.getAbbreviation()}}</td>
-          <td class="d-none d-sm-table-cell">{{competition.getSport()}}</td>
+          <td class="d-none d-sm-table-cell">
+            <span>{{competition.getAssociation().getName()}}</span>
+          </td>
           <td style="text-align: right;">
             <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing" (click)="remove(competition);">
               <span class="fa fa-remove"></span>

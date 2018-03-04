@@ -1,20 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  Competitionseason,
-  CompetitionseasonRepository,
-  PoulePlace,
-  Round,
-  StructureRepository,
-  StructureService,
-} from 'ngx-sport';
+import { Competition, CompetitionRepository, PoulePlace, Round, StructureRepository, StructureService } from 'ngx-sport';
 import { Subscription } from 'rxjs/Subscription';
 
 import { IAlert } from '../../app.definitions';
 
 @Component({
-  selector: 'app-competitionseason-edit',
+  selector: 'app-competition-edit',
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.css']
 })
@@ -24,7 +17,7 @@ export class StructureEditComponent implements OnInit, OnDestroy {
   public alert: IAlert;
   public processing = true;
   customForm: FormGroup;
-  competitionseason: Competitionseason;
+  competition: Competition;
   private structureService: StructureService;
 
   validations: StructureValidations = {
@@ -34,7 +27,7 @@ export class StructureEditComponent implements OnInit, OnDestroy {
 
   constructor(
     private structureRepository: StructureRepository,
-    private competitionseasonRepos: CompetitionseasonRepository,
+    private competitionRepos: CompetitionRepository,
     private route: ActivatedRoute,
     private router: Router,
     fb: FormBuilder
@@ -50,16 +43,16 @@ export class StructureEditComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
-      this.competitionseasonRepos.getObject(+params.id)
+      this.competitionRepos.getObject(+params.id)
         .subscribe(
-        /* happy path */(competitionseason: Competitionseason) => {
-          this.competitionseason = competitionseason;
-          this.structureRepository.getObject(this.competitionseason)
+        /* happy path */(competition: Competition) => {
+          this.competition = competition;
+          this.structureRepository.getObject(this.competition)
             .subscribe(
               /* happy path */(round: Round) => {
               if (round !== undefined) {
                 this.structureService = new StructureService(
-                  this.competitionseason,
+                  this.competition,
                   { min: 2, max: 64 },
                   round
                 );
@@ -82,7 +75,7 @@ export class StructureEditComponent implements OnInit, OnDestroy {
   create() {
 
     this.structureService = new StructureService(
-      this.competitionseason,
+      this.competition,
       { min: 2, max: 64 },
       undefined,
       this.customForm.controls.nrofteams.value
@@ -90,11 +83,11 @@ export class StructureEditComponent implements OnInit, OnDestroy {
 
     this.structureService.getFirstRound().getConfig().setNrOfHeadtoheadMatches(2);
 
-    this.structureRepository.createObject(this.structureService.getFirstRound(), this.competitionseason).subscribe(
+    this.structureRepository.createObject(this.structureService.getFirstRound(), this.competition).subscribe(
               /* happy path */(roundRes: Round) => {
 
         this.structureService = new StructureService(
-          this.competitionseason,
+          this.competition,
           { min: 2, max: 64 },
           roundRes
         );
@@ -106,16 +99,16 @@ export class StructureEditComponent implements OnInit, OnDestroy {
   }
 
   editPoulePlace(poulePlace: PoulePlace) {
-    this.linkToEdit(this.competitionseason, poulePlace);
+    this.linkToEdit(this.competition, poulePlace);
   }
 
-  linkToEdit(competitionseason: Competitionseason, poulePlace: PoulePlace) {
+  linkToEdit(competition: Competition, poulePlace: PoulePlace) {
     this.router.navigate(
-      ['/admin/pouleplace/edit', competitionseason.getId(), poulePlace.getId()],
+      ['/admin/pouleplace/edit', competition.getId(), poulePlace.getId()],
       {
         queryParams: {
           returnAction: '/admin/structure',
-          returnParam: competitionseason.getId()
+          returnParam: competition.getId()
         }
       }
     );
@@ -144,11 +137,11 @@ export class StructureEditComponent implements OnInit, OnDestroy {
   //     return;
   //   }
 
-  //   this.competitionseason.setStartDateTime(startDateTime);
+  //   this.competition.setStartDateTime(startDateTime);
 
-  //   this.competitionseasonRepos.editObject(this.competitionseason)
+  //   this.competitionRepos.editObject(this.competition)
   //     .subscribe(
-  //       /* happy path */ competitionseasonRes => {
+  //       /* happy path */ competitionRes => {
   //       this.navigateBack();
   //     },
   //       /* error path */ e => { this.setAlert('danger', e); this.processing = false; },
@@ -157,7 +150,7 @@ export class StructureEditComponent implements OnInit, OnDestroy {
   // }
 
   navigateBack() {
-    this.router.navigate(['/admin/competitionseason/home', this.competitionseason.getId()]);
+    this.router.navigate(['/admin/competition/home', this.competition.getId()]);
   }
 
   protected setAlert(type: string, message: string) {

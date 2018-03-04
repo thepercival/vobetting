@@ -1,12 +1,11 @@
 <div class="row justify-content-center mx-0" style="min-height:4.5rem;">
-  <div *ngIf="competitionseason" class="col-xs-12 col-sm-8 col-md-8 col-lg-6 mt-1">
+  <div *ngIf="competition" class="col-xs-12 col-sm-8 col-md-8 col-lg-6 mt-1">
     <h1>
-      <span>{{competitionseason.getName()}}</span>
+      <span>{{competition.getName()}}</span>
     </h1>
     <h1 class="">
       <span>wedstrijden</span>
-      <button [routerLink]="['/admin/competitionseason/home',competitionseason.getId()]" routerLinkActive="active" type="button"
-        class="btn btn-outline-secondary btn-sm">
+      <button [routerLink]="['/admin/competition/home',competition.getId()]" routerLinkActive="active" type="button" class="btn btn-outline-secondary btn-sm">
         <i class="fa fa-level-up fa-rotate-270"></i>
       </button>
     </h1>

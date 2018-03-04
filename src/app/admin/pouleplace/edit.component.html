@@ -2,8 +2,8 @@
   <div *ngIf="poulePlace" class="row justify-content-center">
     <div class="col-xs-12 col-sm-8 col-md-8 col-lg-6">
       <div class="mb-4">
-        <h1 *ngIf="competitionseason">
-          {{competitionseason.getName()}}
+        <h1 *ngIf="competition">
+          {{competition.getName()}}
           <button (click)="navigateBack()" type="button" class="btn btn-outline-secondary btn-sm">
             <i class="fa fa-level-up fa-rotate-270"></i>
           </button>
@@ -30,7 +30,7 @@
             <select id="team" name="team" class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.team.invalid, 'is-valid': customForm.controls.team.valid }"
               [formControl]="customForm.controls.team">
               <option value="">kies..</option>
-              <option *ngFor="let team of competitionseason.getAssociation().getTeams()" [ngValue]="team">{{team.getName()}}</option>
+              <option *ngFor="let team of competition.getAssociation().getTeams()" [ngValue]="team">{{team.getName()}}</option>
             </select>
           </div>
         </div>

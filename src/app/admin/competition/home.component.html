@@ -1,11 +1,11 @@
-<div *ngIf="competitionseason" class="container-fluid home">
+<div *ngIf="competition" class="container-fluid home">
   <div class="row justify-content-center">
     <div class="col-xs-12 col-sm-8 col-md-8 col-lg-6">
       <div class="mb-4">
         <h1>
           <span>competitieseizoen</span>
-          <span> {{competitionseason.getName()}}</span>
-          <button [routerLink]="['/admin/competitionseason']" type="button" class="btn btn-outline-secondary btn-sm">
+          <span> {{competition.getName()}}</span>
+          <button [routerLink]="['/admin/competition']" type="button" class="btn btn-outline-secondary btn-sm">
             <i class="fa fa-level-up fa-rotate-270"></i>
           </button>
         </h1>
@@ -25,7 +25,7 @@
             <h5 class="card-title">structuur</h5>
           </div>
         </div>
-        <div class="card pointer mt-3 mx-2" [routerLink]="['/admin/games',competitionseason.getId()]">
+        <div class="card pointer mt-3 mx-2" [routerLink]="['/admin/games',competition.getId()]">
           <div class="card-body">
             <h5 class="card-title">wedstrijden</h5>
           </div>

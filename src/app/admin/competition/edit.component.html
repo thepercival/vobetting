@@ -1,46 +1,70 @@
-<div class="container-fluid home">
+<div class="container-fluid edit">
   <div class="row justify-content-center">
     <div class="col-xs-12 col-sm-8 col-md-8 col-lg-6">
       <div class="mb-4">
         <h1>
-          <span>competitie</span>
+          <span>competitieseizoen</span>
           <span> {{competition ? 'wijzigen' : 'toevoegen'}}</span>
           <button (click)="navigateBack()" type="button" class="btn btn-outline-secondary btn-sm">
             <i class="fa fa-level-up fa-rotate-270"></i>
           </button>
         </h1>
       </div>
-      <form name="form" (ngSubmit)="save() && false" [formGroup]="customForm" novalidate>
+      <h1 *ngIf="processing" align="center">
+        <i class="fa fa-spinner fa-spin fa-fw"></i>
+      </h1>
+      <form *ngIf="!processing" name="form" (ngSubmit)="save() && false" [formGroup]="customForm" novalidate>
         <div class="form-group row">
           <div class="col-3">
-            <label for="name" class="col-form-label">naam</label>
+            <label for="association" class="col-form-label">bond</label>
           </div>
           <div class="col-9">
-            <input class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.name.invalid, 'is-valid': customForm.controls.name.valid }"
-              type="text" name="name" id="name" [formControl]="customForm.controls.name" maxlength="{{validations.maxlengthname}}"
-              placeholder="max. {{validations.maxlengthname}} karakters" autofocus>
-          </div>
-        </div>
-        <div class="form-group row">
-          <div class="col-3">
-            <label for="sport" class="col-form-label">sport</label>
-          </div>
-          <div class="col-9">
-            <select id="sport" name="sport" class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.sport.invalid, 'is-valid': customForm.controls.sport.valid }"
-              [formControl]="customForm.controls.sport">
+            <select id="association" name="association" class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.association.invalid, 'is-valid': customForm.controls.association.valid }"
+              [formControl]="customForm.controls.association">
               <option value="">kies..</option>
-              <option *ngFor="let sport of sports" [ngValue]="sport">{{sport}}</option>
+              <option *ngFor="let association of associations" [ngValue]="association">{{association.getName()}}</option>
             </select>
           </div>
         </div>
         <div class="form-group row">
           <div class="col-3">
-            <label for="abbreviation" class="col-form-label">afkorting</label>
+            <label for="league" class="col-form-label">competitie</label>
           </div>
           <div class="col-9">
-            <input class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.abbreviation.invalid, 'is-valid': customForm.controls.abbreviation.valid }"
-              type="text" name="abbreviation" id="abbreviation" [formControl]="customForm.controls.abbreviation" maxlength="{{validations.maxlengthabbreviation}}"
-              placeholder="max. {{validations.maxlengthabbreviation}} karakters">
+            <select id="league" name="league" class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.league.invalid, 'is-valid': customForm.controls.league.valid }"
+              [formControl]="customForm.controls.league">
+              <option value="">kies..</option>
+              <option *ngFor="let league of leagues" [ngValue]="league">{{league.getName()}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-3">
+            <label for="season" class="col-form-label">seizoen</label>
+          </div>
+          <div class="col-9">
+            <select id="season" name="season" class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.season.invalid, 'is-valid': customForm.controls.season.valid }"
+              [formControl]="customForm.controls.season" (ngModelChange)="updateStartDateTime($event)">
+              <option value="">kies..</option>
+              <option *ngFor="let season of seasons" [ngValue]="season">{{season.getName()}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-3">
+            <label for="dp" class="col-form-label">startdatum</label>
+          </div>
+          <div class="col-9">
+            <div class="input-group input-group-date">
+              <input class="form-control" placeholder="yyyy-mm-dd" id="dp" name="dp" [formControl]="customForm.controls.startDateTime"
+                [ngClass]="{ 'is-invalid': customForm.controls.startDateTime.invalid, 'is-valid': customForm.controls.startDateTime.valid }"
+                ngbDatepicker #d="ngbDatepicker" required>
+              <div class="input-group-append">
+                <span class="input-group-text" (click)="d.toggle()" style="cursor: pointer;">
+                  <i class="fa fa-calendar"></i>
+                </span>
+              </div>
+            </div>
           </div>
         </div>
         <ngb-alert *ngIf="alert" [type]="alert.type" style="width:100%;" [dismissible]="true" (close)="alert = undefined;">{{ alert.message }}</ngb-alert>
@@ -48,7 +72,7 @@
           <div class="col-9">
             <button [disabled]="customForm.invalid" type="submit" class="btn btn-outline-primary">
               <span>{{competition ? 'wijzigen' : 'toevoegen'}}</span>
-              <i *ngIf="processing" class="fa fa-spinner fa-spin fa-fw"></i>
+              <i *ngIf="loading" class="fa fa-spinner fa-spin fa-fw"></i>
             </button>
           </div>
         </div>

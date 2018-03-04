@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+
 import { AuthService } from '../auth/auth.service';
 
 @Component({
@@ -11,15 +12,15 @@ export class NavComponent implements OnInit {
   @Input()
   title: string;
   navbarCollapsed = true;
-  // showCompetitionSeasonDetails: boolean = false;
+  // showCompetitionDetails: boolean = false;
 
   constructor(
-      private authService: AuthService/*
+    private authService: AuthService/*
       ,
       private globalEventsManager: GlobalEventsManager*/
   ) {
-    // this.globalEventsManager.showCompetitionSeasonDetailsInNavBar.subscribe((mode)=>{
-    //   this.showCompetitionSeasonDetails = mode;
+    // this.globalEventsManager.showLeagueeasonDetailsInNavBar.subscribe((mode)=>{
+    //   this.showLeagueeasonDetails = mode;
     //   console.log('in navbar show is ' + mode );
     // });
   }

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap/datepicker/datepicker.module';
-import { Competition, Competitionseason } from 'ngx-sport';
+import { Competition, League } from 'ngx-sport';
 
 import { BetLine } from '../betline';
 import { BetLineFilter } from './repository';
@@ -13,7 +13,7 @@ import { BetLineFilter } from './repository';
 })
 export class BetLineSelectionComponent implements OnInit, OnDestroy {
 
-  @Input() competitionseasons: Competitionseason[];
+  @Input() competitions: Competition[];
   @Output() processBetLinesFilter = new EventEmitter<BetLineFilter>();
 
   // games: Game[];
@@ -21,12 +21,12 @@ export class BetLineSelectionComponent implements OnInit, OnDestroy {
   public processing = false;
   customForm: FormGroup;
   // protected sub: Subscription;
-  // competitionseason: Competitionseason;
+  // competition: Competition;
   // structureService: StructureService;
 
   constructor(
     // private teamRepos: TeamRepository,
-    // private competitionseasonRepos: CompetitionseasonRepository,
+    // private competitionRepos: CompetitionRepository,
     // private associationRepos: AssociationRepository,
     // private pouleplaceRepos: PoulePlaceRepository,
     // private structureRepository: StructureRepository,
@@ -35,10 +35,10 @@ export class BetLineSelectionComponent implements OnInit, OnDestroy {
     fb: FormBuilder
   ) {
     this.customForm = fb.group({
-      competition: ['', Validators.compose([
+      league: ['', Validators.compose([
         Validators.required
       ])],
-      competitionseason: ['', Validators.compose([
+      competition: ['', Validators.compose([
         Validators.required
       ])],
       endDateTime: ['', Validators.required],
@@ -46,22 +46,22 @@ export class BetLineSelectionComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.customForm.controls.competition.setValue(this.competitionseasons[this.competitionseasons.length - 1].getCompetition());
-    this.customForm.controls.competitionseason.setValue(this.competitionseasons[this.competitionseasons.length - 1]);
+    this.customForm.controls.league.setValue(this.competitions[this.competitions.length - 1].getLeague());
+    this.customForm.controls.competition.setValue(this.competitions[this.competitions.length - 1]);
     const date = new Date(); date.setMonth(date.getMonth() + 1);
     this.customForm.controls.endDateTime.setValue(this.convertDateBack(date));
 
     // this.sub = this.route.params.subscribe(params => {
-    //   this.competitionseasonRepos.getObject(+params.id)
+    //   this.competitionRepos.getObject(+params.id)
     //     .subscribe(
-    //     /* happy path */(competitionseason: Competitionseason) => {
-    //       this.competitionseason = competitionseason;
-    //       this.structureRepository.getObject(this.competitionseason)
+    //     /* happy path */(competition: Competition) => {
+    //       this.competition = competition;
+    //       this.structureRepository.getObject(this.competition)
     //         .subscribe(
     //           /* happy path */(round: Round) => {
     //           if (round !== undefined) {
     //             this.structureService = new StructureService(
-    //               this.competitionseason,
+    //               this.competition,
     //               { min: 2, max: 64 },
     //               round
     //             );
@@ -89,25 +89,25 @@ export class BetLineSelectionComponent implements OnInit, OnDestroy {
     // this.sub.unsubscribe();
   }
 
-  getCompetitions(): Competition[] {
-    return this.competitionseasons.map(competitionseason => competitionseason.getCompetition());
+  getLeagues(): League[] {
+    return this.competitions.map(competition => competition.getLeague());
   }
 
   // (ngModelChange)="updateStartDateTime($event)"
 
-  getCompetitionseasons(): Competitionseason[] {
-    const selectedCompetition = this.customForm.controls.competition.value;
-    return this.competitionseasons.filter(competitionseason => competitionseason.getCompetition() === selectedCompetition);
+  getCompetitions(): Competition[] {
+    const selectedLeague = this.customForm.controls.league.value;
+    return this.competitions.filter(competition => competition.getLeague() === selectedLeague);
   }
 
   process() {
-    const competitionseason = this.customForm.controls.competitionseason.value;
+    const competition = this.customForm.controls.competition.value;
     const startDateTime = new Date();
     const endDateTime = this.convertDate(this.customForm.controls.endDateTime.value);
     const betType = BetLine.MATCH_ODDS;
 
     const betLineFilter: BetLineFilter = {
-      competitionseason: competitionseason,
+      competition: competition,
       startDateTime: startDateTime,
       endDateTime: endDateTime,
       betType: betType,
@@ -131,11 +131,11 @@ export class BetLineSelectionComponent implements OnInit, OnDestroy {
   //   const planningService = new PlanningService(this.structureService);
   //   planningService.create(this.structureService.getFirstRound().getNumber());
 
-  //   this.structureRepository.editObject(this.structureService.getFirstRound(), this.competitionseason)
+  //   this.structureRepository.editObject(this.structureService.getFirstRound(), this.competition)
   //     .subscribe(
   //           /* happy path */ roundRes => {
   //       this.structureService = new StructureService(
-  //         this.competitionseason,
+  //         this.competition,
   //         { min: 2, max: 64 },
   //         roundRes
   //       );

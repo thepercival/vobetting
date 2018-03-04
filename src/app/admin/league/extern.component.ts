@@ -2,24 +2,24 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
-  Competition,
-  CompetitionRepository,
   ExternalObject,
   ExternalObjectRepository,
   ExternalSystem,
   ExternalSystemRepository,
   IExternalObject,
+  League,
+  LeagueRepository,
 } from 'ngx-sport';
 import { Subscription } from 'rxjs/Subscription';
 
 import { IAlert } from '../../app.definitions';
 
 @Component({
-  selector: 'app-competition-extern',
+  selector: 'app-league-extern',
   templateUrl: './extern.component.html'/*,
   styleUrls: ['./edit.component.css']*/
 })
-export class CompetitionExternComponent implements OnInit, OnDestroy {
+export class LeagueExternComponent implements OnInit, OnDestroy {
 
   protected sub: Subscription;
   returnUrl: string;
@@ -29,7 +29,7 @@ export class CompetitionExternComponent implements OnInit, OnDestroy {
   public alert: IAlert;
   public processing = true;
   customForm: FormGroup;
-  competition: Competition;
+  league: League;
   externalSystems: ExternalSystem[];
   externalObject: ExternalObject;
 
@@ -38,7 +38,7 @@ export class CompetitionExternComponent implements OnInit, OnDestroy {
   };
 
   constructor(
-    private competitionRepos: CompetitionRepository,
+    private leagueRepos: LeagueRepository,
     private externalSystemRepos: ExternalSystemRepository,
     private externalObjectRepos: ExternalObjectRepository,
     private route: ActivatedRoute,
@@ -46,7 +46,7 @@ export class CompetitionExternComponent implements OnInit, OnDestroy {
     fb: FormBuilder
   ) {
 
-    this.externalObjectRepos.setUrlpostfix(this.competitionRepos);
+    this.externalObjectRepos.setUrlpostfix(this.leagueRepos);
     this.customForm = fb.group({
       name: ['', Validators.compose([
         Validators.required
@@ -71,11 +71,11 @@ export class CompetitionExternComponent implements OnInit, OnDestroy {
         /* onComplete */() => { this.processing = false; }
         );
 
-      this.competitionRepos.getObject(+params.id)
+      this.leagueRepos.getObject(+params.id)
         .subscribe(
-        /* happy path */(competition: Competition) => {
-          this.competition = competition;
-          this.customForm.controls.name.setValue(this.competition.getName());
+        /* happy path */(league: League) => {
+          this.league = league;
+          this.customForm.controls.name.setValue(this.league.getName());
           this.customForm.controls.name.disable();
         },
         /* error path */ e => { this.processing = false; },
@@ -98,7 +98,8 @@ export class CompetitionExternComponent implements OnInit, OnDestroy {
 
   getExternalObject(externalSystem: ExternalSystem) {
     this.processing = true;
-    this.externalObjectRepos.getObject(this.competition, externalSystem)
+    this.customForm.controls.externalId.setValue(undefined);
+    this.externalObjectRepos.getObject(this.league, externalSystem)
       .subscribe(
         /* happy path */(externalObject: ExternalObject) => {
         this.externalObject = externalObject;
@@ -126,7 +127,7 @@ export class CompetitionExternComponent implements OnInit, OnDestroy {
     const externalId = this.customForm.controls.externalId.value;
 
     const externalObject: IExternalObject = {
-      importableObjectId: this.competition.getId(),
+      importableObjectId: this.league.getId(),
       externalSystemId: externalSystem.getId(),
       externalId: externalId
 

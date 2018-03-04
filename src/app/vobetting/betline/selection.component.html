@@ -2,25 +2,25 @@
   <form *ngIf="!processing" name="form" (ngSubmit)="process() && false" [formGroup]="customForm" novalidate>
     <div class="form-group row">
       <div class="col-3">
-        <label for="competition" class="col-form-label">competitie</label>
+        <label for="league" class="col-form-label">competitie</label>
+      </div>
+      <div class="col-9">
+        <select id="league" name="league" class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.league.invalid, 'is-valid': customForm.controls.league.valid }"
+          [formControl]="customForm.controls.league">
+          <option value="">kies..</option>
+          <option *ngFor="let leagueIt of getLeagues()" [ngValue]="leagueIt">{{leagueIt.getName()}}</option>
+        </select>
+      </div>
+    </div>
+    <div *ngIf="customForm.controls.league.value" class="form-group row">
+      <div class="col-3">
+        <label for="competition" class="col-form-label">seizoen</label>
       </div>
       <div class="col-9">
         <select id="competition" name="competition" class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.competition.invalid, 'is-valid': customForm.controls.competition.valid }"
           [formControl]="customForm.controls.competition">
           <option value="">kies..</option>
-          <option *ngFor="let competitionIt of getCompetitions()" [ngValue]="competitionIt">{{competitionIt.getName()}}</option>
-        </select>
-      </div>
-    </div>
-    <div *ngIf="customForm.controls.competition.value" class="form-group row">
-      <div class="col-3">
-        <label for="competitionseason" class="col-form-label">seizoen</label>
-      </div>
-      <div class="col-9">
-        <select id="competitionseason" name="competitionseason" class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.competitionseason.invalid, 'is-valid': customForm.controls.competitionseason.valid }"
-          [formControl]="customForm.controls.competitionseason">
-          <option value="">kies..</option>
-          <option *ngFor="let competitionseasonIt of getCompetitionseasons()" [ngValue]="competitionseasonIt">{{competitionseasonIt.getSeason().getName()}}</option>
+          <option *ngFor="let competitionIt of getCompetitions()" [ngValue]="competitionIt">{{competitionIt.getSeason().getName()}}</option>
         </select>
       </div>
     </div>

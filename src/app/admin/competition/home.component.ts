@@ -1,16 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Competitionseason, CompetitionseasonRepository } from 'ngx-sport';
+import { Competition, CompetitionRepository } from 'ngx-sport';
 import { Subscription } from 'rxjs/Subscription';
 
 import { IAlert } from '../../app.definitions';
 
 @Component({
-  selector: 'app-competitionseason-home',
+  selector: 'app-competition-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class CompetitionseasonHomeComponent implements OnInit, OnDestroy {
+export class CompetitionHomeComponent implements OnInit, OnDestroy {
 
   protected sub: Subscription;
   returnUrl: string;
@@ -19,11 +19,11 @@ export class CompetitionseasonHomeComponent implements OnInit, OnDestroy {
   returnUrlQueryParamValue: string;
   public alert: IAlert;
   public processing = true;
-  competitionseasons: Competitionseason[];
-  competitionseason: Competitionseason;
+  competitions: Competition[];
+  competition: Competition;
 
   constructor(
-    private competitionseasonRepos: CompetitionseasonRepository,
+    private competitionRepos: CompetitionRepository,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -33,10 +33,10 @@ export class CompetitionseasonHomeComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.sub = this.route.params.subscribe(params => {
-      this.competitionseasonRepos.getObjects()
+      this.competitionRepos.getObjects()
         .subscribe(
-        /* happy path */(competitionseasons: Competitionseason[]) => {
-          this.competitionseasons = competitionseasons;
+        /* happy path */(competitions: Competition[]) => {
+          this.competitions = competitions;
           this.postInit(+params.id);
         },
         /* error path */ e => { },
@@ -61,16 +61,16 @@ export class CompetitionseasonHomeComponent implements OnInit, OnDestroy {
     if (id === undefined || id < 1) {
       return;
     }
-    this.competitionseason = this.competitionseasons.find(competitionseason => competitionseason.getId() === id);
+    this.competition = this.competitions.find(competition => competition.getId() === id);
   }
 
   linkToBasics() {
     this.router.navigate(
-      ['/admin/competitionseason/edit', this.competitionseason.getId()],
+      ['/admin/competition/edit', this.competition.getId()],
       {
         queryParams: {
-          returnAction: '/admin/competitionseason/home',
-          returnParam: this.competitionseason.getId()
+          returnAction: '/admin/competition/home',
+          returnParam: this.competition.getId()
         }
       }
     );
@@ -78,11 +78,11 @@ export class CompetitionseasonHomeComponent implements OnInit, OnDestroy {
 
   linkToStructure() {
     this.router.navigate(
-      ['/admin/structure', this.competitionseason.getId()],
+      ['/admin/structure', this.competition.getId()],
       {
         queryParams: {
-          returnAction: '/admin/competitionseason/home',
-          returnParam: this.competitionseason.getId()
+          returnAction: '/admin/competition/home',
+          returnParam: this.competition.getId()
         }
       }
     );

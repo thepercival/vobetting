@@ -2,7 +2,18 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap/datepicker/datepicker.module';
-import { Competition, CompetitionRepository, ICompetition, SportConfig } from 'ngx-sport';
+import {
+  Association,
+  AssociationRepository,
+  Competition,
+  CompetitionRepository,
+  ICompetition,
+  League,
+  LeagueRepository,
+  Season,
+  SeasonRepository,
+} from 'ngx-sport';
+import { forkJoin } from 'rxjs/observable/forkJoin';
 import { Subscription } from 'rxjs/Subscription';
 
 import { IAlert } from '../../app.definitions';
@@ -22,36 +33,55 @@ export class CompetitionEditComponent implements OnInit, OnDestroy {
   public alert: IAlert;
   public processing = true;
   customForm: FormGroup;
+  associations: Association[];
+  leagues: League[];
+  seasons: Season[];
   competitions: Competition[];
   competition: Competition;
-  sports: string[];
-
-  validations: CompetitionValidations = {
-    minlengthname: Competition.MIN_LENGTH_NAME,
-    maxlengthname: Competition.MAX_LENGTH_NAME,
-    maxlengthabbreviation: Competition.MAX_LENGTH_ABBREVIATION,
-    maxlengthsport: Competition.MAX_LENGTH_SPORT
-  };
 
   constructor(
+    private associationRepos: AssociationRepository,
+    private leagueRepos: LeagueRepository,
+    private seasonRepos: SeasonRepository,
     private competitionRepos: CompetitionRepository,
     private route: ActivatedRoute,
     private router: Router,
     fb: FormBuilder
   ) {
-    this.sports = SportConfig.getSports();
     this.customForm = fb.group({
-      name: ['', Validators.compose([
-        Validators.required,
-        Validators.minLength(this.validations.minlengthname),
-        Validators.maxLength(this.validations.maxlengthname)
+      association: ['', Validators.compose([
+        Validators.required
       ])],
-      abbreviation: ['', Validators.maxLength(this.validations.maxlengthabbreviation)],
-      sport: ['', Validators.required]
+      league: ['', Validators.compose([
+        Validators.required
+      ])],
+      season: ['', Validators.compose([
+        Validators.required
+      ])],
+      startDateTime: ['', Validators.required],
     });
   }
 
   ngOnInit() {
+
+    const reposUpdates = [
+      this.associationRepos.getObjects(),
+      this.leagueRepos.getObjects(),
+      this.seasonRepos.getObjects()
+    ];
+
+    forkJoin(reposUpdates).subscribe(results => {
+      this.associations = results[0];
+      this.leagues = results[1];
+      this.seasons = results[2];
+    },
+      err => {
+        // this.setAlert('danger', 'volgorde niet gewijzigd: ' + err);
+        this.processing = false;
+      },
+      () => this.processing = false
+    );
+
     this.sub = this.route.params.subscribe(params => {
       this.competitionRepos.getObjects()
         .subscribe(
@@ -73,10 +103,6 @@ export class CompetitionEditComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
-    this.sub.unsubscribe();
-  }
-
   private postInit(id: number) {
     if (id === undefined || id < 1) {
       return;
@@ -85,9 +111,18 @@ export class CompetitionEditComponent implements OnInit, OnDestroy {
     if (this.competition === undefined) {
       return;
     }
-    this.customForm.controls.name.setValue(this.competition.getName());
-    this.customForm.controls.abbreviation.setValue(this.competition.getAbbreviation());
-    this.customForm.controls.sport.setValue(this.competition.getSport());
+    this.customForm.controls.association.setValue(this.competition.getAssociation());
+    this.customForm.controls.league.setValue(this.competition.getLeague());
+    this.customForm.controls.season.setValue(this.competition.getSeason());
+    this.customForm.controls.startDateTime.setValue(this.convertDateBack(this.competition.getStartDateTime()));
+
+    this.customForm.controls.association.disable();
+    this.customForm.controls.league.disable();
+    this.customForm.controls.season.disable();
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 
   save() {
@@ -101,26 +136,29 @@ export class CompetitionEditComponent implements OnInit, OnDestroy {
   add() {
     this.processing = true;
 
-    const name = this.customForm.controls.name.value;
-    const abbreviation = this.customForm.controls.abbreviation.value;
-    const sport = this.customForm.controls.sport.value;
+    const league = this.customForm.controls.league.value;
+    const season = this.customForm.controls.season.value;
+    const startDateTime = this.convertDate(this.customForm.controls.startDateTime.value);
 
-    if (this.isNameDuplicate(this.customForm.controls.name.value)) {
-      this.setAlert('danger', 'de naam bestaan al');
+    if (this.isStartDateTimeInSeason(startDateTime, season)) {
+      this.setAlert('danger', 'de startdatum valut buiten het seizoen');
       this.processing = false;
       return;
     }
+
     const competition: ICompetition = {
-      name: name,
-      abbreviation: abbreviation ? abbreviation : undefined,
-      sport: sport,
+      fields: [],
+      referees: [],
+      startDateTime: startDateTime.toISOString(),
+      state: Competition.STATE_CREATED
+
     };
-    this.competitionRepos.createObject(competition)
+    this.competitionRepos.createObject(competition, league, season)
       .subscribe(
         /* happy path */ competitionRes => {
         this.navigateBack();
       },
-        /* error path */ e => { this.setAlert('danger', e); },
+        /* error path */ e => { this.setAlert('danger', e); this.processing = false; },
         /* onComplete */() => this.processing = false
       );
   }
@@ -128,18 +166,16 @@ export class CompetitionEditComponent implements OnInit, OnDestroy {
   edit() {
     this.processing = true;
 
-    if (this.isNameDuplicate(this.customForm.controls.name.value, this.competition)) {
-      this.setAlert('danger', 'de naam bestaan al');
+    const startDateTime = this.convertDate(this.customForm.controls.startDateTime.value);
+    const season = this.customForm.controls.season.value;
+
+    if (this.isStartDateTimeInSeason(startDateTime, season)) {
+      this.setAlert('danger', 'de startdatum valut buiten het seizoen');
       this.processing = false;
       return;
     }
-    const name = this.customForm.controls.name.value;
-    const abbreviation = this.customForm.controls.abbreviation.value;
-    const sport = this.customForm.controls.sport.value;
 
-    this.competition.setName(name);
-    this.competition.setAbbreviation(abbreviation ? abbreviation : undefined);
-    this.competition.setSport(sport);
+    this.competition.setStartDateTime(startDateTime);
 
     this.competitionRepos.editObject(this.competition)
       .subscribe(
@@ -149,6 +185,10 @@ export class CompetitionEditComponent implements OnInit, OnDestroy {
         /* error path */ e => { this.setAlert('danger', e); this.processing = false; },
         /* onComplete */() => { this.processing = false; }
       );
+  }
+
+  isStartDateTimeInSeason(startDateTime: Date, season: Season) {
+    return (startDateTime < season.getStartDateTime() || startDateTime > season.getEndDateTime());
   }
 
   private getForwarUrl() {
@@ -168,10 +208,16 @@ export class CompetitionEditComponent implements OnInit, OnDestroy {
     this.router.navigate(this.getForwarUrl(), { queryParams: this.getForwarUrlQueryParams() });
   }
 
-  isNameDuplicate(name: string, competition?: Competition): boolean {
-    return this.competitions.find(competitionIt => {
-      return (name === competitionIt.getName() && (competition === undefined || competition !== competitionIt));
-    }) !== undefined;
+  // isNameDuplicate(name: string, competition?: Competition): boolean {
+  //   return this.competitions.find(competitionIt => {
+  //     return (name === competitionIt.getName() && (competition === undefined || competition !== competitionIt));
+  //   }) !== undefined;
+  // }
+
+  updateStartDateTime(season: Season) {
+    if (this.customForm.controls.startDateTime.value.length === 0) {
+      this.customForm.controls.startDateTime.setValue(this.convertDateBack(season.getStartDateTime()));
+    }
   }
 
   protected setAlert(type: string, message: string) {
@@ -189,11 +235,4 @@ export class CompetitionEditComponent implements OnInit, OnDestroy {
   convertDateBack(date: Date) {
     return { year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() };
   }
-}
-
-export interface CompetitionValidations {
-  maxlengthname: number;
-  minlengthname: number;
-  maxlengthabbreviation: number;
-  maxlengthsport: number;
 }

@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Competitionseason, Game, GameRepository, IPoulePlace, PoulePlaceRepository, SportRepository } from 'ngx-sport';
+import { Competition, Game, GameRepository, IPoulePlace, PoulePlaceRepository, SportRepository } from 'ngx-sport';
 import { Observable } from 'rxjs/Observable';
 import { catchError } from 'rxjs/operators/catchError';
 import { map } from 'rxjs/operators/map';
@@ -119,7 +119,7 @@ export interface IBetLine {
 }
 
 export interface BetLineFilter {
-    competitionseason: Competitionseason;
+    competition: Competition;
     startDateTime: Date;
     endDateTime: Date;
     betType: number;

@@ -1,4 +1,4 @@
-<div *ngIf="competitionseasons" class="container-fluid home">
+<div *ngIf="competitions" class="container-fluid home">
 
   <div class="mb-4">
     <h1>
@@ -9,7 +9,7 @@
     </h1>
   </div>
   <div>
-    <app-betline-selection [competitionseasons]="competitionseasons" (processBetLinesFilter)="processBetLinesFilter($event)"></app-betline-selection>
+    <app-betline-selection [competitions]="competitions" (processBetLinesFilter)="processBetLinesFilter($event)"></app-betline-selection>
   </div>
   <hr>
   <div>

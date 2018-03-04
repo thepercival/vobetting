@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Season, SeasonRepository } from 'ngx-sport';
+import { Season, SeasonRepository, SportConfig } from 'ngx-sport';
 
 import { IAlert } from '../../app.definitions';
 
@@ -14,6 +14,7 @@ export class SeasonListComponent implements OnInit {
   seasons: Season[];
   alert: IAlert;
   processing = true;
+  useExternal = SportConfig.useExternal;
 
   constructor(
     private router: Router,
@@ -42,6 +43,17 @@ export class SeasonListComponent implements OnInit {
   linkToEdit(season?: Season) {
     this.router.navigate(
       ['/admin/season/edit', season ? season.getId() : 0],
+      {
+        queryParams: {
+          returnAction: '/admin/season'
+        }
+      }
+    );
+  }
+
+  linkToExtern(season: Season) {
+    this.router.navigate(
+      ['/admin/season/extern', season.getId()],
       {
         queryParams: {
           returnAction: '/admin/season'

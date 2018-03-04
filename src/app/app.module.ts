@@ -8,7 +8,7 @@ import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap/collapse/collapse.
 import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap/datepicker/datepicker.module';
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap/popover/popover.module';
 import { NgbTimepickerModule } from '@ng-bootstrap/ng-bootstrap/timepicker/timepicker.module';
-import { AssociationRepository, CompetitionRepository, CompetitionseasonRepository, SeasonRepository } from 'ngx-sport';
+import { AssociationRepository, LeagueRepository, CompetitionRepository, SeasonRepository } from 'ngx-sport';
 
 import { AdminModule } from './admin/admin.module';
 import { AppRoutingModule } from './app-routing.module';
@@ -44,9 +44,9 @@ import { UserModule } from './user/user.module';
   providers: [
     AuthService,
     AuthguardService,
-    CompetitionseasonRepository,
-    AssociationRepository,
     CompetitionRepository,
+    AssociationRepository,
+    LeagueRepository,
     SeasonRepository
   ],
   bootstrap: [AppComponent]

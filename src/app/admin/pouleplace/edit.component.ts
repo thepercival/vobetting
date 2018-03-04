@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   AssociationRepository,
-  Competitionseason,
-  CompetitionseasonRepository,
+  Competition,
+  CompetitionRepository,
   PoulePlace,
   PoulePlaceRepository,
   Round,
@@ -35,12 +35,12 @@ export class PoulePlaceEditComponent implements OnInit, OnDestroy {
   teams: Team[];
   team: Team;
   poulePlace: PoulePlace;
-  competitionseason: Competitionseason;
+  competition: Competition;
   structureService: StructureService;
 
   constructor(
     private teamRepos: TeamRepository,
-    private competitionseasonRepos: CompetitionseasonRepository,
+    private competitionRepos: CompetitionRepository,
     private associationRepos: AssociationRepository,
     private pouleplaceRepos: PoulePlaceRepository,
     private structureRepository: StructureRepository,
@@ -56,12 +56,12 @@ export class PoulePlaceEditComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.sub = this.route.params.subscribe(params => {
-      this.competitionseasonRepos.getObject(+params.competitionseasonid)
+      this.competitionRepos.getObject(+params.competitionid)
         .subscribe(
-        /* happy path */(competitionseason: Competitionseason) => {
-          this.competitionseason = competitionseason;
+        /* happy path */(competition: Competition) => {
+          this.competition = competition;
 
-          this.teamRepos.getObjects(this.competitionseason.getAssociation())
+          this.teamRepos.getObjects(this.competition.getLeague().getAssociation())
             .subscribe(
             /* happy path */(teams: Team[]) => {
               this.teams = teams;
@@ -71,11 +71,11 @@ export class PoulePlaceEditComponent implements OnInit, OnDestroy {
             /* onComplete */() => { this.processing = false; }
             );
 
-          this.structureRepository.getObject(this.competitionseason)
+          this.structureRepository.getObject(this.competition)
             .subscribe(
               /* happy path */(roundRes: Round) => {
               this.structureService = new StructureService(
-                this.competitionseason,
+                this.competition,
                 { min: 2, max: 64 },
                 roundRes
               );

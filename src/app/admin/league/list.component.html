@@ -1,7 +1,7 @@
 <div class="row justify-content-center mx-0" style="min-height:4.5rem;">
   <div class="col-xs-12 col-sm-8 col-md-8 col-lg-6 mt-1">
     <h1 class="">
-      <span>competitieseizoenen</span>
+      <span>competities</span>
       <button routerLink="/admin/home" routerLinkActive="active" type="button" class="btn btn-outline-secondary btn-sm">
         <i class="fa fa-level-up fa-rotate-270"></i>
       </button>
@@ -16,9 +16,10 @@
       <thead>
         <tr>
           <th></th>
-          <th>competitie</th>
-          <th>seizoen</th>
-          <th class="d-none d-sm-table-cell">bond</th>
+          <th *ngIf="useExternal"></th>
+          <th>naam</th>
+          <th class="d-none d-sm-table-cell">afkorting</th>
+          <th class="d-none d-sm-table-cell">sport</th>
           <th style="text-align: right;">
             <button type="button" class="btn btn-sm btn-outline-primary" (click)="add()" [disabled]="processing">
               <i class="fa fa-plus"></i>
@@ -27,23 +28,24 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let competitionseason of competitionseasons">
+        <tr *ngFor="let league of leagues">
           <td>
-            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing" (click)="edit(competitionseason)">
+            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing" (click)="edit(league)">
               <span class="fa fa-pencil"></span>
             </button>
           </td>
-          <td>
-            <span>{{competitionseason.getCompetition().getName()}}</span>
+          <td *ngIf="useExternal">
+            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing" (click)="linkToExtern(league)">
+              <span class="fa fa-cloud-download"></span>
+            </button>
           </td>
           <td>
-            <span>{{competitionseason.getSeason().getName()}}</span>
+            <span>{{league.getName()}}</span>
           </td>
-          <td class="d-none d-sm-table-cell">
-            <span>{{competitionseason.getAssociation().getName()}}</span>
-          </td>
+          <td class="d-none d-sm-table-cell">{{league.getAbbreviation()}}</td>
+          <td class="d-none d-sm-table-cell">{{league.getSport()}}</td>
           <td style="text-align: right;">
-            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing" (click)="remove(competitionseason);">
+            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing" (click)="remove(league);">
               <span class="fa fa-remove"></span>
             </button>
           </td>

@@ -1,30 +1,31 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Competitionseason, CompetitionseasonRepository } from 'ngx-sport';
+import { League, LeagueRepository, SportConfig } from 'ngx-sport';
 
 import { IAlert } from '../../app.definitions';
 
 @Component({
-  selector: 'app-competitionseason-list',
+  selector: 'app-league-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.css']
 })
-export class CompetitionseasonListComponent implements OnInit {
+export class LeagueListComponent implements OnInit {
 
-  competitionseasons: Competitionseason[];
+  leagues: League[];
   alert: IAlert;
   processing = true;
+  useExternal = SportConfig.useExternal;
 
   constructor(
     private router: Router,
-    private competitionseasonRepos: CompetitionseasonRepository
+    private leagueRepos: LeagueRepository
   ) { }
 
   ngOnInit() {
-    this.competitionseasonRepos.getObjects()
+    this.leagueRepos.getObjects()
       .subscribe(
-        /* happy path */(competitionseasons: Competitionseason[]) => {
-        this.competitionseasons = competitionseasons;
+        /* happy path */(leagues: League[]) => {
+        this.leagues = leagues;
       },
         /* error path */ e => { },
         /* onComplete */() => { this.processing = false; }
@@ -32,37 +33,45 @@ export class CompetitionseasonListComponent implements OnInit {
   }
 
   add() {
+    this.linkToEdit();
+  }
+
+  edit(league: League) {
+    this.linkToEdit(league);
+  }
+
+  linkToEdit(league?: League) {
     this.router.navigate(
-      ['/admin/competitionseason/edit', 0],
+      ['/admin/league/edit', league ? league.getId() : 0],
       {
         queryParams: {
-          returnAction: '/admin/competitionseason'
+          returnAction: '/admin/league'
         }
       }
     );
   }
 
-  edit(competitionseason: Competitionseason) {
+  linkToExtern(league: League) {
     this.router.navigate(
-      ['/admin/competitionseason/home', competitionseason.getId()],
+      ['/admin/league/extern', league.getId()],
       {
         queryParams: {
-          returnAction: '/admin/competitionseason'
+          returnAction: '/admin/league'
         }
       }
     );
   }
 
-  remove(competitionseason: Competitionseason) {
+  remove(league: League) {
     this.setAlert('info', 'competitie verwijderen..');
     this.processing = true;
 
-    this.competitionseasonRepos.removeObject(competitionseason)
+    this.leagueRepos.removeObject(league)
       .subscribe(
-        /* happy path */ competitionseasonRes => {
-        const index = this.competitionseasons.indexOf(competitionseason);
+        /* happy path */ leagueRes => {
+        const index = this.leagues.indexOf(league);
         if (index > -1) {
-          this.competitionseasons.splice(index, 1);
+          this.leagues.splice(index, 1);
         }
         this.resetAlert();
       },

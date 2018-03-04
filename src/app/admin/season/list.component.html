@@ -16,6 +16,7 @@
       <thead>
         <tr>
           <th></th>
+          <th *ngIf="useExternal"></th>
           <th>naam</th>
           <th class="d-none d-sm-table-cell">start</th>
           <th class="d-none d-sm-table-cell">eind</th>
@@ -31,6 +32,11 @@
           <td>
             <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing" (click)="edit(season)">
               <span class="fa fa-pencil"></span>
+            </button>
+          </td>
+          <td *ngIf="useExternal">
+            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing" (click)="linkToExtern(season)">
+              <span class="fa fa-cloud-download"></span>
             </button>
           </td>
           <td>

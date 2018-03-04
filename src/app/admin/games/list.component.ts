@@ -2,8 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   AssociationRepository,
-  Competitionseason,
-  CompetitionseasonRepository,
+  Competition,
+  CompetitionRepository,
   Game,
   GameRepository,
   PlanningService,
@@ -29,12 +29,12 @@ export class GameListComponent implements OnInit, OnDestroy {
   alert: IAlert;
   processing = true;
   protected sub: Subscription;
-  competitionseason: Competitionseason;
+  competition: Competition;
   structureService: StructureService;
 
   constructor(
     private teamRepos: TeamRepository,
-    private competitionseasonRepos: CompetitionseasonRepository,
+    private competitionRepos: CompetitionRepository,
     private associationRepos: AssociationRepository,
     private pouleplaceRepos: PoulePlaceRepository,
     private structureRepository: StructureRepository,
@@ -45,16 +45,16 @@ export class GameListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
-      this.competitionseasonRepos.getObject(+params.id)
+      this.competitionRepos.getObject(+params.id)
         .subscribe(
-        /* happy path */(competitionseason: Competitionseason) => {
-          this.competitionseason = competitionseason;
-          this.structureRepository.getObject(this.competitionseason)
+        /* happy path */(competition: Competition) => {
+          this.competition = competition;
+          this.structureRepository.getObject(this.competition)
             .subscribe(
               /* happy path */(round: Round) => {
               if (round !== undefined) {
                 this.structureService = new StructureService(
-                  this.competitionseason,
+                  this.competition,
                   { min: 2, max: 64 },
                   round
                 );
@@ -97,11 +97,11 @@ export class GameListComponent implements OnInit, OnDestroy {
     const planningService = new PlanningService(this.structureService);
     planningService.create(this.structureService.getFirstRound().getNumber());
 
-    this.structureRepository.editObject(this.structureService.getFirstRound(), this.competitionseason)
+    this.structureRepository.editObject(this.structureService.getFirstRound(), this.competition)
       .subscribe(
             /* happy path */ roundRes => {
         this.structureService = new StructureService(
-          this.competitionseason,
+          this.competition,
           { min: 2, max: 64 },
           roundRes
         );

@@ -1,13 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  Competitionseason,
-  CompetitionseasonRepository,
-  Game,
-  Round,
-  StructureRepository,
-  StructureService,
-} from 'ngx-sport';
+import { Competition, CompetitionRepository, Game, Round, StructureRepository, StructureService } from 'ngx-sport';
 
 import { IAlert } from '../../app.definitions';
 import { BetLineFilter } from './repository';
@@ -26,14 +19,14 @@ export class BetLineMainComponent implements OnInit, OnDestroy {
   // returnUrlQueryParamValue: string;
   public alert: IAlert;
   public processing = true;
-  competitionseasons: Competitionseason[];
-  // competitionseason: Competitionseason;
+  competitions: Competition[];
+  // competition: Competition;
   games: Game[];
   structureService: StructureService;
   betTypes: number;
 
   constructor(
-    private competitionseasonRepos: CompetitionseasonRepository,
+    private competitionRepos: CompetitionRepository,
     private structureRepository: StructureRepository,
     private route: ActivatedRoute,
     private router: Router
@@ -42,10 +35,10 @@ export class BetLineMainComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.competitionseasonRepos.getObjects()
+    this.competitionRepos.getObjects()
       .subscribe(
-        /* happy path */(competitionseasons: Competitionseason[]) => {
-        this.competitionseasons = competitionseasons;
+        /* happy path */(competitions: Competition[]) => {
+        this.competitions = competitions;
         // this.postInit(+params.id);
       },
         /* error path */ e => { },
@@ -67,11 +60,11 @@ export class BetLineMainComponent implements OnInit, OnDestroy {
   }
 
   processBetLinesFilter(betLineFilter: BetLineFilter) {
-    this.structureRepository.getObject(betLineFilter.competitionseason)
+    this.structureRepository.getObject(betLineFilter.competition)
       .subscribe(
         /* happy path */(round: Round) => {
         this.structureService = new StructureService(
-          betLineFilter.competitionseason,
+          betLineFilter.competition,
           { min: 2, max: 64 },
           round
         );
@@ -104,16 +97,16 @@ export class BetLineMainComponent implements OnInit, OnDestroy {
   //   if (id === undefined || id < 1) {
   //     return;
   //   }
-  //   this.competitionseason = this.competitionseasons.find(competitionseason => competitionseason.getId() === id);
+  //   this.competition = this.competitions.find(competition => competition.getId() === id);
   // }
 
   // linkToBasics() {
   //   this.router.navigate(
-  //     ['/admin/competitionseason/edit', this.competitionseason.getId()],
+  //     ['/admin/competition/edit', this.competition.getId()],
   //     {
   //       queryParams: {
-  //         returnAction: '/admin/competitionseason/home',
-  //         returnParam: this.competitionseason.getId()
+  //         returnAction: '/admin/competition/home',
+  //         returnParam: this.competition.getId()
   //       }
   //     }
   //   );
@@ -121,11 +114,11 @@ export class BetLineMainComponent implements OnInit, OnDestroy {
 
   // linkToStructure() {
   //   this.router.navigate(
-  //     ['/admin/structure', this.competitionseason.getId()],
+  //     ['/admin/structure', this.competition.getId()],
   //     {
   //       queryParams: {
-  //         returnAction: '/admin/competitionseason/home',
-  //         returnParam: this.competitionseason.getId()
+  //         returnAction: '/admin/competition/home',
+  //         returnParam: this.competition.getId()
   //       }
   //     }
   //   );
