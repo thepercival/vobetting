@@ -63,7 +63,7 @@ export class LeagueListComponent implements OnInit {
   }
 
   remove(league: League) {
-    this.setAlert('info', 'competitie verwijderen..');
+    this.setAlert('info', 'league verwijderen..');
     this.processing = true;
 
     this.leagueRepos.removeObject(league)

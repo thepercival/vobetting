@@ -44,6 +44,7 @@
             <tr>
               <th></th>
               <th>plek</th>
+              <th class="d-none d-sm-table-cell"></th>
               <th>naam</th>
             </tr>
           </thead>
@@ -56,6 +57,9 @@
               </td>
               <td>
                 <span>{{poulePlace.getNumber()}}</span>
+              </td>
+              <td class="d-none d-sm-table-cell">
+                <img *ngIf="poulePlace.getTeam().getImageUrl()" height="16px" src="{{poulePlace.getTeam().getImageUrl()}}">
               </td>
               <td *ngIf="poulePlace.getTeam()">
                 <span>{{poulePlace.getTeam().getName()}}</span>

@@ -1,7 +1,7 @@
 <div class="row justify-content-center mx-0" style="min-height:4.5rem;">
   <div class="col-xs-12 col-sm-8 col-md-8 col-lg-6 mt-1">
     <h1 class="">
-      <span>competitieseizoenen</span>
+      <span>competities</span>
       <button routerLink="/admin/home" routerLinkActive="active" type="button" class="btn btn-outline-secondary btn-sm">
         <i class="fa fa-level-up fa-rotate-270"></i>
       </button>
@@ -16,7 +16,7 @@
       <thead>
         <tr>
           <th></th>
-          <th>competitie</th>
+          <th>league</th>
           <th>seizoen</th>
           <th class="d-none d-sm-table-cell">bond</th>
           <th style="text-align: right;">
@@ -40,7 +40,7 @@
             <span>{{competition.getSeason().getName()}}</span>
           </td>
           <td class="d-none d-sm-table-cell">
-            <span>{{competition.getAssociation().getName()}}</span>
+            <span>{{competition.getLeague().getAssociation().getName()}}</span>
           </td>
           <td style="text-align: right;">
             <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing" (click)="remove(competition);">

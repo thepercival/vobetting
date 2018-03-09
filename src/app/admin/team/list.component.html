@@ -32,9 +32,10 @@
         <tr>
           <th></th>
           <th *ngIf="useExternal "></th>
-          <th>bond</th>
+          <th class="d-none d-sm-table-cell">bond</th>
+          <th></th>
           <th>naam</th>
-          <th class="d-none d-sm-table-cell ">afkorting</th>
+          <th class="d-none d-sm-table-cell">afk.</th>
           <th style="text-align: right; ">
             <button type="button " class="btn btn-sm btn-outline-primary " (click)="add() " [disabled]="processing ">
               <i class="fa fa-plus "></i>
@@ -54,8 +55,11 @@
               <span class="fa fa-cloud-download "></span>
             </button>
           </td>
-          <td>
+          <td class="d-none d-sm-table-cell">
             <span>{{team.getAssociation().getName()}}</span>
+          </td>
+          <td>
+            <img *ngIf="team.getImageUrl()" height="16px" src="{{team.getImageUrl()}}">
           </td>
           <td>
             <span>{{team.getName()}}</span>

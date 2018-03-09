@@ -2,7 +2,7 @@
   <form *ngIf="!processing" name="form" (ngSubmit)="process() && false" [formGroup]="customForm" novalidate>
     <div class="form-group row">
       <div class="col-3">
-        <label for="league" class="col-form-label">competitie</label>
+        <label for="league" class="col-form-label">league</label>
       </div>
       <div class="col-9">
         <select id="league" name="league" class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.league.invalid, 'is-valid': customForm.controls.league.valid }"

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap/datepicker/datepicker.module';
-import { League, LeagueRepository, ILeague, SportConfig } from 'ngx-sport';
+import { Association, AssociationRepository, ILeague, League, LeagueRepository, SportConfig } from 'ngx-sport';
 import { Subscription } from 'rxjs/Subscription';
 
 import { IAlert } from '../../app.definitions';
@@ -25,6 +25,7 @@ export class LeagueEditComponent implements OnInit, OnDestroy {
   leagues: League[];
   league: League;
   sports: string[];
+  associations: Association[];
 
   validations: LeagueValidations = {
     minlengthname: League.MIN_LENGTH_NAME,
@@ -34,6 +35,7 @@ export class LeagueEditComponent implements OnInit, OnDestroy {
   };
 
   constructor(
+    private associationRepos: AssociationRepository,
     private leagueRepos: LeagueRepository,
     private route: ActivatedRoute,
     private router: Router,
@@ -47,11 +49,22 @@ export class LeagueEditComponent implements OnInit, OnDestroy {
         Validators.maxLength(this.validations.maxlengthname)
       ])],
       abbreviation: ['', Validators.maxLength(this.validations.maxlengthabbreviation)],
-      sport: ['', Validators.required]
+      sport: ['', Validators.required],
+      association: ['', Validators.required]
     });
   }
 
   ngOnInit() {
+    this.associationRepos.getObjects()
+      .subscribe(
+          /* happy path */(associations: Association[]) => {
+        this.associations = associations;
+
+      },
+          /* error path */ e => { },
+          /* onComplete */() => { }
+      );
+
     this.sub = this.route.params.subscribe(params => {
       this.leagueRepos.getObjects()
         .subscribe(
@@ -88,6 +101,8 @@ export class LeagueEditComponent implements OnInit, OnDestroy {
     this.customForm.controls.name.setValue(this.league.getName());
     this.customForm.controls.abbreviation.setValue(this.league.getAbbreviation());
     this.customForm.controls.sport.setValue(this.league.getSport());
+    this.customForm.controls.association.setValue(this.league.getAssociation());
+    this.customForm.controls.association.disable();
   }
 
   save() {
@@ -104,6 +119,7 @@ export class LeagueEditComponent implements OnInit, OnDestroy {
     const name = this.customForm.controls.name.value;
     const abbreviation = this.customForm.controls.abbreviation.value;
     const sport = this.customForm.controls.sport.value;
+    const association = this.customForm.controls.association.value;
 
     if (this.isNameDuplicate(this.customForm.controls.name.value)) {
       this.setAlert('danger', 'de naam bestaan al');
@@ -113,6 +129,7 @@ export class LeagueEditComponent implements OnInit, OnDestroy {
     const league: ILeague = {
       name: name,
       abbreviation: abbreviation ? abbreviation : undefined,
+      association: this.associationRepos.objectToJsonHelper(association),
       sport: sport,
     };
     this.leagueRepos.createObject(league)
@@ -136,10 +153,12 @@ export class LeagueEditComponent implements OnInit, OnDestroy {
     const name = this.customForm.controls.name.value;
     const abbreviation = this.customForm.controls.abbreviation.value;
     const sport = this.customForm.controls.sport.value;
+    const association = this.customForm.controls.association.value;
 
     this.league.setName(name);
     this.league.setAbbreviation(abbreviation ? abbreviation : undefined);
     this.league.setSport(sport);
+    this.league.setAssociation(association);
 
     this.leagueRepos.editObject(this.league)
       .subscribe(

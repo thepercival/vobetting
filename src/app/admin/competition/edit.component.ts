@@ -3,8 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap/datepicker/datepicker.module';
 import {
-  Association,
-  AssociationRepository,
   Competition,
   CompetitionRepository,
   ICompetition,
@@ -33,14 +31,12 @@ export class CompetitionEditComponent implements OnInit, OnDestroy {
   public alert: IAlert;
   public processing = true;
   customForm: FormGroup;
-  associations: Association[];
   leagues: League[];
   seasons: Season[];
   competitions: Competition[];
   competition: Competition;
 
   constructor(
-    private associationRepos: AssociationRepository,
     private leagueRepos: LeagueRepository,
     private seasonRepos: SeasonRepository,
     private competitionRepos: CompetitionRepository,
@@ -49,9 +45,6 @@ export class CompetitionEditComponent implements OnInit, OnDestroy {
     fb: FormBuilder
   ) {
     this.customForm = fb.group({
-      association: ['', Validators.compose([
-        Validators.required
-      ])],
       league: ['', Validators.compose([
         Validators.required
       ])],
@@ -65,13 +58,11 @@ export class CompetitionEditComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     const reposUpdates = [
-      this.associationRepos.getObjects(),
       this.leagueRepos.getObjects(),
       this.seasonRepos.getObjects()
     ];
 
     forkJoin(reposUpdates).subscribe(results => {
-      this.associations = results[0];
       this.leagues = results[1];
       this.seasons = results[2];
     },
@@ -111,12 +102,10 @@ export class CompetitionEditComponent implements OnInit, OnDestroy {
     if (this.competition === undefined) {
       return;
     }
-    this.customForm.controls.association.setValue(this.competition.getAssociation());
     this.customForm.controls.league.setValue(this.competition.getLeague());
     this.customForm.controls.season.setValue(this.competition.getSeason());
     this.customForm.controls.startDateTime.setValue(this.convertDateBack(this.competition.getStartDateTime()));
 
-    this.customForm.controls.association.disable();
     this.customForm.controls.league.disable();
     this.customForm.controls.season.disable();
   }
@@ -147,13 +136,15 @@ export class CompetitionEditComponent implements OnInit, OnDestroy {
     }
 
     const competition: ICompetition = {
+      league: this.leagueRepos.objectToJsonHelper(league),
+      season: this.seasonRepos.objectToJsonHelper(season),
       fields: [],
       referees: [],
       startDateTime: startDateTime.toISOString(),
       state: Competition.STATE_CREATED
 
     };
-    this.competitionRepos.createObject(competition, league, season)
+    this.competitionRepos.createObject(competition)
       .subscribe(
         /* happy path */ competitionRes => {
         this.navigateBack();
