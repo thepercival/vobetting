@@ -29,7 +29,7 @@
           <div class="col-9">
             <select id="team" name="team" class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.team.invalid, 'is-valid': customForm.controls.team.valid }"
               [formControl]="customForm.controls.team">
-              <option value="">kies..</option>
+              <option [ngValue]="undefined">kies..</option>
               <option *ngFor="let team of competition.getLeague().getAssociation().getTeams()" [ngValue]="team">{{team.getName()}}</option>
             </select>
           </div>

@@ -21,7 +21,7 @@
           <div class="col-9">
             <select id="league" name="league" class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.league.invalid, 'is-valid': customForm.controls.league.valid }"
               [formControl]="customForm.controls.league">
-              <option value="">kies..</option>
+              <option [ngValue]="undefined">kies..</option>
               <option *ngFor="let league of leagues" [ngValue]="league">{{league.getName()}}</option>
             </select>
           </div>
@@ -33,7 +33,7 @@
           <div class="col-9">
             <select id="season" name="season" class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.season.invalid, 'is-valid': customForm.controls.season.valid }"
               [formControl]="customForm.controls.season" (ngModelChange)="updateStartDateTime($event)">
-              <option value="">kies..</option>
+              <option [ngValue]="undefined">kies..</option>
               <option *ngFor="let season of seasons" [ngValue]="season">{{season.getName()}}</option>
             </select>
           </div>

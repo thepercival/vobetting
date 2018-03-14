@@ -15,7 +15,7 @@
         </div>
         <div class="col-8">
           <select id="association" name="association" class="form-control" [ngModel]="association" (ngModelChange)="onSelectAssociation($event)">
-            <option value=" ">kies..</option>
+            <option [ngValue]="undefined">kies..</option>
             <option *ngFor="let associationIt of associations" [ngValue]="associationIt">{{associationIt.getName()}}</option>
           </select>
         </div>

@@ -38,7 +38,7 @@
           <div class="col-9">
             <select id="parent" name="parent" class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.parent.invalid, 'is-valid': customForm.controls.parent.valid }"
               [formControl]="customForm.controls.parent">
-              <option value="">kies..</option>
+              <option [ngValue]="undefined">kies..</option>
               <option *ngFor="let associationIt of getFilteredAssociation()" [ngValue]="associationIt">{{associationIt.getName()}}</option>
             </select>
           </div>

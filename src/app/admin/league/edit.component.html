@@ -18,7 +18,7 @@
           <div class="col-9">
             <select id="association" name="association" class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.association.invalid, 'is-valid': customForm.controls.association.valid }"
               [formControl]="customForm.controls.association">
-              <option value="">kies..</option>
+              <option [ngValue]="undefined">kies..</option>
               <option *ngFor="let association of associations" [ngValue]="association">{{association.getName()}}</option>
             </select>
           </div>
@@ -40,7 +40,7 @@
           <div class="col-9">
             <select id="sport" name="sport" class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.sport.invalid, 'is-valid': customForm.controls.sport.valid }"
               [formControl]="customForm.controls.sport">
-              <option value="">kies..</option>
+              <option [ngValue]="undefined">kies..</option>
               <option *ngFor="let sport of sports" [ngValue]="sport">{{sport}}</option>
             </select>
           </div>

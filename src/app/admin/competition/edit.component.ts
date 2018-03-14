@@ -63,8 +63,8 @@ export class CompetitionEditComponent implements OnInit, OnDestroy {
     ];
 
     forkJoin(reposUpdates).subscribe(results => {
-      this.leagues = results[1];
-      this.seasons = results[2];
+      this.leagues = results[0];
+      this.seasons = results[1];
     },
       err => {
         // this.setAlert('danger', 'volgorde niet gewijzigd: ' + err);
@@ -77,9 +77,9 @@ export class CompetitionEditComponent implements OnInit, OnDestroy {
       this.competitionRepos.getObjects()
         .subscribe(
         /* happy path */(competitions: Competition[]) => {
-          this.competitions = competitions;
-          this.postInit(+params.id);
-        },
+            this.competitions = competitions;
+            this.postInit(+params.id);
+          },
         /* error path */ e => { },
         /* onComplete */() => { this.processing = false; }
         );
@@ -102,6 +102,7 @@ export class CompetitionEditComponent implements OnInit, OnDestroy {
     if (this.competition === undefined) {
       return;
     }
+
     this.customForm.controls.league.setValue(this.competition.getLeague());
     this.customForm.controls.season.setValue(this.competition.getSeason());
     this.customForm.controls.startDateTime.setValue(this.convertDateBack(this.competition.getStartDateTime()));
@@ -147,8 +148,8 @@ export class CompetitionEditComponent implements OnInit, OnDestroy {
     this.competitionRepos.createObject(competition)
       .subscribe(
         /* happy path */ competitionRes => {
-        this.navigateBack();
-      },
+          this.navigateBack();
+        },
         /* error path */ e => { this.setAlert('danger', e); this.processing = false; },
         /* onComplete */() => this.processing = false
       );
@@ -171,8 +172,8 @@ export class CompetitionEditComponent implements OnInit, OnDestroy {
     this.competitionRepos.editObject(this.competition)
       .subscribe(
         /* happy path */ competitionRes => {
-        this.navigateBack();
-      },
+          this.navigateBack();
+        },
         /* error path */ e => { this.setAlert('danger', e); this.processing = false; },
         /* onComplete */() => { this.processing = false; }
       );

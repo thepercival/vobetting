@@ -7,7 +7,7 @@
       <div class="col-9">
         <select id="league" name="league" class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.league.invalid, 'is-valid': customForm.controls.league.valid }"
           [formControl]="customForm.controls.league">
-          <option value="">kies..</option>
+          <option [ngValue]="undefined">kies..</option>
           <option *ngFor="let leagueIt of getLeagues()" [ngValue]="leagueIt">{{leagueIt.getName()}}</option>
         </select>
       </div>
@@ -19,7 +19,7 @@
       <div class="col-9">
         <select id="competition" name="competition" class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.competition.invalid, 'is-valid': customForm.controls.competition.valid }"
           [formControl]="customForm.controls.competition">
-          <option value="">kies..</option>
+          <option [ngValue]="undefined">kies..</option>
           <option *ngFor="let competitionIt of getCompetitions()" [ngValue]="competitionIt">{{competitionIt.getSeason().getName()}}</option>
         </select>
       </div>

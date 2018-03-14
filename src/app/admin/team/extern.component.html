@@ -25,7 +25,7 @@
           <div class="col-9">
             <select id="externalSystem" name="externalSystem" class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.externalSystem.invalid, 'is-valid': customForm.controls.externalSystem.valid }"
               [formControl]="customForm.controls.externalSystem" (ngModelChange)="getExternalObject($event)">
-              <option value="">kies..</option>
+              <option [ngValue]="undefined">kies..</option>
               <option *ngFor="let externalSystemIt of externalSystems" [ngValue]="externalSystemIt">{{externalSystemIt.getName()}}</option>
             </select>
           </div>

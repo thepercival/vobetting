@@ -46,22 +46,23 @@ export class StructureEditComponent implements OnInit, OnDestroy {
       this.competitionRepos.getObject(+params.id)
         .subscribe(
         /* happy path */(competition: Competition) => {
-          this.competition = competition;
-          this.structureRepository.getObject(this.competition)
-            .subscribe(
+            this.competition = competition;
+            this.structureRepository.getObject(this.competition)
+              .subscribe(
               /* happy path */(round: Round) => {
-              if (round !== undefined) {
-                this.structureService = new StructureService(
-                  this.competition,
-                  { min: 2, max: 64 },
-                  round
-                );
-              }
-            },
+                  console.log(round);
+                  if (round !== undefined) {
+                    this.structureService = new StructureService(
+                      this.competition,
+                      { min: 2, max: 64 },
+                      round
+                    );
+                  }
+                },
             /* error path */ e => { },
             /* onComplete */() => { }
-            );
-        },
+              );
+          },
         /* error path */ e => { },
         /* onComplete */() => { this.processing = false; }
         );

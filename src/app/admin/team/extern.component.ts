@@ -68,8 +68,8 @@ export class TeamExternComponent implements OnInit, OnDestroy {
       this.externalSystemRepos.getObjects()
         .subscribe(
         /* happy path */(externalSystems: ExternalSystem[]) => {
-          this.externalSystems = externalSystems;
-        },
+            this.externalSystems = externalSystems;
+          },
         /* error path */ e => { },
         /* onComplete */() => { this.processing = false; }
         );
@@ -77,17 +77,17 @@ export class TeamExternComponent implements OnInit, OnDestroy {
       this.associationRepos.getObject(+params.associationid)
         .subscribe(
           /* happy path */(association: Association) => {
-          this.teamRepos.getObject(+params.id, association)
-            .subscribe(
+            this.teamRepos.getObject(+params.id, association)
+              .subscribe(
                     /* happy path */(team: Team) => {
-              this.team = team;
-              this.customForm.controls.name.setValue(this.team.getName());
-              this.customForm.controls.name.disable();
-            },
+                  this.team = team;
+                  this.customForm.controls.name.setValue(this.team.getName());
+                  this.customForm.controls.name.disable();
+                },
                   /* error path */ e => { },
                   /* onComplete */() => { }
-            );
-        },
+              );
+          },
           /* error path */ e => { },
           /* onComplete */() => { this.processing = false; }
         );
@@ -107,16 +107,19 @@ export class TeamExternComponent implements OnInit, OnDestroy {
   }
 
   getExternalObject(externalSystem: ExternalSystem) {
-    this.processing = true;
     this.customForm.controls.externalId.setValue(undefined);
+    if (externalSystem === undefined) {
+      return;
+    }
+    this.processing = true;
     this.externalObjectRepos.getObject(this.team, externalSystem)
       .subscribe(
         /* happy path */(externalObject: ExternalObject) => {
-        this.externalObject = externalObject;
-        if (this.externalObject !== undefined) {
-          this.customForm.controls.externalId.setValue(this.externalObject.getExternalId());
-        }
-      },
+          this.externalObject = externalObject;
+          if (this.externalObject !== undefined) {
+            this.customForm.controls.externalId.setValue(this.externalObject.getExternalId());
+          }
+        },
         /* error path */ e => { this.processing = false; },
         /* onComplete */() => { this.processing = false; }
       );
@@ -145,8 +148,8 @@ export class TeamExternComponent implements OnInit, OnDestroy {
     this.externalObjectRepos.createObject(externalObject)
       .subscribe(
         /* happy path */ externalObjectRes => {
-        this.navigateBack();
-      },
+          this.navigateBack();
+        },
         /* error path */ e => { this.setAlert('danger', e); this.processing = false; },
         /* onComplete */() => this.processing = false
       );
@@ -160,8 +163,8 @@ export class TeamExternComponent implements OnInit, OnDestroy {
     this.externalObjectRepos.editObject(this.externalObject)
       .subscribe(
         /* happy path */ externalObjectRes => {
-        this.navigateBack();
-      },
+          this.navigateBack();
+        },
         /* error path */ e => { this.setAlert('danger', e); this.processing = false; },
         /* onComplete */() => this.processing = false
       );
