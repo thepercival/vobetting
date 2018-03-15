@@ -98,6 +98,7 @@ export class LeagueExternComponent implements OnInit, OnDestroy {
 
   getExternalObject(externalSystem: ExternalSystem) {
     this.customForm.controls.externalId.setValue(undefined);
+    this.externalObject = undefined;
     if (externalSystem === undefined) {
       return;
     }
