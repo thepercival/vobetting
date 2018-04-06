@@ -20,8 +20,8 @@ import {
   QualifyRuleRepository,
   RefereeRepository,
   RoundConfigRepository,
+  RoundConfigScoreRepository,
   RoundRepository,
-  RoundScoreConfigRepository,
   SeasonRepository,
   StructureRepository,
   TeamRepository,
@@ -69,7 +69,7 @@ import { TeamListComponent } from './team/list.component';
     HomeComponent, PoulePlaceEditComponent],
   providers: [UserRepository, ExternalSystemRepository, SeasonRepository, LeagueRepository,
     CompetitionRepository, FieldRepository, RefereeRepository, TeamRepository, AssociationRepository,
-    StructureRepository, RoundRepository, RoundConfigRepository, RoundScoreConfigRepository, PouleRepository, PoulePlaceRepository,
+    StructureRepository, RoundRepository, RoundConfigRepository, RoundConfigScoreRepository, PouleRepository, PoulePlaceRepository,
     GameRepository, GameScoreRepository, QualifyRuleRepository, ExternalObjectRepository]
 })
 export class AdminModule { }

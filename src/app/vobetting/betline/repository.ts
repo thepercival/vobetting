@@ -97,7 +97,7 @@ export class BetLineRepository extends SportRepository {
         }
         betLine.setId(json.id);
         if (json.poulePlace !== undefined) {
-            betLine.setPoulePlace(this.poulePlaceRepository.jsonToObjectHelper(json.poulePlace, game.getPoule()));
+            betLine.setPoulePlace(game.getPoule().getPlace(json.poulePlace.number));
         }
         return betLine;
     }

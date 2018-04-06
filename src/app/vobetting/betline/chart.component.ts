@@ -41,7 +41,14 @@ export class BetLineChartComponent implements OnInit, OnDestroy, OnChanges {
   showYAxisLabel = true;
   yAxisLabel = 'quotering';
   colorScheme = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
+    domain: [
+      '#000080', /* back home */
+      '#3090C7', /* lay home */
+      '#800517', /* back away */
+      '#FF2400', /* lay away */
+      '#348017', /* back draw */
+      '#6CC417' /* lay draw */
+    ]
   };
   autoScale = true;
   // chart: end
@@ -111,7 +118,7 @@ export class BetLineChartComponent implements OnInit, OnDestroy, OnChanges {
           // do nothing
         });
       });
-      let chartLayBacks: LayBack[] = [];
+      let chartLayBacks: any[] = [];
       this.betLines.forEach((betLine) => {
         chartLayBacks = chartLayBacks.concat(this.getLayBacks(betLine));
       });
@@ -172,7 +179,7 @@ export class BetLineChartComponent implements OnInit, OnDestroy, OnChanges {
 
   protected getLayBacksHelper(betLine: BetLine, back: boolean) {
     const layBacks: LayBack[] = betLine.getLayBacks();
-    const layBacksTmp = layBacks.filter(layBack => layBack.getBack() === back);
+    const layBacksTmp = layBacks.filter(layBack => layBack.getBack() === back && layBack.getPrice() < 8);
     return layBacksTmp.map(layback => {
       return {
         name: layback.getDateTime(),

@@ -1,7 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Competition, CompetitionRepository, PoulePlace, Round, StructureRepository, StructureService } from 'ngx-sport';
+import {
+  Competition,
+  CompetitionRepository,
+  PoulePlace,
+  Round,
+  RoundRepository,
+  StructureRepository,
+  StructureService,
+} from 'ngx-sport';
 import { Subscription } from 'rxjs/Subscription';
 
 import { IAlert } from '../../app.definitions';
@@ -28,6 +36,7 @@ export class StructureEditComponent implements OnInit, OnDestroy {
   constructor(
     private structureRepository: StructureRepository,
     private competitionRepos: CompetitionRepository,
+    private roundRepository: RoundRepository,
     private route: ActivatedRoute,
     private router: Router,
     fb: FormBuilder
@@ -83,8 +92,8 @@ export class StructureEditComponent implements OnInit, OnDestroy {
     );
 
     this.structureService.getFirstRound().getConfig().setNrOfHeadtoheadMatches(2);
-
-    this.structureRepository.createObject(this.structureService.getFirstRound(), this.competition).subscribe(
+    const jsonRound = this.roundRepository.objectToJsonHelper(this.structureService.getFirstRound());
+    this.structureRepository.createObject(jsonRound, this.competition).subscribe(
               /* happy path */(roundRes: Round) => {
 
         this.structureService = new StructureService(
