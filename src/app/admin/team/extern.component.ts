@@ -83,6 +83,15 @@ export class TeamExternComponent implements OnInit, OnDestroy {
                   this.team = team;
                   this.customForm.controls.name.setValue(this.team.getName());
                   this.customForm.controls.name.disable();
+                  if (localStorage.getItem('externalSystemId') !== undefined) {
+                    const externalSystem = this.externalSystems.find(
+                      externalSystemIt => externalSystemIt.getId() === +localStorage.getItem('externalSystemId')
+                    );
+                    if (externalSystem !== undefined) {
+                      this.getExternalObject(externalSystem);
+                      this.customForm.controls.externalSystem.setValue(externalSystem);
+                    }
+                  }
                 },
                   /* error path */ e => { },
                   /* onComplete */() => { }
@@ -112,6 +121,7 @@ export class TeamExternComponent implements OnInit, OnDestroy {
     if (externalSystem === undefined) {
       return;
     }
+    localStorage.setItem('externalSystemId', externalSystem.getId().toString());
     this.processing = true;
     this.externalObjectRepos.getObject(this.team, externalSystem)
       .subscribe(

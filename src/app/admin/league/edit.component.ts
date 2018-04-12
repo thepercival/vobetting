@@ -58,9 +58,9 @@ export class LeagueEditComponent implements OnInit, OnDestroy {
     this.associationRepos.getObjects()
       .subscribe(
           /* happy path */(associations: Association[]) => {
-        this.associations = associations;
+          this.associations = associations;
 
-      },
+        },
           /* error path */ e => { },
           /* onComplete */() => { }
       );
@@ -69,9 +69,9 @@ export class LeagueEditComponent implements OnInit, OnDestroy {
       this.leagueRepos.getObjects()
         .subscribe(
         /* happy path */(leagues: League[]) => {
-          this.leagues = leagues;
-          this.postInit(+params.id);
-        },
+            this.leagues = leagues;
+            this.postInit(+params.id);
+          },
         /* error path */ e => { },
         /* onComplete */() => { this.processing = false; }
         );
@@ -135,9 +135,9 @@ export class LeagueEditComponent implements OnInit, OnDestroy {
     this.leagueRepos.createObject(league)
       .subscribe(
         /* happy path */ leagueRes => {
-        this.navigateBack();
-      },
-        /* error path */ e => { this.setAlert('danger', e); },
+          this.navigateBack();
+        },
+        /* error path */ e => { this.setAlert('danger', e); this.processing = false; },
         /* onComplete */() => this.processing = false
       );
   }
@@ -163,8 +163,8 @@ export class LeagueEditComponent implements OnInit, OnDestroy {
     this.leagueRepos.editObject(this.league)
       .subscribe(
         /* happy path */ leagueRes => {
-        this.navigateBack();
-      },
+          this.navigateBack();
+        },
         /* error path */ e => { this.setAlert('danger', e); this.processing = false; },
         /* onComplete */() => { this.processing = false; }
       );

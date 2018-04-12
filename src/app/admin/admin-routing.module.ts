@@ -4,6 +4,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthguardService } from '../auth/authguard.service';
 import { AssociationEditComponent } from './association/edit.component';
 import { AssociationListComponent } from './association/list.component';
+import { BookmakerEditComponent } from './bookmaker/edit.component';
+import { BookmakerListComponent } from './bookmaker/list.component';
 import { CompetitionEditComponent } from './competition/edit.component';
 import { CompetitionHomeComponent } from './competition/home.component';
 import { CompetitionListComponent } from './competition/list.component';
@@ -28,6 +30,8 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [AuthguardService] },
   { path: 'externalsystem', component: ExternalSystemListComponent, canActivate: [AuthguardService] },
   { path: 'externalsystem/edit/:id', component: ExternalSystemEditComponent, canActivate: [AuthguardService] },
+  { path: 'bookmaker', component: BookmakerListComponent, canActivate: [AuthguardService] },
+  { path: 'bookmaker/edit/:id', component: BookmakerEditComponent, canActivate: [AuthguardService] },
   { path: 'season', component: SeasonListComponent, canActivate: [AuthguardService] },
   { path: 'season/edit/:id', component: SeasonEditComponent, canActivate: [AuthguardService] },
   { path: 'season/extern/:id', component: SeasonExternComponent, canActivate: [AuthguardService] },

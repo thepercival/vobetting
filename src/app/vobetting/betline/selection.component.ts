@@ -46,9 +46,9 @@ export class BetLineSelectionComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.customForm.controls.league.setValue(this.competitions[this.competitions.length - 1].getLeague());
-    this.customForm.controls.competition.setValue(this.competitions[this.competitions.length - 1]);
-    const date = new Date(); date.setMonth(date.getMonth() + 1);
+    this.customForm.controls.league.setValue(this.competitions[0].getLeague());
+    this.customForm.controls.competition.setValue(this.competitions[0]);
+    const date = new Date(); date.setDate(date.getDate() + 7);
     this.customForm.controls.endDateTime.setValue(this.convertDateBack(date));
 
     // this.sub = this.route.params.subscribe(params => {
@@ -97,7 +97,9 @@ export class BetLineSelectionComponent implements OnInit, OnDestroy {
 
   getCompetitions(): Competition[] {
     const selectedLeague = this.customForm.controls.league.value;
-    return this.competitions.filter(competition => competition.getLeague() === selectedLeague);
+    return this.competitions.filter(competition => competition.getLeague() === selectedLeague).sort((c1, c2) => {
+      return c1.getSeason().getStartDateTime() < c2.getSeason().getStartDateTime() ? 1 : -1;
+    });
   }
 
   process() {

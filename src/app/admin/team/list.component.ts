@@ -32,15 +32,15 @@ export class TeamListComponent implements OnInit, OnDestroy {
       this.associationRepos.getObjects()
         .subscribe(
         /* happy path */(associations: Association[]) => {
-          this.associations = associations.filter(association => association.getChildren().length === 0);
-          const associationId = +params.associationid;
-          if (associationId > 0) {
-            this.association = this.associations.find(associationIt => associationIt.getId() === associationId);
-            this.onSelectAssociation(this.association);
-          } else {
-            this.processing = false;
-          }
-        },
+            this.associations = associations.filter(association => association.getChildren().length === 0);
+            const associationId = +params.associationid;
+            if (associationId > 0) {
+              this.association = this.associations.find(associationIt => associationIt.getId() === associationId);
+              this.onSelectAssociation(this.association);
+            } else {
+              this.processing = false;
+            }
+          },
         /* error path */ e => { },
         /* onComplete */() => { this.processing = false; }
         );
@@ -53,8 +53,10 @@ export class TeamListComponent implements OnInit, OnDestroy {
     this.teamRepos.getObjects(association)
       .subscribe(
         /* happy path */(teams: Team[]) => {
-        this.teams = teams;
-      },
+          this.teams = teams.sort((t1, t2) => {
+            return t1.getName() > t2.getName() ? 1 : -1;
+          });
+        },
         /* error path */ e => { this.processing = false; },
         /* onComplete */() => { this.processing = false; }
       );
@@ -105,12 +107,12 @@ export class TeamListComponent implements OnInit, OnDestroy {
     this.teamRepos.removeObject(team)
       .subscribe(
         /* happy path */ teamRes => {
-        const index = this.teams.indexOf(team);
-        if (index > -1) {
-          this.teams.splice(index, 1);
-        }
-        this.resetAlert();
-      },
+          const index = this.teams.indexOf(team);
+          if (index > -1) {
+            this.teams.splice(index, 1);
+          }
+          this.resetAlert();
+        },
         /* error path */ e => { this.setAlert('danger', 'X' + e); this.processing = false; },
         /* onComplete */() => this.processing = false
       );

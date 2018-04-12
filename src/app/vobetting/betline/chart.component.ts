@@ -140,7 +140,7 @@ export class BetLineChartComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   getDescription(betType: number, back: boolean, homeAway?: boolean) {
-    return this.getBetTypeDescription(betType) + ' - ' + this.getHomeAwayDescription(homeAway) + ' - ' + (back ? 'back' : 'lay');
+    return this.getHomeAwayDescription(homeAway) + ' - ' + (back ? 'back' : 'lay');
   }
 
   getHomeAway(betLine: BetLine): boolean {
@@ -149,6 +149,11 @@ export class BetLineChartComponent implements OnInit, OnDestroy, OnChanges {
 
   getHomeAwayDescription(homeAway?: boolean) {
     return homeAway === true ? 'thuis' : (homeAway === false ? 'uit' : 'gelijk');
+  }
+
+  getStyle(color: string) {
+    console.log(color);
+    return { 'background-color': color };
   }
 
   updateFilter(betLine: BetLine) {
@@ -186,5 +191,15 @@ export class BetLineChartComponent implements OnInit, OnDestroy, OnChanges {
         value: layback.getPrice()
       };
     });
+  }
+
+  getPerformance(items: any[]) {
+    let back = 0; // let lay = 0;
+    items.forEach(item => {
+      if (item.series.search('back') >= 0) {
+        back += 100 / item.value;
+      }
+    });
+    return back;
   }
 }

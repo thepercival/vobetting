@@ -28,9 +28,12 @@ import {
 } from 'ngx-sport';
 
 import { UserRepository } from '../user/repository';
+import { BookmakerRepository } from '../vobetting/bookmaker/repository';
 import { AdminRoutingModule } from './admin-routing.module';
 import { AssociationEditComponent } from './association/edit.component';
 import { AssociationListComponent } from './association/list.component';
+import { BookmakerEditComponent } from './bookmaker/edit.component';
+import { BookmakerListComponent } from './bookmaker/list.component';
 import { CompetitionEditComponent } from './competition/edit.component';
 import { CompetitionHomeComponent } from './competition/home.component';
 import { CompetitionListComponent } from './competition/list.component';
@@ -60,6 +63,7 @@ import { TeamListComponent } from './team/list.component';
   ],
   declarations: [HomeComponent,
     ExternalSystemListComponent, ExternalSystemEditComponent,
+    BookmakerListComponent, BookmakerEditComponent,
     SeasonListComponent, SeasonEditComponent, SeasonExternComponent,
     AssociationListComponent, AssociationEditComponent,
     TeamListComponent, TeamEditComponent, TeamExternComponent,
@@ -70,6 +74,6 @@ import { TeamListComponent } from './team/list.component';
   providers: [UserRepository, ExternalSystemRepository, SeasonRepository, LeagueRepository,
     CompetitionRepository, FieldRepository, RefereeRepository, TeamRepository, AssociationRepository,
     StructureRepository, RoundRepository, RoundConfigRepository, RoundConfigScoreRepository, PouleRepository, PoulePlaceRepository,
-    GameRepository, GameScoreRepository, QualifyRuleRepository, ExternalObjectRepository]
+    GameRepository, GameScoreRepository, QualifyRuleRepository, ExternalObjectRepository, BookmakerRepository]
 })
 export class AdminModule { }

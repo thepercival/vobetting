@@ -17,6 +17,17 @@
     <ngx-charts-line-chart class="col" [view]="view" *ngIf="chartLayBacks" [results]="chartLayBacks" [gradient]="gradient" [xAxis]="showXAxis"
       [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
       [yAxisLabel]="yAxisLabel" [scheme]="colorScheme" [autoScale]="autoScale" timeline="true" (select)="onSelect($event)">
+      <ng-template #seriesTooltipTemplate let-items="model">
+        <!-- <p>{{items[0].name | date:'short'}}</p> -->
+        <p *ngIf="items.length === 6">perf(back) : {{getPerformance(items) | number:'1.2-2'}}%</p>
+        <table>
+          <tr *ngFor="let item of items">
+            <td class="legend-label-color" [ngStyle]="{'background-color': item.color}"></td>
+            <td class="text-left">{{item.series}}</td>
+            <td class="text-right">{{item.value | number}}</td>
+          </tr>
+        </table>
+      </ng-template>
     </ngx-charts-line-chart>
   </div>
 </div>
