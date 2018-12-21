@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { ExternalSystemRepository, IExternalSystem, SportRepository } from 'ngx-sport';
+import { ExternalSystemMapper, JsonExternalSystem, SportRepository } from 'ngx-sport';
 import { Observable } from 'rxjs/Observable';
 import { catchError } from 'rxjs/operators/catchError';
 import { map } from 'rxjs/operators/map';
@@ -15,7 +15,7 @@ export class LayBackRepository extends SportRepository {
     private url: string;
 
     constructor(private http: HttpClient,
-        private externalSystemRepository: ExternalSystemRepository,
+        private externalSystemMapper: ExternalSystemMapper,
         router: Router
     ) {
         super(router);
@@ -85,7 +85,7 @@ export class LayBackRepository extends SportRepository {
         layBack.setPrice(json.price);
         layBack.setSize(json.size);
         if (json.externalSystem !== undefined) {
-            layBack.setExternalSystem(this.externalSystemRepository.jsonToObjectHelper(json.externalSystem));
+            layBack.setExternalSystem(this.externalSystemMapper.toObject(json.externalSystem));
         }
         return layBack;
     }
@@ -98,7 +98,7 @@ export class LayBackRepository extends SportRepository {
             price: object.getPrice(),
             size: object.getSize(),
             externalSystem: object.getExternalSystem() ?
-                this.externalSystemRepository.objectToJsonHelper(object.getExternalSystem()) : undefined
+                this.externalSystemMapper.toJson(object.getExternalSystem()) : undefined
         };
         return json;
     }
@@ -110,5 +110,5 @@ export interface ILayBack {
     back: boolean;
     price: number;
     size: number;
-    externalSystem?: IExternalSystem;
+    externalSystem?: JsonExternalSystem;
 }

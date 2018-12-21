@@ -3,11 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap/alert/alert.module';
-import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap/collapse/collapse.module';
-import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap/datepicker/datepicker.module';
-import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap/popover/popover.module';
-import { NgbTimepickerModule } from '@ng-bootstrap/ng-bootstrap/timepicker/timepicker.module';
+import { NgbAlertModule, NgbCollapseModule, NgbDatepickerModule, NgbPopoverModule, NgbTimepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { AssociationRepository, LeagueRepository, CompetitionRepository, SeasonRepository } from 'ngx-sport';
 
 import { AdminModule } from './admin/admin.module';

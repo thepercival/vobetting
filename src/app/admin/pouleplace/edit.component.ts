@@ -12,6 +12,7 @@ import {
   StructureService,
   Team,
   TeamRepository,
+  Structure
 } from 'ngx-sport';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -36,7 +37,7 @@ export class PoulePlaceEditComponent implements OnInit, OnDestroy {
   team: Team;
   poulePlace: PoulePlace;
   competition: Competition;
-  structureService: StructureService;
+  structure: Structure;
 
   constructor(
     private teamRepos: TeamRepository,
@@ -73,12 +74,8 @@ export class PoulePlaceEditComponent implements OnInit, OnDestroy {
 
           this.structureRepository.getObject(this.competition)
             .subscribe(
-              /* happy path */(roundRes: Round) => {
-              this.structureService = new StructureService(
-                this.competition,
-                { min: 2, max: 64 },
-                roundRes
-              );
+              /* happy path */(structure: Structure) => {
+              this.structure = structure;
               this.postInit(+params.id);
 
             },
@@ -102,7 +99,7 @@ export class PoulePlaceEditComponent implements OnInit, OnDestroy {
   }
 
   getPoulePlaces() {
-    return this.structureService.getFirstRound().getPoules()[0].getPlaces();
+    return this.structure.getRootRound().getPoules()[0].getPlaces();
   }
 
   private postInit(id: number) {

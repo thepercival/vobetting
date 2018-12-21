@@ -1,18 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import {
-  AssociationRepository,
   Competition,
   CompetitionRepository,
   Game,
-  GameRepository,
   PlanningService,
   Poule,
-  PoulePlaceRepository,
-  Round,
   StructureRepository,
-  StructureService,
-  TeamRepository,
+  Structure
 } from 'ngx-sport';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -30,17 +25,12 @@ export class GameListComponent implements OnInit, OnDestroy {
   processing = true;
   protected sub: Subscription;
   competition: Competition;
-  structureService: StructureService;
+  structure: Structure;
 
   constructor(
-    private teamRepos: TeamRepository,
     private competitionRepos: CompetitionRepository,
-    private associationRepos: AssociationRepository,
-    private pouleplaceRepos: PoulePlaceRepository,
     private structureRepository: StructureRepository,
-    private route: ActivatedRoute,
-    private router: Router,
-    private gameRepos: GameRepository
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
@@ -51,15 +41,10 @@ export class GameListComponent implements OnInit, OnDestroy {
           this.competition = competition;
           this.structureRepository.getObject(this.competition)
             .subscribe(
-              /* happy path */(round: Round) => {
-              if (round !== undefined) {
-                this.structureService = new StructureService(
-                  this.competition,
-                  { min: 2, max: 64 },
-                  round
-                );
+              /* happy path */(structure: Structure) => {
+              this.structure = structure;
               }
-            },
+            ,
             /* error path */ e => { },
             /* onComplete */() => { }
             );
@@ -83,10 +68,10 @@ export class GameListComponent implements OnInit, OnDestroy {
   }
 
   getPoule(): Poule {
-    if (this.structureService === undefined) {
+    if (this.structure === undefined) {
       return undefined;
     }
-    return this.structureService.getFirstRound().getPoules()[0];
+    return this.structure.getRootRound().getPoules()[0];
   }
 
   allPoulePlaceHaveTeam() {
@@ -94,17 +79,13 @@ export class GameListComponent implements OnInit, OnDestroy {
   }
 
   create() {
-    const planningService = new PlanningService(this.structureService);
-    planningService.create(this.structureService.getFirstRound().getNumber());
+    const planningService = new PlanningService(this.competition);
+    planningService.create(this.structure.getFirstRoundNumber());
 
-    this.structureRepository.editObject(this.structureService.getFirstRound(), this.competition)
+    this.structureRepository.editObject(this.structure, this.competition)
       .subscribe(
-            /* happy path */ roundRes => {
-        this.structureService = new StructureService(
-          this.competition,
-          { min: 2, max: 64 },
-          roundRes
-        );
+            /* happy path */ structure => {
+        this.structure = structure;
         // console.log(structure);
         // this.router.navigate(['/toernooi/home', tournamentOut.getId()]);
       },

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap/datepicker/datepicker.module';
-import { Association, AssociationRepository, ILeague, League, LeagueRepository, SportConfig } from 'ngx-sport';
+import { Association, AssociationRepository, AssociationMapper, JsonLeague, League, LeagueRepository, SportConfig } from 'ngx-sport';
 import { Subscription } from 'rxjs/Subscription';
 
 import { IAlert } from '../../app.definitions';
@@ -36,6 +36,7 @@ export class LeagueEditComponent implements OnInit, OnDestroy {
 
   constructor(
     private associationRepos: AssociationRepository,
+    private associationMapper: AssociationMapper,
     private leagueRepos: LeagueRepository,
     private route: ActivatedRoute,
     private router: Router,
@@ -126,10 +127,10 @@ export class LeagueEditComponent implements OnInit, OnDestroy {
       this.processing = false;
       return;
     }
-    const league: ILeague = {
+    const league: JsonLeague = {
       name: name,
       abbreviation: abbreviation ? abbreviation : undefined,
-      association: this.associationRepos.objectToJsonHelper(association),
+      association: this.associationMapper.toJson(association),
       sport: sport,
     };
     this.leagueRepos.createObject(league)

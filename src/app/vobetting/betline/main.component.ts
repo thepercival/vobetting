@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Competition, CompetitionRepository, Game, Round, StructureRepository, StructureService } from 'ngx-sport';
+import { Competition, CompetitionRepository, Game, Round, StructureRepository, Structure } from 'ngx-sport';
 
 import { IAlert } from '../../app.definitions';
 import { BetLineFilter } from './repository';
@@ -22,7 +22,7 @@ export class BetLineMainComponent implements OnInit, OnDestroy {
   competitions: Competition[];
   // competition: Competition;
   games: Game[];
-  structureService: StructureService;
+  structure: Structure;
   betTypes: number;
 
   constructor(
@@ -62,14 +62,10 @@ export class BetLineMainComponent implements OnInit, OnDestroy {
   processBetLinesFilter(betLineFilter: BetLineFilter) {
     this.structureRepository.getObject(betLineFilter.competition)
       .subscribe(
-        /* happy path */(round: Round) => {
-        this.structureService = new StructureService(
-          betLineFilter.competition,
-          { min: 2, max: 64 },
-          round
-        );
+        /* happy path */(structure: Structure) => {
+        this.structure = structure;
         this.betTypes = betLineFilter.betType;
-        this.games = this.getAllGames(this.structureService.getFirstRound(), betLineFilter.startDateTime, betLineFilter.endDateTime);
+        this.games = this.getAllGames(this.structure.getRootRound(), betLineFilter.startDateTime, betLineFilter.endDateTime);
       },
       /* error path */ e => { },
       /* onComplete */() => { }

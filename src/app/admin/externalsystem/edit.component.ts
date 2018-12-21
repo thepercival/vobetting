@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ExternalSystem, ExternalSystemRepository, IExternalSystem } from 'ngx-sport';
+import { ExternalSystem, ExternalSystemRepository, JsonExternalSystem } from 'ngx-sport';
 import { Subscription } from 'rxjs/Subscription';
 
 import { IAlert } from '../../app.definitions';
@@ -120,7 +120,7 @@ export class ExternalSystemEditComponent implements OnInit, OnDestroy {
       this.processing = false;
       return;
     }
-    const externalSystem: IExternalSystem = {
+    const externalSystem: JsonExternalSystem = {
       name: name,
       website: website ? website : undefined,
       username: username ? username : undefined,

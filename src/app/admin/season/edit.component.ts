@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap/datepicker/datepicker.module';
-import { ISeason, Season, SeasonRepository } from 'ngx-sport';
+import { JsonSeason, Season, SeasonRepository } from 'ngx-sport';
 import { Subscription } from 'rxjs/Subscription';
 
 import { IAlert } from '../../app.definitions';
@@ -106,7 +106,7 @@ export class SeasonEditComponent implements OnInit, OnDestroy {
       this.processing = false;
       return;
     }
-    const season: ISeason = {
+    const season: JsonSeason = {
       name: name,
       startDateTime: startDateTime.toISOString(),
       endDateTime: endDateTime.toISOString()

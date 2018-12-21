@@ -1,11 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap/alert/alert.module';
-import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap/collapse/collapse.module';
-import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap/datepicker/datepicker.module';
-import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap/popover/popover.module';
-import { NgbTimepickerModule } from '@ng-bootstrap/ng-bootstrap/timepicker/timepicker.module';
+import { NgbAlertModule, NgbCollapseModule, NgbDatepickerModule, NgbPopoverModule, NgbTimepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import {
   AssociationRepository,
   CompetitionRepository,
@@ -13,14 +9,10 @@ import {
   ExternalSystemRepository,
   FieldRepository,
   GameRepository,
-  GameScoreRepository,
   LeagueRepository,
   PoulePlaceRepository,
-  PouleRepository,
   QualifyRuleRepository,
   RefereeRepository,
-  RoundConfigRepository,
-  RoundConfigScoreRepository,
   RoundRepository,
   SeasonRepository,
   StructureRepository,
@@ -73,7 +65,7 @@ import { TeamListComponent } from './team/list.component';
     HomeComponent, PoulePlaceEditComponent],
   providers: [UserRepository, ExternalSystemRepository, SeasonRepository, LeagueRepository,
     CompetitionRepository, FieldRepository, RefereeRepository, TeamRepository, AssociationRepository,
-    StructureRepository, RoundRepository, RoundConfigRepository, RoundConfigScoreRepository, PouleRepository, PoulePlaceRepository,
-    GameRepository, GameScoreRepository, QualifyRuleRepository, ExternalObjectRepository, BookmakerRepository]
+    StructureRepository, RoundRepository, PoulePlaceRepository,
+    GameRepository, QualifyRuleRepository, ExternalObjectRepository, BookmakerRepository]
 })
 export class AdminModule { }

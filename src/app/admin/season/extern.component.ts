@@ -6,7 +6,7 @@ import {
   ExternalObjectRepository,
   ExternalSystem,
   ExternalSystemRepository,
-  IExternalObject,
+  JsonExternalObject,
   Season,
   SeasonRepository,
 } from 'ngx-sport';
@@ -130,7 +130,7 @@ export class SeasonExternComponent implements OnInit, OnDestroy {
     const externalSystem = this.customForm.controls.externalSystem.value;
     const externalId = this.customForm.controls.externalId.value;
 
-    const externalObject: IExternalObject = {
+    const externalObject: JsonExternalObject = {
       importableObjectId: this.season.getId(),
       externalSystemId: externalSystem.getId(),
       externalId: externalId

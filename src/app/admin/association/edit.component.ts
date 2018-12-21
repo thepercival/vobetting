@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap/datepicker/datepicker.module';
-import { Association, AssociationRepository, IAssociation } from 'ngx-sport';
+import { Association, AssociationRepository, JsonAssociation, AssociationMapper } from 'ngx-sport';
 import { Subscription } from 'rxjs/Subscription';
 
 import { IAlert } from '../../app.definitions';
@@ -33,6 +33,7 @@ export class AssociationEditComponent implements OnInit, OnDestroy {
 
   constructor(
     private associationRepos: AssociationRepository,
+    private associationMapper: AssociationMapper,
     private route: ActivatedRoute,
     private router: Router,
     fb: FormBuilder
@@ -109,10 +110,10 @@ export class AssociationEditComponent implements OnInit, OnDestroy {
       this.processing = false;
       return;
     }
-    const association: IAssociation = {
+    const association: JsonAssociation = {
       name: name,
       description: description ? description : undefined,
-      parent: parent ? this.associationRepos.objectToJsonHelper(parent) : undefined
+      parent: parent ? this.associationMapper.toJson(parent) : undefined
     };
     this.associationRepos.createObject(association)
       .subscribe(

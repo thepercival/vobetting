@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Competition, Game, GameRepository, IPoulePlace, PoulePlaceRepository, SportRepository } from 'ngx-sport';
+import { Competition, Game, GameRepository, JsonPoulePlace, PoulePlaceMapper, SportRepository } from 'ngx-sport';
 import { Observable } from 'rxjs/Observable';
 import { catchError } from 'rxjs/operators/catchError';
 import { map } from 'rxjs/operators/map';
@@ -15,7 +15,7 @@ export class BetLineRepository extends SportRepository {
 
     constructor(private http: HttpClient,
         private gameRepository: GameRepository,
-        private poulePlaceRepository: PoulePlaceRepository,
+        private poulePlaceMapper: PoulePlaceMapper,
         router: Router
     ) {
         super(router);
@@ -106,7 +106,7 @@ export class BetLineRepository extends SportRepository {
         const json: IBetLine = {
             id: object.getId(),
             betType: object.getBetType(),
-            poulePlace: object.getPoulePlace() ? this.poulePlaceRepository.objectToJsonHelper(object.getPoulePlace()) : undefined
+            poulePlace: object.getPoulePlace() ? this.poulePlaceMapper.toJson(object.getPoulePlace()) : undefined
         };
         return json;
     }
@@ -115,7 +115,7 @@ export class BetLineRepository extends SportRepository {
 export interface IBetLine {
     id?: number;
     betType: number;
-    poulePlace?: IPoulePlace;
+    poulePlace?: JsonPoulePlace;
 }
 
 export interface BetLineFilter {

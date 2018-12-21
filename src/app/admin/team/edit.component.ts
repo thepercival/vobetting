@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap/datepicker/datepicker.module';
-import { Association, AssociationRepository, ITeam, Team, TeamRepository } from 'ngx-sport';
+import { Association, AssociationRepository, JsonTeam, Team, TeamRepository } from 'ngx-sport';
 import { Subscription } from 'rxjs/Subscription';
 
 import { IAlert } from '../../app.definitions';
@@ -121,7 +121,7 @@ export class TeamEditComponent implements OnInit, OnDestroy {
       this.processing = false;
       return;
     }
-    const team: ITeam = {
+    const team: JsonTeam = {
       name: name,
       abbreviation: abbreviation ? abbreviation : undefined
     };
