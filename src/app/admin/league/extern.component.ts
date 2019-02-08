@@ -122,6 +122,7 @@ export class LeagueExternComponent implements OnInit, OnDestroy {
     } else {
       this.add();
     }
+    return false;
   }
 
   add() {

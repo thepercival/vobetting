@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap/datepicker/datepicker.module';
 import { Competition, League } from 'ngx-sport';
 
+import { IAlert } from '../../app.definitions';
 import { BetLine } from '../betline';
 import { BetLineFilter } from './repository';
 
@@ -17,7 +18,7 @@ export class BetLineSelectionComponent implements OnInit, OnDestroy {
   @Output() processBetLinesFilter = new EventEmitter<BetLineFilter>();
 
   // games: Game[];
-  // alert: IAlert;
+  alert: IAlert;
   public processing = false;
   customForm: FormGroup;
   // protected sub: Subscription;
@@ -116,6 +117,7 @@ export class BetLineSelectionComponent implements OnInit, OnDestroy {
     };
     console.log('emitted');
     this.processBetLinesFilter.emit(betLineFilter);
+    return false;
   }
 
   // getPoule(): Poule {

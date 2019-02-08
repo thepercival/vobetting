@@ -96,6 +96,7 @@ export class AssociationEditComponent implements OnInit, OnDestroy {
     } else {
       this.add();
     }
+    return false;
   }
 
   add() {

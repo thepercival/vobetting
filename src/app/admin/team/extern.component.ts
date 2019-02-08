@@ -142,6 +142,7 @@ export class TeamExternComponent implements OnInit, OnDestroy {
     } else {
       this.add();
     }
+    return false;
   }
 
   add() {

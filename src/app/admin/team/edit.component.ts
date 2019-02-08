@@ -107,6 +107,7 @@ export class TeamEditComponent implements OnInit, OnDestroy {
     } else {
       this.add();
     }
+    return false;
   }
 
   add() {

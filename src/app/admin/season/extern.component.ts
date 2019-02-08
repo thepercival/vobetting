@@ -122,6 +122,7 @@ export class SeasonExternComponent implements OnInit, OnDestroy {
     } else {
       this.add();
     }
+    return false;
   }
 
   add() {
