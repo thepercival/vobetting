@@ -166,7 +166,7 @@ export class BetLineChartComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   protected getBetLine(homeAway?: boolean): BetLine {
-    return this.betLines.find(betLine => betLine.getGame().getPoulePlace(homeAway) === betLine.getPoulePlace());
+    return this.betLines.find(betLine => betLine.getGame().isParticipating(betLine.getPoulePlace(), homeAway));
   }
 
   getLayBacks(betLine: BetLine): any[] {
