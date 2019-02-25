@@ -20,7 +20,7 @@
           <th>naam</th>
           <th style="text-align: right;">
             <button type="button" class="btn btn-sm btn-outline-primary" (click)="add()" [disabled]="processing">
-              <fa-icon [icon]="['fas', 'fa-plus']"></fa-icon>
+              <fa-icon [icon]="['fas', 'plus']"></fa-icon>
             </button>
           </th>
         </tr>
@@ -29,7 +29,7 @@
         <tr *ngFor="let bookmaker of bookmakers">
           <td>
             <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing" (click)="edit(bookmaker)">
-              <fa-icon [icon]="['fas', 'fa-pencil-alt']"></fa-icon>
+              <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon>
             </button>
           </td>
           <td>
@@ -37,7 +37,7 @@
           </td>
           <td style="text-align: right;">
             <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing" (click)="remove(bookmaker);">
-              <fa-icon [icon]="['fas', 'fa-trash-alt']"></fa-icon>
+              <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon>
             </button>
           </td>
         </tr>

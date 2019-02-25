@@ -4,11 +4,11 @@
 
   <button *ngIf="!isLoggedIn()" routerLink="/user/login" routerLinkActive="active" class="btn btn-outline-secondary"
     type="button" style="cursor:pointer;">
-    <fa-icon [icon]="['fas', 'fa-sign-in-alt']"></fa-icon> inloggen
+    <fa-icon [icon]="['fas', 'sign-in-alt']"></fa-icon> inloggen
   </button>
   <button *ngIf="isLoggedIn()" routerLink="/user/logout" routerLinkActive="active" class="btn btn-outline-secondary"
     type="button" style="cursor:pointer;">
-    <fa-icon [icon]="['fas', 'fa-sign-out-alt']"></fa-icon> uitloggen
+    <fa-icon [icon]="['fas', 'sign-out-alt']"></fa-icon> uitloggen
   </button>
 
   <!-- <button class="navbar-toggler navbar-toggler-right text-white" type="button" data-toggle="collapse" data-target="#navbarResponsive"

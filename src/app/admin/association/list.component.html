@@ -21,7 +21,7 @@
           <th class="d-none d-sm-table-cell">parent</th>
           <th style="text-align: right;">
             <button type="button" class="btn btn-sm btn-outline-primary" (click)="add()" [disabled]="processing">
-              <fa-icon [icon]="['fas', 'fa-plus']"></fa-icon>
+              <fa-icon [icon]="['fas', 'plus']"></fa-icon>
             </button>
           </th>
         </tr>
@@ -30,7 +30,7 @@
         <tr *ngFor="let association of associations">
           <td>
             <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing" (click)="edit(association)">
-              <fa-icon [icon]="['fas', 'fa-pencil-alt']"></fa-icon>
+              <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon>
             </button>
           </td>
           <td>
@@ -40,7 +40,7 @@
           <td style="text-align: right;">
             <button *ngIf="association.getChildren().length === 0" type="button" class="btn btn-sm btn-outline-primary"
               [disabled]="processing" (click)="remove(association);">
-              <fa-icon [icon]="['fas', 'fa-trash-alt']"></fa-icon>
+              <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon>
             </button>
           </td>
         </tr>
