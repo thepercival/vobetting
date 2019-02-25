@@ -2,12 +2,14 @@
   <a class="navbar-brand" [routerLink]="['/']">
     <i class="fi flaticon-favicon"></i> {{title}}</a>
 
-    <button *ngIf="!isLoggedIn()" routerLink="/user/login" routerLinkActive="active" class="btn btn-outline-secondary" type="button" style="cursor:pointer;">
-      <i class="fa fa-sign-in"></i> inloggen
-    </button>
-    <button *ngIf="isLoggedIn()" routerLink="/user/logout" routerLinkActive="active" class="btn btn-outline-secondary" type="button" style="cursor:pointer;">
-      <i class="fa fa-sign-out"></i> uitloggen
-    </button>
+  <button *ngIf="!isLoggedIn()" routerLink="/user/login" routerLinkActive="active" class="btn btn-outline-secondary"
+    type="button" style="cursor:pointer;">
+    <fa-icon [icon]="['fas', 'fa-sign-in-alt']"></fa-icon> inloggen
+  </button>
+  <button *ngIf="isLoggedIn()" routerLink="/user/logout" routerLinkActive="active" class="btn btn-outline-secondary"
+    type="button" style="cursor:pointer;">
+    <fa-icon [icon]="['fas', 'fa-sign-out-alt']"></fa-icon> uitloggen
+  </button>
 
   <!-- <button class="navbar-toggler navbar-toggler-right text-white" type="button" data-toggle="collapse" data-target="#navbarResponsive"
     aria-controls="navbarResponsive" aria-label="Toggle navigation" (click)="navbarCollapsed = !navbarCollapsed" [attr.aria-expanded]="!navbarCollapsed"

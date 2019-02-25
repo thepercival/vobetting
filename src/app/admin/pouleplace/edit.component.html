@@ -5,7 +5,7 @@
         <h1 *ngIf="competition">
           {{competition.getName()}}
           <button (click)="navigateBack()" type="button" class="btn btn-outline-secondary btn-sm">
-            <i class="fa fa-level-up fa-rotate-270"></i>
+            <fa-icon [icon]="['fas', 'level-up-alt']" rotate="270"></fa-icon>
           </button>
         </h1>
         <h1 *ngIf="poulePlace">
@@ -40,7 +40,7 @@
           <div class="col-9">
             <button [disabled]="customForm.invalid" type="submit" class="btn btn-outline-primary">
               <i class="fi flaticon-group"></i> deelnemer opslaan
-              <i *ngIf="processing" class="fa fa-spinner fa-spin fa-fw"></i>
+              <fa-icon *ngIf="processing" [icon]="['fas', 'spinner']" [spin]="true"></fa-icon>
             </button>
           </div>
         </div>

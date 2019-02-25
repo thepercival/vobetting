@@ -5,12 +5,14 @@
     </h1>
     <h1 class="">
       <span>wedstrijden</span>
-      <button [routerLink]="['/admin/competition/home',competition.getId()]" routerLinkActive="active" type="button" class="btn btn-outline-secondary btn-sm">
-        <i class="fa fa-level-up fa-rotate-270"></i>
+      <button [routerLink]="['/admin/competition/home',competition.getId()]" routerLinkActive="active" type="button"
+        class="btn btn-outline-secondary btn-sm">
+        <fa-icon [icon]="['fas', 'level-up-alt']" rotate="270"></fa-icon>
       </button>
     </h1>
     <ngb-alert *ngIf="alert" [type]="alert.type" [dismissible]="true" (close)="alert = undefined;">
-      <i *ngIf="processing" class="fa fa-spinner fa-spin"></i> {{ alert.message }}</ngb-alert>
+      <fa-icon *ngIf="processing" [icon]="['fas', 'spinner']" [spin]="true"></fa-icon> {{ alert.message }}
+    </ngb-alert>
   </div>
 </div>
 <div *ngIf="getPoule()" class="row justify-content-center mx-0">

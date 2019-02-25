@@ -30,22 +30,24 @@
       </div>
       <div class="col-9">
         <div class="input-group input-group-date">
-          <input class="form-control" placeholder="yyyy-mm-dd" id="dp" name="dp" [formControl]="customForm.controls.endDateTime" [ngClass]="{ 'is-invalid': customForm.controls.endDateTime.invalid, 'is-valid': customForm.controls.endDateTime.valid }"
+          <input class="form-control" placeholder="yyyy-mm-dd" id="dp" name="dp" [formControl]="customForm.controls.endDateTime"
+            [ngClass]="{ 'is-invalid': customForm.controls.endDateTime.invalid, 'is-valid': customForm.controls.endDateTime.valid }"
             ngbDatepicker #d="ngbDatepicker" required>
           <div class="input-group-append">
             <span class="input-group-text" (click)="d.toggle()" style="cursor: pointer;">
-              <i class="fa fa-calendar"></i>
+              <fa-icon [icon]="['fas', 'fa-calendar-alt']"></fa-icon>
             </span>
           </div>
         </div>
       </div>
     </div>
-    <ngb-alert *ngIf="alert" [type]="alert.type" style="width:100%;" [dismissible]="true" (close)="alert = undefined;">{{ alert.message }}</ngb-alert>
+    <ngb-alert *ngIf="alert" [type]="alert.type" style="width:100%;" [dismissible]="true" (close)="alert = undefined;">{{
+      alert.message }}</ngb-alert>
     <div class="form-group row justify-content-end">
       <div class="col-9">
         <button [disabled]="customForm.invalid" type="submit" class="btn btn-outline-primary">
           <span>toon betregels</span>
-          <i *ngIf="processing" class="fa fa-spinner fa-spin fa-fw"></i>
+          <fa-icon [icon]="['fas', 'spinner']" [spin]="true"></fa-icon>
         </button>
       </div>
     </div>

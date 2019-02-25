@@ -3,11 +3,12 @@
     <h1 class="">
       <span>bookmakers</span>
       <button routerLink="/admin/home" routerLinkActive="active" type="button" class="btn btn-outline-secondary btn-sm">
-        <i class="fa fa-level-up fa-rotate-270"></i>
+        <fa-icon [icon]="['fas', 'level-up-alt']" rotate="270"></fa-icon>
       </button>
     </h1>
     <ngb-alert *ngIf="alert" [type]="alert.type" [dismissible]="true" (close)="alert = undefined;">
-      <i *ngIf="processing" class="fa fa-spinner fa-spin"></i> {{ alert.message }}</ngb-alert>
+      <fa-icon *ngIf="processing" [icon]="['fas', 'spinner']" [spin]="true"></fa-icon> {{ alert.message }}
+    </ngb-alert>
   </div>
 </div>
 <div class="row justify-content-center mx-0">
@@ -19,7 +20,7 @@
           <th>naam</th>
           <th style="text-align: right;">
             <button type="button" class="btn btn-sm btn-outline-primary" (click)="add()" [disabled]="processing">
-              <i class="fa fa-plus"></i>
+              <fa-icon [icon]="['fas', 'fa-plus']"></fa-icon>
             </button>
           </th>
         </tr>
@@ -28,7 +29,7 @@
         <tr *ngFor="let bookmaker of bookmakers">
           <td>
             <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing" (click)="edit(bookmaker)">
-              <span class="fa fa-pencil"></span>
+              <fa-icon [icon]="['fas', 'fa-pencil-alt']"></fa-icon>
             </button>
           </td>
           <td>
@@ -36,7 +37,7 @@
           </td>
           <td style="text-align: right;">
             <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing" (click)="remove(bookmaker);">
-              <span class="fa fa-remove"></span>
+              <fa-icon [icon]="['fas', 'fa-trash-alt']"></fa-icon>
             </button>
           </td>
         </tr>

@@ -3,6 +3,19 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import {
+  faCalendarAlt,
+  faCloudDownloadAlt,
+  faLevelUpAlt,
+  faPencilAlt,
+  faPlus,
+  faSignInAlt,
+  faSignOutAlt,
+  faSpinner,
+  faTrashAlt,
+} from '@fortawesome/free-solid-svg-icons';
 import {
   NgbAlertModule,
   NgbCollapseModule,
@@ -22,6 +35,8 @@ import { HomeComponent } from './home/home.component';
 import { NavComponent } from './nav/nav.component';
 import { UserModule } from './user/user.module';
 
+library.add(faLevelUpAlt, faSpinner, faPlus, faSignInAlt,
+  faSignOutAlt, faPencilAlt, faTrashAlt, faCalendarAlt, faCloudDownloadAlt);
 
 @NgModule({
   declarations: [
@@ -41,7 +56,8 @@ import { UserModule } from './user/user.module';
     AdminModule/*,
     SportModule*/,
     NgbAlertModule.forRoot(), NgbCollapseModule.forRoot(), NgbDatepickerModule.forRoot(),
-    NgbPopoverModule.forRoot(), NgbTimepickerModule.forRoot()
+    NgbPopoverModule.forRoot(), NgbTimepickerModule.forRoot(),
+    FontAwesomeModule
   ],
   providers: [
     AuthService,

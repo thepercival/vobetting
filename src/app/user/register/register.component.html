@@ -13,7 +13,7 @@
     <div *ngIf="f.submitted && !password.valid" class="alert alert-danger">wachtwoord is verplicht</div>
     <div *ngIf="error" class="alert alert-danger">{{error}}</div>
     <button [disabled]="loading" class="btn btn-lg btn-primary btn-block" type="submit">registreren
-      <i *ngIf="loading" class="fa fa-spinner fa-spin fa-fw"></i>
+      <fa-icon *ngIf="loading" [icon]="['fas', 'spinner']" [spin]="true"></fa-icon>
     </button>
   </form>
 </div>

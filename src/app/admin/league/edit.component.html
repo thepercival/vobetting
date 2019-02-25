@@ -6,7 +6,7 @@
           <span>league</span>
           <span> {{league ? 'wijzigen' : 'toevoegen'}}</span>
           <button (click)="navigateBack()" type="button" class="btn btn-outline-secondary btn-sm">
-            <i class="fa fa-level-up fa-rotate-270"></i>
+            <fa-icon [icon]="['fas', 'level-up-alt']" rotate="270"></fa-icon>
           </button>
         </h1>
       </div>
@@ -51,16 +51,17 @@
           </div>
           <div class="col-9">
             <input class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.abbreviation.invalid, 'is-valid': customForm.controls.abbreviation.valid }"
-              type="text" name="abbreviation" id="abbreviation" [formControl]="customForm.controls.abbreviation" maxlength="{{validations.maxlengthabbreviation}}"
-              placeholder="max. {{validations.maxlengthabbreviation}} karakters">
+              type="text" name="abbreviation" id="abbreviation" [formControl]="customForm.controls.abbreviation"
+              maxlength="{{validations.maxlengthabbreviation}}" placeholder="max. {{validations.maxlengthabbreviation}} karakters">
           </div>
         </div>
-        <ngb-alert *ngIf="alert" [type]="alert.type" style="width:100%;" [dismissible]="true" (close)="alert = undefined;">{{ alert.message }}</ngb-alert>
+        <ngb-alert *ngIf="alert" [type]="alert.type" style="width:100%;" [dismissible]="true" (close)="alert = undefined;">{{
+          alert.message }}</ngb-alert>
         <div class="form-group row justify-content-end">
           <div class="col-9">
             <button [disabled]="customForm.invalid" type="submit" class="btn btn-outline-primary">
               <span>{{league ? 'wijzigen' : 'toevoegen'}}</span>
-              <i *ngIf="processing" class="fa fa-spinner fa-spin fa-fw"></i>
+              <fa-icon *ngIf="processing" [icon]="['fas', 'spinner']" [spin]="true"></fa-icon>
             </button>
           </div>
         </div>

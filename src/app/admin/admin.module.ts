@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   NgbAlertModule,
   NgbCollapseModule,
@@ -13,6 +14,7 @@ import {
   CompetitionRepository,
   CompetitorRepository,
   ExternalObjectRepository,
+  ExternalSystemMapper,
   ExternalSystemRepository,
   FieldRepository,
   GameRepository,
@@ -58,6 +60,7 @@ import { StructureEditComponent } from './structure/edit.component';
     FormsModule,
     ReactiveFormsModule,
     NgbAlertModule, NgbCollapseModule, NgbDatepickerModule, NgbPopoverModule, NgbTimepickerModule,
+    FontAwesomeModule
   ],
   declarations: [HomeComponent,
     ExternalSystemListComponent, ExternalSystemEditComponent,
@@ -72,6 +75,6 @@ import { StructureEditComponent } from './structure/edit.component';
   providers: [UserRepository, ExternalSystemRepository, SeasonRepository, LeagueRepository,
     CompetitionRepository, FieldRepository, RefereeRepository, CompetitorRepository, AssociationRepository,
     StructureRepository, RoundRepository, RoundNumberConfigRepository, PoulePlaceRepository,
-    GameRepository, ExternalObjectRepository, BookmakerRepository]
+    GameRepository, ExternalObjectRepository, BookmakerRepository, ExternalSystemMapper]
 })
 export class AdminModule { }
