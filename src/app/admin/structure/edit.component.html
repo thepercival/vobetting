@@ -16,19 +16,21 @@
       <h1 *ngIf="processing" align="center">
         <i class="fa fa-spinner fa-spin fa-fw"></i>
       </h1>
-      <form *ngIf="!processing && !structureService" name="form" (ngSubmit)="create() && false" [formGroup]="customForm" novalidate>
+      <form *ngIf="!processing && !structureService" name="form" (ngSubmit)="create() && false" [formGroup]="customForm"
+        novalidate>
         <div class="form-group row">
           <div class="col-3">
-            <label for="nrofteams" class="col-form-label">aantal teams</label>
+            <label for="nrofcompetitors" class="col-form-label">aantal competitors</label>
           </div>
           <div class="col-9">
-            <input class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.nrofteams.invalid, 'is-valid': customForm.controls.nrofteams.valid }"
-              type="text" name="nrofteams" id="nrofteams" [formControl]="customForm.controls.nrofteams" min="{{validations.minnrofteams}}"
-              max="{{validations.maxnrofteams}}" placeholder="{{validations.minnrofteams}} - {{validations.maxnrofteams}}"
+            <input class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.nrofcompetitors.invalid, 'is-valid': customForm.controls.nrofcompetitors.valid }"
+              type="text" name="nrofcompetitors" id="nrofcompetitors" [formControl]="customForm.controls.nrofcompetitors"
+              min="{{validations.minnrofcompetitors}}" max="{{validations.maxnrofcompetitors}}" placeholder="{{validations.minnrofcompetitors}} - {{validations.maxnrofcompetitors}}"
               autofocus>
           </div>
         </div>
-        <ngb-alert *ngIf="alert" [type]="alert.type" style="width:100%;" [dismissible]="true" (close)="alert = undefined;">{{ alert.message }}</ngb-alert>
+        <ngb-alert *ngIf="alert" [type]="alert.type" style="width:100%;" [dismissible]="true" (close)="alert = undefined;">{{
+          alert.message }}</ngb-alert>
         <div class="form-group row justify-content-end">
           <div class="col-9">
             <button [disabled]="customForm.invalid" type="submit" class="btn btn-outline-primary">
@@ -59,12 +61,12 @@
                 <span>{{poulePlace.getNumber()}}</span>
               </td>
               <td class="d-none d-sm-table-cell">
-                <img *ngIf="poulePlace.getTeam().getImageUrl()" height="16px" src="{{poulePlace.getTeam().getImageUrl()}}">
+                <img *ngIf="poulePlace.getCompetitor().getImageUrl()" height="16px" src="{{poulePlace.getCompetitor().getImageUrl()}}">
               </td>
-              <td *ngIf="poulePlace.getTeam()">
-                <span>{{poulePlace.getTeam().getName()}}</span>
+              <td *ngIf="poulePlace.getCompetitor()">
+                <span>{{poulePlace.getCompetitor().getName()}}</span>
               </td>
-              <td *ngIf="!poulePlace.getTeam()">
+              <td *ngIf="!poulePlace.getCompetitor()">
                 <span class="badge badge-danger">vul een naam in</span>
               </td>
             </tr>
@@ -72,8 +74,8 @@
         </table>
       </div>
 
-      <hr> teams kunnen koppelen
-      <br> testen als team niet meer te verwijderen is
+      <hr> competitors kunnen koppelen
+      <br> testen als competitor niet meer te verwijderen is
       <br>
       <br> wedstrijden is een ander scherm, hier kun je de wedstrijden aanmaken en verwijderen
       <br> verwijderen mag alleen als er geen externe koppelingen zijn en er geen gespeelde wedstrijden zijn

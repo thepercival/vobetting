@@ -1,10 +1,10 @@
-/**
- * Created by coen on 9-10-17.
- */
 import { ExternalSystem } from 'ngx-sport';
 
 import { BetLine } from './betline';
 
+/**
+ * Created by coen on 9-10-17.
+ */
 export class LayBack {
     protected id: number;
     protected back: boolean;

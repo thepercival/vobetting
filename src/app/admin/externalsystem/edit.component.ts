@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ExternalSystem, ExternalSystemRepository, IExternalSystem } from 'ngx-sport';
-import { Subscription } from 'rxjs/Subscription';
+import { ExternalSystem, ExternalSystemRepository, JsonExternalSystem } from 'ngx-sport';
+import { Subscription } from 'rxjs';
 
 import { IAlert } from '../../app.definitions';
 
@@ -60,9 +60,9 @@ export class ExternalSystemEditComponent implements OnInit, OnDestroy {
       this.externalSystemRepos.getObjects()
         .subscribe(
         /* happy path */(externalSystems: ExternalSystem[]) => {
-          this.externalSystems = externalSystems;
-          this.postInit(+params.id);
-        },
+            this.externalSystems = externalSystems;
+            this.postInit(+params.id);
+          },
         /* error path */ e => { },
         /* onComplete */() => { this.processing = false; }
         );
@@ -120,7 +120,7 @@ export class ExternalSystemEditComponent implements OnInit, OnDestroy {
       this.processing = false;
       return;
     }
-    const externalSystem: IExternalSystem = {
+    const externalSystem: JsonExternalSystem = {
       name: name,
       website: website ? website : undefined,
       username: username ? username : undefined,
@@ -131,8 +131,8 @@ export class ExternalSystemEditComponent implements OnInit, OnDestroy {
     this.externalSystemRepos.createObject(externalSystem)
       .subscribe(
         /* happy path */ externalSystemRes => {
-        this.navigateBack();
-      },
+          this.navigateBack();
+        },
         /* error path */ e => { this.setAlert('danger', e); },
         /* onComplete */() => this.processing = false
       );
@@ -163,8 +163,8 @@ export class ExternalSystemEditComponent implements OnInit, OnDestroy {
     this.externalSystemRepos.editObject(this.externalSystem)
       .subscribe(
         /* happy path */ externalSystemRes => {
-        this.navigateBack();
-      },
+          this.navigateBack();
+        },
         /* error path */ e => { this.setAlert('danger', e); this.processing = false; },
         /* onComplete */() => { this.processing = false; }
       );

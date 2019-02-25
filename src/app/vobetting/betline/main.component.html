@@ -15,9 +15,9 @@
   <div>
     <div *ngFor="let game of games">
       <div>
-        <span>{{game.getHomePoulePlace().getTeam().getName() }}</span>
+        <span>{{game.getHomePoulePlace().getCompetitor().getName() }}</span>
         <span> vs </span>
-        <span>{{game.getAwayPoulePlace().getTeam().getName() }}</span>
+        <span>{{game.getAwayPoulePlace().getCompetitor().getName() }}</span>
       </div>
       <app-betline-chart *ngFor="let betType of getBetTypes(game)" [game]="game" [betType]="betType" [structureService]="structureService"></app-betline-chart>
     </div>

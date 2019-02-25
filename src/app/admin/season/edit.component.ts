@@ -2,8 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap/datepicker/datepicker.module';
-import { ISeason, Season, SeasonRepository } from 'ngx-sport';
-import { Subscription } from 'rxjs/Subscription';
+import { JsonSeason, Season, SeasonRepository } from 'ngx-sport';
+import { Subscription } from 'rxjs';
 
 import { IAlert } from '../../app.definitions';
 
@@ -52,9 +52,9 @@ export class SeasonEditComponent implements OnInit, OnDestroy {
       this.seasonRepos.getObjects()
         .subscribe(
         /* happy path */(seasons: Season[]) => {
-          this.seasons = seasons;
-          this.postInit(+params.id);
-        },
+            this.seasons = seasons;
+            this.postInit(+params.id);
+          },
         /* error path */ e => { },
         /* onComplete */() => { this.processing = false; }
         );
@@ -106,7 +106,7 @@ export class SeasonEditComponent implements OnInit, OnDestroy {
       this.processing = false;
       return;
     }
-    const season: ISeason = {
+    const season: JsonSeason = {
       name: name,
       startDateTime: startDateTime.toISOString(),
       endDateTime: endDateTime.toISOString()
@@ -114,8 +114,8 @@ export class SeasonEditComponent implements OnInit, OnDestroy {
     this.seasonRepos.createObject(season)
       .subscribe(
         /* happy path */ seasonRes => {
-        this.navigateBack();
-      },
+          this.navigateBack();
+        },
         /* error path */ e => { this.setAlert('danger', e); },
         /* onComplete */() => this.processing = false
       );
@@ -140,8 +140,8 @@ export class SeasonEditComponent implements OnInit, OnDestroy {
     this.seasonRepos.editObject(this.season)
       .subscribe(
         /* happy path */ seasonRes => {
-        this.navigateBack();
-      },
+          this.navigateBack();
+        },
         /* error path */ e => { this.setAlert('danger', e); this.processing = false; },
         /* onComplete */() => { this.processing = false; }
       );

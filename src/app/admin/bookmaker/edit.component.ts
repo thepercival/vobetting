@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { IAlert } from '../../app.definitions';
-import { Bookmaker } from '../../vobetting/bookmaker';
-import { BookmakerRepository, IBookmaker } from '../../vobetting/bookmaker/repository';
+import { Bookmaker } from '../../lib/bookmaker';
+import { BookmakerRepository, IBookmaker } from '../../lib/bookmaker/repository';
 
 @Component({
   selector: 'app-bookmaker-edit',

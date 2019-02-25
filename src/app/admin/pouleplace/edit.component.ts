@@ -5,15 +5,14 @@ import {
   AssociationRepository,
   Competition,
   CompetitionRepository,
+  Competitor,
+  CompetitorRepository,
   PoulePlace,
   PoulePlaceRepository,
-  Round,
+  Structure,
   StructureRepository,
-  StructureService,
-  Team,
-  TeamRepository,
 } from 'ngx-sport';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { IAlert } from '../../app.definitions';
 
@@ -32,14 +31,14 @@ export class PoulePlaceEditComponent implements OnInit, OnDestroy {
   public alert: IAlert;
   public processing = true;
   customForm: FormGroup;
-  teams: Team[];
-  team: Team;
+  competitors: Competitor[];
+  competitor: Competitor;
   poulePlace: PoulePlace;
   competition: Competition;
-  structureService: StructureService;
+  structure: Structure;
 
   constructor(
-    private teamRepos: TeamRepository,
+    private competitorRepos: CompetitorRepository,
     private competitionRepos: CompetitionRepository,
     private associationRepos: AssociationRepository,
     private pouleplaceRepos: PoulePlaceRepository,
@@ -49,7 +48,7 @@ export class PoulePlaceEditComponent implements OnInit, OnDestroy {
     fb: FormBuilder
   ) {
     this.customForm = fb.group({
-      team: ['']
+      competitor: ['']
     });
   }
 
@@ -59,33 +58,29 @@ export class PoulePlaceEditComponent implements OnInit, OnDestroy {
       this.competitionRepos.getObject(+params.competitionid)
         .subscribe(
         /* happy path */(competition: Competition) => {
-          this.competition = competition;
+            this.competition = competition;
 
-          this.teamRepos.getObjects(this.competition.getLeague().getAssociation())
-            .subscribe(
-            /* happy path */(teams: Team[]) => {
-              this.teams = teams;
+            this.competitorRepos.getObjects(this.competition.getLeague().getAssociation())
+              .subscribe(
+            /* happy path */(competitors: Competitor[]) => {
+                  this.competitors = competitors;
 
-            },
+                },
             /* error path */ e => { },
             /* onComplete */() => { this.processing = false; }
-            );
-
-          this.structureRepository.getObject(this.competition)
-            .subscribe(
-              /* happy path */(roundRes: Round) => {
-              this.structureService = new StructureService(
-                this.competition,
-                { min: 2, max: 64 },
-                roundRes
               );
-              this.postInit(+params.id);
 
-            },
+            this.structureRepository.getObject(this.competition)
+              .subscribe(
+              /* happy path */(structureRes) => {
+                  this.structure = structureRes;
+                  this.postInit(+params.id);
+
+                },
             /* error path */ e => { },
             /* onComplete */() => { }
-            );
-        },
+              );
+          },
         /* error path */ e => { },
         /* onComplete */() => { this.processing = false; }
         );
@@ -102,7 +97,7 @@ export class PoulePlaceEditComponent implements OnInit, OnDestroy {
   }
 
   getPoulePlaces() {
-    return this.structureService.getFirstRound().getPoules()[0].getPlaces();
+    return this.structure.getRootRound().getPoules()[0].getPlaces();
   }
 
   private postInit(id: number) {
@@ -111,7 +106,7 @@ export class PoulePlaceEditComponent implements OnInit, OnDestroy {
     }
     this.poulePlace = this.getPoulePlaces().find(pouleplace => pouleplace.getId() === id);
     if (this.poulePlace !== undefined) {
-      this.customForm.controls.team.setValue(this.poulePlace.getTeam());
+      this.customForm.controls.competitor.setValue(this.poulePlace.getCompetitor());
     }
   }
 
@@ -122,22 +117,22 @@ export class PoulePlaceEditComponent implements OnInit, OnDestroy {
   save() {
     this.processing = true;
 
-    const team = this.customForm.controls.team.value;
+    const competitor = this.customForm.controls.competitor.value;
 
-    // if (this.isTeamDuplicate(team)) {
+    // if (this.isCompetitorDuplicate(competitor)) {
     //   this.setAlert('danger', 'de naam bestaan al');
     //   this.processing = false;
     //   return;
     // }
 
 
-    this.poulePlace.setTeam(team);
+    this.poulePlace.setCompetitor(competitor);
 
     this.pouleplaceRepos.editObject(this.poulePlace, this.poulePlace.getPoule())
       .subscribe(
         /* happy path */ poulePlaceRes => {
-        this.navigateBack();
-      },
+          this.navigateBack();
+        },
         /* error path */ e => { this.setAlert('danger', e); this.processing = false; },
         /* onComplete */() => { this.processing = false; }
       );
@@ -160,9 +155,9 @@ export class PoulePlaceEditComponent implements OnInit, OnDestroy {
     this.router.navigate(this.getForwarUrl(), { queryParams: this.getForwarUrlQueryParams() });
   }
 
-  // isTeamDuplicate(team: Team): boolean {
-  //   return this.teams.find(teamIt => {
-  //     return (name === teamIt.getName() && (team === undefined || team !== teamIt));
+  // isCompetitorDuplicate(competitor: Competitor): boolean {
+  //   return this.competitors.find(competitorIt => {
+  //     return (name === competitorIt.getName() && (competitor === undefined || competitor !== competitorIt));
   //   }) !== undefined;
   // }
 

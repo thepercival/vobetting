@@ -1,34 +1,32 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap/alert/alert.module';
-import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap/collapse/collapse.module';
-import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap/datepicker/datepicker.module';
-import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap/popover/popover.module';
-import { NgbTimepickerModule } from '@ng-bootstrap/ng-bootstrap/timepicker/timepicker.module';
+import {
+  NgbAlertModule,
+  NgbCollapseModule,
+  NgbDatepickerModule,
+  NgbPopoverModule,
+  NgbTimepickerModule,
+} from '@ng-bootstrap/ng-bootstrap';
 import {
   AssociationRepository,
   CompetitionRepository,
+  CompetitorRepository,
   ExternalObjectRepository,
   ExternalSystemRepository,
   FieldRepository,
   GameRepository,
-  GameScoreRepository,
   LeagueRepository,
   PoulePlaceRepository,
-  PouleRepository,
-  QualifyRuleRepository,
   RefereeRepository,
-  RoundConfigRepository,
-  RoundConfigScoreRepository,
+  RoundNumberConfigRepository,
   RoundRepository,
   SeasonRepository,
   StructureRepository,
-  TeamRepository,
 } from 'ngx-sport';
 
+import { BookmakerRepository } from '../lib/bookmaker/repository';
 import { UserRepository } from '../user/repository';
-import { BookmakerRepository } from '../vobetting/bookmaker/repository';
 import { AdminRoutingModule } from './admin-routing.module';
 import { AssociationEditComponent } from './association/edit.component';
 import { AssociationListComponent } from './association/list.component';
@@ -37,6 +35,9 @@ import { BookmakerListComponent } from './bookmaker/list.component';
 import { CompetitionEditComponent } from './competition/edit.component';
 import { CompetitionHomeComponent } from './competition/home.component';
 import { CompetitionListComponent } from './competition/list.component';
+import { CompetitorEditComponent } from './competitor/edit.component';
+import { CompetitorExternComponent } from './competitor/extern.component';
+import { CompetitorListComponent } from './competitor/list.component';
 import { ExternalSystemEditComponent } from './externalsystem/edit.component';
 import { ExternalSystemListComponent } from './externalsystem/list.component';
 import { GameListComponent } from './games/list.component';
@@ -49,9 +50,6 @@ import { SeasonEditComponent } from './season/edit.component';
 import { SeasonExternComponent } from './season/extern.component';
 import { SeasonListComponent } from './season/list.component';
 import { StructureEditComponent } from './structure/edit.component';
-import { TeamEditComponent } from './team/edit.component';
-import { TeamExternComponent } from './team/extern.component';
-import { TeamListComponent } from './team/list.component';
 
 @NgModule({
   imports: [
@@ -66,14 +64,14 @@ import { TeamListComponent } from './team/list.component';
     BookmakerListComponent, BookmakerEditComponent,
     SeasonListComponent, SeasonEditComponent, SeasonExternComponent,
     AssociationListComponent, AssociationEditComponent,
-    TeamListComponent, TeamEditComponent, TeamExternComponent,
+    CompetitorListComponent, CompetitorEditComponent, CompetitorExternComponent,
     LeagueEditComponent, LeagueListComponent, LeagueExternComponent,
     CompetitionEditComponent, CompetitionListComponent, CompetitionHomeComponent,
     StructureEditComponent, GameListComponent,
     HomeComponent, PoulePlaceEditComponent],
   providers: [UserRepository, ExternalSystemRepository, SeasonRepository, LeagueRepository,
-    CompetitionRepository, FieldRepository, RefereeRepository, TeamRepository, AssociationRepository,
-    StructureRepository, RoundRepository, RoundConfigRepository, RoundConfigScoreRepository, PouleRepository, PoulePlaceRepository,
-    GameRepository, GameScoreRepository, QualifyRuleRepository, ExternalObjectRepository, BookmakerRepository]
+    CompetitionRepository, FieldRepository, RefereeRepository, CompetitorRepository, AssociationRepository,
+    StructureRepository, RoundRepository, RoundNumberConfigRepository, PoulePlaceRepository,
+    GameRepository, ExternalObjectRepository, BookmakerRepository]
 })
 export class AdminModule { }

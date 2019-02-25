@@ -24,17 +24,18 @@
         </div>
         <div class="form-group row">
           <div class="col-3">
-            <label for="team" class="col-form-label">team</label>
+            <label for="competitor" class="col-form-label">competitor</label>
           </div>
           <div class="col-9">
-            <select id="team" name="team" class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.team.invalid, 'is-valid': customForm.controls.team.valid }"
-              [formControl]="customForm.controls.team">
+            <select id="competitor" name="competitor" class="form-control" [ngClass]="{ 'is-invalid': customForm.controls.competitor.invalid, 'is-valid': customForm.controls.competitor.valid }"
+              [formControl]="customForm.controls.competitor">
               <option [ngValue]="undefined">kies..</option>
-              <option *ngFor="let team of competition.getLeague().getAssociation().getTeams()" [ngValue]="team">{{team.getName()}}</option>
+              <option *ngFor="let competitor of competition.getLeague().getAssociation().getCompetitors()" [ngValue]="competitor">{{competitor.getName()}}</option>
             </select>
           </div>
         </div>
-        <ngb-alert *ngIf="alert" [type]="alert.type" style="width:100%;" [dismissible]="true" (close)="alert = undefined;">{{ alert.message }}</ngb-alert>
+        <ngb-alert *ngIf="alert" [type]="alert.type" style="width:100%;" [dismissible]="true" (close)="alert = undefined;">{{
+          alert.message }}</ngb-alert>
         <div class="form-group row justify-content-end">
           <div class="col-9">
             <button [disabled]="customForm.invalid" type="submit" class="btn btn-outline-primary">

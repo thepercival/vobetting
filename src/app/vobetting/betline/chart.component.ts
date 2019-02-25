@@ -1,12 +1,11 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Game, StructureService } from 'ngx-sport';
-import { Observable } from 'rxjs/Observable';
-import { forkJoin } from 'rxjs/observable/forkJoin';
+import { forkJoin, Observable } from 'rxjs';
 
-import { BetLine } from '../betline';
-import { LayBack } from '../layback';
-import { LayBackRepository } from '../layback/repository';
-import { BetLineRepository } from './repository';
+import { BetLine } from '../../lib/betline';
+import { BetLineRepository } from '../../lib/betline/repository';
+import { LayBack } from '../../lib/layback';
+import { LayBackRepository } from '../../lib/layback/repository';
 
 
 @Component({
@@ -166,7 +165,7 @@ export class BetLineChartComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   protected getBetLine(homeAway?: boolean): BetLine {
-    return this.betLines.find(betLine => betLine.getGame().getPoulePlace(homeAway) === betLine.getPoulePlace());
+    return this.betLines.find(betLine => betLine.getGame().isParticipating(betLine.getPoulePlace(), homeAway));
   }
 
   getLayBacks(betLine: BetLine): any[] {

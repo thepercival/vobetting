@@ -1,19 +1,19 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Association, AssociationRepository, SportConfig, Team, TeamRepository } from 'ngx-sport';
-import { Subscription } from 'rxjs/Subscription';
+import { Association, AssociationRepository, Competitor, CompetitorRepository, SportConfig } from 'ngx-sport';
+import { Subscription } from 'rxjs';
 
 import { IAlert } from '../../app.definitions';
 
 @Component({
-  selector: 'app-team-list',
+  selector: 'app-competitor-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.css']
 })
-export class TeamListComponent implements OnInit, OnDestroy {
+export class CompetitorListComponent implements OnInit, OnDestroy {
 
   protected sub: Subscription;
-  teams: Team[] = [];
+  competitors: Competitor[] = [];
   alert: IAlert;
   processing = true;
   associations: Association[];
@@ -23,7 +23,7 @@ export class TeamListComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private teamRepos: TeamRepository,
+    private competitorRepos: CompetitorRepository,
     private associationRepos: AssociationRepository
   ) { }
 
@@ -50,10 +50,10 @@ export class TeamListComponent implements OnInit, OnDestroy {
   onSelectAssociation(association: Association) {
     this.association = association;
     this.processing = true;
-    this.teamRepos.getObjects(association)
+    this.competitorRepos.getObjects(association)
       .subscribe(
-        /* happy path */(teams: Team[]) => {
-          this.teams = teams.sort((t1, t2) => {
+        /* happy path */(competitors: Competitor[]) => {
+          this.competitors = competitors.sort((t1, t2) => {
             return t1.getName() > t2.getName() ? 1 : -1;
           });
         },
@@ -67,12 +67,12 @@ export class TeamListComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
-  linkToExtern(team: Team) {
+  linkToExtern(competitor: Competitor) {
     this.router.navigate(
-      ['/admin/team/extern', this.association.getId(), team.getId()],
+      ['/admin/competitor/extern', this.association.getId(), competitor.getId()],
       {
         queryParams: {
-          returnAction: '/admin/team',
+          returnAction: '/admin/competitor',
           returnParam: this.association.getId()
         }
       }
@@ -84,32 +84,32 @@ export class TeamListComponent implements OnInit, OnDestroy {
     this.linkToEdit();
   }
 
-  edit(team: Team) {
-    this.linkToEdit(team);
+  edit(competitor: Competitor) {
+    this.linkToEdit(competitor);
   }
 
-  linkToEdit(team?: Team) {
+  linkToEdit(competitor?: Competitor) {
     this.router.navigate(
-      ['/admin/team/edit', this.association.getId(), team ? team.getId() : 0],
+      ['/admin/competitor/edit', this.association.getId(), competitor ? competitor.getId() : 0],
       {
         queryParams: {
-          returnAction: '/admin/team',
+          returnAction: '/admin/competitor',
           returnParam: this.association.getId()
         }
       }
     );
   }
 
-  remove(team: Team) {
-    this.setAlert('info', 'team verwijderen..');
+  remove(competitor: Competitor) {
+    this.setAlert('info', 'competitor verwijderen..');
     this.processing = true;
 
-    this.teamRepos.removeObject(team)
+    this.competitorRepos.removeObject(competitor)
       .subscribe(
-        /* happy path */ teamRes => {
-          const index = this.teams.indexOf(team);
+        /* happy path */ competitorRes => {
+          const index = this.competitors.indexOf(competitor);
           if (index > -1) {
-            this.teams.splice(index, 1);
+            this.competitors.splice(index, 1);
           }
           this.resetAlert();
         },

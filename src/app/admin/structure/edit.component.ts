@@ -1,16 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  Competition,
-  CompetitionRepository,
-  PoulePlace,
-  Round,
-  RoundRepository,
-  StructureRepository,
-  StructureService,
-} from 'ngx-sport';
-import { Subscription } from 'rxjs/Subscription';
+import { Competition, CompetitionRepository, PoulePlace, Structure, StructureMapper, StructureRepository } from 'ngx-sport';
+import { Subscription } from 'rxjs';
 
 import { IAlert } from '../../app.definitions';
 
@@ -26,26 +18,26 @@ export class StructureEditComponent implements OnInit, OnDestroy {
   public processing = true;
   customForm: FormGroup;
   competition: Competition;
-  private structureService: StructureService;
+  private structure: Structure;
 
   validations: StructureValidations = {
-    minnrofteams: 2,
-    maxnrofteams: 32,
+    minnrofcompetitors: 2,
+    maxnrofcompetitors: 32,
   };
 
   constructor(
+    private structureMapper: StructureMapper,
     private structureRepository: StructureRepository,
     private competitionRepos: CompetitionRepository,
-    private roundRepository: RoundRepository,
     private route: ActivatedRoute,
     private router: Router,
     fb: FormBuilder
   ) {
     this.customForm = fb.group({
-      nrofteams: ['', Validators.compose([
+      nrofcompetitors: ['', Validators.compose([
         Validators.required,
-        Validators.min(this.validations.minnrofteams),
-        Validators.max(this.validations.maxnrofteams)
+        Validators.min(this.validations.minnrofcompetitors),
+        Validators.max(this.validations.maxnrofcompetitors)
       ])],
     });
   }
@@ -58,16 +50,10 @@ export class StructureEditComponent implements OnInit, OnDestroy {
             this.competition = competition;
             this.structureRepository.getObject(this.competition)
               .subscribe(
-              /* happy path */(round: Round) => {
-                  console.log(round);
-                  if (round !== undefined) {
-                    this.structureService = new StructureService(
-                      this.competition,
-                      { min: 2, max: 64 },
-                      round
-                    );
-                  }
-                },
+              /* happy path */(structure: Structure) => {
+                  this.structure = structure;
+                }
+                ,
             /* error path */ e => { },
             /* onComplete */() => { }
               );
@@ -84,24 +70,18 @@ export class StructureEditComponent implements OnInit, OnDestroy {
 
   create() {
 
-    this.structureService = new StructureService(
-      this.competition,
-      { min: 2, max: 64 },
-      undefined,
-      this.customForm.controls.nrofteams.value
-    );
+    // this.structureService = new StructureService(
+    //   this.competition,
+    //   { min: 2, max: 64 },
+    //   undefined,
+    //   this.customForm.controls.nrofcompetitors.value
+    // );
 
-    this.structureService.getFirstRound().getConfig().setNrOfHeadtoheadMatches(2);
-    const jsonRound = this.roundRepository.objectToJsonHelper(this.structureService.getFirstRound());
-    this.structureRepository.createObject(jsonRound, this.competition).subscribe(
-              /* happy path */(roundRes: Round) => {
-
-        this.structureService = new StructureService(
-          this.competition,
-          { min: 2, max: 64 },
-          roundRes
-        );
-
+    this.structure.getFirstRoundNumber().getConfig().setNrOfHeadtoheadMatches(2);
+    const json = this.structureMapper.toJson(this.structure);
+    this.structureRepository.createObject(json, this.competition).subscribe(
+              /* happy path */(structureRes) => {
+        this.structure = structureRes;
       },
             /* error path */ e => { this.processing = false; },
             /* onComplete */() => { this.processing = false; }
@@ -125,14 +105,14 @@ export class StructureEditComponent implements OnInit, OnDestroy {
   }
 
   isStarted() {
-    return this.structureService.getFirstRound().isStarted();
+    return this.structure.getRootRound().isStarted();
   }
 
   getPoulePlaces() {
-    if (this.structureService === undefined) {
+    if (this.structure === undefined) {
       return [];
     }
-    return this.structureService.getFirstRound().getPoules()[0].getPlaces();
+    return this.structure.getRootRound().getPoules()[0].getPlaces();
   }
 
   // edit() {
@@ -173,6 +153,6 @@ export class StructureEditComponent implements OnInit, OnDestroy {
 }
 
 export interface StructureValidations {
-  maxnrofteams: number;
-  minnrofteams: number;
+  maxnrofcompetitors: number;
+  minnrofcompetitors: number;
 }

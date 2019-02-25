@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap/datepicker/datepicker.module';
 import { Competition, League } from 'ngx-sport';
 
-import { BetLine } from '../betline';
-import { BetLineFilter } from './repository';
+import { BetLine } from '../../lib/betline';
+import { BetLineFilter } from '../../lib/betline/repository';
 
 @Component({
   selector: 'app-betline-selection',
@@ -25,7 +25,7 @@ export class BetLineSelectionComponent implements OnInit, OnDestroy {
   // structureService: StructureService;
 
   constructor(
-    // private teamRepos: TeamRepository,
+    // private competitorRepos: CompetitorRepository,
     // private competitionRepos: CompetitionRepository,
     // private associationRepos: AssociationRepository,
     // private pouleplaceRepos: PoulePlaceRepository,
@@ -125,8 +125,8 @@ export class BetLineSelectionComponent implements OnInit, OnDestroy {
   //   return this.structureService.getFirstRound().getPoules()[0];
   // }
 
-  // allPoulePlaceHaveTeam() {
-  //   return !this.getPoule().getPlaces().some(poulePlace => poulePlace.getTeam() === undefined);
+  // allPoulePlaceHaveCompetitor() {
+  //   return !this.getPoule().getPlaces().some(poulePlace => poulePlace.getCompetitor() === undefined);
   // }
 
   // create() {

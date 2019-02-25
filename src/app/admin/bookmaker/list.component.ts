@@ -1,9 +1,9 @@
-import { BookmakerRepository } from '../../vobetting/bookmaker/repository';
-import { Bookmaker } from '../../vobetting/bookmaker';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { IAlert } from '../../app.definitions';
+import { Bookmaker } from '../../lib/bookmaker';
+import { BookmakerRepository } from '../../lib/bookmaker/repository';
 
 @Component({
   selector: 'app-bookmaker-list',

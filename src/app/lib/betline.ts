@@ -1,10 +1,10 @@
-/**
- * Created by coen on 9-10-17.
- */
 import { Game, PoulePlace } from 'ngx-sport';
 
 import { LayBack } from './layback';
 
+/**
+ * Created by coen on 9-10-17.
+ */
 export class BetLine {
     static readonly MATCH_ODDS = 1;
 

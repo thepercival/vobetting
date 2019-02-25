@@ -5,14 +5,15 @@ import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap/datepicker/datepicker.
 import {
   Competition,
   CompetitionRepository,
-  ICompetition,
+  JsonCompetition,
   League,
+  LeagueMapper,
   LeagueRepository,
   Season,
+  SeasonMapper,
   SeasonRepository,
 } from 'ngx-sport';
-import { forkJoin } from 'rxjs/observable/forkJoin';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { IAlert } from '../../app.definitions';
 
@@ -38,7 +39,9 @@ export class CompetitionEditComponent implements OnInit, OnDestroy {
 
   constructor(
     private leagueRepos: LeagueRepository,
+    private leagueMapper: LeagueMapper,
     private seasonRepos: SeasonRepository,
+    private seasonMapper: SeasonMapper,
     private competitionRepos: CompetitionRepository,
     private route: ActivatedRoute,
     private router: Router,
@@ -57,21 +60,36 @@ export class CompetitionEditComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    const reposUpdates = [
-      this.leagueRepos.getObjects(),
-      this.seasonRepos.getObjects()
-    ];
+    this.leagueRepos.getObjects()
+      .subscribe(
+        /* happy path */(leagues: League[]) => {
+          this.leagues = leagues;
+          this.seasonRepos.getObjects()
+            .subscribe(
+        /* happy path */(seasons: Season[]) => {
+                this.seasons = seasons;
+                this.processing = false;
+              },
+        /* error path */ e => { },
+        /* onComplete */() => { }
+            );
+        },
+        /* error path */ e => { },
+        /* onComplete */() => { }
+      );
 
-    forkJoin(reposUpdates).subscribe(results => {
-      this.leagues = results[0];
-      this.seasons = results[1];
-    },
-      err => {
-        // this.setAlert('danger', 'volgorde niet gewijzigd: ' + err);
-        this.processing = false;
-      },
-      () => this.processing = false
-    );
+
+
+    // forkJoin(reposUpdates).subscribe(results => {
+    //   this.leagues = results[0];
+    //   this.seasons = results[1];
+    // },
+    //   err => {
+    //     // this.setAlert('danger', 'volgorde niet gewijzigd: ' + err);
+    //     this.processing = false;
+    //   },
+    //   () => this.processing = false
+    // );
 
     this.sub = this.route.params.subscribe(params => {
       this.competitionRepos.getObjects()
@@ -136,9 +154,9 @@ export class CompetitionEditComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const competition: ICompetition = {
-      league: this.leagueRepos.objectToJsonHelper(league),
-      season: this.seasonRepos.objectToJsonHelper(season),
+    const competition: JsonCompetition = {
+      league: this.leagueMapper.toJson(league),
+      season: this.seasonMapper.toJson(season),
       fields: [],
       referees: [],
       startDateTime: startDateTime.toISOString(),

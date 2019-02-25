@@ -2,17 +2,17 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap/datepicker/datepicker.module';
-import { Association, AssociationRepository, ITeam, Team, TeamRepository } from 'ngx-sport';
-import { Subscription } from 'rxjs/Subscription';
+import { Association, AssociationRepository, Competitor, CompetitorRepository, JsonCompetitor } from 'ngx-sport';
+import { Subscription } from 'rxjs';
 
 import { IAlert } from '../../app.definitions';
 
 @Component({
-  selector: 'app-team-edit',
+  selector: 'app-competitor-edit',
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.css']
 })
-export class TeamEditComponent implements OnInit, OnDestroy {
+export class CompetitorEditComponent implements OnInit, OnDestroy {
 
   protected sub: Subscription;
   returnUrl: string;
@@ -22,19 +22,19 @@ export class TeamEditComponent implements OnInit, OnDestroy {
   public alert: IAlert;
   public processing = true;
   customForm: FormGroup;
-  teams: Team[] = [];
-  team: Team;
+  competitors: Competitor[] = [];
+  competitor: Competitor;
   associations: Association[] = [];
   association: Association;
 
-  validations: TeamValidations = {
-    minlengthname: Team.MIN_LENGTH_NAME,
-    maxlengthname: Team.MAX_LENGTH_NAME,
-    maxlengthabbreviation: Team.MAX_LENGTH_ABBREVIATION
+  validations: CompetitorValidations = {
+    minlengthname: Competitor.MIN_LENGTH_NAME,
+    maxlengthname: Competitor.MAX_LENGTH_NAME,
+    maxlengthabbreviation: Competitor.MAX_LENGTH_ABBREVIATION
   };
 
   constructor(
-    private teamRepos: TeamRepository,
+    private competitorRepos: CompetitorRepository,
     private associationRepos: AssociationRepository,
     private route: ActivatedRoute,
     private router: Router,
@@ -56,18 +56,18 @@ export class TeamEditComponent implements OnInit, OnDestroy {
       this.associationRepos.getObject(+params.associationid)
         .subscribe(
           /* happy path */(association: Association) => {
-          this.associations.push(association);
-          this.association = association;
-          this.teamRepos.getObjects(association)
-            .subscribe(
-                    /* happy path */(teams: Team[]) => {
-              this.teams = teams;
-              this.postInit(+params.id);
-            },
+            this.associations.push(association);
+            this.association = association;
+            this.competitorRepos.getObjects(association)
+              .subscribe(
+                    /* happy path */(competitors: Competitor[]) => {
+                  this.competitors = competitors;
+                  this.postInit(+params.id);
+                },
                   /* error path */ e => { },
                   /* onComplete */() => { }
-            );
-        },
+              );
+          },
           /* error path */ e => { },
           /* onComplete */() => { this.processing = false; this.postInit(+params.id); }
         );
@@ -89,12 +89,12 @@ export class TeamEditComponent implements OnInit, OnDestroy {
     if (id === undefined || id < 1) {
       return;
     }
-    this.team = this.teams.find(team => team.getId() === id);
-    if (this.team === undefined) {
+    this.competitor = this.competitors.find(competitor => competitor.getId() === id);
+    if (this.competitor === undefined) {
       return;
     }
-    this.customForm.controls.name.setValue(this.team.getName());
-    this.customForm.controls.abbreviation.setValue(this.team.getAbbreviation());
+    this.customForm.controls.name.setValue(this.competitor.getName());
+    this.customForm.controls.abbreviation.setValue(this.competitor.getAbbreviation());
   }
 
   ngOnDestroy() {
@@ -102,7 +102,7 @@ export class TeamEditComponent implements OnInit, OnDestroy {
   }
 
   save() {
-    if (this.team !== undefined) {
+    if (this.competitor !== undefined) {
       this.edit();
     } else {
       this.add();
@@ -121,15 +121,15 @@ export class TeamEditComponent implements OnInit, OnDestroy {
       this.processing = false;
       return;
     }
-    const team: ITeam = {
+    const competitor: JsonCompetitor = {
       name: name,
       abbreviation: abbreviation ? abbreviation : undefined
     };
-    this.teamRepos.createObject(team, association)
+    this.competitorRepos.createObject(competitor, association)
       .subscribe(
-        /* happy path */ teamRes => {
-        this.navigateBack();
-      },
+        /* happy path */ competitorRes => {
+          this.navigateBack();
+        },
         /* error path */ e => { this.setAlert('danger', e); this.processing = false; },
         /* onComplete */() => this.processing = false
       );
@@ -138,7 +138,7 @@ export class TeamEditComponent implements OnInit, OnDestroy {
   edit() {
     this.processing = true;
 
-    if (this.isNameDuplicate(this.customForm.controls.name.value, this.team)) {
+    if (this.isNameDuplicate(this.customForm.controls.name.value, this.competitor)) {
       this.setAlert('danger', 'de naam bestaan al');
       this.processing = false;
       return;
@@ -146,14 +146,14 @@ export class TeamEditComponent implements OnInit, OnDestroy {
     const name = this.customForm.controls.name.value;
     const abbreviation = this.customForm.controls.abbreviation.value;
 
-    this.team.setName(name);
-    this.team.setAbbreviation(abbreviation ? abbreviation : undefined);
+    this.competitor.setName(name);
+    this.competitor.setAbbreviation(abbreviation ? abbreviation : undefined);
 
-    this.teamRepos.editObject(this.team)
+    this.competitorRepos.editObject(this.competitor)
       .subscribe(
-        /* happy path */ teamRes => {
-        this.navigateBack();
-      },
+        /* happy path */ competitorRes => {
+          this.navigateBack();
+        },
         /* error path */ e => { this.setAlert('danger', e); this.processing = false; },
         /* onComplete */() => { this.processing = false; }
       );
@@ -176,9 +176,9 @@ export class TeamEditComponent implements OnInit, OnDestroy {
     this.router.navigate(this.getForwarUrl(), { queryParams: this.getForwarUrlQueryParams() });
   }
 
-  isNameDuplicate(name: string, team?: Team): boolean {
-    return this.teams.find(teamIt => {
-      return (name === teamIt.getName() && (team === undefined || team !== teamIt));
+  isNameDuplicate(name: string, competitor?: Competitor): boolean {
+    return this.competitors.find(competitorIt => {
+      return (name === competitorIt.getName() && (competitor === undefined || competitor !== competitorIt));
     }) !== undefined;
   }
 
@@ -199,7 +199,7 @@ export class TeamEditComponent implements OnInit, OnDestroy {
   }
 }
 
-export interface TeamValidations {
+export interface CompetitorValidations {
   maxlengthname: number;
   minlengthname: number;
   maxlengthabbreviation: number;

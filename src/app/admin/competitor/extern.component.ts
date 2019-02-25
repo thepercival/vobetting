@@ -4,24 +4,25 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
   Association,
   AssociationRepository,
+  Competitor,
+  CompetitorRepository,
   ExternalObject,
   ExternalObjectRepository,
   ExternalSystem,
   ExternalSystemRepository,
-  IExternalObject,
-  Team,
-  TeamRepository,
+  JsonExternalObject,
 } from 'ngx-sport';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { IAlert } from '../../app.definitions';
 
 @Component({
-  selector: 'app-team-extern',
+  selector: 'app-competitor-extern',
   templateUrl: './extern.component.html'/*,
   styleUrls: ['./edit.component.css']*/
 })
-export class TeamExternComponent implements OnInit, OnDestroy {
+export class CompetitorExternComponent implements OnInit, OnDestroy {
+
 
   protected sub: Subscription;
   returnUrl: string;
@@ -31,7 +32,7 @@ export class TeamExternComponent implements OnInit, OnDestroy {
   public alert: IAlert;
   public processing = true;
   customForm: FormGroup;
-  team: Team;
+  competitor: Competitor;
   externalSystems: ExternalSystem[];
   externalObject: ExternalObject;
 
@@ -40,7 +41,7 @@ export class TeamExternComponent implements OnInit, OnDestroy {
   };
 
   constructor(
-    private teamRepos: TeamRepository,
+    private competitorRepos: CompetitorRepository,
     private associationRepos: AssociationRepository,
     private externalSystemRepos: ExternalSystemRepository,
     private externalObjectRepos: ExternalObjectRepository,
@@ -49,7 +50,7 @@ export class TeamExternComponent implements OnInit, OnDestroy {
     fb: FormBuilder
   ) {
 
-    this.externalObjectRepos.setUrlpostfix(this.teamRepos);
+    this.externalObjectRepos.setUrlpostfix(this.competitorRepos);
     this.customForm = fb.group({
       name: ['', Validators.compose([
         Validators.required
@@ -77,11 +78,11 @@ export class TeamExternComponent implements OnInit, OnDestroy {
       this.associationRepos.getObject(+params.associationid)
         .subscribe(
           /* happy path */(association: Association) => {
-            this.teamRepos.getObject(+params.id, association)
+            this.competitorRepos.getObject(+params.id, association)
               .subscribe(
-                    /* happy path */(team: Team) => {
-                  this.team = team;
-                  this.customForm.controls.name.setValue(this.team.getName());
+                    /* happy path */(competitor: Competitor) => {
+                  this.competitor = competitor;
+                  this.customForm.controls.name.setValue(this.competitor.getName());
                   this.customForm.controls.name.disable();
                   if (localStorage.getItem('externalSystemId') !== undefined) {
                     const externalSystem = this.externalSystems.find(
@@ -123,7 +124,7 @@ export class TeamExternComponent implements OnInit, OnDestroy {
     }
     localStorage.setItem('externalSystemId', externalSystem.getId().toString());
     this.processing = true;
-    this.externalObjectRepos.getObject(this.team, externalSystem)
+    this.externalObjectRepos.getObject(this.competitor, externalSystem)
       .subscribe(
         /* happy path */(externalObject: ExternalObject) => {
           this.externalObject = externalObject;
@@ -150,8 +151,8 @@ export class TeamExternComponent implements OnInit, OnDestroy {
     const externalSystem = this.customForm.controls.externalSystem.value;
     const externalId = this.customForm.controls.externalId.value;
 
-    const externalObject: IExternalObject = {
-      importableObjectId: this.team.getId(),
+    const externalObject: JsonExternalObject = {
+      importableObjectId: this.competitor.getId(),
       externalSystemId: externalSystem.getId(),
       externalId: externalId
 

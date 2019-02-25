@@ -21,9 +21,9 @@ import { SeasonEditComponent } from './season/edit.component';
 import { SeasonExternComponent } from './season/extern.component';
 import { SeasonListComponent } from './season/list.component';
 import { StructureEditComponent } from './structure/edit.component';
-import { TeamEditComponent } from './team/edit.component';
-import { TeamExternComponent } from './team/extern.component';
-import { TeamListComponent } from './team/list.component';
+import { CompetitorEditComponent } from './competitor/edit.component';
+import { CompetitorExternComponent } from './competitor/extern.component';
+import { CompetitorListComponent } from './competitor/list.component';
 
 
 const routes: Routes = [
@@ -37,9 +37,9 @@ const routes: Routes = [
   { path: 'season/extern/:id', component: SeasonExternComponent, canActivate: [AuthguardService] },
   { path: 'association', component: AssociationListComponent, canActivate: [AuthguardService] },
   { path: 'association/edit/:id', component: AssociationEditComponent, canActivate: [AuthguardService] },
-  { path: 'team/:associationid', component: TeamListComponent, canActivate: [AuthguardService] },
-  { path: 'team/edit/:associationid/:id', component: TeamEditComponent, canActivate: [AuthguardService] },
-  { path: 'team/extern/:associationid/:id', component: TeamExternComponent, canActivate: [AuthguardService] },
+  { path: 'competitor/:associationid', component: CompetitorListComponent, canActivate: [AuthguardService] },
+  { path: 'competitor/edit/:associationid/:id', component: CompetitorEditComponent, canActivate: [AuthguardService] },
+  { path: 'competitor/extern/:associationid/:id', component: CompetitorExternComponent, canActivate: [AuthguardService] },
   { path: 'league', component: LeagueListComponent, canActivate: [AuthguardService] },
   { path: 'league/edit/:id', component: LeagueEditComponent, canActivate: [AuthguardService] },
   { path: 'league/extern/:id', component: LeagueExternComponent, canActivate: [AuthguardService] },

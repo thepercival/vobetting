@@ -2,9 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { SportRepository } from 'ngx-sport';
-import { Observable } from 'rxjs/Observable';
-import { map } from 'rxjs/operators/map';
-import { catchError } from 'rxjs/operators/catchError';
+import { Observable } from 'rxjs';
+import { map ,  catchError } from 'rxjs/operators';
 
 import { User } from './user';
 

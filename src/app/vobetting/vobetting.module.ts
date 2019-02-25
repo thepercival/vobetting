@@ -1,19 +1,21 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap/alert/alert.module';
-import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap/collapse/collapse.module';
-import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap/datepicker/datepicker.module';
-import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap/popover/popover.module';
-import { NgbTimepickerModule } from '@ng-bootstrap/ng-bootstrap/timepicker/timepicker.module';
+import {
+  NgbAlertModule,
+  NgbCollapseModule,
+  NgbDatepickerModule,
+  NgbPopoverModule,
+  NgbTimepickerModule,
+} from '@ng-bootstrap/ng-bootstrap';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { CompetitionRepository } from 'ngx-sport';
 
+import { BetLineRepository } from '../lib/betline/repository';
+import { LayBackRepository } from '../lib/layback/repository';
 import { BetLineChartComponent } from './betline/chart.component';
 import { BetLineMainComponent } from './betline/main.component';
-import { BetLineRepository } from './betline/repository';
 import { BetLineSelectionComponent } from './betline/selection.component';
-import { LayBackRepository } from './layback/repository';
 import { VOBettingRoutingModule } from './vobetting-routing.module';
 
 

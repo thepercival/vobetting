@@ -6,11 +6,11 @@ import {
   ExternalObjectRepository,
   ExternalSystem,
   ExternalSystemRepository,
-  IExternalObject,
+  JsonExternalObject,
   League,
   LeagueRepository,
 } from 'ngx-sport';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { IAlert } from '../../app.definitions';
 
@@ -130,7 +130,7 @@ export class LeagueExternComponent implements OnInit, OnDestroy {
     const externalSystem = this.customForm.controls.externalSystem.value;
     const externalId = this.customForm.controls.externalId.value;
 
-    const externalObject: IExternalObject = {
+    const externalObject: JsonExternalObject = {
       importableObjectId: this.league.getId(),
       externalSystemId: externalSystem.getId(),
       externalId: externalId
