@@ -24,8 +24,9 @@ export class ExternalSystemListComponent implements OnInit {
     this.externalSystemRepos.getObjects()
       .subscribe(
         /* happy path */(externalSystems: ExternalSystem[]) => {
-        this.externalSystems = externalSystems;
-      },
+          this.externalSystems = externalSystems;
+          this.processing = false;
+        },
         /* error path */ e => { },
         /* onComplete */() => { this.processing = false; }
       );
@@ -57,12 +58,12 @@ export class ExternalSystemListComponent implements OnInit {
     this.externalSystemRepos.removeObject(externalSystem)
       .subscribe(
         /* happy path */ externalSystemRes => {
-        const index = this.externalSystems.indexOf(externalSystem);
-        if (index > -1) {
-          this.externalSystems.splice(index, 1);
-        }
-        this.resetAlert();
-      },
+          const index = this.externalSystems.indexOf(externalSystem);
+          if (index > -1) {
+            this.externalSystems.splice(index, 1);
+          }
+          this.resetAlert();
+        },
         /* error path */ e => { this.setAlert('danger', 'X' + e); this.processing = false; },
         /* onComplete */() => this.processing = false
       );
