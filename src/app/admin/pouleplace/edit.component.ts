@@ -136,6 +136,7 @@ export class PoulePlaceEditComponent implements OnInit, OnDestroy {
         /* error path */ e => { this.setAlert('danger', e); this.processing = false; },
         /* onComplete */() => { this.processing = false; }
       );
+    return false;
   }
 
   private getForwarUrl() {

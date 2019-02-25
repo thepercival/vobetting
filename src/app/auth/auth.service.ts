@@ -1,12 +1,20 @@
+<<<<<<< HEAD
 
 import {throwError as observableThrowError,  Observable } from 'rxjs';
 
 
+=======
+>>>>>>> dada9cbb704fd2686916e3a5b96f439bdc6f976d
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { SportRepository } from 'ngx-sport';
+<<<<<<< HEAD
 import { catchError ,  map } from 'rxjs/operators';
+=======
+import { Observable, throwError as observableThrowError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+>>>>>>> dada9cbb704fd2686916e3a5b96f439bdc6f976d
 
 import { UserRepository } from '../user/repository';
 import { User } from '../user/user';
@@ -57,6 +65,13 @@ export class AuthService extends SportRepository {
   //       .catch(this.handleError);
   // }
 
+  validateToken(): Observable<boolean> {
+    return this.http.post(this.url + '/validatetoken', undefined, { headers: super.getHeaders() }).pipe(
+      map((res) => true),
+      catchError((err) => observableThrowError(err))
+    );
+  }
+
   login(emailaddress: string, password: string): Observable<boolean> {
     return this.http.post<IAuthItem>(this.url + '/login', { emailaddress: emailaddress, password: password }).pipe(
       map((res) => {
@@ -67,9 +82,10 @@ export class AuthService extends SportRepository {
           return false;
         }
       }),
-      catchError(this.handleError)
+      catchError((err) => this.handleError(err))
     );
   }
+
 
   setAuthItem(authItem: IAuthItem): boolean {
     this.authItem = authItem;
@@ -111,9 +127,11 @@ export class AuthService extends SportRepository {
     console.error(error);
     if (typeof error.error === 'string') {
       errortext = error.error;
+    } else if (error.statusText !== undefined) {
+      errortext = error.statusText;
     }
     if (error.status === 401) {
-      errortext = 'je bent niet ingelogd';
+      this.router.navigate(['/user/login']);
     }
     return observableThrowError(errortext);
   }

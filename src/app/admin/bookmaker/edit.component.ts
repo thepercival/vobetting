@@ -91,6 +91,7 @@ export class BookmakerEditComponent implements OnInit, OnDestroy {
     } else {
       this.add();
     }
+    return false;
   }
 
   add() {

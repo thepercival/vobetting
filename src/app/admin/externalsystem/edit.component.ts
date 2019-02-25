@@ -103,6 +103,7 @@ export class ExternalSystemEditComponent implements OnInit, OnDestroy {
     } else {
       this.add();
     }
+    return false;
   }
 
   add() {

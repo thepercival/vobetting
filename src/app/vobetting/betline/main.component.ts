@@ -73,7 +73,7 @@ export class BetLineMainComponent implements OnInit, OnDestroy {
   }
 
   getBetTypes() {
-    return [this.betTypes];
+    return this.betTypes;
   }
 
   getAllGames(round: Round, startDateTime: Date, endDateTime: Date) {

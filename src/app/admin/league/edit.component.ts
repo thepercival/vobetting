@@ -120,6 +120,7 @@ export class LeagueEditComponent implements OnInit, OnDestroy {
     } else {
       this.add();
     }
+    return false;
   }
 
   add() {

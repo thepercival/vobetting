@@ -143,6 +143,7 @@ export class CompetitorExternComponent implements OnInit, OnDestroy {
     } else {
       this.add();
     }
+    return false;
   }
 
   add() {

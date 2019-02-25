@@ -34,6 +34,6 @@ export class LoginComponent implements OnInit {
             /* error path */ e => { this.error = e; this.loading = false; },
             /* onComplete */() => this.loading = false
       );
+    return false;
   }
-
 }

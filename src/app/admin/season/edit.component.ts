@@ -92,6 +92,7 @@ export class SeasonEditComponent implements OnInit, OnDestroy {
     } else {
       this.add();
     }
+    return false;
   }
 
   add() {

@@ -7,7 +7,6 @@ import { BetLineRepository } from '../../lib/betline/repository';
 import { LayBack } from '../../lib/layback';
 import { LayBackRepository } from '../../lib/layback/repository';
 
-
 @Component({
   selector: 'app-betline-chart',
   templateUrl: './chart.component.html',
@@ -17,7 +16,6 @@ export class BetLineChartComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() betType: number;
   @Input() game: Game;
-  @Input() structureService: StructureService;
   processing = true;
 
   showChart = false;

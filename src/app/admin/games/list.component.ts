@@ -1,15 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import {
-  AssociationRepository,
   Competition,
   CompetitionRepository,
   CompetitorRepository,
   Game,
-  GameRepository,
   PlanningService,
   Poule,
-  PoulePlaceRepository,
   Structure,
   StructureRepository,
 } from 'ngx-sport';
@@ -34,12 +31,8 @@ export class GameListComponent implements OnInit, OnDestroy {
   constructor(
     private competitorRepos: CompetitorRepository,
     private competitionRepos: CompetitionRepository,
-    private associationRepos: AssociationRepository,
-    private pouleplaceRepos: PoulePlaceRepository,
     private structureRepository: StructureRepository,
-    private route: ActivatedRoute,
-    private router: Router,
-    private gameRepos: GameRepository
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {

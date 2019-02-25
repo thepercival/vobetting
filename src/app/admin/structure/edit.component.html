@@ -16,8 +16,12 @@
       <h1 *ngIf="processing" align="center">
         <i class="fa fa-spinner fa-spin fa-fw"></i>
       </h1>
+<<<<<<< HEAD
       <form *ngIf="!processing && !structureService" name="form" (ngSubmit)="create() && false" [formGroup]="customForm"
         novalidate>
+=======
+      <form *ngIf="!processing" name="form" (ngSubmit)="create() && false" [formGroup]="customForm" novalidate>
+>>>>>>> dada9cbb704fd2686916e3a5b96f439bdc6f976d
         <div class="form-group row">
           <div class="col-3">
             <label for="nrofcompetitors" class="col-form-label">aantal competitors</label>
@@ -35,12 +39,12 @@
           <div class="col-9">
             <button [disabled]="customForm.invalid" type="submit" class="btn btn-outline-primary">
               <span>maak structuur</span>
-              <i *ngIf="loading" class="fa fa-spinner fa-spin fa-fw"></i>
+              <i *ngIf="processing" class="fa fa-spinner fa-spin fa-fw"></i>
             </button>
           </div>
         </div>
       </form>
-      <div *ngIf="!processing && structureService">
+      <div *ngIf="!processing">
         <table class="table">
           <thead>
             <tr>

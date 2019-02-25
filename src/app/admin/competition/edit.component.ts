@@ -139,6 +139,7 @@ export class CompetitionEditComponent implements OnInit, OnDestroy {
     } else {
       this.add();
     }
+    return false;
   }
 
   add() {

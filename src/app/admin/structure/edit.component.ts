@@ -86,6 +86,7 @@ export class StructureEditComponent implements OnInit, OnDestroy {
             /* error path */ e => { this.processing = false; },
             /* onComplete */() => { this.processing = false; }
     );
+    return false;
   }
 
   editPoulePlace(poulePlace: PoulePlace) {

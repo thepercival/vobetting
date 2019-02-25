@@ -79,6 +79,9 @@ export class CompetitorListComponent implements OnInit, OnDestroy {
     );
   }
 
+  save() {
+    return false;
+  }
 
   add() {
     this.linkToEdit();
