@@ -1,27 +1,29 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { ExternalSystemMapper, ExternalSystemRepository, SportRepository } from 'ngx-sport';
+import { ExternalSystemMapper, } from 'ngx-sport';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
+import { ExternalSystemRepository } from '../ngx-sport/external/system/repository';
+import { APIRepository } from '../repository';
 import { BetLine } from '../betline';
 import { LayBack } from '../layback';
 import { JsonLayBack, LayBackMapper } from './mapper';
 
 
 @Injectable()
-export class LayBackRepository extends SportRepository {
+export class LayBackRepository extends APIRepository {
 
     private url: string;
 
-    constructor(private http: HttpClient,
+    constructor(
+        private http: HttpClient,
         private externalSystemRepository: ExternalSystemRepository,
         private externalSystemMapper: ExternalSystemMapper,
-        private mapper: LayBackMapper,
-        router: Router
+        private mapper: LayBackMapper
     ) {
-        super(router);
+        super();
         this.url = super.getApiUrl() + this.getUrlpostfix();
     }
 

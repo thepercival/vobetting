@@ -1,21 +1,19 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { SportRepository } from 'ngx-sport';
 import { Observable } from 'rxjs';
-import { catchError ,  map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 
+import { APIRepository } from '../repository';
 import { Bookmaker } from '../bookmaker';
 
 @Injectable()
-export class BookmakerRepository extends SportRepository {
+export class BookmakerRepository extends APIRepository {
 
     private url: string;
 
-    constructor(private http: HttpClient,
-        router: Router
+    constructor(private http: HttpClient
     ) {
-        super(router);
+        super();
         this.url = super.getApiUrl() + this.getUrlpostfix();
     }
 

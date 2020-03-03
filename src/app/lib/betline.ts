@@ -1,4 +1,4 @@
-import { Game, PoulePlace } from 'ngx-sport';
+import { Game, Place } from 'ngx-sport';
 
 import { LayBack } from './layback';
 
@@ -11,7 +11,7 @@ export class BetLine {
     protected id: number;
     protected betType: number;
     protected game: Game;
-    protected poulePlace: PoulePlace;
+    protected poulePlace: Place;
     protected layBacks: LayBack[] = [];
 
     // constructor
@@ -44,11 +44,11 @@ export class BetLine {
         this.game = game;
     }
 
-    getPoulePlace(): PoulePlace {
+    getPoulePlace(): Place {
         return this.poulePlace;
     }
 
-    setPoulePlace(poulePlace: PoulePlace): void {
+    setPoulePlace(poulePlace: Place): void {
         this.poulePlace = poulePlace;
     }
 

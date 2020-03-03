@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-date-struct';
 
-import { IAlert } from '../app.definitions';
+import { IAlert } from '../common/alert';
 import { AuthService } from '../auth/auth.service';
 
 @Component({
@@ -30,7 +30,7 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       if (params.type !== undefined && params.message !== undefined) {
-        this.alert = { type: params['type'], message: params['message'] };
+        this.alert = { type: params.type, message: params.message };
       }
     });
   }

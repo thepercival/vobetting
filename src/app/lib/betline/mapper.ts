@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Game, JsonPoulePlace, PoulePlaceMapper } from 'ngx-sport';
+import { Game, JsonPlace, PlaceMapper } from 'ngx-sport';
 
 import { BetLine } from '../betline';
 
 @Injectable()
 export class BetLineMapper {
 
-    constructor(private poulePlaceMapper: PoulePlaceMapper) { }
+    constructor(private placeMapper: PlaceMapper) { }
 
     toObject(json: JsonBetLine, game: Game, betLine?: BetLine): BetLine {
         if (betLine === undefined) {
@@ -23,7 +23,7 @@ export class BetLineMapper {
         return {
             id: betLine.getId(),
             betType: betLine.getBetType(),
-            poulePlace: betLine.getPoulePlace() ? this.poulePlaceMapper.toJson(betLine.getPoulePlace()) : undefined
+            poulePlace: betLine.getPoulePlace() ? this.placeMapper.toJson(betLine.getPoulePlace()) : undefined
         };
     }
 }
@@ -31,5 +31,5 @@ export class BetLineMapper {
 export interface JsonBetLine {
     id?: number;
     betType: number;
-    poulePlace?: JsonPoulePlace;
+    poulePlace?: JsonPlace;
 }

@@ -1,72 +1,86 @@
-import { HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
+import { NgModule } from '@angular/core';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
+import { AuthService } from './auth/auth.service';
+import { AuthguardService } from './auth/authguard.service';
+import { GlobalEventsManager } from './common/eventmanager';
+import { MyNavigation } from './common/navigation';
+import { CommonSharedModule } from './common/shared.module';
+import { NgbDatepickerModule, NgbTimepickerModule, NgbAlertModule, NgbPopoverModule, NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
+import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { NavComponent } from './nav/nav.component';
+import { FooterComponent } from './footer/footer.component';
+import { HomeComponent } from './home/home.component';
+
 import {
+  faAngleDoubleDown,
+  faBasketballBall,
   faCalendarAlt,
-  faCloudDownloadAlt,
+  faChess,
+  faClipboardCheck,
+  faCopyright,
+  faEnvelope,
+  faEye,
+  faFilter,
+  faFutbol,
+  faGamepad,
   faLevelUpAlt,
+  faMobileAlt,
   faPencilAlt,
   faPlus,
+  faPlusCircle,
+  faSave,
+  faSearch,
+  faShareAlt,
   faSignInAlt,
   faSignOutAlt,
   faSpinner,
-  faTrashAlt,
+  faTableTennis,
+  faTv,
+  faUserCircle,
+  faUserFriends,
+  faUserShield,
+  faVolleyballBall
 } from '@fortawesome/free-solid-svg-icons';
-import {
-  NgbAlertModule,
-  NgbCollapseModule,
-  NgbDatepickerModule,
-  NgbPopoverModule,
-  NgbTimepickerModule,
-} from '@ng-bootstrap/ng-bootstrap';
-import { AssociationRepository, CompetitionRepository, LeagueRepository, SeasonRepository } from 'ngx-sport';
 
-import { AdminModule } from './admin/admin.module';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { AuthService } from './auth/auth.service';
-import { AuthguardService } from './auth/authguard.service';
-import { FooterComponent } from './footer/footer.component';
-import { HomeComponent } from './home/home.component';
-import { NavComponent } from './nav/nav.component';
-import { UserModule } from './user/user.module';
-
-library.add(faLevelUpAlt, faSpinner, faPlus, faSignInAlt,
-  faSignOutAlt, faPencilAlt, faTrashAlt, faCalendarAlt, faCloudDownloadAlt);
+import { faTwitter } from '@fortawesome/free-brands-svg-icons';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavComponent,
     FooterComponent,
-    HomeComponent
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule,
     AppRoutingModule,
-    BrowserModule,
-    HttpClientModule,
-    FormsModule,
-    UserModule,
-    AdminModule/*,
-    SportModule*/,
-    NgbAlertModule.forRoot(), NgbCollapseModule.forRoot(), NgbDatepickerModule.forRoot(),
-    NgbPopoverModule.forRoot(), NgbTimepickerModule.forRoot(),
+    CommonSharedModule,
+    NgbDatepickerModule, NgbTimepickerModule, NgbAlertModule, NgbPopoverModule, NgbCollapseModule,
+    ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
     FontAwesomeModule
   ],
   providers: [
     AuthService,
     AuthguardService,
-    CompetitionRepository,
-    AssociationRepository,
-    LeagueRepository,
-    SeasonRepository
+    GlobalEventsManager,
+    MyNavigation,
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(library: FaIconLibrary) {
+    library.addIcons(faLevelUpAlt, faSpinner, faUserCircle, faFilter, faPencilAlt, faSave,
+      faSignInAlt, faSignOutAlt, faPlusCircle, faPlus, faTv, faFutbol, faTableTennis, faSearch,
+      faMobileAlt, faEnvelope, faCopyright, faEye, faShareAlt, faClipboardCheck,
+      faGamepad, faBasketballBall, faChess, faVolleyballBall, faUserShield, faUserFriends, faCalendarAlt,
+      faAngleDoubleDown);
+    library.addIcons(
+      faTwitter
+    );
+  }
+}

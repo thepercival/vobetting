@@ -1,33 +1,11 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 
 import { AuthguardService } from '../auth/authguard.service';
-import { AssociationEditComponent } from './association/edit.component';
-import { AssociationListComponent } from './association/list.component';
-import { BookmakerEditComponent } from './bookmaker/edit.component';
-import { BookmakerListComponent } from './bookmaker/list.component';
-import { CompetitionEditComponent } from './competition/edit.component';
-import { CompetitionHomeComponent } from './competition/home.component';
-import { CompetitionListComponent } from './competition/list.component';
-import { ExternalSystemEditComponent } from './externalsystem/edit.component';
-import { ExternalSystemListComponent } from './externalsystem/list.component';
-import { GameListComponent } from './games/list.component';
 import { HomeComponent } from './home/home.component';
-import { LeagueEditComponent } from './league/edit.component';
-import { LeagueExternComponent } from './league/extern.component';
-import { LeagueListComponent } from './league/list.component';
-import { PoulePlaceEditComponent } from './pouleplace/edit.component';
-import { SeasonEditComponent } from './season/edit.component';
-import { SeasonExternComponent } from './season/extern.component';
-import { SeasonListComponent } from './season/list.component';
-import { StructureEditComponent } from './structure/edit.component';
-import { CompetitorEditComponent } from './competitor/edit.component';
-import { CompetitorExternComponent } from './competitor/extern.component';
-import { CompetitorListComponent } from './competitor/list.component';
-
 
 const routes: Routes = [
-  { path: 'home', component: HomeComponent, canActivate: [AuthguardService] },
+  { path: 'home', component: HomeComponent, canActivate: [AuthguardService] }, /*
   { path: 'externalsystem', component: ExternalSystemListComponent, canActivate: [AuthguardService] },
   { path: 'externalsystem/edit/:id', component: ExternalSystemEditComponent, canActivate: [AuthguardService] },
   { path: 'bookmaker', component: BookmakerListComponent, canActivate: [AuthguardService] },
@@ -48,7 +26,7 @@ const routes: Routes = [
   { path: 'competition/edit/:id', component: CompetitionEditComponent, canActivate: [AuthguardService] },
   { path: 'pouleplace/edit/:competitionid/:id', component: PoulePlaceEditComponent, canActivate: [AuthguardService] },
   { path: 'structure/:id', component: StructureEditComponent, canActivate: [AuthguardService] },
-  { path: 'games/:id', component: GameListComponent, canActivate: [AuthguardService] },
+  { path: 'games/:id', component: GameListComponent, canActivate: [AuthguardService] },*/
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', redirectTo: '' }
 ];

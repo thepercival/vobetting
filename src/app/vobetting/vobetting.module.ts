@@ -9,7 +9,7 @@ import {
   NgbTimepickerModule,
 } from '@ng-bootstrap/ng-bootstrap';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { CompetitionRepository } from 'ngx-sport';
+import { CompetitionRepository } from '../lib/ngx-sport/competition/repository';
 
 import { BetLineRepository } from '../lib/betline/repository';
 import { LayBackRepository } from '../lib/layback/repository';

@@ -1,24 +1,24 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { Competition, Game, SportRepository } from 'ngx-sport';
+import { Competition, Game } from 'ngx-sport';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
+
+import { APIRepository } from '../repository';
 import { BetLine } from '../betline';
 import { BetLineMapper, JsonBetLine } from './mapper';
 
 @Injectable()
-export class BetLineRepository extends SportRepository {
+export class BetLineRepository extends APIRepository {
 
     private url: string;
 
     constructor(
         private http: HttpClient,
-        private mapper: BetLineMapper,
-        router: Router
+        private mapper: BetLineMapper
     ) {
-        super(router);
+        super();
         this.url = super.getApiUrl() + this.getUrlpostfix();
     }
 
@@ -83,8 +83,6 @@ export class BetLineRepository extends SportRepository {
         );
     }
 }
-
-
 
 export interface BetLineFilter {
     competition: Competition;

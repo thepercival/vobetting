@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap/datepicker/datepicker.module';
 import { Competition, League } from 'ngx-sport';
 
-import { IAlert } from '../../app.definitions';
+import { IAlert } from '../../common/alert';
 import { BetLine } from '../../lib/betline';
 import { BetLineFilter } from '../../lib/betline/repository';
 
@@ -109,12 +109,7 @@ export class BetLineSelectionComponent implements OnInit, OnDestroy {
     const endDateTime = this.convertDate(this.customForm.controls.endDateTime.value);
     const betType = BetLine.MATCH_ODDS;
 
-    const betLineFilter: BetLineFilter = {
-      competition: competition,
-      startDateTime: startDateTime,
-      endDateTime: endDateTime,
-      betType: betType,
-    };
+    const betLineFilter: BetLineFilter = { competition, startDateTime, endDateTime, betType };
     console.log('emitted');
     this.processBetLinesFilter.emit(betLineFilter);
     return false;

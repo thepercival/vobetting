@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 import { AuthService } from '../auth/auth.service';
+import { GlobalEventsManager } from '../common/eventmanager';
 
 @Component({
   selector: 'app-nav',
@@ -12,17 +13,15 @@ export class NavComponent implements OnInit {
   @Input()
   title: string;
   navbarCollapsed = true;
-  // showCompetitionDetails: boolean = false;
+  liveboardLink: NavBarLiveboardLink = {};
 
   constructor(
-    private authService: AuthService/*
-      ,
-      private globalEventsManager: GlobalEventsManager*/
+    private authService: AuthService,
+    private globalEventsManager: GlobalEventsManager
   ) {
-    // this.globalEventsManager.showLeagueeasonDetailsInNavBar.subscribe((mode)=>{
-    //   this.showLeagueeasonDetails = mode;
-    //   console.log('in navbar show is ' + mode );
-    // });
+    this.globalEventsManager.toggleLiveboardIconInNavBar.subscribe((tournamentLiveboardLink: NavBarLiveboardLink) => {
+      this.liveboardLink = tournamentLiveboardLink;
+    });
   }
 
   ngOnInit() {
@@ -33,4 +32,10 @@ export class NavComponent implements OnInit {
     return this.authService.isLoggedIn();
   }
 
+}
+
+export class NavBarLiveboardLink {
+  showIcon?: boolean;
+  tournamentId?: number;
+  link?: string;
 }

@@ -1,20 +1,27 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { PreloadAllModules, Routes, RouterModule } from '@angular/router';
 
 import { HomeComponent } from './home/home.component';
 
-// import { ActivateComponent }  from './user/activate.component';
 const routes: Routes = [
-  { path: 'home', component: HomeComponent },
-  { path: 'admin', loadChildren: 'app/admin/admin.module#AdminModule' },
-  { path: 'vobetting', loadChildren: 'app/vobetting/vobetting.module#VOBettingModule' },
-  { path: 'user', loadChildren: 'app/user/user.module#UserModule' },
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: '', component: HomeComponent },
+  { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule) },
+  //  { path: 'toernooi', loadChildren: () => import('app/vobetting/vobetting.module').then(m => m.VOBettingModule) },
+  /*{ path: '', redirectTo: '/home', pathMatch: 'full' },*/
+  // otherwise redirect to home
   { path: '**', redirectTo: '' }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {
+    scrollPositionRestoration: 'enabled'/*, anchorScrolling: 'enabled'*/, preloadingStrategy: PreloadAllModules
+  })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
+
+
+
+
+
+

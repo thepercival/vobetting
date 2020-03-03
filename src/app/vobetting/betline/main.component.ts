@@ -1,8 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Competition, CompetitionRepository, Game, Round, Structure, StructureRepository } from 'ngx-sport';
+import { Competition, Game, Round, Structure } from 'ngx-sport';
+import { CompetitionRepository } from '../../lib/ngx-sport/competition/repository';
+import { StructureRepository } from '../../lib/ngx-sport/structure/repository';
 
-import { IAlert } from '../../app.definitions';
+import { IAlert } from '../../common/alert';
 import { BetLineFilter } from '../../lib/betline/repository';
 
 @Component({
@@ -35,15 +37,15 @@ export class BetLineMainComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.competitionRepos.getObjects()
-      .subscribe(
-        /* happy path */(competitions: Competition[]) => {
-          this.competitions = competitions;
-          // this.postInit(+params.id);
-        },
-        /* error path */ e => { },
-        /* onComplete */() => { this.processing = false; }
-      );
+    // this.competitionRepos.getObjects()
+    //   .subscribe(
+    //     /* happy path */(competitions: Competition[]) => {
+    //       this.competitions = competitions;
+    //       // this.postInit(+params.id);
+    //     },
+    //     /* error path */ e => { },
+    //     /* onComplete */() => { this.processing = false; }
+    //   );
 
     // this.route.queryParamMap.subscribe(params => {
     //   this.returnUrl = params.get('returnAction');
@@ -60,16 +62,16 @@ export class BetLineMainComponent implements OnInit, OnDestroy {
   }
 
   processBetLinesFilter(betLineFilter: BetLineFilter) {
-    this.structureRepository.getObject(betLineFilter.competition)
-      .subscribe(
-        /* happy path */(structure: Structure) => {
-          this.structure = structure;
-          this.betTypes = betLineFilter.betType;
-          this.games = this.getAllGames(this.structure.getRootRound(), betLineFilter.startDateTime, betLineFilter.endDateTime);
-        },
-      /* error path */ e => { },
-      /* onComplete */() => { }
-      );
+    // this.structureRepository.getObject(betLineFilter.competition)
+    //   .subscribe(
+    //     /* happy path */(structure: Structure) => {
+    //       this.structure = structure;
+    //       this.betTypes = betLineFilter.betType;
+    //       this.games = this.getAllGames(this.structure.getRootRound(), betLineFilter.startDateTime, betLineFilter.endDateTime);
+    //     },
+    //   /* error path */ e => { },
+    //   /* onComplete */() => { }
+    //   );
   }
 
   getBetTypes() {
@@ -83,9 +85,9 @@ export class BetLineMainComponent implements OnInit, OnDestroy {
         game => game.getStartDateTime() > startDateTime && game.getStartDateTime() < endDateTime
       ));
     });
-    round.getChildRounds().forEach((childRound) => {
+    /*round.getChildRounds().forEach((childRound) => {
       games = games.concat(this.getAllGames(childRound, startDateTime, endDateTime));
-    });
+    });*/
     return games;
   }
 
@@ -138,7 +140,7 @@ export class BetLineMainComponent implements OnInit, OnDestroy {
   // }
 
   protected setAlert(type: string, message: string) {
-    this.alert = { 'type': type, 'message': message };
+    this.alert = { type, message };
   }
 
   protected resetAlert(): void {
