@@ -28,21 +28,20 @@ export class HomeComponent implements OnInit {
         this.alert = { type: params.type, message: params.message };
       }
     });
-    this.router.navigate(['/user/login']);
-    // if (this.authService.isLoggedIn() === false) {
-    //   this.router.navigate(['/user/login']);
-    //   return;
-    // }
 
-    // this.authService.validateToken().subscribe(
-    //     /* happy path */ res => { },
-    //     /* error path */ e => {
-    //     console.log('cdj');
-    //     this.authService.logout();
-    //     this.router.navigate(['/user/login']);
-    //   },
-    //     /* onComplete */() => { this.processing = false; }
-    // );
+    if (this.authService.isLoggedIn() === false) {
+      this.router.navigate(['/user/login']);
+      return;
+    }
+
+    this.authService.validateToken().subscribe(
+        /* happy path */ res => { },
+        /* error path */ e => {
+        this.authService.logout();
+        this.router.navigate(['/user/login']);
+      },
+        /* onComplete */() => { this.processing = false; }
+    );
   }
 
   isLoggedIn() {

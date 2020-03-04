@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
         }
       });
     if (this.isLoggedIn() === true) {
-      this.setAlert('danger', 'je bent al ingelogd');
+      this.router.navigate(['/']);
     }
     this.processing = false;
   }

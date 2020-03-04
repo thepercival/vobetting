@@ -8,14 +8,31 @@
         <ngb-alert [type]="alert.type" (close)="alert = undefined;">{{ alert.message }}</ngb-alert>
       </p>
 
-      <button *ngIf="!processing" routerLink="/admin/home" routerLinkActive="active" class="btn btn-primary"
-        type="button" style="cursor:pointer;">
-        ga naar admin-gedeelte
-      </button>
-      <button *ngIf="!processing" routerLink="/vobetting/betline" routerLinkActive="active" class="btn btn-primary"
-        type="button" style="cursor:pointer;">
-        ga naar betline-view
-      </button>
+      <div *ngIf="!processing" class="card-deck">
+        <div class="card border-primary mb-3">
+          <div class="card-header">Basis-objecten</div>
+          <div class="card-body">
+            <p class="card-text">beheer de basis-elementen voor voetbal en vobetting
+            </p>
+
+          </div>
+          <div class="card-footer"><button routerLink="/admin/home" routerLinkActive="active" class="btn btn-primary"
+              type="button">
+              gaan
+            </button></div>
+        </div>
+        <div class="card border-primary mb-3">
+          <div class="card-header">Weddenschappen</div>
+          <div class="card-body">
+            <p class="card-text">bekijk de weddenschappen
+            </p>
+          </div>
+          <div class="card-footer"><button routerLink="/vobetting/betline" routerLinkActive="active"
+              class="btn btn-primary" type="button">
+              gaan
+            </button></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

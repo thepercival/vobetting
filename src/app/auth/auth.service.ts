@@ -38,9 +38,9 @@ export class AuthService extends APIRepository {
 
   login(password: string): Observable<boolean> {
     return this.http.post(this.getPublicUrl() + '/login', { password }).pipe(
-      map((retToken: string) => {
-        if (retToken) {
-          return this.setToken(retToken);
+      map((jsonToken: any) => {
+        if (jsonToken && jsonToken.token) {
+          return this.setToken(jsonToken.token);
         } else {
           return false;
         }
