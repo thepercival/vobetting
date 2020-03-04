@@ -19,8 +19,8 @@ export class NavComponent implements OnInit {
     private authService: AuthService,
     private globalEventsManager: GlobalEventsManager
   ) {
-    this.globalEventsManager.toggleLiveboardIconInNavBar.subscribe((tournamentLiveboardLink: NavBarLiveboardLink) => {
-      this.liveboardLink = tournamentLiveboardLink;
+    this.globalEventsManager.toggleLiveboardIconInNavBar.subscribe((liveboardLink: NavBarLiveboardLink) => {
+      this.liveboardLink = liveboardLink;
     });
   }
 

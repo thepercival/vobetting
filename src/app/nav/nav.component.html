@@ -1,23 +1,11 @@
-<nav *ngIf="tournamentLiveboardLink.showIcon !== false" class="navbar navbar-dark bg-primary">
+<nav *ngIf="liveboardLink.showIcon !== false" class="navbar navbar-dark bg-primary">
   <a class="navbar-brand" tabindex="-1" [routerLink]="['/']">
     <i class="fi flaticon-favicon"></i> {{title}}</a>
 
-  <button *ngIf="tournamentLiveboardLink.showIcon === true"
-    [routerLink]="[tournamentLiveboardLink.link, tournamentLiveboardLink.tournamentId]" routerLinkActive="active"
-    class="btn btn-outline-secondary d-none d-lg-block" type="button" tabindex="-1">
+  <button *ngIf="liveboardLink.showIcon === true" [routerLink]="[liveboardLink.link, liveboardLink.tournamentId]"
+    routerLinkActive="active" class="btn btn-outline-secondary d-none d-lg-block" type="button" tabindex="-1">
     <fa-icon [icon]=" [ 'fas', 'tv'] "></fa-icon>
     <span> scorebord</span>
-  </button>
-
-  <button *ngIf="!isLoggedIn()" routerLink="/user/login" routerLinkActive="active" class="btn btn-outline-secondary"
-    role="button" aria-label="inloggen " tabindex="-1">
-    <fa-icon [icon]=" [ 'fas', 'sign-in-alt'] "></fa-icon>
-    <span class="d-none d-sm-inline "> inloggen</span>
-  </button>
-  <button *ngIf="isLoggedIn()" routerLink="/user/logout" routerLinkActive="active" class="btn btn-outline-secondary"
-    role="button" tabindex="-1">
-    <fa-icon [icon]="[ 'fas', 'sign-out-alt'] "></fa-icon>
-    <span class="d-none d-sm-inline " aria-label="uitloggen "> uitloggen</span>
   </button>
 
   <!-- <button class="navbar-toggler navbar-toggler-right pointer" type="button" data-toggle="collapse

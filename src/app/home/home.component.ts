@@ -11,13 +11,8 @@ import { AuthService } from '../auth/auth.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-
-  modelFilter: any;
   alert: IAlert;
-  isCollapsed = true;
-  loading = false;
-  minEndDate: NgbDateStruct;
-  maxEndDate: NgbDateStruct;
+  processing = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -33,9 +28,28 @@ export class HomeComponent implements OnInit {
         this.alert = { type: params.type, message: params.message };
       }
     });
+    this.router.navigate(['/user/login']);
+    // if (this.authService.isLoggedIn() === false) {
+    //   this.router.navigate(['/user/login']);
+    //   return;
+    // }
+
+    // this.authService.validateToken().subscribe(
+    //     /* happy path */ res => { },
+    //     /* error path */ e => {
+    //     console.log('cdj');
+    //     this.authService.logout();
+    //     this.router.navigate(['/user/login']);
+    //   },
+    //     /* onComplete */() => { this.processing = false; }
+    // );
   }
 
   isLoggedIn() {
     return this.authService.isLoggedIn();
+  }
+
+  protected setAlert(type: string, message: string) {
+    this.alert = { type, message };
   }
 }

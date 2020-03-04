@@ -70,7 +70,7 @@ export class ExternalSystemListComponent implements OnInit {
   }
 
   protected setAlert(type: string, message: string) {
-    this.alert = { 'type': type, 'message': message };
+    this.alert = { type, message };
   }
 
   protected resetAlert(): void {

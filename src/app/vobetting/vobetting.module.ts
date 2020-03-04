@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import {
   NgbAlertModule,
   NgbCollapseModule,
@@ -23,7 +23,6 @@ import { VOBettingRoutingModule } from './vobetting-routing.module';
   imports: [
     CommonModule,
     VOBettingRoutingModule,
-    FormsModule,
     ReactiveFormsModule,
     NgbAlertModule, NgbCollapseModule, NgbDatepickerModule, NgbPopoverModule, NgbTimepickerModule,
     NgxChartsModule,

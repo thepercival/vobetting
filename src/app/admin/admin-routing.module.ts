@@ -7,6 +7,7 @@ import { ExternalSystemListComponent } from './externalsystem/list.component';
 import { ExternalSystemEditComponent } from './externalsystem/edit.component';
 import { AssociationListComponent } from './association/list.component';
 import { AssociationEditComponent } from './association/edit.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [AuthguardService] },
@@ -36,7 +37,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
+  imports: [RouterModule.forChild(routes), ReactiveFormsModule],
   exports: [RouterModule]
 })
 export class AdminRoutingModule { }

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 import { APIRepository } from '../../repository';
-import { AssociationMapper, Association } from 'ngx-sport';
+import { AssociationMapper, Association, JsonAssociation } from 'ngx-sport';
 
 @Injectable()
 export class AssociationRepository extends APIRepository {
@@ -14,29 +14,37 @@ export class AssociationRepository extends APIRepository {
         super();
     }
 
-    getUrlpostfix(): string {
-        return 'associations';
+    getUrl(association?: Association): string {
+        return super.getApiUrl() + 'associations' + (association ? ('/' + association.getId()) : '');
     }
 
-    getUrl(association: Association): string {
-        return super.getApiUrl() + 'associations/' + association.getId() + '/' + this.getUrlpostfix();
+    getObjects(): Observable<Association[]> {
+        return this.http.get(this.getUrl(), this.getOptions()).pipe(
+            map((json: JsonAssociation[]) => json.map(jsonAssociation => this.mapper.toObject(jsonAssociation))),
+            catchError((err) => this.handleError(err))
+        );
     }
-    /*
-        createObject(json: JsonCompetition, league: League, season: Season): Observable<Competition> {
-            const association = tournament.getCompetition().getLeague().getAssociation();
-            return this.http.post(this.getUrl(tournament), json, this.getOptions()).pipe(
-                map((jsonCompetitor: JsonCompetitor) => this.mapper.toObject(jsonCompetitor, association)),
-                catchError((err) => this.handleError(err))
-            );
-        }
 
-        editObject(competitor: Competitor, tournament: Tournament): Observable<Competitor> {
-            const url = this.getUrl(tournament) + '/' + competitor.getId();
-            const association = tournament.getCompetition().getLeague().getAssociation();
-            return this.http.put(url, this.mapper.toJson(competitor), this.getOptions()).pipe(
-                map((jsonCompetitor: JsonCompetitor) => this.mapper.toObject(jsonCompetitor, association, competitor)),
-                catchError((err) => this.handleError(err))
-            );
-        }*/
+    createObject(json: JsonAssociation): Observable<Association> {
+        return this.http.post(this.getUrl(), json, this.getOptions()).pipe(
+            map((jsonAssociation: JsonAssociation) => this.mapper.toObject(jsonAssociation)),
+            catchError((err) => this.handleError(err))
+        );
+    }
+
+    editObject(association: Association): Observable<Association> {
+        const url = this.getUrl(association);
+        return this.http.put(url, this.mapper.toJson(association), this.getOptions()).pipe(
+            map((jsonAssociation: JsonAssociation) => this.mapper.toObject(jsonAssociation, association)),
+            catchError((err) => this.handleError(err))
+        );
+    }
+
+    removeObject(association: Association): Observable<Association> {
+        return this.http.delete(this.getUrl(association), { headers: super.getHeaders() }).pipe(
+            map((res: Association) => res),
+            catchError((err) => this.handleError(err))
+        );
+    }
 
 }

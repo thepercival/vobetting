@@ -13,7 +13,7 @@
         </h1>
       </div>
       <h2 *ngIf="processing" class="text-center">
-        <fa-icon [icon]="['fas', 'spinner']" [spin]="true"></fa-icon>
+        <fa-icon [icon]="['fas', 'spinner']" spin="true"></fa-icon>
       </h2>
       <ngb-alert *ngIf="alert" [type]="alert.type" [dismissible]="false">{{ alert.message }}</ngb-alert>
       <form *ngIf="!processing && !isLoggedIn()" name="form" (ngSubmit)="login()" [formGroup]="form" novalidate>
@@ -33,16 +33,6 @@
             <button [disabled]="form.invalid" type="submit" class="btn btn-primary">
               inloggen
             </button>
-          </div>
-        </div>
-        <div class="form-group row justify-content-end my-5">
-          <div class="col-9">
-            <a routerLink="/user/register">registreren</a>
-          </div>
-        </div>
-        <div class="form-group row justify-content-end mt-5">
-          <div class="col-9">
-            <a routerLink="/user/passwordreset">wachtwoord vergeten</a>
           </div>
         </div>
       </form>

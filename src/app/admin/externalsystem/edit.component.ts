@@ -123,7 +123,7 @@ export class ExternalSystemEditComponent implements OnInit, OnDestroy {
       return;
     }
     const externalSystem: JsonExternalSystem = {
-      name: name,
+      name,
       website: website ? website : undefined,
       username: username ? username : undefined,
       password: password ? password : undefined,
@@ -196,7 +196,7 @@ export class ExternalSystemEditComponent implements OnInit, OnDestroy {
   }
 
   protected setAlert(type: string, message: string) {
-    this.alert = { 'type': type, 'message': message };
+    this.alert = { type, message };
   }
 
   protected resetAlert(): void {

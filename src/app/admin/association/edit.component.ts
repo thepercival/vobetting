@@ -113,7 +113,7 @@ export class AssociationEditComponent implements OnInit, OnDestroy {
       return;
     }
     const association: JsonAssociation = {
-      name: name,
+      name,
       description: description ? description : undefined,
       parent: parent ? this.associationMapper.toJson(parent) : undefined
     };
@@ -185,7 +185,7 @@ export class AssociationEditComponent implements OnInit, OnDestroy {
   }
 
   protected setAlert(type: string, message: string) {
-    this.alert = { 'type': type, 'message': message };
+    this.alert = { type, message };
   }
 
   protected resetAlert(): void {
