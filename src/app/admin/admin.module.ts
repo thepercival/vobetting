@@ -12,6 +12,8 @@ import {
   NgbCollapseModule, NgbButtonsModule, NgbModalModule
 } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ExternalSystemRepository } from '../lib/ngx-sport/external/system/repository';
+import { ExternalSystem, ExternalSystemMapper } from 'ngx-sport';
 
 
 @NgModule({
@@ -23,6 +25,10 @@ import { ReactiveFormsModule } from '@angular/forms';
     NgbDatepickerModule, NgbTimepickerModule, NgbAlertModule, NgbPopoverModule, NgbCollapseModule, NgbModalModule, NgbButtonsModule,
     NgbNavModule,
     ReactiveFormsModule,
+  ],
+  providers: [
+    ExternalSystemRepository,
+    ExternalSystemMapper
   ]
 })
 export class AdminModule { }

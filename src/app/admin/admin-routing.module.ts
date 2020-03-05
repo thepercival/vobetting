@@ -11,8 +11,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [AuthguardService] },
-  { path: 'externalsystem', component: ExternalSystemListComponent, canActivate: [AuthguardService] },
-  { path: 'externalsystem/edit/:id', component: ExternalSystemEditComponent, canActivate: [AuthguardService] }, /*
+  { path: 'externalsystems', component: ExternalSystemListComponent },
+  { path: 'externalsystem/:id', component: ExternalSystemEditComponent, canActivate: [AuthguardService] }, /*
   { path: 'bookmaker', component: BookmakerListComponent, canActivate: [AuthguardService] },
   { path: 'bookmaker/edit/:id', component: BookmakerEditComponent, canActivate: [AuthguardService] },
   { path: 'season', component: SeasonListComponent, canActivate: [AuthguardService] },

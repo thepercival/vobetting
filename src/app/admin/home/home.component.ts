@@ -16,4 +16,7 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
   }
 
+  navigate(action: string) {
+    this.router.navigate(['/admin/' + action]);
+  }
 }
