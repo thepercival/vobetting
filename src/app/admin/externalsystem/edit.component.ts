@@ -6,6 +6,7 @@ import { ExternalSystemRepository } from '../../lib/ngx-sport/external/system/re
 import { Subscription } from 'rxjs';
 
 import { IAlert } from '../../common/alert';
+import { MyNavigation } from 'src/app/common/navigation';
 
 @Component({
   selector: 'app-externalsystem-edit',
@@ -15,10 +16,6 @@ import { IAlert } from '../../common/alert';
 export class ExternalSystemEditComponent implements OnInit, OnDestroy {
 
   protected sub: Subscription;
-  returnUrl: string;
-  returnUrlParam: number;
-  returnUrlQueryParamKey: string;
-  returnUrlQueryParamValue: string;
   public alert: IAlert;
   public processing = true;
   customForm: FormGroup;
@@ -38,6 +35,7 @@ export class ExternalSystemEditComponent implements OnInit, OnDestroy {
     private externalSystemRepos: ExternalSystemRepository,
     private route: ActivatedRoute,
     private router: Router,
+    protected myNavigation: MyNavigation,
     fb: FormBuilder
   ) {
     this.customForm = fb.group({
@@ -67,14 +65,6 @@ export class ExternalSystemEditComponent implements OnInit, OnDestroy {
         /* error path */ e => { },
         /* onComplete */() => { this.processing = false; }
         );
-    });
-    this.route.queryParamMap.subscribe(params => {
-      this.returnUrl = params.get('returnAction');
-      if (params.get('returnParam') !== null) {
-        this.returnUrlParam = +params.get('returnParam');
-      }
-      this.returnUrlQueryParamKey = params.get('returnQueryParamKey');
-      this.returnUrlQueryParamValue = params.get('returnQueryParamValue');
     });
   }
 
@@ -172,21 +162,8 @@ export class ExternalSystemEditComponent implements OnInit, OnDestroy {
       );
   }
 
-  private getForwarUrl() {
-    if (this.returnUrlParam !== undefined) {
-      return [this.returnUrl, this.returnUrlParam];
-    }
-    return [this.returnUrl];
-  }
-
-  private getForwarUrlQueryParams(): {} {
-    const queryParams = {};
-    queryParams[this.returnUrlQueryParamKey] = this.returnUrlQueryParamValue;
-    return queryParams;
-  }
-
   navigateBack() {
-    this.router.navigate(this.getForwarUrl(), { queryParams: this.getForwarUrlQueryParams() });
+    this.myNavigation.back();
   }
 
   isNameDuplicate(name: string, externalSystem?: ExternalSystem): boolean {

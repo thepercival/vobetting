@@ -6,7 +6,7 @@ import { AssociationListComponent } from './association/list.component';
 import { AssociationEditComponent } from './association/edit.component';
 import { ExternalSystemEditComponent } from './externalsystem/edit.component';
 import { ExternalSystemListComponent } from './externalsystem/list.component';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import {
   NgbAlertModule, NgbDatepickerModule, NgbTimepickerModule, NgbNavModule, NgbPopoverModule,
   NgbCollapseModule, NgbButtonsModule, NgbModalModule
@@ -14,6 +14,7 @@ import {
 import { ReactiveFormsModule } from '@angular/forms';
 import { ExternalSystemRepository } from '../lib/ngx-sport/external/system/repository';
 import { ExternalSystem, ExternalSystemMapper } from 'ngx-sport';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 
 @NgModule({
@@ -31,4 +32,8 @@ import { ExternalSystem, ExternalSystemMapper } from 'ngx-sport';
     ExternalSystemMapper
   ]
 })
-export class AdminModule { }
+export class AdminModule { 
+  constructor(library: FaIconLibrary) {
+    library.addIcons(faTrashAlt);
+  }
+}

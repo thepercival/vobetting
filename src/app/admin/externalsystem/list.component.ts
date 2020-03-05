@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationExtras } from '@angular/router';
 import { ExternalSystem } from 'ngx-sport';
 import { ExternalSystemRepository } from '../../lib/ngx-sport/external/system/repository';
 import { IAlert } from '../../common/alert';
@@ -41,14 +41,7 @@ export class ExternalSystemListComponent implements OnInit {
   }
 
   linkToEdit(externalSystem?: ExternalSystem) {
-    this.router.navigate(
-      ['/admin/externalsystem/edit', externalSystem ? externalSystem.getId() : 0],
-      {
-        queryParams: {
-          returnAction: '/admin/externalsystem'
-        }
-      }
-    );
+    this.router.navigate( ['/admin/externalsystem', externalSystem ? externalSystem.getId() : 0] );
   }
 
   remove(externalSystem: ExternalSystem) {

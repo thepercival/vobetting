@@ -22,7 +22,7 @@ export class ExternalSystemRepository extends APIRepository {
     }
 
     getUrlpostfix(): string {
-        return 'external/systems';
+        return 'externalsystems';
     }
 
     getObjects(): Observable<ExternalSystem[]> {
@@ -33,7 +33,7 @@ export class ExternalSystemRepository extends APIRepository {
         //         observer.complete();
         //     });
         // }
-        return this.http.get(this.url, { headers: super.getHeaders() }).pipe(
+        return this.http.get(this.url, this.getOptions()).pipe(
             map((jsonSystems: JsonExternalSystem[]) => jsonSystems.map(jsonSystem => this.mapper.toObject(jsonSystem))),
             catchError((err) => this.handleError(err))
         );
