@@ -30,7 +30,7 @@
     "@swimlane/ngx-charts": "^13.0.2",
     "bootstrap": "^4.4.1",
     "module": "^1.2.5",
-    "ngx-sport": "0.0.83",
+    "ngx-sport": "0.0.84",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
