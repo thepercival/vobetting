@@ -1,38 +1,38 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ExternalSystem, JsonExternalSystem } from 'ngx-sport';
-import { ExternalSystemRepository } from '../../lib/ngx-sport/external/system/repository';
+import { ExternalSource, JsonExternalSource } from 'ngx-sport';
+import { ExternalSourceRepository } from '../../lib/ngx-sport/external/system/repository';
 import { Subscription } from 'rxjs';
 
 import { IAlert } from '../../common/alert';
 import { MyNavigation } from 'src/app/common/navigation';
 
 @Component({
-  selector: 'app-externalsystem-edit',
+  selector: 'app-externalsource-edit',
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.css']
 })
-export class ExternalSystemEditComponent implements OnInit, OnDestroy {
+export class ExternalSourceEditComponent implements OnInit, OnDestroy {
 
   protected sub: Subscription;
   public alert: IAlert;
   public processing = true;
   customForm: FormGroup;
-  externalSystems: ExternalSystem[];
-  externalSystem: ExternalSystem;
+  externalSources: ExternalSource[];
+  externalSource: ExternalSource;
 
-  validations: ExternalSystemValidations = {
-    maxlengthname: ExternalSystem.MAX_LENGTH_NAME,
-    maxlengthwebsite: ExternalSystem.MAX_LENGTH_WEBSITE,
-    maxlengthusername: ExternalSystem.MAX_LENGTH_USERNAME,
-    maxlengthpassword: ExternalSystem.MAX_LENGTH_PASSWORD,
-    maxlengthapiurl: ExternalSystem.MAX_LENGTH_APIURL,
-    maxlengthapikey: ExternalSystem.MAX_LENGTH_APIKEY
+  validations: ExternalSourceValidations = {
+    maxlengthname: ExternalSource.MAX_LENGTH_NAME,
+    maxlengthwebsite: ExternalSource.MAX_LENGTH_WEBSITE,
+    maxlengthusername: ExternalSource.MAX_LENGTH_USERNAME,
+    maxlengthpassword: ExternalSource.MAX_LENGTH_PASSWORD,
+    maxlengthapiurl: ExternalSource.MAX_LENGTH_APIURL,
+    maxlengthapikey: ExternalSource.MAX_LENGTH_APIKEY
   };
 
   constructor(
-    private externalSystemRepos: ExternalSystemRepository,
+    private externalSourceRepos: ExternalSourceRepository,
     private route: ActivatedRoute,
     private router: Router,
     protected myNavigation: MyNavigation,
@@ -56,10 +56,10 @@ export class ExternalSystemEditComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
-      this.externalSystemRepos.getObjects()
+      this.externalSourceRepos.getObjects()
         .subscribe(
-        /* happy path */(externalSystems: ExternalSystem[]) => {
-            this.externalSystems = externalSystems;
+        /* happy path */(externalSources: ExternalSource[]) => {
+            this.externalSources = externalSources;
             this.postInit(+params.id);
           },
         /* error path */ e => { },
@@ -72,16 +72,16 @@ export class ExternalSystemEditComponent implements OnInit, OnDestroy {
     if (id === undefined || id < 1) {
       return;
     }
-    this.externalSystem = this.externalSystems.find(externalSystem => externalSystem.getId() === id);
-    if (this.externalSystem === undefined) {
+    this.externalSource = this.externalSources.find(externalSource => externalSource.getId() === id);
+    if (this.externalSource === undefined) {
       return;
     }
-    this.customForm.controls.name.setValue(this.externalSystem.getName());
-    this.customForm.controls.website.setValue(this.externalSystem.getWebsite());
-    this.customForm.controls.username.setValue(this.externalSystem.getUsername());
-    this.customForm.controls.password.setValue(this.externalSystem.getPassword());
-    this.customForm.controls.apiurl.setValue(this.externalSystem.getApiurl());
-    this.customForm.controls.apikey.setValue(this.externalSystem.getApikey());
+    this.customForm.controls.name.setValue(this.externalSource.getName());
+    this.customForm.controls.website.setValue(this.externalSource.getWebsite());
+    this.customForm.controls.username.setValue(this.externalSource.getUsername());
+    this.customForm.controls.password.setValue(this.externalSource.getPassword());
+    this.customForm.controls.apiurl.setValue(this.externalSource.getApiurl());
+    this.customForm.controls.apikey.setValue(this.externalSource.getApikey());
   }
 
   ngOnDestroy() {
@@ -89,7 +89,7 @@ export class ExternalSystemEditComponent implements OnInit, OnDestroy {
   }
 
   save() {
-    if (this.externalSystem !== undefined) {
+    if (this.externalSource !== undefined) {
       this.edit();
     } else {
       this.add();
@@ -112,7 +112,7 @@ export class ExternalSystemEditComponent implements OnInit, OnDestroy {
       this.processing = false;
       return;
     }
-    const externalSystem: JsonExternalSystem = {
+    const externalSource: JsonExternalSource = {
       name,
       website: website ? website : undefined,
       username: username ? username : undefined,
@@ -120,9 +120,9 @@ export class ExternalSystemEditComponent implements OnInit, OnDestroy {
       apiurl: apiurl ? apiurl : undefined,
       apikey: apikey ? apikey : undefined
     };
-    this.externalSystemRepos.createObject(externalSystem)
+    this.externalSourceRepos.createObject(externalSource)
       .subscribe(
-        /* happy path */ externalSystemRes => {
+        /* happy path */ externalSourceRes => {
           this.navigateBack();
         },
         /* error path */ e => { this.setAlert('danger', e); },
@@ -133,7 +133,7 @@ export class ExternalSystemEditComponent implements OnInit, OnDestroy {
   edit() {
     this.processing = true;
 
-    if (this.isNameDuplicate(this.customForm.controls.name.value, this.externalSystem)) {
+    if (this.isNameDuplicate(this.customForm.controls.name.value, this.externalSource)) {
       this.setAlert('danger', 'de naam bestaan al');
       this.processing = false;
       return;
@@ -145,16 +145,16 @@ export class ExternalSystemEditComponent implements OnInit, OnDestroy {
     const apiurl = this.customForm.controls.apiurl.value;
     const apikey = this.customForm.controls.apikey.value;
 
-    this.externalSystem.setName(name);
-    this.externalSystem.setWebsite(website ? website : undefined);
-    this.externalSystem.setUsername(username ? username : undefined);
-    this.externalSystem.setPassword(password ? password : undefined);
-    this.externalSystem.setApiurl(apiurl ? apiurl : undefined);
-    this.externalSystem.setApikey(apikey ? apikey : undefined);
+    this.externalSource.setName(name);
+    this.externalSource.setWebsite(website ? website : undefined);
+    this.externalSource.setUsername(username ? username : undefined);
+    this.externalSource.setPassword(password ? password : undefined);
+    this.externalSource.setApiurl(apiurl ? apiurl : undefined);
+    this.externalSource.setApikey(apikey ? apikey : undefined);
 
-    this.externalSystemRepos.editObject(this.externalSystem)
+    this.externalSourceRepos.editObject(this.externalSource)
       .subscribe(
-        /* happy path */ externalSystemRes => {
+        /* happy path */ externalSourceRes => {
           this.navigateBack();
         },
         /* error path */ e => { this.setAlert('danger', e); this.processing = false; },
@@ -166,9 +166,9 @@ export class ExternalSystemEditComponent implements OnInit, OnDestroy {
     this.myNavigation.back();
   }
 
-  isNameDuplicate(name: string, externalSystem?: ExternalSystem): boolean {
-    return this.externalSystems.find(externalSystemIt => {
-      return (name === externalSystemIt.getName() && (externalSystem === undefined || externalSystem !== externalSystemIt));
+  isNameDuplicate(name: string, externalSource?: ExternalSource): boolean {
+    return this.externalSources.find(externalSourceIt => {
+      return (name === externalSourceIt.getName() && (externalSource === undefined || externalSource !== externalSourceIt));
     }) !== undefined;
   }
 
@@ -181,7 +181,7 @@ export class ExternalSystemEditComponent implements OnInit, OnDestroy {
   }
 }
 
-export interface ExternalSystemValidations {
+export interface ExternalSourceValidations {
   maxlengthname: number;
   maxlengthwebsite: number;
   maxlengthusername: number;

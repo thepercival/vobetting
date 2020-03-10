@@ -3,25 +3,25 @@ import { Router } from '@angular/router';
 import { Observable, throwError as observableThrowError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
-import { ExternalSystemLeagueInterface } from './interface';
-import { League, ExternalSystem } from 'ngx-sport';
+import { ExternalSourceLeagueInterface } from './interface';
+import { League, ExternalSource } from 'ngx-sport';
 
-export class ExternalSystemBetFair implements ExternalSystemLeagueInterface {
+export class ExternalSourceBetFair implements ExternalSourceLeagueInterface {
 
     constructor(
         private http: HttpClient,
-        private externalSystem: ExternalSystem,
+        private externalSource: ExternalSource,
         router: Router
     ) {
 
     }
 
     getApiurl(): string {
-        return this.externalSystem.getApiurl();
+        return this.externalSource.getApiurl();
     }
 
     getToken(): string {
-        return this.externalSystem.getApikey();
+        return this.externalSource.getApikey();
     }
 
     getHeaders(): HttpHeaders {

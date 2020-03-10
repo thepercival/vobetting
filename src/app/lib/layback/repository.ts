@@ -1,11 +1,11 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { ExternalSystemMapper, } from 'ngx-sport';
+import { ExternalSourceMapper, } from 'ngx-sport';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
-import { ExternalSystemRepository } from '../ngx-sport/external/system/repository';
+import { ExternalSourceRepository } from '../ngx-sport/external/system/repository';
 import { APIRepository } from '../repository';
 import { BetLine } from '../betline';
 import { LayBack } from '../layback';
@@ -19,8 +19,8 @@ export class LayBackRepository extends APIRepository {
 
     constructor(
         private http: HttpClient,
-        private externalSystemRepository: ExternalSystemRepository,
-        private externalSystemMapper: ExternalSystemMapper,
+        private externalSourceRepository: ExternalSourceRepository,
+        private externalSourceMapper: ExternalSourceMapper,
         private mapper: LayBackMapper
     ) {
         super();

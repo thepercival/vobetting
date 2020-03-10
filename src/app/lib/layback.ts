@@ -1,4 +1,4 @@
-import { ExternalSystem } from 'ngx-sport';
+import { ExternalSource } from 'ngx-sport';
 
 import { BetLine } from './betline';
 
@@ -12,7 +12,7 @@ export class LayBack {
     private size: number;
     protected dateTime: Date;
     protected betLine: BetLine;
-    protected externalSystem: ExternalSystem;
+    protected externalSource: ExternalSource;
 
     constructor(dateTime: Date, betLine: BetLine) {
         this.setDateTime(dateTime);
@@ -68,11 +68,11 @@ export class LayBack {
         this.betLine.getLayBacks().push(this);
     }
 
-    getExternalSystem(): ExternalSystem {
-        return this.externalSystem;
+    getExternalSource(): ExternalSource {
+        return this.externalSource;
     }
 
-    setExternalSystem(externalSystem: ExternalSystem): void {
-        this.externalSystem = externalSystem;
+    setExternalSource(externalSource: ExternalSource): void {
+        this.externalSource = externalSource;
     }
 }

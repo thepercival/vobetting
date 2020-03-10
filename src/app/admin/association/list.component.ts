@@ -41,14 +41,7 @@ export class AssociationListComponent implements OnInit {
   }
 
   linkToEdit(association?: Association) {
-    this.router.navigate(
-      ['/admin/association/edit', association ? association.getId() : 0],
-      {
-        queryParams: {
-          returnAction: '/admin/association'
-        }
-      }
-    );
+    this.router.navigate(['/admin/association', association ? association.getId() : 0]);
   }
 
   remove(association: Association) {

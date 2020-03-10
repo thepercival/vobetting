@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ExternalSystemMapper, JsonExternalSystem } from 'ngx-sport';
+import { ExternalSourceMapper, JsonExternalSource } from 'ngx-sport';
 
 import { BetLine } from '../betline';
 import { LayBack } from '../layback';
@@ -7,7 +7,7 @@ import { LayBack } from '../layback';
 @Injectable()
 export class LayBackMapper {
 
-    constructor(private externalSystemMapper: ExternalSystemMapper) { }
+    constructor(private externalSourceMapper: ExternalSourceMapper) { }
 
     toObject(json: JsonLayBack, betLine: BetLine, layBack?: LayBack): LayBack {
         if (layBack === undefined) {
@@ -17,8 +17,8 @@ export class LayBackMapper {
         layBack.setBack(json.back);
         layBack.setPrice(json.price);
         layBack.setSize(json.size);
-        if (json.externalSystem !== undefined) {
-            layBack.setExternalSystem(this.externalSystemMapper.toObject(json.externalSystem));
+        if (json.externalSource !== undefined) {
+            layBack.setExternalSource(this.externalSourceMapper.toObject(json.externalSource));
         }
         return layBack;
     }
@@ -30,8 +30,8 @@ export class LayBackMapper {
             back: layBack.getBack(),
             price: layBack.getPrice(),
             size: layBack.getSize(),
-            externalSystem: layBack.getExternalSystem() ?
-                this.externalSystemMapper.toJson(layBack.getExternalSystem()) : undefined
+            externalSource: layBack.getExternalSource() ?
+                this.externalSourceMapper.toJson(layBack.getExternalSource()) : undefined
         };
     }
 }
@@ -42,5 +42,5 @@ export interface JsonLayBack {
     back: boolean;
     price: number;
     size: number;
-    externalSystem?: JsonExternalSystem;
+    externalSource?: JsonExternalSource;
 }

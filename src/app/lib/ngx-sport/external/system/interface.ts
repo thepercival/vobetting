@@ -3,14 +3,14 @@ import { Observable } from 'rxjs';
 import { Association, League, Season } from 'ngx-sport';
 
 
-export interface ExternalSystemAssociation {
+export interface ExternalSourceAssociation {
     getAssociations(): Association[];
 }
 
-export interface ExternalSystemLeagueInterface {
+export interface ExternalSourceLeagueInterface {
     getLeagues(appLeagues: League[]): Observable<League[]>;
 }
 
-export interface ExternalSystemSeasonInterface {
+export interface ExternalSourceSeasonInterface {
     getSeasons(): Season[];
 }

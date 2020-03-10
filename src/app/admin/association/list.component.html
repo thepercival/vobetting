@@ -29,7 +29,8 @@
       <tbody>
         <tr *ngFor="let association of associations">
           <td>
-            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing" (click)="edit(association)">
+            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing"
+              (click)="edit(association)">
               <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon>
             </button>
           </td>

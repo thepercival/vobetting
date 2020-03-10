@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 import { APIRepository } from '../../../repository';
-import { ExternalObject, ImportableObject, ExternalSystem, ExternalObjectMapper, JsonExternalObject } from 'ngx-sport';
+import { Attacher, Importable, ExternalSource, AttacherMapper, JsonExternalObject } from 'ngx-sport';
 
 @Injectable()
 export class ExternalObjectRepository extends APIRepository {
@@ -13,7 +13,7 @@ export class ExternalObjectRepository extends APIRepository {
 
     constructor(
         private http: HttpClient,
-        private mapper: ExternalObjectMapper) {
+        private mapper: AttacherMapper) {
         super();
     }
 
@@ -38,10 +38,10 @@ export class ExternalObjectRepository extends APIRepository {
 
     // haal object op, dan importableObjectId, externSystem, dit moet opvraagbaar zijn?
 
-    getObject(importableObject: ImportableObject, externalSystem: ExternalSystem): Observable<ExternalObject> {
+    getObject(importable: Importable, externalSource: ExternalSource): Observable<Attacher> {
         let httpParams = new HttpParams();
-        httpParams = httpParams.set('importableObjectId', importableObject.getId().toString());
-        httpParams = httpParams.set('externalSystemId', externalSystem.getId().toString());
+        httpParams = httpParams.set('importableObjectId', importable.getId().toString());
+        httpParams = httpParams.set('externalSourceId', externalSource.getId().toString());
         const options = {
             headers: this.getHeaders(),
             params: httpParams
@@ -88,10 +88,10 @@ export class ExternalObjectRepository extends APIRepository {
     //     );
     // }
 
-    // getExternalObject(externalobjects: ExternalObject[], externalsystem: any, externalid: string,
+    // getExternalObject(externalobjects: ExternalObject[], externalsource: any, externalid: string,
     // importableObject: any): ExternalObject {
     //     return externalobjects.filter(
-    //         extobjIt => extobjIt.getExternalSystem() === externalsystem
+    //         extobjIt => extobjIt.getExternalSource() === externalsource
     //             && (externalid === undefined || extobjIt.getExternalId() === externalid)
     //             && (importableObject === undefined || extobjIt.getImportableObject() === importableObject)
     //     ).shift();

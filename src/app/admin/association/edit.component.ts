@@ -7,6 +7,7 @@ import { AssociationRepository } from '../../lib/ngx-sport/association/repositor
 import { Subscription } from 'rxjs';
 
 import { IAlert } from '../../common/alert';
+import { MyNavigation } from 'src/app/common/navigation';
 
 @Component({
   selector: 'app-association-edit',
@@ -37,6 +38,7 @@ export class AssociationEditComponent implements OnInit, OnDestroy {
     private associationMapper: AssociationMapper,
     private route: ActivatedRoute,
     private router: Router,
+    protected myNavigation: MyNavigation,
     fb: FormBuilder
   ) {
     this.customForm = fb.group({
@@ -62,14 +64,7 @@ export class AssociationEditComponent implements OnInit, OnDestroy {
         /* onComplete */() => { this.processing = false; }
         );
     });
-    this.route.queryParamMap.subscribe(params => {
-      this.returnUrl = params.get('returnAction');
-      if (params.get('returnParam') !== null) {
-        this.returnUrlParam = +params.get('returnParam');
-      }
-      this.returnUrlQueryParamKey = params.get('returnQueryParamKey');
-      this.returnUrlQueryParamValue = params.get('returnQueryParamValue');
-    });
+
   }
 
   private postInit(id: number) {
@@ -167,7 +162,7 @@ export class AssociationEditComponent implements OnInit, OnDestroy {
   }
 
   navigateBack() {
-    this.router.navigate(this.getForwarUrl(), { queryParams: this.getForwarUrlQueryParams() });
+    this.myNavigation.back();
   }
 
   isNameDuplicate(name: string): boolean {

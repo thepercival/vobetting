@@ -1,30 +1,30 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationExtras } from '@angular/router';
-import { ExternalSystem } from 'ngx-sport';
-import { ExternalSystemRepository } from '../../lib/ngx-sport/external/system/repository';
+import { ExternalSource } from 'ngx-sport';
+import { ExternalSourceRepository } from '../../lib/ngx-sport/external/system/repository';
 import { IAlert } from '../../common/alert';
 
 @Component({
-  selector: 'app-externalsystem-list',
+  selector: 'app-externalsource-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.css']
 })
-export class ExternalSystemListComponent implements OnInit {
+export class ExternalSourceListComponent implements OnInit {
 
-  externalSystems: ExternalSystem[];
+  externalSources: ExternalSource[];
   alert: IAlert;
   processing = true;
 
   constructor(
     private router: Router,
-    private externalSystemRepos: ExternalSystemRepository
+    private externalSourceRepos: ExternalSourceRepository
   ) { }
 
   ngOnInit() {
-    this.externalSystemRepos.getObjects()
+    this.externalSourceRepos.getObjects()
       .subscribe(
-        /* happy path */(externalSystems: ExternalSystem[]) => {
-          this.externalSystems = externalSystems;
+        /* happy path */(externalSources: ExternalSource[]) => {
+          this.externalSources = externalSources;
           this.processing = false;
         },
         /* error path */ e => { },
@@ -36,24 +36,24 @@ export class ExternalSystemListComponent implements OnInit {
     this.linkToEdit();
   }
 
-  edit(externalSystem: ExternalSystem) {
-    this.linkToEdit(externalSystem);
+  edit(externalSource: ExternalSource) {
+    this.linkToEdit(externalSource);
   }
 
-  linkToEdit(externalSystem?: ExternalSystem) {
-    this.router.navigate( ['/admin/externalsystem', externalSystem ? externalSystem.getId() : 0] );
+  linkToEdit(externalSource?: ExternalSource) {
+    this.router.navigate(['/admin/externalsource', externalSource ? externalSource.getId() : 0]);
   }
 
-  remove(externalSystem: ExternalSystem) {
+  remove(externalSource: ExternalSource) {
     this.setAlert('info', 'extern systeem verwijderen..');
     this.processing = true;
 
-    this.externalSystemRepos.removeObject(externalSystem)
+    this.externalSourceRepos.removeObject(externalSource)
       .subscribe(
-        /* happy path */ externalSystemRes => {
-          const index = this.externalSystems.indexOf(externalSystem);
+        /* happy path */ externalSourceRes => {
+          const index = this.externalSources.indexOf(externalSource);
           if (index > -1) {
-            this.externalSystems.splice(index, 1);
+            this.externalSources.splice(index, 1);
           }
           this.resetAlert();
         },

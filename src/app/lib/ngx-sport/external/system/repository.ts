@@ -4,28 +4,28 @@ import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 import { APIRepository } from '../../../repository';
-import { ExternalSystem, ExternalSystemMapper, JsonExternalSystem } from 'ngx-sport';
+import { ExternalSource, ExternalSourceMapper, JsonExternalSource } from 'ngx-sport';
 
-// import { ExternalSystemSoccerOdds } from './soccerodds';
-// import { ExternalSystemSoccerSports } from './soccersports';
+// import { ExternalSourceSoccerOdds } from './soccerodds';
+// import { ExternalSourceSoccerSports } from './soccersports';
 
 @Injectable()
-export class ExternalSystemRepository extends APIRepository {
+export class ExternalSourceRepository extends APIRepository {
 
     private url: string;
-    // private objects: ExternalSystem[];
-    // private specificObjects: ExternalSystem[] = [];
+    // private objects: ExternalSource[];
+    // private specificObjects: ExternalSource[] = [];
 
-    constructor(private http: HttpClient, private mapper: ExternalSystemMapper) {
+    constructor(private http: HttpClient, private mapper: ExternalSourceMapper) {
         super();
         this.url = super.getApiUrl() + 'voetbal/' + this.getUrlpostfix();
     }
 
     getUrlpostfix(): string {
-        return 'externalsystems';
+        return 'externalsources';
     }
 
-    getObjects(): Observable<ExternalSystem[]> {
+    getObjects(): Observable<ExternalSource[]> {
 
         // if (this.objects !== undefined) {
         //     return Observable.create(observer => {
@@ -34,12 +34,12 @@ export class ExternalSystemRepository extends APIRepository {
         //     });
         // }
         return this.http.get(this.url, this.getOptions()).pipe(
-            map((jsonSystems: JsonExternalSystem[]) => jsonSystems.map(jsonSystem => this.mapper.toObject(jsonSystem))),
+            map((jsonSystems: JsonExternalSource[]) => jsonSystems.map(jsonSystem => this.mapper.toObject(jsonSystem))),
             catchError((err) => this.handleError(err))
         );
     }
 
-    // getObject(id: number): Observable<ExternalSystem> {
+    // getObject(id: number): Observable<ExternalSource> {
     //     const url = this.url + '/' + id;
     //     return this.http.get(url).pipe(
     //         map((res) => this.jsonToObject(res)),
@@ -49,45 +49,45 @@ export class ExternalSystemRepository extends APIRepository {
 
 
 
-    // private getObjectByName(name: string): ExternalSystem {
+    // private getObjectByName(name: string): ExternalSource {
     //     const foundObjects = this.specificObjects.filter(objectFilter => objectFilter.getName() === name);
     //     const foundObject = foundObjects.shift();
     //     if (foundObject) {
     //         return foundObject;
     //     }
-    //     let externalSystem;
+    //     let externalSource;
     //     if (name === 'Soccer Odds') {
-    //         externalSystem = new ExternalSystemSoccerOdds(name, this.http, this);
+    //         externalSource = new ExternalSourceSoccerOdds(name, this.http, this);
     //     } else if (name === 'Soccer Sports') {
-    //         externalSystem = new ExternalSystemSoccerSports(name, this.http, this);
+    //         externalSource = new ExternalSourceSoccerSports(name, this.http, this);
     //     } else {
-    //         externalSystem = new ExternalSystem(name);
+    //         externalSource = new ExternalSource(name);
     //     }
-    //     if (externalSystem !== undefined) {
-    //         this.specificObjects.push(externalSystem);
+    //     if (externalSource !== undefined) {
+    //         this.specificObjects.push(externalSource);
     //     }
-    //     return externalSystem;
+    //     return externalSource;
     // }
 
-    createObject(json: JsonExternalSystem): Observable<ExternalSystem> {
+    createObject(json: JsonExternalSource): Observable<ExternalSource> {
         return this.http.post(this.url, json, { headers: super.getHeaders() }).pipe(
-            map((jsonRes: JsonExternalSystem) => this.mapper.toObject(jsonRes)),
+            map((jsonRes: JsonExternalSource) => this.mapper.toObject(jsonRes)),
             catchError((err) => this.handleError(err))
         );
     }
 
-    editObject(externalSystem: ExternalSystem): Observable<ExternalSystem> {
+    editObject(externalSource: ExternalSource): Observable<ExternalSource> {
         const options = {
             headers: super.getHeaders()
         };
-        const url = this.url + '/' + externalSystem.getId();
-        return this.http.put(url, this.mapper.toJson(externalSystem), options).pipe(
-            map((res: JsonExternalSystem) => this.mapper.toObject(res, externalSystem)),
+        const url = this.url + '/' + externalSource.getId();
+        return this.http.put(url, this.mapper.toJson(externalSource), options).pipe(
+            map((res: JsonExternalSource) => this.mapper.toObject(res, externalSource)),
             catchError((err) => this.handleError(err))
         );
     }
 
-    removeObject(object: ExternalSystem): Observable<void> {
+    removeObject(object: ExternalSource): Observable<void> {
         const url = this.url + '/' + object.getId();
 
 

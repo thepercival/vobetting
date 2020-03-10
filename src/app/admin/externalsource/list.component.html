@@ -6,7 +6,8 @@
         <fa-icon [icon]="['fas', 'level-up-alt']" rotate="270"></fa-icon>
       </button>
     </h1>
-    <ngb-alert *ngIf="alert" [type]="alert.type" [dismissible]="true" (close)="alert = undefined;">{{ alert.message }}</ngb-alert>
+    <ngb-alert *ngIf="alert" [type]="alert.type" [dismissible]="true" (close)="alert = undefined;">{{ alert.message }}
+    </ngb-alert>
   </div>
 </div>
 <div>
@@ -29,17 +30,19 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let externalSystem of externalSystems">
+        <tr *ngFor="let externalSource of externalSources">
           <td>
-            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing" (click)="edit(externalSystem)">
+            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing"
+              (click)="edit(externalSource)">
               <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon>
             </button>
           </td>
           <td>
-            <span>{{externalSystem.getName()}}</span>
+            <span>{{externalSource.getName()}}</span>
           </td>
           <td style="text-align: right;">
-            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing" (click)="remove(externalSystem);">
+            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing"
+              (click)="remove(externalSource);">
               <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon>
             </button>
           </td>
