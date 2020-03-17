@@ -1,12 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ExternalSource, JsonExternalSource } from 'ngx-sport';
 import { ExternalSourceRepository } from '../../lib/ngx-sport/external/system/repository';
 import { Subscription } from 'rxjs';
 
 import { IAlert } from '../../common/alert';
 import { MyNavigation } from 'src/app/common/navigation';
+import { ExternalSource } from 'src/app/lib/externalsource';
+import { JsonExternalSource } from 'src/app/lib/externalsource/source/mapper';
 
 @Component({
   selector: 'app-externalsource-edit',
@@ -114,6 +115,7 @@ export class ExternalSourceEditComponent implements OnInit, OnDestroy {
     }
     const externalSource: JsonExternalSource = {
       name,
+      implementations: 0,
       website: website ? website : undefined,
       username: username ? username : undefined,
       password: password ? password : undefined,

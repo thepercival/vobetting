@@ -4,6 +4,10 @@ import { Association } from 'ngx-sport';
 import { AssociationRepository } from '../../lib/ngx-sport/association/repository';
 
 import { IAlert } from '../../common/alert';
+import { MyNavigation } from 'src/app/common/navigation';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ExternalSourceSelectModalComponent } from '../externalsource/selectmodal.component';
+import { ExternalSource } from 'src/app/lib/externalsource';
 
 @Component({
   selector: 'app-association-list',
@@ -15,10 +19,13 @@ export class AssociationListComponent implements OnInit {
   associations: Association[];
   alert: IAlert;
   processing = true;
+  externalSource: ExternalSource;
 
   constructor(
     private router: Router,
-    private associationRepos: AssociationRepository
+    private associationRepos: AssociationRepository,
+    private myNavigation: MyNavigation,
+    private modalService: NgbModal
   ) { }
 
   ngOnInit() {
@@ -30,6 +37,27 @@ export class AssociationListComponent implements OnInit {
         /* error path */ e => { },
         /* onComplete */() => { this.processing = false; }
       );
+  }
+
+  openExternalSource() {
+    this.resetAlert();
+    const modalRef = this.modalService.open(ExternalSourceSelectModalComponent);
+    modalRef.componentInstance.showDeselect = (this.externalSource !== undefined);
+    modalRef.result.then((result) => {
+      if (result instanceof ExternalSource) {
+        this.externalSource = result;
+        if (this.hasImplementation() === false) {
+          this.setAlert('danger', 'deze externe bron heeft geen bonden');
+        }
+      } else {
+        this.externalSource = undefined;
+      }
+    }, (reason) => {
+    });
+  }
+
+  hasImplementation(): boolean {
+    return this.externalSource.hasImplementation(ExternalSource.ASSOCIATION);
   }
 
   add() {
@@ -68,6 +96,10 @@ export class AssociationListComponent implements OnInit {
 
   protected resetAlert(): void {
     this.alert = undefined;
+  }
+
+  navigateBack() {
+    this.myNavigation.back();
   }
 
 }

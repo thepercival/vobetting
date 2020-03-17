@@ -1,0 +1,25 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">kies externe bron</h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('close')">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="container-fluid">
+        <h2 *ngIf="processing" class="text-center">
+            <fa-icon [icon]="['fas', 'spinner']" [spin]="true"></fa-icon>
+        </h2>
+        <ul *ngIf="externalSources" class="list-group text-center m-2">
+            <li *ngFor="let externalSource of externalSources" (click)="activeModal.close(externalSource)"
+                class="list-group-item">{{externalSource.getName()}}</li>
+        </ul>
+    </div>
+</div>
+<div class="modal-footer justify-content-around">
+    <button *ngIf="showDeselect" type="button" class="btn btn-outline-secondary" data-dismiss="modal"
+        (click)="activeModal.close('deselect')">
+        <span> deselecteren</span>
+    </button>
+    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"
+        (click)="activeModal.dismiss('close')">sluiten</button>
+</div>

@@ -13,13 +13,16 @@ import {
 } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ExternalSourceRepository } from '../lib/ngx-sport/external/system/repository';
-import { ExternalSource, ExternalSourceMapper, AssociationMapper } from 'ngx-sport';
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { AssociationMapper } from 'ngx-sport';
+import { faTrashAlt, faCloud, faCompressAlt } from '@fortawesome/free-solid-svg-icons';
 import { AssociationRepository } from '../lib/ngx-sport/association/repository';
+import { ExternalSourceSelectModalComponent } from './externalsource/selectmodal.component';
+import { ExternalSourceMapper } from '../lib/externalsource/source/mapper';
 
 
 @NgModule({
-  declarations: [AssociationListComponent, AssociationEditComponent, ExternalSourceEditComponent, ExternalSourceListComponent],
+  declarations: [ExternalSourceSelectModalComponent,
+    AssociationListComponent, AssociationEditComponent, ExternalSourceEditComponent, ExternalSourceListComponent],
   imports: [
     CommonModule,
     AdminRoutingModule,
@@ -28,6 +31,7 @@ import { AssociationRepository } from '../lib/ngx-sport/association/repository';
     NgbNavModule,
     ReactiveFormsModule,
   ],
+  entryComponents: [ExternalSourceSelectModalComponent],
   providers: [
     ExternalSourceRepository,
     ExternalSourceMapper,
@@ -37,6 +41,6 @@ import { AssociationRepository } from '../lib/ngx-sport/association/repository';
 })
 export class AdminModule {
   constructor(library: FaIconLibrary) {
-    library.addIcons(faTrashAlt);
+    library.addIcons(faTrashAlt, faCloud, faCompressAlt);
   }
 }

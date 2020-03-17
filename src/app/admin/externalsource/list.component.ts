@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationExtras } from '@angular/router';
-import { ExternalSource } from 'ngx-sport';
 import { ExternalSourceRepository } from '../../lib/ngx-sport/external/system/repository';
 import { IAlert } from '../../common/alert';
+import { ExternalSource } from 'src/app/lib/externalsource';
 
 @Component({
   selector: 'app-externalsource-list',

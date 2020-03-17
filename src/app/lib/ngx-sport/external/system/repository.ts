@@ -4,10 +4,8 @@ import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 import { APIRepository } from '../../../repository';
-import { ExternalSource, ExternalSourceMapper, JsonExternalSource } from 'ngx-sport';
-
-// import { ExternalSourceSoccerOdds } from './soccerodds';
-// import { ExternalSourceSoccerSports } from './soccersports';
+import { ExternalSourceMapper, JsonExternalSource } from 'src/app/lib/externalsource/source/mapper';
+import { ExternalSource } from 'src/app/lib/externalsource';
 
 @Injectable()
 export class ExternalSourceRepository extends APIRepository {
