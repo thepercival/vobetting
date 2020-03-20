@@ -1,3 +1,5 @@
+import { Attacher } from '../attacher';
+import { Association, Sport } from 'ngx-sport';
 
 export class ExternalSource {
     static readonly MAX_LENGTH_NAME = 50;
@@ -7,10 +9,11 @@ export class ExternalSource {
     static readonly MAX_LENGTH_APIURL = 255;
     static readonly MAX_LENGTH_APIKEY = 255;
 
-    static readonly ASSOCIATION = 1;
-    static readonly SEASON = 2;
-    static readonly LEAGUE = 4;
-    static readonly COMPETITION = 8;
+    protected static readonly SPORT = 1;
+    protected static readonly ASSOCIATION = 2;
+    protected static readonly SEASON = 4;
+    protected static readonly LEAGUE = 8;
+    protected static readonly COMPETITION = 16;
 
     protected id: number;
     protected name: string;
@@ -20,6 +23,9 @@ export class ExternalSource {
     protected apiurl: string;
     protected apikey: string;
     protected implementations: number;
+
+    protected associationAttachers: Attacher[] = [];
+    protected sportAttachers: Attacher[] = [];
 
     //     implementations toevoegen aan json def en aan business, in externsource scherm kun je dan aangeven op welke
     // zaken er gekoppeld kan worden met cards, en een card voor basisgegevens wijzigen
@@ -92,22 +98,29 @@ export class ExternalSource {
         this.implementations = implementations;
     }
 
-    hasImplementation(implementation: number): boolean {
+    hasAssociationImplementation(): boolean {
         // tslint:disable-next-line:no-bitwise
-        return (this.implementations & implementation) > 0;
+        return (this.implementations & ExternalSource.ASSOCIATION) > 0;
     }
 
-    // hasAvailableExportClass(exportclassparam: string): boolean {
-    //     let x = this.getExportableClasses().filter(exportclass => exportclass.name == exportclassparam);
-    //     return x.length == 1;
-    // }
+    addAssociationAttacher(attacher: Attacher) {
+        this.associationAttachers.push(attacher);
+    }
 
-    // hasAvailableExportClassAsSource(exportclassparam: string): boolean {
-    //     let x = this.getExportableClasses().filter(exportclass => exportclass.name == exportclassparam);
-    //     return x.length == 1 && x[0].source;
-    // }
+    getAssociationAttacher(association: Association): Attacher {
+        return this.associationAttachers.find(attacher => attacher.getImportableId() === association.getId());
+    }
 
-    // getExportableClasses(): any[] {
-    //     return [];
-    // }
+    hasSportImplementation(): boolean {
+        // tslint:disable-next-line:no-bitwise
+        return (this.implementations & ExternalSource.SPORT) > 0;
+    }
+
+    addSportAttacher(attacher: Attacher) {
+        this.sportAttachers.push(attacher);
+    }
+
+    getSportAttacher(sport: Sport): Attacher {
+        return this.sportAttachers.find(attacher => attacher.getImportableId() === sport.getId());
+    }
 }

@@ -14,13 +14,7 @@ import { MyNavigation } from 'src/app/common/navigation';
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.css']
 })
-export class AssociationEditComponent implements OnInit, OnDestroy {
-
-  protected sub: Subscription;
-  returnUrl: string;
-  returnUrlParam: number;
-  returnUrlQueryParamKey: string;
-  returnUrlQueryParamValue: string;
+export class AssociationEditComponent implements OnInit {
   public alert: IAlert;
   public processing = true;
   customForm: FormGroup;
@@ -37,7 +31,6 @@ export class AssociationEditComponent implements OnInit, OnDestroy {
     private associationRepos: AssociationRepository,
     private associationMapper: AssociationMapper,
     private route: ActivatedRoute,
-    private router: Router,
     protected myNavigation: MyNavigation,
     fb: FormBuilder
   ) {
@@ -53,14 +46,14 @@ export class AssociationEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.sub = this.route.params.subscribe(params => {
+    this.route.params.subscribe(params => {
       this.associationRepos.getObjects()
         .subscribe(
         /* happy path */(associations: Association[]) => {
             this.associations = associations;
             this.postInit(+params.id);
           },
-        /* error path */ e => { },
+        /* error path */ e => { this.processing = false; this.setAlert('danger', e.message); },
         /* onComplete */() => { this.processing = false; }
         );
     });
@@ -148,19 +141,6 @@ export class AssociationEditComponent implements OnInit, OnDestroy {
       );
   }
 
-  private getForwarUrl() {
-    if (this.returnUrlParam !== undefined) {
-      return [this.returnUrl, this.returnUrlParam];
-    }
-    return [this.returnUrl];
-  }
-
-  private getForwarUrlQueryParams(): {} {
-    const queryParams = {};
-    queryParams[this.returnUrlQueryParamKey] = this.returnUrlQueryParamValue;
-    return queryParams;
-  }
-
   navigateBack() {
     this.myNavigation.back();
   }
@@ -185,18 +165,6 @@ export class AssociationEditComponent implements OnInit, OnDestroy {
 
   protected resetAlert(): void {
     this.alert = undefined;
-  }
-
-  convertDate(dateStruct: NgbDateStruct) {
-    return new Date(dateStruct.year, dateStruct.month - 1, dateStruct.day, 0, 0);
-  }
-
-  convertDateBack(date: Date) {
-    return { year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() };
-  }
-
-  ngOnDestroy() {
-    this.sub.unsubscribe();
   }
 }
 

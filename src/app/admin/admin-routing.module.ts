@@ -8,6 +8,10 @@ import { ExternalSourceEditComponent } from './externalsource/edit.component';
 import { AssociationListComponent } from './association/list.component';
 import { AssociationEditComponent } from './association/edit.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AssociationAttachComponent } from './association/attach.component';
+import { SportListComponent } from './sport/list.component';
+import { SportEditComponent } from './sport/edit.component';
+import { SportAttachComponent } from './sport/attach.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [AuthguardService] },
@@ -19,7 +23,11 @@ const routes: Routes = [
   { path: 'season/edit/:id', component: SeasonEditComponent, canActivate: [AuthguardService] },
   { path: 'season/extern/:id', component: SeasonExternComponent, canActivate: [AuthguardService] }, */
   { path: 'associations', component: AssociationListComponent, canActivate: [AuthguardService] },
-  { path: 'association/:id', component: AssociationEditComponent, canActivate: [AuthguardService] }, /*
+  { path: 'association/:id', component: AssociationEditComponent, canActivate: [AuthguardService] },
+  { path: 'association/attach/:id/:externalSourceId', component: AssociationAttachComponent, canActivate: [AuthguardService] },
+  { path: 'sports', component: SportListComponent, canActivate: [AuthguardService] },
+  { path: 'sport/:id', component: SportEditComponent, canActivate: [AuthguardService] },
+  { path: 'sport/attach/:id/:externalSourceId', component: SportAttachComponent, canActivate: [AuthguardService] }, /*
   { path: 'competitor/:associationid', component: CompetitorListComponent, canActivate: [AuthguardService] },
   { path: 'competitor/edit/:associationid/:id', component: CompetitorEditComponent, canActivate: [AuthguardService] },
   { path: 'competitor/extern/:associationid/:id', component: CompetitorExternComponent, canActivate: [AuthguardService] },

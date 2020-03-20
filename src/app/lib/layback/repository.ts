@@ -1,15 +1,15 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { ExternalSourceMapper, } from 'ngx-sport';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
-import { ExternalSourceRepository } from '../ngx-sport/external/system/repository';
 import { APIRepository } from '../repository';
 import { BetLine } from '../betline';
 import { LayBack } from '../layback';
 import { JsonLayBack, LayBackMapper } from './mapper';
+import { ExternalSourceRepository } from '../external/source/repository';
+import { ExternalSourceMapper } from '../external/source/mapper';
 
 
 @Injectable()

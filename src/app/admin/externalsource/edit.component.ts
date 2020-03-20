@@ -1,13 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ExternalSourceRepository } from '../../lib/ngx-sport/external/system/repository';
+import { ExternalSourceRepository } from '../../lib/external/source/repository';
 import { Subscription } from 'rxjs';
 
 import { IAlert } from '../../common/alert';
 import { MyNavigation } from 'src/app/common/navigation';
-import { ExternalSource } from 'src/app/lib/externalsource';
-import { JsonExternalSource } from 'src/app/lib/externalsource/source/mapper';
+import { ExternalSource } from 'src/app/lib/external/source';
+import { JsonExternalSource } from 'src/app/lib/external/source/mapper';
 
 @Component({
   selector: 'app-externalsource-edit',

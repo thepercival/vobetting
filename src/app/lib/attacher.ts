@@ -1,5 +1,4 @@
-import { ExternalSource } from "./externalsource";
-import { Importable } from 'ngx-sport';
+import { ExternalSource } from "./external/source";
 
 export class Attacher {
     static readonly MAX_LENGTH_EXTERNALID = 100;
@@ -8,9 +7,10 @@ export class Attacher {
     protected externalId: string;
 
     constructor(
-        protected importable: Importable,
+        protected importableId: number,
         protected externalSource: ExternalSource
     ) {
+        this.externalSource.addAssociationAttacher(this);
     }
 
     getId(): number {
@@ -21,8 +21,8 @@ export class Attacher {
         this.id = id;
     }
 
-    getImportable(): Importable {
-        return this.importable;
+    getImportableId(): number {
+        return this.importableId;
     }
 
     getExternalSource(): ExternalSource {

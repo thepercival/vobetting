@@ -12,17 +12,27 @@ import {
   NgbCollapseModule, NgbButtonsModule, NgbModalModule
 } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ExternalSourceRepository } from '../lib/ngx-sport/external/system/repository';
-import { AssociationMapper } from 'ngx-sport';
-import { faTrashAlt, faCloud, faCompressAlt } from '@fortawesome/free-solid-svg-icons';
+import { AssociationMapper, SportMapper } from 'ngx-sport';
+import { faTrashAlt, faCloud, faCompressAlt, faExpandAlt, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { AssociationRepository } from '../lib/ngx-sport/association/repository';
 import { ExternalSourceSelectModalComponent } from './externalsource/selectmodal.component';
-import { ExternalSourceMapper } from '../lib/externalsource/source/mapper';
+import { ExternalSourceRepository } from '../lib/external/source/repository';
+import { ExternalSourceMapper } from '../lib/external/source/mapper';
+import { AttacherRepository } from '../lib/attacher/repository';
+import { AttacherMapper } from '../lib/attacher/mapper';
+import { ExternalObjectRepository } from '../lib/external/repository';
+import { AssociationAttachComponent } from './association/attach.component';
+import { SportListComponent } from './sport/list.component';
+import { SportEditComponent } from './sport/edit.component';
+import { SportAttachComponent } from './sport/attach.component';
+import { SportRepository } from '../lib/ngx-sport/sport/repository';
 
 
 @NgModule({
   declarations: [ExternalSourceSelectModalComponent,
-    AssociationListComponent, AssociationEditComponent, ExternalSourceEditComponent, ExternalSourceListComponent],
+    AssociationListComponent, AssociationEditComponent, AssociationAttachComponent,
+    SportListComponent, SportEditComponent, SportAttachComponent,
+    ExternalSourceEditComponent, ExternalSourceListComponent],
   imports: [
     CommonModule,
     AdminRoutingModule,
@@ -33,14 +43,19 @@ import { ExternalSourceMapper } from '../lib/externalsource/source/mapper';
   ],
   entryComponents: [ExternalSourceSelectModalComponent],
   providers: [
+    AttacherRepository,
+    AttacherMapper,
+    ExternalObjectRepository,
     ExternalSourceRepository,
     ExternalSourceMapper,
     AssociationRepository,
-    AssociationMapper
+    AssociationMapper,
+    SportRepository,
+    SportMapper
   ]
 })
 export class AdminModule {
   constructor(library: FaIconLibrary) {
-    library.addIcons(faTrashAlt, faCloud, faCompressAlt);
+    library.addIcons(faTrashAlt, faCloud, faCompressAlt, faExpandAlt, faCheckCircle);
   }
 }

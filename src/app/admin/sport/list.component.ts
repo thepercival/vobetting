@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Association } from 'ngx-sport';
-import { AssociationRepository } from '../../lib/ngx-sport/association/repository';
+import { Sport } from 'ngx-sport';
+import { SportRepository } from '../../lib/ngx-sport/sport/repository';
 
 import { IAlert } from '../../common/alert';
 import { MyNavigation } from 'src/app/common/navigation';
@@ -14,22 +14,22 @@ import { ExternalObjectRepository } from 'src/app/lib/external/repository';
 import { ExternalSourceRepository } from 'src/app/lib/external/source/repository';
 
 @Component({
-  selector: 'app-association-list',
+  selector: 'app-sport-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.css']
 })
-export class AssociationListComponent implements OnInit {
+export class SportListComponent implements OnInit {
 
-  associations: Association[];
+  sports: Sport[];
   alert: IAlert;
   processing = true;
   processingtaching = false;
   externalSource: ExternalSource;
-  uiAttachers: AssociationAttacher[];
+  uiAttachers: SportAttacher[];
 
   constructor(
     private router: Router,
-    private associationRepos: AssociationRepository,
+    private sportRepos: SportRepository,
     private attacherRepos: AttacherRepository,
     private externalObjectRepos: ExternalObjectRepository,
     private externalSourceRepos: ExternalSourceRepository,
@@ -38,10 +38,10 @@ export class AssociationListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.associationRepos.getObjects()
+    this.sportRepos.getObjects()
       .subscribe(
-        /* happy path */(associations: Association[]) => {
-          this.associations = associations.sort((a, b) => a.getName() < b.getName() ? -1 : 0);
+        /* happy path */(sports: Sport[]) => {
+          this.sports = sports.sort((a, b) => a.getName() < b.getName() ? -1 : 0);
           const externalSourceId = localStorage.getItem('externalSourceId');
           if (externalSourceId) {
             this.externalSourceRepos.getObject(externalSourceId)
@@ -72,6 +72,7 @@ export class AssociationListComponent implements OnInit {
         localStorage.setItem('externalSourceId', '' + result.getId());
         this.updateExternalSource();
       } else {
+        localStorage.setItem('externalSourceId', '');
         this.externalSource = undefined;
       }
     }, (reason) => {
@@ -80,8 +81,8 @@ export class AssociationListComponent implements OnInit {
 
   updateExternalSource() {
 
-    if (this.externalSource.hasAssociationImplementation() === false) {
-      this.setAlert('danger', 'deze externe bron heeft geen bonden');
+    if (this.externalSource.hasSportImplementation() === false) {
+      this.setAlert('danger', 'deze externe bron heeft geen sporten');
       return;
     }
     this.processing = true;
@@ -91,18 +92,18 @@ export class AssociationListComponent implements OnInit {
 
   protected getAttachers(externalSource: ExternalSource) {
     this.uiAttachers = [];
-    this.attacherRepos.getAssociations(externalSource)
+    this.attacherRepos.getSports(externalSource)
       .subscribe(
         /* happy path */(attachers) => {
-          this.externalObjectRepos.getAssociations(externalSource)
+          this.externalObjectRepos.getSports(externalSource)
             .subscribe(
-            /* happy path */(externalAssociations: Association[]) => {
-                this.associations.forEach(association => {
-                  const attacher = this.externalSource.getAssociationAttacher(association);
-                  const externalAssociation = attacher ? externalAssociations.find(externalAssociationIt => {
-                    return externalAssociationIt.getId() == attacher.getExternalId();
+            /* happy path */(externalSports: Sport[]) => {
+                this.sports.forEach(sport => {
+                  const attacher = this.externalSource.getSportAttacher(sport);
+                  const externalSport = attacher ? externalSports.find(externalSportIt => {
+                    return externalSportIt.getId() == attacher.getExternalId();
                   }) : undefined;
-                  const uiAttacher: AssociationAttacher = { association, attacher, externalAssociation };
+                  const uiAttacher: SportAttacher = { sport, attacher, externalSport };
                   this.uiAttachers.push(uiAttacher);
                 });
               },
@@ -115,24 +116,24 @@ export class AssociationListComponent implements OnInit {
       );
   }
 
-  hasAttacher(association: Association): boolean {
-    return this.getAttacher(association) !== undefined;
+  hasAttacher(sport: Sport): boolean {
+    return this.getAttacher(sport) !== undefined;
   }
 
-  getAttacher(association: Association): Attacher {
-    return this.externalSource.getAssociationAttacher(association);
+  getAttacher(sport: Sport): Attacher {
+    return this.externalSource.getSportAttacher(sport);
   }
 
-  attach(associationAttacher: AssociationAttacher) {
-    this.router.navigate(['/admin/association/attach', associationAttacher.association.getId(), this.externalSource.getId()]);
+  attach(sportAttacher: SportAttacher) {
+    this.router.navigate(['/admin/sport/attach', sportAttacher.sport.getId(), this.externalSource.getId()]);
   }
 
-  detach(associationAttacher: AssociationAttacher) {
+  detach(sportAttacher: SportAttacher) {
     this.processingtaching = true;
-    this.attacherRepos.removeAssociation(associationAttacher.attacher)
+    this.attacherRepos.removeSport(sportAttacher.attacher)
       .subscribe(
         /* happy path */() => {
-          associationAttacher.externalAssociation = undefined;
+          sportAttacher.externalSport = undefined;
         },
         /* error path */ e => { this.processingtaching = false; this.setAlert('danger', e.message); },
         /* onComplete */() => { this.processingtaching = false; }
@@ -143,24 +144,24 @@ export class AssociationListComponent implements OnInit {
     this.linkToEdit();
   }
 
-  edit(association: Association) {
-    this.linkToEdit(association);
+  edit(sport: Sport) {
+    this.linkToEdit(sport);
   }
 
-  linkToEdit(association?: Association) {
-    this.router.navigate(['/admin/association', association ? association.getId() : 0]);
+  linkToEdit(sport?: Sport) {
+    this.router.navigate(['/admin/sport', sport ? sport.getId() : 0]);
   }
 
-  remove(association: Association) {
-    this.setAlert('info', 'bond verwijderen..');
+  remove(sport: Sport) {
+    this.setAlert('info', 'sport verwijderen..');
     this.processing = true;
 
-    this.associationRepos.removeObject(association)
+    this.sportRepos.removeObject(sport)
       .subscribe(
-        /* happy path */ associationRes => {
-          const index = this.associations.indexOf(association);
+        /* happy path */ sportRes => {
+          const index = this.sports.indexOf(sport);
           if (index > -1) {
-            this.associations.splice(index, 1);
+            this.sports.splice(index, 1);
           }
           this.resetAlert();
         },
@@ -181,17 +182,17 @@ export class AssociationListComponent implements OnInit {
     this.myNavigation.back();
   }
 
-  // updateAssociationAttacher(association: Association) {
-  //   const attacher = this.getAssociationAttacher(association);
+  // updateSportAttacher(sport: Sport) {
+  //   const attacher = this.getSportAttacher(sport);
   //   if (attacher === undefined) {
   //     return;
   //   }
-  //   attacher.setExternal(association);
+  //   attacher.setExternal(sport);
   // }
 }
 
-interface AssociationAttacher {
-  association: Association;
+interface SportAttacher {
+  sport: Sport;
   attacher: Attacher;
-  externalAssociation: Association;
+  externalSport: Sport;
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { ExternalSourceRepository } from 'src/app/lib/ngx-sport/external/system/repository';
-import { ExternalSource } from 'src/app/lib/externalsource';
+import { ExternalSource } from 'src/app/lib/external/source';
+import { ExternalSourceRepository } from 'src/app/lib/external/source/repository';
 
 @Component({
     selector: 'app-ngbd-modal-selectexternalsource',

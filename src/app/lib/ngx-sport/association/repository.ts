@@ -14,8 +14,15 @@ export class AssociationRepository extends APIRepository {
         super();
     }
 
-    getUrl(association?: Association): string {
-        return super.getApiUrl() + 'voetbal/associations' + (association ? ('/' + association.getId()) : '');
+    getUrl(id?: any): string {
+        return super.getApiUrl() + 'voetbal/associations' + (id ? ('/' + id) : '');
+    }
+
+    getObject(id: any): Observable<Association> {
+        return this.http.get(this.getUrl(id), this.getOptions()).pipe(
+            map((json: JsonAssociation) => this.mapper.toObject(json)),
+            catchError((err) => this.handleError(err))
+        );
     }
 
     getObjects(): Observable<Association[]> {

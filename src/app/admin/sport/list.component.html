@@ -1,7 +1,7 @@
 <div class="row justify-content-center mx-0" style="min-height:4.5rem;">
   <div class="col-xs-12 col-sm-8 col-md-8 col-lg-6 mt-1">
     <div class="d-flex justify-content-between mb-2">
-      <h1 class="text-truncate">bonden</h1>
+      <h1 class="text-truncate">sporten</h1>
       <h1 class="mr-1">
         <button (click)="navigateBack()" type="button" class="btn btn-outline-secondary">
           <fa-icon [icon]="['fas', 'level-up-alt']" rotate="270"></fa-icon>
@@ -32,7 +32,8 @@
         <tr>
           <th></th>
           <th>naam</th>
-          <th class="d-none d-sm-table-cell">parent</th>
+          <th>team</th>
+          <th class="d-none d-sm-table-cell">customId</th>
           <th style="text-align: right;">
             <button type="button" class="btn btn-sm btn-outline-primary" (click)="add()" [disabled]="processing">
               <fa-icon [icon]="['fas', 'plus']"></fa-icon>
@@ -41,20 +42,22 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let association of associations">
+        <tr *ngFor="let sport of sports">
           <td>
-            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing"
-              (click)="edit(association)">
+            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing" (click)="edit(sport)">
               <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon>
             </button>
           </td>
           <td>
-            <span>{{association.getName()}}</span>
+            <span>{{sport.getName()}}</span>
           </td>
-          <td class="d-none d-sm-table-cell">{{association.getParent() ? association.getParent().getName(): ''}}</td>
+          <td>
+            <fa-icon *ngIf="sport.getTeam()" [icon]="['fas', 'check-circle']"></fa-icon>
+          </td>
+          <td class="d-none d-sm-table-cell">{{sport.getCustomId()}}</td>
           <td style="text-align: right;">
-            <button *ngIf="association.getChildren().length === 0" type="button" class="btn btn-sm btn-outline-primary"
-              [disabled]="processing" (click)="remove(association);">
+            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing"
+              (click)="remove(sport);">
               <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon>
             </button>
           </td>
@@ -62,7 +65,7 @@
       </tbody>
     </table>
 
-    <table *ngIf="!processing && externalSource && externalSource.hasAssociationImplementation()" class="table">
+    <table *ngIf="!processing && externalSource && externalSource.hasSportImplementation()" class="table">
       <thead>
         <tr>
           <th>naam</th>
@@ -73,7 +76,7 @@
       <tbody>
         <tr *ngFor="let uiAttacher of uiAttachers">
           <td>
-            <span>{{uiAttacher.association.getName()}}</span>
+            <span>{{uiAttacher.sport.getName()}}</span>
           </td>
           <td class="text-center">
             <button *ngIf="uiAttacher.attacher" type="button" class="btn btn-sm btn-outline-primary"
@@ -88,8 +91,8 @@
             </button>
           </td>
           <td class="">
-            <span *ngIf="uiAttacher.externalAssociation">
-              {{uiAttacher.externalAssociation.getName()}}
+            <span *ngIf="uiAttacher.externalSport">
+              {{uiAttacher.externalSport.getName()}}
             </span>
           </td>
         </tr>

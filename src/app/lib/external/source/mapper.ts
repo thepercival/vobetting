@@ -1,4 +1,4 @@
-import { ExternalSource } from '../../externalsource';
+import { ExternalSource } from '.';
 import { Injectable } from '@angular/core';
 
 @Injectable()
