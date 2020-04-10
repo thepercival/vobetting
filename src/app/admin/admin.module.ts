@@ -12,7 +12,7 @@ import {
   NgbCollapseModule, NgbButtonsModule, NgbModalModule
 } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
-import { AssociationMapper, SportMapper } from 'ngx-sport';
+import { AssociationMapper, SportMapper, SeasonMapper, LeagueMapper } from 'ngx-sport';
 import { faTrashAlt, faCloud, faCompressAlt, faExpandAlt, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { AssociationRepository } from '../lib/ngx-sport/association/repository';
 import { ExternalSourceSelectModalComponent } from './externalsource/selectmodal.component';
@@ -26,12 +26,22 @@ import { SportListComponent } from './sport/list.component';
 import { SportEditComponent } from './sport/edit.component';
 import { SportAttachComponent } from './sport/attach.component';
 import { SportRepository } from '../lib/ngx-sport/sport/repository';
+import { SeasonListComponent } from './season/list.component';
+import { SeasonEditComponent } from './season/edit.component';
+import { SeasonAttachComponent } from './season/attach.component';
+import { LeagueListComponent } from './league/list.component';
+import { LeagueEditComponent } from './league/edit.component';
+import { LeagueAttachComponent } from './league/attach.component';
+import { SeasonRepository } from '../lib/ngx-sport/season/repository';
+import { LeagueRepository } from '../lib/ngx-sport/league/repository';
 
 
 @NgModule({
   declarations: [ExternalSourceSelectModalComponent,
-    AssociationListComponent, AssociationEditComponent, AssociationAttachComponent,
     SportListComponent, SportEditComponent, SportAttachComponent,
+    AssociationListComponent, AssociationEditComponent, AssociationAttachComponent,
+    SeasonListComponent, SeasonEditComponent, SeasonAttachComponent,
+    LeagueListComponent, LeagueEditComponent, LeagueAttachComponent,
     ExternalSourceEditComponent, ExternalSourceListComponent],
   imports: [
     CommonModule,
@@ -48,10 +58,14 @@ import { SportRepository } from '../lib/ngx-sport/sport/repository';
     ExternalObjectRepository,
     ExternalSourceRepository,
     ExternalSourceMapper,
+    SportRepository,
+    SportMapper,
     AssociationRepository,
     AssociationMapper,
-    SportRepository,
-    SportMapper
+    SeasonRepository,
+    SeasonMapper,
+    LeagueRepository,
+    LeagueMapper,
   ]
 })
 export class AdminModule {

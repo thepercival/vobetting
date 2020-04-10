@@ -22,6 +22,13 @@ export class AttacherRepository extends APIRepository {
         return id ? (url + '/' + id) : url;
     }
 
+    getSports(externalSource: ExternalSource): Observable<Attacher[]> {
+        return this.http.get(this.getUrl(externalSource, 'sports'), this.getOptions()).pipe(
+            map((json: JsonAttacher[]) => json.map(jsonAttacher => this.mapper.toObject(jsonAttacher, externalSource))),
+            catchError((err) => this.handleError(err))
+        );
+    }
+
     getAssociations(externalSource: ExternalSource): Observable<Attacher[]> {
         return this.http.get(this.getUrl(externalSource, 'associations'), this.getOptions()).pipe(
             map((json: JsonAttacher[]) => json.map(jsonAttacher => this.mapper.toObject(jsonAttacher, externalSource))),
@@ -29,8 +36,15 @@ export class AttacherRepository extends APIRepository {
         );
     }
 
-    getSports(externalSource: ExternalSource): Observable<Attacher[]> {
-        return this.http.get(this.getUrl(externalSource, 'sports'), this.getOptions()).pipe(
+    getSeasons(externalSource: ExternalSource): Observable<Attacher[]> {
+        return this.http.get(this.getUrl(externalSource, 'seasons'), this.getOptions()).pipe(
+            map((json: JsonAttacher[]) => json.map(jsonAttacher => this.mapper.toObject(jsonAttacher, externalSource))),
+            catchError((err) => this.handleError(err))
+        );
+    }
+
+    getLeagues(externalSource: ExternalSource): Observable<Attacher[]> {
+        return this.http.get(this.getUrl(externalSource, 'leagues'), this.getOptions()).pipe(
             map((json: JsonAttacher[]) => json.map(jsonAttacher => this.mapper.toObject(jsonAttacher, externalSource))),
             catchError((err) => this.handleError(err))
         );
@@ -43,6 +57,14 @@ export class AttacherRepository extends APIRepository {
     //     );
     // }
 
+    createSport(json: JsonAttacher, externalSource: ExternalSource): Observable<Attacher> {
+        const url = this.getUrl(externalSource, 'sports');
+        return this.http.post(url, json, this.getOptions()).pipe(
+            map((jsonAttacher: JsonAttacher) => this.mapper.toObject(jsonAttacher, externalSource)),
+            catchError((err) => this.handleError(err))
+        );
+    }
+
     createAssociation(json: JsonAttacher, externalSource: ExternalSource): Observable<Attacher> {
         const url = this.getUrl(externalSource, 'associations');
         return this.http.post(url, json, this.getOptions()).pipe(
@@ -51,10 +73,25 @@ export class AttacherRepository extends APIRepository {
         );
     }
 
-    createSport(json: JsonAttacher, externalSource: ExternalSource): Observable<Attacher> {
-        const url = this.getUrl(externalSource, 'sports');
+    createSeason(json: JsonAttacher, externalSource: ExternalSource): Observable<Attacher> {
+        const url = this.getUrl(externalSource, 'seasons');
         return this.http.post(url, json, this.getOptions()).pipe(
             map((jsonAttacher: JsonAttacher) => this.mapper.toObject(jsonAttacher, externalSource)),
+            catchError((err) => this.handleError(err))
+        );
+    }
+
+    createLeague(json: JsonAttacher, externalSource: ExternalSource): Observable<Attacher> {
+        const url = this.getUrl(externalSource, 'seasons');
+        return this.http.post(url, json, this.getOptions()).pipe(
+            map((jsonAttacher: JsonAttacher) => this.mapper.toObject(jsonAttacher, externalSource)),
+            catchError((err) => this.handleError(err))
+        );
+    }
+
+    removeSport(attacher: Attacher): Observable<void> {
+        const url = this.getUrl(attacher.getExternalSource(), 'sports', attacher.getId());
+        return this.http.delete(url, { headers: super.getHeaders() }).pipe(
             catchError((err) => this.handleError(err))
         );
     }
@@ -66,10 +103,18 @@ export class AttacherRepository extends APIRepository {
         );
     }
 
-    removeSport(attacher: Attacher): Observable<void> {
-        const url = this.getUrl(attacher.getExternalSource(), 'sports', attacher.getId());
+    removeSeason(attacher: Attacher): Observable<void> {
+        const url = this.getUrl(attacher.getExternalSource(), 'seasons', attacher.getId());
         return this.http.delete(url, { headers: super.getHeaders() }).pipe(
             catchError((err) => this.handleError(err))
         );
     }
+
+    removeLeague(attacher: Attacher): Observable<void> {
+        const url = this.getUrl(attacher.getExternalSource(), 'leagues', attacher.getId());
+        return this.http.delete(url, { headers: super.getHeaders() }).pipe(
+            catchError((err) => this.handleError(err))
+        );
+    }
+
 }

@@ -1,4 +1,4 @@
-import { ExternalSource } from "./external/source";
+import { ExternalSource } from './external/source';
 
 export class Attacher {
     static readonly MAX_LENGTH_EXTERNALID = 100;

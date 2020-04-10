@@ -3,7 +3,10 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { APIRepository } from '../repository';
-import { AssociationMapper, Association, JsonAssociation, JsonSport, Sport, SportMapper } from 'ngx-sport';
+import {
+    AssociationMapper, Association, JsonAssociation, JsonSport, Sport,
+    SportMapper, JsonLeague, JsonSeason, SeasonMapper, LeagueMapper, Season, League
+} from 'ngx-sport';
 import { ExternalSource } from './source';
 
 @Injectable()
@@ -13,8 +16,11 @@ export class ExternalObjectRepository extends APIRepository {
 
     constructor(
         private http: HttpClient,
+        private sportMapper: SportMapper,
         private associationMapper: AssociationMapper,
-        private sportMapper: SportMapper) {
+        private seasonMapper: SeasonMapper,
+        private leagueMapper: LeagueMapper
+    ) {
         super();
         this.url = super.getApiUrl() + this.getUrlpostfix();
     }
@@ -27,8 +33,18 @@ export class ExternalObjectRepository extends APIRepository {
         return this.url + '/' + externalSource.getId() + '/' + objectType;
     }
 
+    getSports(externalSource: ExternalSource): Observable<Sport[]> {
+        const url = this.getUrl(externalSource, 'sports');
+        return this.http.get(url, this.getOptions()).pipe(
+            map((json: JsonSport[]) => {
+                return json.map(jsonSport => this.sportMapper.toObject(jsonSport));
+            }),
+            catchError((err) => this.handleError(err))
+        );
+    }
+
     getAssociations(externalSource: ExternalSource): Observable<Association[]> {
-        const url = this.getUrl(externalSource, 'associations')
+        const url = this.getUrl(externalSource, 'associations');
         return this.http.get(url, this.getOptions()).pipe(
             map((json: JsonAssociation[]) => {
                 return json.map(jsonAssociation => this.associationMapper.toObject(jsonAssociation));
@@ -37,15 +53,26 @@ export class ExternalObjectRepository extends APIRepository {
         );
     }
 
-    getSports(externalSource: ExternalSource): Observable<Sport[]> {
-        const url = this.getUrl(externalSource, 'sports')
+    getSeasons(externalSource: ExternalSource): Observable<Season[]> {
+        const url = this.getUrl(externalSource, 'seasons');
         return this.http.get(url, this.getOptions()).pipe(
-            map((json: JsonSport[]) => {
-                return json.map(jsonSport => this.sportMapper.toObject(jsonSport));
+            map((json: JsonSeason[]) => {
+                return json.map(jsonSeason => this.seasonMapper.toObject(jsonSeason));
             }),
             catchError((err) => this.handleError(err))
         );
     }
+
+    getLeagues(externalSource: ExternalSource): Observable<League[]> {
+        const url = this.getUrl(externalSource, 'leagues');
+        return this.http.get(url, this.getOptions()).pipe(
+            map((json: JsonLeague[]) => {
+                return json.map(jsonLeague => this.leagueMapper.toObject(jsonLeague));
+            }),
+            catchError((err) => this.handleError(err))
+        );
+    }
+
 }
 
 

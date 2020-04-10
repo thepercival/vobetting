@@ -15,31 +15,32 @@
   </div>
   <hr>
   <div class="row d-flex justify-content-center">
-    <div class="card pointer mt-3 mx-2" (click)="navigate('associations')">
-      <div class="card-body">
-        <h5 class="card-title">
-          bonden</h5>
-      </div>
-    </div>
     <div class="card pointer mt-3 mx-2" (click)="navigate('sports')">
       <div class="card-body">
         <h5 class="card-title">
           sporten</h5>
       </div>
     </div>
-    <!-- <div class="card pointer mt-3 mx-2" [routerLink]="['/admin/season']">
+    <div class="card pointer mt-3 mx-2" (click)="navigate('associations')">
+      <div class="card-body">
+        <h5 class="card-title">
+          bonden</h5>
+      </div>
+    </div>
+    <div class="card pointer mt-3 mx-2" (click)="navigate('seasons')">
       <div class="card-body">
         <h5 class="card-title">
           seizoenen</h5>
       </div>
-    </div> -->
-    <!-- <div class="card pointer mt-3 mx-2" [routerLink]="['/admin/league']">
+    </div>
+  </div>
+  <div class="row d-flex justify-content-center">
+    <div class="card pointer mt-3 mx-2" (click)="navigate('leagues')">
       <div class="card-body">
         <h5 class="card-title">
           leagues</h5>
       </div>
-    </div> -->
-
+    </div>
   </div>
   <hr>
   <!-- <div class="row d-flex justify-content-center">
