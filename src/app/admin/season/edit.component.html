@@ -1,6 +1,6 @@
 <div class="container-fluid home">
   <div class="row justify-content-center">
-    <div class="col-xs-12 col-sm-8 col-md-8 col-lg-6">
+    <div *ngIf="!processing" class="col-xs-12 col-sm-8 col-md-8 col-lg-6">
       <div class="d-flex justify-content-between mb-2">
         <h1 class="text-truncate"><span>seizoen</span>
           <span> {{season ? 'wijzigen' : 'toevoegen'}}</span></h1>
@@ -16,48 +16,55 @@
       </h2>
       <ngb-alert *ngIf="alert" [type]="alert.type" [dismissible]="true" (close)="alert = undefined;">{{alert.message }}
       </ngb-alert>
-      <form *ngIf="!processing" name="form" (ngSubmit)="save() && false" [formGroup]="customForm" novalidate>
+      <form *ngIf="!processing" name="form" (ngSubmit)="save() && false" [formGroup]="form" novalidate>
         <div class="form-group row">
           <div class="col-3">
             <label for="name" class="col-form-label">naam</label>
           </div>
           <div class="col-9">
             <input class="form-control"
-              [ngClass]="{ 'is-invalid': customForm.controls.name.invalid, 'is-valid': customForm.controls.name.valid }"
-              type="text" name="name" id="name" [formControl]="customForm.controls.name"
-              maxlength="{{validations.maxlengthname}}" placeholder="max. {{validations.maxlengthname}} karakters"
-              autofocus>
+              [ngClass]="{ 'is-invalid': form.controls.name.invalid, 'is-valid': form.controls.name.valid }" type="text"
+              name="name" id="name" [formControl]="form.controls.name" maxlength="{{validations.maxlengthname}}"
+              placeholder="max. {{validations.maxlengthname}} karakters" autofocus>
           </div>
         </div>
-        <!-- <div class="form-group row">
-          <div class="col-3">
-            <label for="description" class="col-form-label">omschrijving</label>
-          </div>
-          <div class="col-9">
-            <textarea class="form-control"
-              [ngClass]="{ 'is-invalid': customForm.controls.description.invalid, 'is-valid': customForm.controls.description.valid }"
-              name="description" id="description" [formControl]="customForm.controls.description"
-              maxlength="{{validations.maxlengthdescription}}"
-              placeholder="max. {{validations.maxlengthdescription}} karakters"></textarea>
-          </div>
-        </div> -->
         <div class="form-group row">
           <div class="col-3">
-            <label for="parent" class="col-form-label">parent</label>
+            <label for="dpStart" class="col-form-label">start</label>
           </div>
           <div class="col-9">
-            <select id="parent" name="parent" class="form-control"
-              [ngClass]="{ 'is-invalid': customForm.controls.parent.invalid, 'is-valid': customForm.controls.parent.valid }"
-              [formControl]="customForm.controls.parent">
-              <option [ngValue]="undefined">kies..</option>
-              <option *ngFor="let seasonIt of getFilteredSeason()" [ngValue]="seasonIt">
-                {{seasonIt.getName()}}</option>
-            </select>
+            <div class="input-group input-group-date">
+              <input class="form-control"
+                [ngClass]="{ 'is-invalid': form.controls.start.invalid, 'is-valid': form.controls.start.valid }"
+                formControlName="start" ngbDatepicker #dStart="ngbDatepicker" required>
+              <div class="input-group-append">
+                <span class="input-group-text pointer" (click)="dStart.toggle()">
+                  <fa-icon [icon]="['fas', 'calendar-alt']"></fa-icon>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-3">
+            <label for="dpEnd" class="col-form-label">eind</label>
+          </div>
+          <div class="col-9">
+            <div class="input-group input-group-date">
+              <input class="form-control"
+                [ngClass]="{ 'is-invalid': form.controls.end.invalid, 'is-valid': form.controls.end.valid }"
+                formControlName="end" ngbDatepicker #dEnd="ngbDatepicker" required>
+              <div class="input-group-append">
+                <span class="input-group-text pointer" (click)="dEnd.toggle()">
+                  <fa-icon [icon]="['fas', 'calendar-alt']"></fa-icon>
+                </span>
+              </div>
+            </div>
           </div>
         </div>
         <div class="form-group row justify-content-end">
           <div class="col-9">
-            <button [disabled]="customForm.invalid" type="submit" class="btn btn-outline-primary">
+            <button [disabled]="form.invalid" type="submit" class="btn btn-outline-primary">
               <span>{{season ? 'wijzigen' : 'toevoegen'}}</span>
               <fa-icon *ngIf="processing" [icon]="['fas', 'spinner']" [spin]="true"></fa-icon>
             </button>

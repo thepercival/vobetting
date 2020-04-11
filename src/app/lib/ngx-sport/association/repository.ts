@@ -14,7 +14,7 @@ export class AssociationRepository extends APIRepository {
         super();
     }
 
-    getUrl(id?: any): string {
+    getUrl(id?: string | number): string {
         return super.getApiUrl() + 'voetbal/associations' + (id ? ('/' + id) : '');
     }
 
@@ -40,7 +40,7 @@ export class AssociationRepository extends APIRepository {
     }
 
     editObject(association: Association): Observable<Association> {
-        const url = this.getUrl(association);
+        const url = this.getUrl(association.getId());
         return this.http.put(url, this.mapper.toJson(association), this.getOptions()).pipe(
             map((jsonAssociation: JsonAssociation) => this.mapper.toObject(jsonAssociation, association)),
             catchError((err) => this.handleError(err))
@@ -48,7 +48,7 @@ export class AssociationRepository extends APIRepository {
     }
 
     removeObject(association: Association): Observable<Association> {
-        return this.http.delete(this.getUrl(association), { headers: super.getHeaders() }).pipe(
+        return this.http.delete(this.getUrl(association.getId()), { headers: super.getHeaders() }).pipe(
             map((res: Association) => res),
             catchError((err) => this.handleError(err))
         );

@@ -14,7 +14,7 @@ export class LeagueRepository extends APIRepository {
         super();
     }
 
-    getUrl(id?: any): string {
+    getUrl(id?: string | number): string {
         return super.getApiUrl() + 'voetbal/leagues' + (id ? ('/' + id) : '');
     }
 
@@ -40,7 +40,7 @@ export class LeagueRepository extends APIRepository {
     }
 
     editObject(league: League): Observable<League> {
-        const url = this.getUrl(league);
+        const url = this.getUrl(league.getId());
         return this.http.put(url, this.mapper.toJson(league), this.getOptions()).pipe(
             map((jsonLeague: JsonLeague) => this.mapper.toObject(jsonLeague, league)),
             catchError((err) => this.handleError(err))
@@ -48,7 +48,7 @@ export class LeagueRepository extends APIRepository {
     }
 
     removeObject(league: League): Observable<League> {
-        return this.http.delete(this.getUrl(league), { headers: super.getHeaders() }).pipe(
+        return this.http.delete(this.getUrl(league.getId()), { headers: super.getHeaders() }).pipe(
             map((res: League) => res),
             catchError((err) => this.handleError(err))
         );

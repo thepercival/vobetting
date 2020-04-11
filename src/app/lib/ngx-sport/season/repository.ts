@@ -14,7 +14,7 @@ export class SeasonRepository extends APIRepository {
         super();
     }
 
-    getUrl(id?: any): string {
+    getUrl(id?: string | number): string {
         return super.getApiUrl() + 'voetbal/seasons' + (id ? ('/' + id) : '');
     }
 
@@ -40,7 +40,7 @@ export class SeasonRepository extends APIRepository {
     }
 
     editObject(season: Season): Observable<Season> {
-        const url = this.getUrl(season);
+        const url = this.getUrl(season.getId());
         return this.http.put(url, this.mapper.toJson(season), this.getOptions()).pipe(
             map((jsonSeason: JsonSeason) => this.mapper.toObject(jsonSeason, season)),
             catchError((err) => this.handleError(err))
@@ -48,7 +48,7 @@ export class SeasonRepository extends APIRepository {
     }
 
     removeObject(season: Season): Observable<Season> {
-        return this.http.delete(this.getUrl(season), { headers: super.getHeaders() }).pipe(
+        return this.http.delete(this.getUrl(season.getId()), { headers: super.getHeaders() }).pipe(
             map((res: Season) => res),
             catchError((err) => this.handleError(err))
         );

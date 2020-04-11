@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap/datepicker/datepicker.module';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Season, SeasonMapper, JsonSeason } from 'ngx-sport';
 import { SeasonRepository } from '../../lib/ngx-sport/season/repository';
 import { Subscription } from 'rxjs';
@@ -17,10 +17,9 @@ import { MyNavigation } from 'src/app/common/navigation';
 export class SeasonEditComponent implements OnInit {
   public alert: IAlert;
   public processing = true;
-  customForm: FormGroup;
+  form: FormGroup;
   seasons: Season[];
   season: Season;
-
   validations: SeasonValidations = {
     minlengthname: Season.MIN_LENGTH_NAME,
     maxlengthname: Season.MAX_LENGTH_NAME
@@ -33,18 +32,14 @@ export class SeasonEditComponent implements OnInit {
     protected myNavigation: MyNavigation,
     fb: FormBuilder
   ) {
-    this.customForm = fb.group({
+    this.form = fb.group({
       name: ['', Validators.compose([
         Validators.required,
         Validators.minLength(this.validations.minlengthname),
         Validators.maxLength(this.validations.maxlengthname)
       ])],
-      start: ['', Validators.compose([
-        Validators.required
-      ])],
-      end: ['', Validators.compose([
-        Validators.required
-      ])],
+      start: ['', Validators.compose([])],
+      end: ['', Validators.compose([])],
     });
   }
 
@@ -77,9 +72,17 @@ export class SeasonEditComponent implements OnInit {
       this.seasons.splice(index, 1);
     }
 
-    this.customForm.controls.name.setValue(this.season.getName());
-    this.customForm.controls.start.setValue(this.season.getStartDateTime());
-    this.customForm.controls.end.setValue(this.season.getEndDateTime());
+    this.form.controls.name.setValue(this.season.getName());
+    this.setDate(this.form.controls.start, this.season.getStartDateTime());
+    this.setDate(this.form.controls.end, this.season.getEndDateTime());
+  }
+
+  getDate(dateFormControl: AbstractControl): Date {
+    return new Date(dateFormControl.value.year, dateFormControl.value.month - 1, dateFormControl.value.day, 0, 0);
+  }
+
+  setDate(dateFormControl: AbstractControl, date: Date) {
+    dateFormControl.setValue({ year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() });
   }
 
   save() {
@@ -94,17 +97,17 @@ export class SeasonEditComponent implements OnInit {
   add() {
     this.processing = true;
 
-    const name = this.customForm.controls.name.value;
-    const startDateTime = this.customForm.controls.start.value;
-    const endDateTime = this.customForm.controls.end.value;
+    const name = this.form.controls.name.value;
+    const startDateTime = this.getDate(this.form.controls.start);
+    const endDateTime = this.getDate(this.form.controls.end);
 
-    if (this.isNameDuplicate(this.customForm.controls.name.value)) {
+    if (this.isNameDuplicate(this.form.controls.name.value)) {
       this.setAlert('danger', 'de naam bestaan al');
       this.processing = false;
       return;
     }
     const season: JsonSeason = {
-      name, startDateTime, endDateTime
+      name, startDateTime: startDateTime.toISOString(), endDateTime: endDateTime.toISOString()
     };
     this.seasonRepos.createObject(season)
       .subscribe(
@@ -119,14 +122,14 @@ export class SeasonEditComponent implements OnInit {
   edit() {
     this.processing = true;
 
-    if (this.isNameDuplicate(this.customForm.controls.name.value)) {
+    if (this.isNameDuplicate(this.form.controls.name.value)) {
       this.setAlert('danger', 'de naam bestaan al');
       this.processing = false;
       return;
     }
-    const name = this.customForm.controls.name.value;
-    const startDateTime = this.customForm.controls.start.value;
-    const endDateTime = this.customForm.controls.end.value;
+    const name = this.form.controls.name.value;
+    const startDateTime = this.getDate(this.form.controls.start);
+    const endDateTime = this.getDate(this.form.controls.end);
 
     this.season.setName(name);
     this.season.setStartDateTime(startDateTime);

@@ -1,13 +1,13 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap/datepicker/datepicker.module';
-import { League, LeagueMapper, JsonLeague, AssociationMapper } from 'ngx-sport';
+import { ActivatedRoute } from '@angular/router';
+import { League, JsonLeague, AssociationMapper, Association } from 'ngx-sport';
 import { LeagueRepository } from '../../lib/ngx-sport/league/repository';
-import { Subscription } from 'rxjs';
+
 
 import { IAlert } from '../../common/alert';
 import { MyNavigation } from 'src/app/common/navigation';
+import { AssociationRepository } from 'src/app/lib/ngx-sport/association/repository';
 
 @Component({
   selector: 'app-league-edit',
@@ -17,9 +17,10 @@ import { MyNavigation } from 'src/app/common/navigation';
 export class LeagueEditComponent implements OnInit {
   public alert: IAlert;
   public processing = true;
-  customForm: FormGroup;
+  form: FormGroup;
   leagues: League[];
   league: League;
+  associations: Association[];
 
   validations: LeagueValidations = {
     minlengthname: League.MIN_LENGTH_NAME,
@@ -28,12 +29,13 @@ export class LeagueEditComponent implements OnInit {
 
   constructor(
     private leagueRepos: LeagueRepository,
+    private associationRepos: AssociationRepository,
     private associationMapper: AssociationMapper,
     private route: ActivatedRoute,
     protected myNavigation: MyNavigation,
     fb: FormBuilder
   ) {
-    this.customForm = fb.group({
+    this.form = fb.group({
       name: ['', Validators.compose([
         Validators.required,
         Validators.minLength(this.validations.minlengthname),
@@ -57,6 +59,14 @@ export class LeagueEditComponent implements OnInit {
         /* error path */ e => { this.processing = false; this.setAlert('danger', e.message); },
         /* onComplete */() => { this.processing = false; }
         );
+      this.associationRepos.getObjects()
+        .subscribe(
+        /* happy path */(associations: Association[]) => {
+            this.associations = associations;
+          },
+        /* error path */ e => { this.processing = false; this.setAlert('danger', e.message); },
+        /* onComplete */() => { this.processing = false; }
+        );
     });
 
   }
@@ -75,9 +85,9 @@ export class LeagueEditComponent implements OnInit {
       this.leagues.splice(index, 1);
     }
 
-    this.customForm.controls.name.setValue(this.league.getName());
-    this.customForm.controls.abbreviation.setValue(this.league.getAbbreviation());
-    this.customForm.controls.association.setValue(this.league.getAssociation());
+    this.form.controls.name.setValue(this.league.getName());
+    this.form.controls.abbreviation.setValue(this.league.getAbbreviation());
+    this.form.controls.association.setValue(this.league.getAssociation());
   }
 
   save() {
@@ -92,11 +102,11 @@ export class LeagueEditComponent implements OnInit {
   add() {
     this.processing = true;
 
-    const name = this.customForm.controls.name.value;
-    const abbreviation = this.customForm.controls.abbreviation.value;
-    const association = this.customForm.controls.association.value;
+    const name = this.form.controls.name.value;
+    const abbreviation = this.form.controls.abbreviation.value;
+    const association = this.form.controls.association.value;
 
-    if (this.isNameDuplicate(this.customForm.controls.name.value)) {
+    if (this.isNameDuplicate(this.form.controls.name.value)) {
       this.setAlert('danger', 'de naam bestaan al');
       this.processing = false;
       return;
@@ -119,14 +129,14 @@ export class LeagueEditComponent implements OnInit {
   edit() {
     this.processing = true;
 
-    if (this.isNameDuplicate(this.customForm.controls.name.value)) {
+    if (this.isNameDuplicate(this.form.controls.name.value)) {
       this.setAlert('danger', 'de naam bestaan al');
       this.processing = false;
       return;
     }
-    const name = this.customForm.controls.name.value;
-    const abbreviation = this.customForm.controls.abbreviation.value;
-    const association = this.customForm.controls.association.value;
+    const name = this.form.controls.name.value;
+    const abbreviation = this.form.controls.abbreviation.value;
+    const association = this.form.controls.association.value;
 
     this.league.setName(name);
     this.league.setAbbreviation(abbreviation ? abbreviation : undefined);

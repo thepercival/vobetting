@@ -24,43 +24,51 @@ export class AttacherRepository extends APIRepository {
 
     getSports(externalSource: ExternalSource): Observable<Attacher[]> {
         return this.http.get(this.getUrl(externalSource, 'sports'), this.getOptions()).pipe(
-            map((json: JsonAttacher[]) => json.map(jsonAttacher => this.mapper.toObject(jsonAttacher, externalSource))),
+            map((json: JsonAttacher[]) => json.map(jsonAttacher => {
+                const attacher = this.mapper.toObject(jsonAttacher, externalSource);
+                externalSource.addSportAttacher(attacher);
+            })),
             catchError((err) => this.handleError(err))
         );
     }
 
     getAssociations(externalSource: ExternalSource): Observable<Attacher[]> {
         return this.http.get(this.getUrl(externalSource, 'associations'), this.getOptions()).pipe(
-            map((json: JsonAttacher[]) => json.map(jsonAttacher => this.mapper.toObject(jsonAttacher, externalSource))),
+            map((json: JsonAttacher[]) => json.map(jsonAttacher => {
+                const attacher = this.mapper.toObject(jsonAttacher, externalSource);
+                externalSource.addAssociationAttacher(attacher);
+            })),
             catchError((err) => this.handleError(err))
         );
     }
 
     getSeasons(externalSource: ExternalSource): Observable<Attacher[]> {
         return this.http.get(this.getUrl(externalSource, 'seasons'), this.getOptions()).pipe(
-            map((json: JsonAttacher[]) => json.map(jsonAttacher => this.mapper.toObject(jsonAttacher, externalSource))),
+            map((json: JsonAttacher[]) => json.map(jsonAttacher => {
+                const attacher = this.mapper.toObject(jsonAttacher, externalSource);
+                externalSource.addSeasonAttacher(attacher);
+            })),
             catchError((err) => this.handleError(err))
         );
     }
 
     getLeagues(externalSource: ExternalSource): Observable<Attacher[]> {
         return this.http.get(this.getUrl(externalSource, 'leagues'), this.getOptions()).pipe(
-            map((json: JsonAttacher[]) => json.map(jsonAttacher => this.mapper.toObject(jsonAttacher, externalSource))),
+            map((json: JsonAttacher[]) => json.map(jsonAttacher => {
+                const attacher = this.mapper.toObject(jsonAttacher, externalSource);
+                externalSource.addLeagueAttacher(attacher);
+            })),
             catchError((err) => this.handleError(err))
         );
     }
 
-    // createObject(json: JsonAssociation): Observable<Association> {
-    //     return this.http.post(this.getUrl(), json, this.getOptions()).pipe(
-    //         map((jsonAssociation: JsonAssociation) => this.mapper.toObject(jsonAssociation)),
-    //         catchError((err) => this.handleError(err))
-    //     );
-    // }
-
     createSport(json: JsonAttacher, externalSource: ExternalSource): Observable<Attacher> {
         const url = this.getUrl(externalSource, 'sports');
         return this.http.post(url, json, this.getOptions()).pipe(
-            map((jsonAttacher: JsonAttacher) => this.mapper.toObject(jsonAttacher, externalSource)),
+            map((jsonAttacher: JsonAttacher) => {
+                const attacher = this.mapper.toObject(jsonAttacher, externalSource);
+                externalSource.addSportAttacher(attacher);
+            }),
             catchError((err) => this.handleError(err))
         );
     }
@@ -68,7 +76,10 @@ export class AttacherRepository extends APIRepository {
     createAssociation(json: JsonAttacher, externalSource: ExternalSource): Observable<Attacher> {
         const url = this.getUrl(externalSource, 'associations');
         return this.http.post(url, json, this.getOptions()).pipe(
-            map((jsonAttacher: JsonAttacher) => this.mapper.toObject(jsonAttacher, externalSource)),
+            map((jsonAttacher: JsonAttacher) => {
+                const attacher = this.mapper.toObject(jsonAttacher, externalSource);
+                externalSource.addAssociationAttacher(attacher);
+            }),
             catchError((err) => this.handleError(err))
         );
     }
@@ -76,15 +87,21 @@ export class AttacherRepository extends APIRepository {
     createSeason(json: JsonAttacher, externalSource: ExternalSource): Observable<Attacher> {
         const url = this.getUrl(externalSource, 'seasons');
         return this.http.post(url, json, this.getOptions()).pipe(
-            map((jsonAttacher: JsonAttacher) => this.mapper.toObject(jsonAttacher, externalSource)),
+            map((jsonAttacher: JsonAttacher) => {
+                const attacher = this.mapper.toObject(jsonAttacher, externalSource);
+                externalSource.addSeasonAttacher(attacher);
+            }),
             catchError((err) => this.handleError(err))
         );
     }
 
     createLeague(json: JsonAttacher, externalSource: ExternalSource): Observable<Attacher> {
-        const url = this.getUrl(externalSource, 'seasons');
+        const url = this.getUrl(externalSource, 'leagues');
         return this.http.post(url, json, this.getOptions()).pipe(
-            map((jsonAttacher: JsonAttacher) => this.mapper.toObject(jsonAttacher, externalSource)),
+            map((jsonAttacher: JsonAttacher) => {
+                const attacher = this.mapper.toObject(jsonAttacher, externalSource);
+                externalSource.addLeagueAttacher(attacher);
+            }),
             catchError((err) => this.handleError(err))
         );
     }

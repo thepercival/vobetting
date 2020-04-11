@@ -72,6 +72,7 @@ export class AssociationListComponent implements OnInit {
         localStorage.setItem('externalSourceId', '' + result.getId());
         this.updateExternalSource();
       } else {
+        localStorage.removeItem('externalSourceId');
         this.externalSource = undefined;
       }
     }, (reason) => {

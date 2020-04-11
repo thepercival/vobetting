@@ -72,7 +72,7 @@ export class SportListComponent implements OnInit {
         localStorage.setItem('externalSourceId', '' + result.getId());
         this.updateExternalSource();
       } else {
-        localStorage.setItem('externalSourceId', '');
+        localStorage.removeItem('externalSourceId');
         this.externalSource = undefined;
       }
     }, (reason) => {

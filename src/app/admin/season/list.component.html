@@ -32,7 +32,8 @@
         <tr>
           <th></th>
           <th>naam</th>
-          <th class="d-none d-sm-table-cell">parent</th>
+          <th class="">start</th>
+          <th class="d-none d-sm-table-cell">end</th>
           <th style="text-align: right;">
             <button type="button" class="btn btn-sm btn-outline-primary" (click)="add()" [disabled]="processing">
               <fa-icon [icon]="['fas', 'plus']"></fa-icon>
@@ -50,10 +51,15 @@
           <td>
             <span>{{season.getName()}}</span>
           </td>
-          <td class="d-none d-sm-table-cell">{{season.getParent() ? season.getParent().getName(): ''}}</td>
+          <td>
+            <span>{{season.getStartDateTime().toLocaleString('nl',{'year':'numeric','month':'short','day':'2-digit'})}}</span>
+          </td>
+          <td class="d-none d-sm-table-cell">
+            <span>{{season.getEndDateTime().toLocaleString('nl',{'year':'numeric','month':'short','day':'2-digit'})}}</span>
+          </td>
           <td style="text-align: right;">
-            <button *ngIf="season.getChildren().length === 0" type="button" class="btn btn-sm btn-outline-primary"
-              [disabled]="processing" (click)="remove(season);">
+            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing"
+              (click)="remove(season);">
               <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon>
             </button>
           </td>

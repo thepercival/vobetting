@@ -32,7 +32,8 @@
         <tr>
           <th></th>
           <th>naam</th>
-          <th class="d-none d-sm-table-cell">parent</th>
+          <th class="d-none d-sm-table-cell">afk.</th>
+          <th>bond</th>
           <th style="text-align: right;">
             <button type="button" class="btn btn-sm btn-outline-primary" (click)="add()" [disabled]="processing">
               <fa-icon [icon]="['fas', 'plus']"></fa-icon>
@@ -50,10 +51,13 @@
           <td>
             <span>{{league.getName()}}</span>
           </td>
-          <td class="d-none d-sm-table-cell">{{league.getParent() ? league.getParent().getName(): ''}}</td>
+          <td class="d-none d-sm-table-cell">{{league.getAbbreviation()}}</td>
+          <td>
+            <span>{{league.getAssociation().getName()}}</span>
+          </td>
           <td style="text-align: right;">
-            <button *ngIf="league.getChildren().length === 0" type="button" class="btn btn-sm btn-outline-primary"
-              [disabled]="processing" (click)="remove(league);">
+            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing"
+              (click)="remove(league);">
               <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon>
             </button>
           </td>

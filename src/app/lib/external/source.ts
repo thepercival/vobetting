@@ -9,11 +9,11 @@ export class ExternalSource {
     static readonly MAX_LENGTH_APIURL = 255;
     static readonly MAX_LENGTH_APIKEY = 255;
 
-    protected static readonly SPORT = 1;
-    protected static readonly ASSOCIATION = 2;
-    protected static readonly SEASON = 4;
-    protected static readonly LEAGUE = 8;
-    protected static readonly COMPETITION = 16;
+    static readonly SPORT = 1;
+    static readonly ASSOCIATION = 2;
+    static readonly SEASON = 4;
+    static readonly LEAGUE = 8;
+    static readonly COMPETITION = 16;
 
     protected id: number;
     protected name: string;

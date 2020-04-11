@@ -10,7 +10,6 @@ export class Attacher {
         protected importableId: number,
         protected externalSource: ExternalSource
     ) {
-        this.externalSource.addAssociationAttacher(this);
     }
 
     getId(): number {
