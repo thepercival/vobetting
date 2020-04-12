@@ -31,9 +31,10 @@
       <thead>
         <tr>
           <th></th>
-          <th>naam</th>
-          <th class="d-none d-sm-table-cell">afk.</th>
-          <th>bond</th>
+          <!-- <th>naam</th> -->
+          <th>competitie</th>
+          <th>seizoen</th>
+          <!-- <th class="d-none d-sm-table-cell">competitie</th> -->
           <th style="text-align: right;">
             <button type="button" class="btn btn-sm btn-outline-primary" (click)="add()" [disabled]="processing">
               <fa-icon [icon]="['fas', 'plus']"></fa-icon>
@@ -50,12 +51,12 @@
             </button>
           </td>
           <td>
-            <span>{{competition.getName()}}</span>
+            <span>{{competition.getLeague().getName()}}</span>
           </td>
-          <td class="d-none d-sm-table-cell">{{competition.getAbbreviation()}}</td>
           <td>
-            <span>{{competition.getAssociation().getName()}}</span>
+            <span>{{competition.getSeason().getName()}}</span>
           </td>
+          <!-- <td class="d-none d-sm-table-cell">{{competition.getAbbreviation()}}</td> -->
           <td style="text-align: right;">
             <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing"
               (click)="remove(competition);">

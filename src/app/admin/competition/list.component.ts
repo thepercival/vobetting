@@ -150,7 +150,11 @@ export class CompetitionListComponent implements OnInit {
   }
 
   linkToEdit(competition?: Competition) {
-    this.router.navigate(['/admin/competition', competition ? competition.getId() : 0]);
+    if (competition) {
+      this.router.navigate(['/admin/competition', competition.getId()]);
+    } else {
+      this.router.navigate(['/admin/competition']);
+    }
   }
 
   remove(competition: Competition) {

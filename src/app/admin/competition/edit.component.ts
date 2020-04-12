@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Competition, JsonCompetition, AssociationMapper, Association, League, Season, RankingService, State, JsonSportConfig, SportConfigService, LeagueMapper, SeasonMapper } from 'ngx-sport';
+import { Competition, JsonCompetition, AssociationMapper, Association, League, Season, RankingService, State, JsonSportConfig, SportConfigService, LeagueMapper, SeasonMapper, Sport } from 'ngx-sport';
 import { CompetitionRepository } from '../../lib/ngx-sport/competition/repository';
 
 
@@ -10,6 +10,7 @@ import { MyNavigation } from 'src/app/common/navigation';
 import { AssociationRepository } from 'src/app/lib/ngx-sport/association/repository';
 import { LeagueRepository } from 'src/app/lib/ngx-sport/league/repository';
 import { SeasonRepository } from 'src/app/lib/ngx-sport/season/repository';
+import { SportRepository } from 'src/app/lib/ngx-sport/sport/repository';
 
 @Component({
   selector: 'app-competition-edit',
@@ -23,11 +24,13 @@ export class CompetitionEditComponent implements OnInit {
   competition: Competition;
   leagues: League[];
   seasons: Season[];
+  sports: Sport[];
 
   constructor(
     private competitionRepos: CompetitionRepository,
     private leagueRepos: LeagueRepository,
     private seasonRepos: SeasonRepository,
+    private sportRepos: SportRepository,
     private sportConfigService: SportConfigService,
     private leagueMapper: LeagueMapper,
     private seasonMapper: SeasonMapper,
@@ -44,21 +47,28 @@ export class CompetitionEditComponent implements OnInit {
       ])],
       season: ['', Validators.compose([
         Validators.required
+      ])],
+      sport: ['', Validators.compose([
+        Validators.required
       ])]
     });
   }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.competitionRepos.getObject(params.id)
-        .subscribe(
+      if (params.id) {
+        this.competitionRepos.getObject(params.id)
+          .subscribe(
         /* happy path */(competition: Competition) => {
-            this.postInit(competition);
-            this.initLeaguesAndSeasons();
-          },
+              this.postInit(competition);
+            },
         /* error path */ e => { this.processing = false; this.setAlert('danger', e.message); },
         /* onComplete */() => { this.processing = false; }
-        );
+          );
+      } else {
+        this.processing = false;
+      }
+      this.initLeaguesSeasonsAndSports();
     });
   }
 
@@ -69,10 +79,15 @@ export class CompetitionEditComponent implements OnInit {
     this.competition = competition;
     this.setDate(this.form.controls.start, this.competition.getStartDateTime());
     this.form.controls.league.setValue(this.competition.getLeague());
+    this.form.controls.league.disable();
     this.form.controls.season.setValue(this.competition.getSeason());
+    this.form.controls.season.disable();
+    this.form.controls.sport.setValue(this.competition.getFirstSportConfig().getSport());
+    this.form.controls.sport.disable();
+    this.processing = false;
   }
 
-  initLeaguesAndSeasons() {
+  initLeaguesSeasonsAndSports() {
     this.leagueRepos.getObjects()
       .subscribe(
       /* happy path */(leagues: League[]) => {
@@ -85,6 +100,14 @@ export class CompetitionEditComponent implements OnInit {
       .subscribe(
       /* happy path */(seasons: Season[]) => {
           this.seasons = seasons;
+        },
+      /* error path */ e => { this.setAlert('danger', e.message); },
+      /* onComplete */() => { }
+      );
+    this.sportRepos.getObjects()
+      .subscribe(
+      /* happy path */(sports: Sport[]) => {
+          this.sports = sports;
         },
       /* error path */ e => { this.setAlert('danger', e.message); },
       /* onComplete */() => { }

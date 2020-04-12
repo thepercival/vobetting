@@ -41,6 +41,7 @@ const routes: Routes = [
   { path: 'league/attach/:id/:externalSourceId', component: LeagueAttachComponent, canActivate: [AuthguardService] },
   { path: 'competitions', component: CompetitionListComponent, canActivate: [AuthguardService] },
   { path: 'competition/:id', component: CompetitionEditComponent, canActivate: [AuthguardService] },
+  { path: 'competition', component: CompetitionEditComponent, canActivate: [AuthguardService] },
   { path: 'competition/attach/:id/:externalSourceId', component: CompetitionAttachComponent, canActivate: [AuthguardService] },
   /*
   { path: 'competitor/:associationid', component: CompetitorListComponent, canActivate: [AuthguardService] },

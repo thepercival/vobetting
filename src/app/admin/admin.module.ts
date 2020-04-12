@@ -12,7 +12,7 @@ import {
   NgbCollapseModule, NgbButtonsModule, NgbModalModule
 } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
-import { AssociationMapper, SportMapper, SeasonMapper, LeagueMapper, CompetitionMapper, RefereeMapper, FieldMapper, SportConfigMapper } from 'ngx-sport';
+import { AssociationMapper, SportMapper, SeasonMapper, LeagueMapper, CompetitionMapper, RefereeMapper, FieldMapper, SportConfigMapper, SportConfigService, SportScoreConfigService } from 'ngx-sport';
 import { faTrashAlt, faCloud, faCompressAlt, faExpandAlt, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { AssociationRepository } from '../lib/ngx-sport/association/repository';
 import { ExternalSourceSelectModalComponent } from './externalsource/selectmodal.component';
@@ -77,6 +77,7 @@ import { CompetitionAttachComponent } from './competition/attach.component';
     FieldMapper,
     SportConfigMapper,
     SportMapper,
+    SportConfigService, SportScoreConfigService,
   ]
 })
 export class AdminModule {
