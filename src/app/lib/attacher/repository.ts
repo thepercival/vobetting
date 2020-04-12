@@ -62,6 +62,26 @@ export class AttacherRepository extends APIRepository {
         );
     }
 
+    getCompetitions(externalSource: ExternalSource): Observable<Attacher[]> {
+        return this.http.get(this.getUrl(externalSource, 'competitions'), this.getOptions()).pipe(
+            map((json: JsonAttacher[]) => json.map(jsonAttacher => {
+                const attacher = this.mapper.toObject(jsonAttacher, externalSource);
+                externalSource.addCompetitionAttacher(attacher);
+            })),
+            catchError((err) => this.handleError(err))
+        );
+    }
+
+    getCompetition(externalSource: ExternalSource): Observable<Attacher[]> {
+        return this.http.get(this.getUrl(externalSource, 'competitions'), this.getOptions()).pipe(
+            map((json: JsonAttacher[]) => json.map(jsonAttacher => {
+                const attacher = this.mapper.toObject(jsonAttacher, externalSource);
+                externalSource.addCompetitionAttacher(attacher);
+            })),
+            catchError((err) => this.handleError(err))
+        );
+    }
+
     createSport(json: JsonAttacher, externalSource: ExternalSource): Observable<Attacher> {
         const url = this.getUrl(externalSource, 'sports');
         return this.http.post(url, json, this.getOptions()).pipe(
@@ -106,6 +126,17 @@ export class AttacherRepository extends APIRepository {
         );
     }
 
+    createCompetition(json: JsonAttacher, externalSource: ExternalSource): Observable<Attacher> {
+        const url = this.getUrl(externalSource, 'competitions');
+        return this.http.post(url, json, this.getOptions()).pipe(
+            map((jsonAttacher: JsonAttacher) => {
+                const attacher = this.mapper.toObject(jsonAttacher, externalSource);
+                externalSource.addCompetitionAttacher(attacher);
+            }),
+            catchError((err) => this.handleError(err))
+        );
+    }
+
     removeSport(attacher: Attacher): Observable<void> {
         const url = this.getUrl(attacher.getExternalSource(), 'sports', attacher.getId());
         return this.http.delete(url, { headers: super.getHeaders() }).pipe(
@@ -134,4 +165,10 @@ export class AttacherRepository extends APIRepository {
         );
     }
 
+    removeCompetition(attacher: Attacher): Observable<void> {
+        const url = this.getUrl(attacher.getExternalSource(), 'competitions', attacher.getId());
+        return this.http.delete(url, { headers: super.getHeaders() }).pipe(
+            catchError((err) => this.handleError(err))
+        );
+    }
 }

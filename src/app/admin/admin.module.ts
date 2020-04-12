@@ -12,7 +12,7 @@ import {
   NgbCollapseModule, NgbButtonsModule, NgbModalModule
 } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
-import { AssociationMapper, SportMapper, SeasonMapper, LeagueMapper } from 'ngx-sport';
+import { AssociationMapper, SportMapper, SeasonMapper, LeagueMapper, CompetitionMapper, RefereeMapper, FieldMapper, SportConfigMapper } from 'ngx-sport';
 import { faTrashAlt, faCloud, faCompressAlt, faExpandAlt, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { AssociationRepository } from '../lib/ngx-sport/association/repository';
 import { ExternalSourceSelectModalComponent } from './externalsource/selectmodal.component';
@@ -34,6 +34,10 @@ import { LeagueEditComponent } from './league/edit.component';
 import { LeagueAttachComponent } from './league/attach.component';
 import { SeasonRepository } from '../lib/ngx-sport/season/repository';
 import { LeagueRepository } from '../lib/ngx-sport/league/repository';
+import { CompetitionRepository } from '../lib/ngx-sport/competition/repository';
+import { CompetitionListComponent } from './competition/list.component';
+import { CompetitionEditComponent } from './competition/edit.component';
+import { CompetitionAttachComponent } from './competition/attach.component';
 
 
 @NgModule({
@@ -42,6 +46,7 @@ import { LeagueRepository } from '../lib/ngx-sport/league/repository';
     AssociationListComponent, AssociationEditComponent, AssociationAttachComponent,
     SeasonListComponent, SeasonEditComponent, SeasonAttachComponent,
     LeagueListComponent, LeagueEditComponent, LeagueAttachComponent,
+    CompetitionListComponent, CompetitionEditComponent, CompetitionAttachComponent,
     ExternalSourceEditComponent, ExternalSourceListComponent],
   imports: [
     CommonModule,
@@ -66,6 +71,12 @@ import { LeagueRepository } from '../lib/ngx-sport/league/repository';
     SeasonMapper,
     LeagueRepository,
     LeagueMapper,
+    CompetitionRepository,
+    CompetitionMapper,
+    RefereeMapper,
+    FieldMapper,
+    SportConfigMapper,
+    SportMapper,
   ]
 })
 export class AdminModule {

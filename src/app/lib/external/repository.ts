@@ -5,7 +5,7 @@ import { catchError, map } from 'rxjs/operators';
 import { APIRepository } from '../repository';
 import {
     AssociationMapper, Association, JsonAssociation, JsonSport, Sport,
-    SportMapper, JsonLeague, JsonSeason, SeasonMapper, LeagueMapper, Season, League
+    SportMapper, JsonLeague, JsonSeason, SeasonMapper, LeagueMapper, Season, League, CompetitionMapper, Competition, JsonCompetition
 } from 'ngx-sport';
 import { ExternalSource } from './source';
 
@@ -19,7 +19,8 @@ export class ExternalObjectRepository extends APIRepository {
         private sportMapper: SportMapper,
         private associationMapper: AssociationMapper,
         private seasonMapper: SeasonMapper,
-        private leagueMapper: LeagueMapper
+        private leagueMapper: LeagueMapper,
+        private competitionMapper: CompetitionMapper
     ) {
         super();
         this.url = super.getApiUrl() + this.getUrlpostfix();
@@ -73,6 +74,15 @@ export class ExternalObjectRepository extends APIRepository {
         );
     }
 
+    getCompetitions(externalSource: ExternalSource): Observable<Competition[]> {
+        const url = this.getUrl(externalSource, 'competitions');
+        return this.http.get(url, this.getOptions()).pipe(
+            map((json: JsonCompetition[]) => {
+                return json.map(jsonCompetition => this.competitionMapper.toObject(jsonCompetition));
+            }),
+            catchError((err) => this.handleError(err))
+        );
+    }
 }
 
 

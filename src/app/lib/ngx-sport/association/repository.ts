@@ -53,5 +53,4 @@ export class AssociationRepository extends APIRepository {
             catchError((err) => this.handleError(err))
         );
     }
-
 }

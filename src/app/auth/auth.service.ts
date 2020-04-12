@@ -60,15 +60,4 @@ export class AuthService extends APIRepository {
     this.token = undefined;
     localStorage.removeItem('token');
   }
-
-  handleError(error: HttpErrorResponse): Observable<any> {
-    let errortext = 'onbekende fout';
-    console.error(error);
-    if (typeof error.error === 'string') {
-      errortext = error.error;
-    } else if (error.statusText !== undefined) {
-      errortext = error.statusText;
-    }
-    return observableThrowError(errortext);
-  }
 }

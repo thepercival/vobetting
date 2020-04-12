@@ -46,7 +46,7 @@
             <label for="parent" class="col-form-label">parent</label>
           </div>
           <div class="col-9">
-            <select id="parent" name="parent" class="form-control"
+            <select [disabled]="association" class="form-control"
               [ngClass]="{ 'is-invalid': customForm.controls.parent.invalid, 'is-valid': customForm.controls.parent.valid }"
               [formControl]="customForm.controls.parent">
               <option [ngValue]="undefined">kies..</option>

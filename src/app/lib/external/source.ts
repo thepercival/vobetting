@@ -1,5 +1,5 @@
 import { Attacher } from '../attacher';
-import { Association, Sport, Season, League } from 'ngx-sport';
+import { Association, Sport, Season, League, Competition } from 'ngx-sport';
 
 export class ExternalSource {
     static readonly MAX_LENGTH_NAME = 50;
@@ -26,8 +26,9 @@ export class ExternalSource {
 
     protected associationAttachers: Attacher[] = [];
     protected sportAttachers: Attacher[] = [];
-    protected leagueAttachers: Attacher[] = [];
     protected seasonAttachers: Attacher[] = [];
+    protected leagueAttachers: Attacher[] = [];
+    protected competitionAttachers: Attacher[] = [];
 
     //     implementations toevoegen aan json def en aan business, in externsource scherm kun je dan aangeven op welke
     // zaken er gekoppeld kan worden met cards, en een card voor basisgegevens wijzigen
@@ -150,5 +151,18 @@ export class ExternalSource {
 
     getLeagueAttacher(league: League): Attacher {
         return this.leagueAttachers.find(attacher => attacher.getImportableId() === league.getId());
+    }
+
+    hasCompetitionImplementation(): boolean {
+        // tslint:disable-next-line:no-bitwise
+        return (this.implementations & ExternalSource.COMPETITION) > 0;
+    }
+
+    addCompetitionAttacher(attacher: Attacher) {
+        this.competitionAttachers.push(attacher);
+    }
+
+    getCompetitionAttacher(competition: Competition): Attacher {
+        return this.competitionAttachers.find(attacher => attacher.getImportableId() === competition.getId());
     }
 }
