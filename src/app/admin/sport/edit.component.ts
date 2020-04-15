@@ -55,7 +55,7 @@ export class SportEditComponent implements OnInit {
             this.sports = sports;
             this.postInit(+params.id);
           },
-        /* error path */ e => { this.processing = false; this.setAlert('danger', e.message); },
+        /* error path */ e => { this.processing = false; this.setAlert('danger', e); },
         /* onComplete */() => { this.processing = false; }
         );
     });

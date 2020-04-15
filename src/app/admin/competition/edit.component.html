@@ -18,10 +18,10 @@
       </ngb-alert>
       <form *ngIf="!processing" name="form" (ngSubmit)="save() && false" [formGroup]="form" novalidate>
         <div class="form-group row">
-          <div class="col-3">
+          <div class="col-5">
             <label for="dpStart" class="col-form-label">start</label>
           </div>
-          <div class="col-9">
+          <div class="col-7">
             <div class="input-group input-group-date">
               <input class="form-control"
                 [ngClass]="{ 'is-invalid': form.controls.start.invalid, 'is-valid': form.controls.start.valid }"
@@ -35,10 +35,10 @@
           </div>
         </div>
         <div *ngIf="leagues" class="form-group row">
-          <div class="col-3">
+          <div class="col-5">
             <label for="league" class="col-form-label">competitie</label>
           </div>
-          <div class="col-9">
+          <div class="col-7">
             <select class="form-control"
               [ngClass]="{ 'is-invalid': form.controls.league.invalid, 'is-valid': form.controls.league.valid }"
               formControlName="league">
@@ -49,10 +49,10 @@
           </div>
         </div>
         <div *ngIf="seasons" class="form-group row">
-          <div class="col-3">
+          <div class="col-5">
             <label for="season" class="col-form-label">seizoen</label>
           </div>
-          <div class="col-9">
+          <div class="col-7">
             <select class="form-control"
               [ngClass]="{ 'is-invalid': form.controls.season.invalid, 'is-valid': form.controls.season.valid }"
               formControlName="season">
@@ -63,10 +63,10 @@
           </div>
         </div>
         <div *ngIf="sports" class="form-group row">
-          <div class="col-3">
+          <div class="col-5">
             <label for="sport" class="col-form-label">sport</label>
           </div>
-          <div class="col-9">
+          <div class="col-7">
             <select class="form-control"
               [ngClass]="{ 'is-invalid': form.controls.sport.invalid, 'is-valid': form.controls.sport.valid }"
               formControlName="sport">
@@ -77,10 +77,27 @@
           </div>
         </div>
         <div class="form-group row justify-content-end">
-          <div class="col-9">
+          <div class="col-7">
             <button [disabled]="form.invalid" type="submit" class="btn btn-outline-primary">
               <span>{{competition ? 'wijzigen' : 'toevoegen'}}</span>
               <fa-icon *ngIf="processing" [icon]="['fas', 'spinner']" [spin]="true"></fa-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="col-5">
+            <button [routerLink]="['/admin/competition/structure', competition.getId()]" type="button"
+              class="btn btn-outline-secondary">
+              <fa-icon [icon]="['fas', 'bezier-curve']"></fa-icon>
+              <span class="ml-1">structuur</span>
+            </button>
+          </div>
+          <div class="col-7">
+            <button [routerLink]="['/admin/competition/games', competition.getId()]" type="button"
+              class="btn btn-outline-secondary">
+              <fa-icon [icon]="['fas', 'calendar-alt']"></fa-icon>
+              <span class="ml-1">wedstrijden</span>
             </button>
           </div>
         </div>

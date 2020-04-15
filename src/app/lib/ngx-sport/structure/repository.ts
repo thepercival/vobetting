@@ -20,8 +20,7 @@ export class StructureRepository extends APIRepository {
     }
 
     getUrl(competition: Competition): string {
-        const prefix = this.getToken() ? '' : 'public/';
-        return super.getApiUrl() + prefix + 'tournaments/' + competition.getId() + '/' + this.getUrlpostfix();
+        return super.getApiUrl() + 'voetbal/competitions/' + competition.getId() + '/' + this.getUrlpostfix();
     }
 
     getObject(competition: Competition): Observable<Structure> {

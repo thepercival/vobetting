@@ -5,7 +5,8 @@ import { catchError, map } from 'rxjs/operators';
 import { APIRepository } from '../repository';
 import {
     AssociationMapper, Association, JsonAssociation, JsonSport, Sport,
-    SportMapper, JsonLeague, JsonSeason, SeasonMapper, LeagueMapper, Season, League, CompetitionMapper, Competition, JsonCompetition
+    SportMapper, JsonLeague, JsonSeason, SeasonMapper, LeagueMapper, Season, League,
+    CompetitionMapper, Competition, JsonCompetition, Competitor, CompetitorMapper, JsonCompetitor
 } from 'ngx-sport';
 import { ExternalSource } from './source';
 
@@ -20,7 +21,8 @@ export class ExternalObjectRepository extends APIRepository {
         private associationMapper: AssociationMapper,
         private seasonMapper: SeasonMapper,
         private leagueMapper: LeagueMapper,
-        private competitionMapper: CompetitionMapper
+        private competitionMapper: CompetitionMapper,
+        private competitorMapper: CompetitorMapper
     ) {
         super();
         this.url = super.getApiUrl() + this.getUrlpostfix();
@@ -30,8 +32,9 @@ export class ExternalObjectRepository extends APIRepository {
         return 'externalsources';
     }
 
-    protected getUrl(externalSource: ExternalSource, objectType: string): string {
-        return this.url + '/' + externalSource.getId() + '/' + objectType;
+    protected getUrl(externalSource: ExternalSource, objectType: string, id?: string | number): string {
+        const url = this.url + '/' + externalSource.getId() + '/' + objectType;
+        return id ? (url + '/' + id) : url;
     }
 
     getSports(externalSource: ExternalSource): Observable<Sport[]> {
@@ -79,6 +82,27 @@ export class ExternalObjectRepository extends APIRepository {
         return this.http.get(url, this.getOptions()).pipe(
             map((json: JsonCompetition[]) => {
                 return json.map(jsonCompetition => this.competitionMapper.toObject(jsonCompetition));
+            }),
+            catchError((err) => this.handleError(err))
+        );
+    }
+
+    getCompetition(externalSource: ExternalSource, externalId: string): Observable<Competition> {
+        const url = this.getUrl(externalSource, 'competitions', externalId);
+        return this.http.get(url, this.getOptions()).pipe(
+            map((json: JsonCompetition[]) => {
+                return json.map(jsonCompetition => this.competitionMapper.toObject(jsonCompetition));
+            }),
+            catchError((err) => this.handleError(err))
+        );
+    }
+
+    getCompetitors(externalSource: ExternalSource, competition: Competition): Observable<Competitor[]> {
+        const url = this.url + '/' + externalSource.getId() + '/' + competition.getId() + '/competitors';
+        const association = competition.getLeague().getAssociation();
+        return this.http.get(url, this.getOptions()).pipe(
+            map((json: JsonCompetitor[]) => {
+                return json.map(jsonCompetitor => this.competitorMapper.toObject(jsonCompetitor, association));
             }),
             catchError((err) => this.handleError(err))
         );

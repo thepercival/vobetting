@@ -51,7 +51,7 @@ export class SeasonEditComponent implements OnInit {
             this.seasons = seasons;
             this.postInit(+params.id);
           },
-        /* error path */ e => { this.processing = false; this.setAlert('danger', e.message); },
+        /* error path */ e => { this.processing = false; this.setAlert('danger', e); },
         /* onComplete */() => { this.processing = false; }
         );
     });

@@ -53,7 +53,7 @@ export class AssociationEditComponent implements OnInit {
             this.associations = associations;
             this.postInit(+params.id);
           },
-        /* error path */ e => { this.processing = false; this.setAlert('danger', e.message); },
+        /* error path */ e => { this.processing = false; this.setAlert('danger', e); },
         /* onComplete */() => { this.processing = false; }
         );
     });

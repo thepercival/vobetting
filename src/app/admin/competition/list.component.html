@@ -31,6 +31,8 @@
       <thead>
         <tr>
           <th></th>
+          <th class="d-none d-sm-table-cell"></th>
+          <th class="d-none d-sm-table-cell"></th>
           <!-- <th>naam</th> -->
           <th>competitie</th>
           <th>seizoen</th>
@@ -50,13 +52,24 @@
               <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon>
             </button>
           </td>
+          <td class="d-none d-sm-table-cell">
+            <button type="button" class="btn btn-sm btn-outline-secondary"
+              [routerLink]="['/admin/competition/structure', competition.getId()]">
+              <fa-icon [icon]="['fas', 'bezier-curve']"></fa-icon>
+            </button>
+          </td>
+          <td class="d-none d-sm-table-cell">
+            <button type="button" class="btn btn-sm btn-outline-secondary"
+              [routerLink]="['/admin/competition/games', competition.getId()]">
+              <fa-icon [icon]="['fas', 'calendar-alt']"></fa-icon>
+            </button>
+          </td>
           <td>
             <span>{{competition.getLeague().getName()}}</span>
           </td>
           <td>
             <span>{{competition.getSeason().getName()}}</span>
           </td>
-          <!-- <td class="d-none d-sm-table-cell">{{competition.getAbbreviation()}}</td> -->
           <td style="text-align: right;">
             <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing"
               (click)="remove(competition);">
@@ -83,12 +96,12 @@
           <td class="text-center">
             <button *ngIf="uiAttacher.attacher" type="button" class="btn btn-sm btn-outline-primary"
               [disabled]="processing" (click)="detach(uiAttacher)">
-              <fa-icon *ngIf="!processingtaching" [icon]="['fas', 'expand-alt']" rotate="27"></fa-icon>
+              <fa-icon *ngIf="!processingtaching" [icon]="['fas', 'expand-alt']"></fa-icon>
               <fa-icon *ngIf="processingtaching" [icon]="['fas', 'spinner']" [spin]="true"></fa-icon>
             </button>
             <button *ngIf="uiAttacher.attacher === undefined" type="button" class="btn btn-sm btn-outline-primary"
               [disabled]="processing" (click)="attach(uiAttacher)">
-              <fa-icon *ngIf="!processingtaching" [icon]="['fas', 'compress-alt']" rotate="27"></fa-icon>
+              <fa-icon *ngIf="!processingtaching" [icon]="['fas', 'compress-alt']"></fa-icon>
               <fa-icon *ngIf="processingtaching" [icon]="['fas', 'spinner']" [spin]="true"></fa-icon>
             </button>
           </td>

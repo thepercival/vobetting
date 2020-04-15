@@ -62,7 +62,7 @@ export class CompetitionEditComponent implements OnInit {
         /* happy path */(competition: Competition) => {
               this.postInit(competition);
             },
-        /* error path */ e => { this.processing = false; this.setAlert('danger', e.message); },
+        /* error path */ e => { this.processing = false; this.setAlert('danger', e); },
         /* onComplete */() => { this.processing = false; }
           );
       } else {
@@ -93,7 +93,7 @@ export class CompetitionEditComponent implements OnInit {
       /* happy path */(leagues: League[]) => {
           this.leagues = leagues;
         },
-      /* error path */ e => { this.setAlert('danger', e.message); },
+      /* error path */ e => { this.setAlert('danger', e); },
       /* onComplete */() => { }
       );
     this.seasonRepos.getObjects()
@@ -101,7 +101,7 @@ export class CompetitionEditComponent implements OnInit {
       /* happy path */(seasons: Season[]) => {
           this.seasons = seasons;
         },
-      /* error path */ e => { this.setAlert('danger', e.message); },
+      /* error path */ e => { this.setAlert('danger', e); },
       /* onComplete */() => { }
       );
     this.sportRepos.getObjects()
@@ -109,7 +109,7 @@ export class CompetitionEditComponent implements OnInit {
       /* happy path */(sports: Sport[]) => {
           this.sports = sports;
         },
-      /* error path */ e => { this.setAlert('danger', e.message); },
+      /* error path */ e => { this.setAlert('danger', e); },
       /* onComplete */() => { }
       );
   }

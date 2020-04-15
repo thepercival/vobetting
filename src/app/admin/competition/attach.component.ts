@@ -103,7 +103,7 @@ export class CompetitionAttachComponent implements OnInit {
         /* happy path */() => {
           this.navigateBack();
         },
-        /* error path */ e => { this.processing = false; this.setAlert('danger', e.message); },
+        /* error path */ e => { this.processing = false; this.setAlert('danger', e); },
         /* onComplete */() => { this.processing = false; }
       );
   }

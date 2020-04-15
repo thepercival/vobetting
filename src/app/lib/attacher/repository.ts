@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 import { APIRepository } from '../repository';
-import { AssociationMapper, Association, JsonAssociation } from 'ngx-sport';
+import { AssociationMapper, Association, JsonAssociation, Competition } from 'ngx-sport';
 import { AttacherMapper, JsonAttacher } from './mapper';
 import { ExternalSource } from '../external/source';
 import { Attacher } from '../attacher';
@@ -17,7 +17,7 @@ export class AttacherRepository extends APIRepository {
         super();
     }
 
-    getUrl(externalSource: ExternalSource, objecType: string, id?: any): string {
+    getUrl(externalSource: ExternalSource, objecType: string, id?: string | number): string {
         const url = super.getApiUrl() + 'attachers/' + externalSource.getId() + '/' + objecType;
         return id ? (url + '/' + id) : url;
     }
@@ -72,11 +72,23 @@ export class AttacherRepository extends APIRepository {
         );
     }
 
-    getCompetition(externalSource: ExternalSource): Observable<Attacher[]> {
-        return this.http.get(this.getUrl(externalSource, 'competitions'), this.getOptions()).pipe(
-            map((json: JsonAttacher[]) => json.map(jsonAttacher => {
+    getCompetition(externalSource: ExternalSource, competition: Competition): Observable<Attacher> {
+        return this.http.get(this.getUrl(externalSource, 'competitions', competition.getId()), this.getOptions()).pipe(
+            map((jsonAttacher: JsonAttacher) => {
                 const attacher = this.mapper.toObject(jsonAttacher, externalSource);
                 externalSource.addCompetitionAttacher(attacher);
+                return attacher;
+            }),
+            catchError((err) => this.handleError(err))
+        );
+    }
+
+    getCompetitors(externalSource: ExternalSource, externalCompetitionId: string | number): Observable<Attacher[]> {
+        const url = this.getUrl(externalSource, 'competitions', externalCompetitionId);
+        return this.http.get(url, this.getOptions()).pipe(
+            map((json: JsonAttacher[]) => json.map(jsonAttacher => {
+                const attacher = this.mapper.toObject(jsonAttacher, externalSource);
+                externalSource.addCompetitorAttacher(attacher);
             })),
             catchError((err) => this.handleError(err))
         );

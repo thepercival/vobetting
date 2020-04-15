@@ -50,14 +50,14 @@ export class AssociationListComponent implements OnInit {
                   this.externalSource = externalSource;
                   this.updateExternalSource();
                 },
-                /* error path */ e => { this.processing = false; this.setAlert('danger', e.message); },
+                /* error path */ e => { this.processing = false; this.setAlert('danger', e); },
                 /* onComplete */() => { this.processing = false; }
               );
           } else {
             this.processing = false;
           }
         },
-        /* error path */ e => { this.processing = false; this.setAlert('danger', e.message); },
+        /* error path */ e => { this.processing = false; this.setAlert('danger', e); },
         /* onComplete */() => { }
       );
   }
@@ -111,7 +111,7 @@ export class AssociationListComponent implements OnInit {
             /* onComplete */() => { this.processing = false; }
             );
         },
-        /* error path */ e => { this.processing = false; this.setAlert('danger', e.message); },
+        /* error path */ e => { this.processing = false; this.setAlert('danger', e); },
         /* onComplete */() => { }
       );
   }
@@ -135,7 +135,7 @@ export class AssociationListComponent implements OnInit {
         /* happy path */() => {
           associationAttacher.externalAssociation = undefined;
         },
-        /* error path */ e => { this.processingtaching = false; this.setAlert('danger', e.message); },
+        /* error path */ e => { this.processingtaching = false; this.setAlert('danger', e); },
         /* onComplete */() => { this.processingtaching = false; }
       );
   }

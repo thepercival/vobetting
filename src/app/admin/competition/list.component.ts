@@ -50,14 +50,14 @@ export class CompetitionListComponent implements OnInit {
                   this.externalSource = externalSource;
                   this.updateExternalSource();
                 },
-                /* error path */ e => { this.processing = false; this.setAlert('danger', e.message); },
+                /* error path */ e => { this.processing = false; this.setAlert('danger', e); },
                 /* onComplete */() => { this.processing = false; }
               );
           } else {
             this.processing = false;
           }
         },
-        /* error path */ e => { this.processing = false; this.setAlert('danger', e.message); },
+        /* error path */ e => { this.processing = false; this.setAlert('danger', e); },
         /* onComplete */() => { }
       );
   }
@@ -107,12 +107,13 @@ export class CompetitionListComponent implements OnInit {
                   const uiAttacher: CompetitionAttacher = { competition, attacher, externalCompetition };
                   this.uiAttachers.push(uiAttacher);
                 });
+                console.log(this.uiAttachers);
               },
             /* error path */ e => { },
             /* onComplete */() => { this.processing = false; }
             );
         },
-        /* error path */ e => { this.processing = false; this.setAlert('danger', e.message); },
+        /* error path */ e => { this.processing = false; this.setAlert('danger', e); },
         /* onComplete */() => { }
       );
   }
@@ -136,7 +137,7 @@ export class CompetitionListComponent implements OnInit {
         /* happy path */() => {
           competitionAttacher.externalCompetition = undefined;
         },
-        /* error path */ e => { this.processingtaching = false; this.setAlert('danger', e.message); },
+        /* error path */ e => { this.processingtaching = false; this.setAlert('danger', e); },
         /* onComplete */() => { this.processingtaching = false; }
       );
   }

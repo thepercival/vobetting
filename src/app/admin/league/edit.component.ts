@@ -56,7 +56,7 @@ export class LeagueEditComponent implements OnInit {
             this.leagues = leagues;
             this.postInit(+params.id);
           },
-        /* error path */ e => { this.processing = false; this.setAlert('danger', e.message); },
+        /* error path */ e => { this.processing = false; this.setAlert('danger', e); },
         /* onComplete */() => { this.processing = false; }
         );
       this.associationRepos.getObjects()
@@ -64,7 +64,7 @@ export class LeagueEditComponent implements OnInit {
         /* happy path */(associations: Association[]) => {
             this.associations = associations;
           },
-        /* error path */ e => { this.processing = false; this.setAlert('danger', e.message); },
+        /* error path */ e => { this.processing = false; this.setAlert('danger', e); },
         /* onComplete */() => { this.processing = false; }
         );
     });

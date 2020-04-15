@@ -1,0 +1,73 @@
+<div class="container-fluid home">
+  <div class="row justify-content-center">
+    <div class="col-xs-12 col-sm-8 col-md-8 col-lg-6">
+      <div class="d-flex justify-content-between mb-2">
+        <h1 class="text-truncate"><span>structuur </span>
+          <span> {{competition ? competition.getName() : ''}}</span></h1>
+        <h1 class="mr-1">
+          <button (click)="navigateBack()" type="button" class="btn btn-outline-secondary">
+            <fa-icon [icon]="['fas', 'level-up-alt']" rotate="270"></fa-icon>
+            <span class="ml-1 d-none d-sm-inline"> terug</span>
+          </button>
+        </h1>
+      </div>
+      <h2 *ngIf="processing" class="text-center">
+        <fa-icon [icon]="['fas', 'spinner']" [spin]="true"></fa-icon>
+      </h2>
+      <ngb-alert *ngIf="alert" [type]="alert.type" [dismissible]="true" (close)="alert = undefined;">{{alert.message }}
+      </ngb-alert>
+      <div *ngIf="!processing" class="d-flex justify-content-end mb-2">
+        <h1 class="mr-1">
+          <button *ngIf="externalSource === undefined" (click)="openExternalSource()" type="button"
+            class="btn btn-outline-secondary">
+            <fa-icon [icon]="['fas', 'cloud']"></fa-icon>
+            <span> externe bron</span>
+          </button>
+          <button *ngIf="externalSource" (click)="openExternalSource()" type="button" class="btn btn-outline-primary">
+            {{externalSource.getName()}}
+          </button>
+        </h1>
+      </div>
+      <table *ngIf="!processing && structure && (!externalSource || externalSource.hasCompetitorImplementation())"
+        class="table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>naam</th>
+            <th *ngIf="externalSource"></th>
+            <th *ngIf="externalSource"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-template ngFor let-poule [ngForOf]="structure.getFirstRoundNumber().getPoules()">
+            <tr *ngFor="let place of poule.getPlaces()">
+              <td>
+                {{nameService.getPlaceName(place)}}
+              </td>
+              <td>
+                <span *ngIf="place.getCompetitor()">{{nameService.getPlaceName(place, true)}}</span>
+              </td>
+              <td *ngIf="externalSource" class="text-center">
+                <button *ngIf="getAttacher(place)" type="button" class="btn btn-sm btn-outline-primary"
+                  [disabled]="processing" (click)="detach(getAttacher(place))">
+                  <fa-icon *ngIf="!processingtaching" [icon]="['fas', 'expand-alt']"></fa-icon>
+                  <fa-icon *ngIf="processingtaching" [icon]="['fas', 'spinner']" [spin]="true"></fa-icon>
+                </button>
+                <button *ngIf="getAttacher(place) === undefined" type="button" class="btn btn-sm btn-outline-primary"
+                  [disabled]="processing" (click)="attach(place)">
+                  <fa-icon *ngIf="!processingtaching" [icon]="['fas', 'compress-alt']"></fa-icon>
+                  <fa-icon *ngIf="processingtaching" [icon]="['fas', 'spinner']" [spin]="true"></fa-icon>
+                </button>
+              </td>
+              <td *ngIf="externalSource">
+                <span *ngIf="getAttacher(place) && getAttacher(place).externalCompetitor">
+                  {{getAttacher(place).externalCompetitor.getName()}}
+                </span>
+              </td>
+            </tr>
+          </ng-template>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

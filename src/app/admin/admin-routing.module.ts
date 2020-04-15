@@ -21,6 +21,7 @@ import { LeagueAttachComponent } from './league/attach.component';
 import { CompetitionListComponent } from './competition/list.component';
 import { CompetitionEditComponent } from './competition/edit.component';
 import { CompetitionAttachComponent } from './competition/attach.component';
+import { CompetitionStructureComponent } from './competition/structure.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [AuthguardService] },
@@ -43,6 +44,8 @@ const routes: Routes = [
   { path: 'competition/:id', component: CompetitionEditComponent, canActivate: [AuthguardService] },
   { path: 'competition', component: CompetitionEditComponent, canActivate: [AuthguardService] },
   { path: 'competition/attach/:id/:externalSourceId', component: CompetitionAttachComponent, canActivate: [AuthguardService] },
+  { path: 'competition/structure/:id', component: CompetitionStructureComponent, canActivate: [AuthguardService] },
+  /*{ path: 'competition/games/:id', component: CompetitionGamesComponent, canActivate: [AuthguardService] },*/
   /*
   { path: 'competitor/:associationid', component: CompetitorListComponent, canActivate: [AuthguardService] },
   { path: 'competitor/edit/:associationid/:id', component: CompetitorEditComponent, canActivate: [AuthguardService] },

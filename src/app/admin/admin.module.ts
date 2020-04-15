@@ -12,8 +12,8 @@ import {
   NgbCollapseModule, NgbButtonsModule, NgbModalModule
 } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
-import { AssociationMapper, SportMapper, SeasonMapper, LeagueMapper, CompetitionMapper, RefereeMapper, FieldMapper, SportConfigMapper, SportConfigService, SportScoreConfigService } from 'ngx-sport';
-import { faTrashAlt, faCloud, faCompressAlt, faExpandAlt, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { AssociationMapper, SportMapper, SeasonMapper, LeagueMapper, CompetitionMapper, RefereeMapper, FieldMapper, SportConfigMapper, SportConfigService, SportScoreConfigService, StructureMapper, RoundNumberMapper, QualifyGroup, RoundMapper, PouleMapper, PlaceMapper, PlanningConfigMapper, SportScoreConfigMapper, CompetitorMapper, GameMapper, GamePlaceMapper, GameScoreMapper, PlanningMapper } from 'ngx-sport';
+import { faTrashAlt, faCloud, faCompressAlt, faExpandAlt, faCheckCircle, faBezierCurve } from '@fortawesome/free-solid-svg-icons';
 import { AssociationRepository } from '../lib/ngx-sport/association/repository';
 import { ExternalSourceSelectModalComponent } from './externalsource/selectmodal.component';
 import { ExternalSourceRepository } from '../lib/external/source/repository';
@@ -38,6 +38,9 @@ import { CompetitionRepository } from '../lib/ngx-sport/competition/repository';
 import { CompetitionListComponent } from './competition/list.component';
 import { CompetitionEditComponent } from './competition/edit.component';
 import { CompetitionAttachComponent } from './competition/attach.component';
+import { CompetitionStructureComponent } from './competition/structure.component';
+import { StructureRepository } from '../lib/ngx-sport/structure/repository';
+import { QualifyGroupMapper } from 'ngx-sport/src/qualify/group/mapper';
 
 
 @NgModule({
@@ -47,6 +50,7 @@ import { CompetitionAttachComponent } from './competition/attach.component';
     SeasonListComponent, SeasonEditComponent, SeasonAttachComponent,
     LeagueListComponent, LeagueEditComponent, LeagueAttachComponent,
     CompetitionListComponent, CompetitionEditComponent, CompetitionAttachComponent,
+    CompetitionStructureComponent,
     ExternalSourceEditComponent, ExternalSourceListComponent],
   imports: [
     CommonModule,
@@ -75,13 +79,14 @@ import { CompetitionAttachComponent } from './competition/attach.component';
     CompetitionMapper,
     RefereeMapper,
     FieldMapper,
-    SportConfigMapper,
-    SportMapper,
+    SportConfigMapper, SportScoreConfigMapper,
     SportConfigService, SportScoreConfigService,
+    StructureRepository, StructureMapper, RoundNumberMapper, RoundMapper, PouleMapper, PlaceMapper, PlanningConfigMapper,
+    CompetitorMapper, GameMapper, GamePlaceMapper, GameScoreMapper, PlanningMapper,
   ]
 })
 export class AdminModule {
   constructor(library: FaIconLibrary) {
-    library.addIcons(faTrashAlt, faCloud, faCompressAlt, faExpandAlt, faCheckCircle);
+    library.addIcons(faTrashAlt, faCloud, faCompressAlt, faExpandAlt, faCheckCircle, faBezierCurve);
   }
 }

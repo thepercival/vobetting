@@ -14,9 +14,7 @@ export class ExternalSourceRepository extends APIRepository {
 
     constructor(
         private http: HttpClient,
-        private mapper: ExternalSourceMapper,
-        private associationMapper: AssociationMapper,
-        private sportMapper: SportMapper) {
+        private mapper: ExternalSourceMapper) {
         super();
         this.url = super.getApiUrl() + this.getUrlpostfix();
     }
@@ -73,26 +71,4 @@ export class ExternalSourceRepository extends APIRepository {
             catchError((err) => this.handleError(err))
         );
     }
-
-    getAssociations(externalSource: ExternalSource): Observable<Association[]> {
-        const url = this.getUrl(externalSource.getId(), 'associations');
-        return this.http.get(url, this.getOptions()).pipe(
-            map((json: JsonAssociation[]) => json.map(jsonAssociation => {
-                return this.associationMapper.toObject(jsonAssociation);
-            })),
-            catchError((err) => this.handleError(err))
-        );
-    }
-
-    getSports(externalSource: ExternalSource): Observable<Sport[]> {
-        const url = this.getUrl(externalSource.getId(), 'sports');
-        return this.http.get(url, this.getOptions()).pipe(
-            map((json: JsonSport[]) => json.map(jsonSport => {
-                return this.sportMapper.toObject(jsonSport);
-            })),
-            catchError((err) => this.handleError(err))
-        );
-    }
 }
-
-

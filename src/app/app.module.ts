@@ -49,6 +49,7 @@ import {
 
 import { faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { HttpClientModule } from '@angular/common/http';
+import { NameService } from 'ngx-sport';
 
 @NgModule({
   declarations: [
@@ -71,6 +72,7 @@ import { HttpClientModule } from '@angular/common/http';
     AuthguardService,
     GlobalEventsManager,
     MyNavigation,
+    NameService,
   ],
   bootstrap: [AppComponent]
 })
