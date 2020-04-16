@@ -90,9 +90,7 @@ export class ExternalObjectRepository extends APIRepository {
     getCompetition(externalSource: ExternalSource, externalId: string): Observable<Competition> {
         const url = this.getUrl(externalSource, 'competitions', externalId);
         return this.http.get(url, this.getOptions()).pipe(
-            map((json: JsonCompetition[]) => {
-                return json.map(jsonCompetition => this.competitionMapper.toObject(jsonCompetition));
-            }),
+            map((jsonCompetition: JsonCompetition) => this.competitionMapper.toObject(jsonCompetition)),
             catchError((err) => this.handleError(err))
         );
     }

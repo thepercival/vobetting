@@ -84,7 +84,7 @@ export class AttacherRepository extends APIRepository {
     }
 
     getCompetitors(externalSource: ExternalSource, externalCompetitionId: string | number): Observable<Attacher[]> {
-        const url = this.getUrl(externalSource, 'competitions', externalCompetitionId);
+        const url = this.getUrl(externalSource, 'competitors', externalCompetitionId);
         return this.http.get(url, this.getOptions()).pipe(
             map((json: JsonAttacher[]) => json.map(jsonAttacher => {
                 const attacher = this.mapper.toObject(jsonAttacher, externalSource);

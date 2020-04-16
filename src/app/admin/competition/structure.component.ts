@@ -67,7 +67,7 @@ export class CompetitionStructureComponent implements OnInit {
         /* happy path */(structure: Structure) => {
           this.structure = structure;
           const externalSourceId = localStorage.getItem('externalSourceId');
-          if (externalSourceId) {
+          if (this.structure && externalSourceId) {
             this.externalSourceRepos.getObject(externalSourceId)
               .subscribe(
                 /* happy path */(externalSource: ExternalSource) => {

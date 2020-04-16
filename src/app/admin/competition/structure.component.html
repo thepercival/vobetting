@@ -48,13 +48,13 @@
                 <span *ngIf="place.getCompetitor()">{{nameService.getPlaceName(place, true)}}</span>
               </td>
               <td *ngIf="externalSource" class="text-center">
-                <button *ngIf="getAttacher(place)" type="button" class="btn btn-sm btn-outline-primary"
-                  [disabled]="processing" (click)="detach(getAttacher(place))">
+                <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing"
+                  (click)="detach(getAttacher(place))">
                   <fa-icon *ngIf="!processingtaching" [icon]="['fas', 'expand-alt']"></fa-icon>
                   <fa-icon *ngIf="processingtaching" [icon]="['fas', 'spinner']" [spin]="true"></fa-icon>
                 </button>
-                <button *ngIf="getAttacher(place) === undefined" type="button" class="btn btn-sm btn-outline-primary"
-                  [disabled]="processing" (click)="attach(place)">
+                <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing"
+                  (click)="attach(place)">
                   <fa-icon *ngIf="!processingtaching" [icon]="['fas', 'compress-alt']"></fa-icon>
                   <fa-icon *ngIf="processingtaching" [icon]="['fas', 'spinner']" [spin]="true"></fa-icon>
                 </button>

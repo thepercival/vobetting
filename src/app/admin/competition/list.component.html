@@ -109,6 +109,9 @@
             <span *ngIf="uiAttacher.externalCompetition">
               {{uiAttacher.externalCompetition.getName()}}
             </span>
+            <span *ngIf="!uiAttacher.externalCompetition && uiAttacher.attacher">
+              {{uiAttacher.attacher.getExternalId()}}
+            </span>
           </td>
         </tr>
       </tbody>
