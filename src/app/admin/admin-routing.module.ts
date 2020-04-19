@@ -22,11 +22,20 @@ import { CompetitionListComponent } from './competition/list.component';
 import { CompetitionEditComponent } from './competition/edit.component';
 import { CompetitionAttachComponent } from './competition/attach.component';
 import { CompetitionStructureComponent } from './competition/structure.component';
+import { CompetitorAttachComponent } from './competitor/attach.component';
+import { CompetitionGameListComponent } from './competition/games.component';
+import { BookmakerListComponent } from './bookmaker/list.component';
+import { BookmakerEditComponent } from './bookmaker/edit.component';
+import { BookmakerAttachComponent } from './bookmaker/attach.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [AuthguardService] },
   { path: 'externalsources', component: ExternalSourceListComponent },
   { path: 'externalsource/:id', component: ExternalSourceEditComponent, canActivate: [AuthguardService] },
+
+  { path: 'bookmakers', component: BookmakerListComponent, canActivate: [AuthguardService] },
+  { path: 'bookmaker/:id', component: BookmakerEditComponent, canActivate: [AuthguardService] },
+  { path: 'bookmaker/attach/:id/:externalSourceId', component: BookmakerAttachComponent, canActivate: [AuthguardService] },
 
   { path: 'sports', component: SportListComponent, canActivate: [AuthguardService] },
   { path: 'sport/:id', component: SportEditComponent, canActivate: [AuthguardService] },
@@ -45,17 +54,11 @@ const routes: Routes = [
   { path: 'competition', component: CompetitionEditComponent, canActivate: [AuthguardService] },
   { path: 'competition/attach/:id/:externalSourceId', component: CompetitionAttachComponent, canActivate: [AuthguardService] },
   { path: 'competition/structure/:id', component: CompetitionStructureComponent, canActivate: [AuthguardService] },
-  /*{ path: 'competition/games/:id', component: CompetitionGamesComponent, canActivate: [AuthguardService] },*/
-  /*
-  { path: 'competitor/:associationid', component: CompetitorListComponent, canActivate: [AuthguardService] },
-  { path: 'competitor/edit/:associationid/:id', component: CompetitorEditComponent, canActivate: [AuthguardService] },
-  { path: 'competitor/extern/:associationid/:id', component: CompetitorExternComponent, canActivate: [AuthguardService] },
-  { path: 'pouleplace/edit/:competitionid/:id', component: PoulePlaceEditComponent, canActivate: [AuthguardService] },
-  { path: 'structure/:id', component: StructureEditComponent, canActivate: [AuthguardService] },
-  { path: 'games/:id', component: GameListComponent, canActivate: [AuthguardService] },
-  { path: 'bookmaker', component: BookmakerListComponent, canActivate: [AuthguardService] },
-  { path: 'bookmaker/edit/:id', component: BookmakerEditComponent, canActivate: [AuthguardService] },
-  */
+  {
+    path: 'competitor/attach/:id/:competitionId/:externalSourceId',
+    component: CompetitorAttachComponent, canActivate: [AuthguardService]
+  },
+  { path: 'competition/games/:id', component: CompetitionGameListComponent, canActivate: [AuthguardService] },
 
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', redirectTo: '' }

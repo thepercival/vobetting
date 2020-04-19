@@ -12,7 +12,12 @@ import {
   NgbCollapseModule, NgbButtonsModule, NgbModalModule
 } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
-import { AssociationMapper, SportMapper, SeasonMapper, LeagueMapper, CompetitionMapper, RefereeMapper, FieldMapper, SportConfigMapper, SportConfigService, SportScoreConfigService, StructureMapper, RoundNumberMapper, QualifyGroup, RoundMapper, PouleMapper, PlaceMapper, PlanningConfigMapper, SportScoreConfigMapper, CompetitorMapper, GameMapper, GamePlaceMapper, GameScoreMapper, PlanningMapper } from 'ngx-sport';
+import {
+  AssociationMapper, SportMapper, SeasonMapper, LeagueMapper, CompetitionMapper, RefereeMapper, FieldMapper,
+  SportConfigMapper, SportConfigService, SportScoreConfigService, StructureMapper, RoundNumberMapper,
+  RoundMapper, PouleMapper, PlaceMapper, PlanningConfigMapper, SportScoreConfigMapper, CompetitorMapper, GameMapper,
+  GamePlaceMapper, GameScoreMapper, PlanningMapper
+} from 'ngx-sport';
 import { faTrashAlt, faCloud, faCompressAlt, faExpandAlt, faCheckCircle, faBezierCurve } from '@fortawesome/free-solid-svg-icons';
 import { AssociationRepository } from '../lib/ngx-sport/association/repository';
 import { ExternalSourceSelectModalComponent } from './externalsource/selectmodal.component';
@@ -41,6 +46,14 @@ import { CompetitionAttachComponent } from './competition/attach.component';
 import { CompetitionStructureComponent } from './competition/structure.component';
 import { StructureRepository } from '../lib/ngx-sport/structure/repository';
 import { QualifyGroupMapper } from 'ngx-sport/src/qualify/group/mapper';
+import { CompetitorAttachComponent } from './competitor/attach.component';
+import { CompetitorRepository } from '../lib/ngx-sport/competitor/repository';
+import { CompetitionGameListComponent } from './competition/games.component';
+import { BookmakerEditComponent } from './bookmaker/edit.component';
+import { BookmakerAttachComponent } from './bookmaker/attach.component';
+import { BookmakerListComponent } from './bookmaker/list.component';
+import { BookmakerRepository } from '../lib/bookmaker/repository';
+import { BookmakerMapper } from '../lib/bookmaker/mapper';
 
 
 @NgModule({
@@ -50,8 +63,11 @@ import { QualifyGroupMapper } from 'ngx-sport/src/qualify/group/mapper';
     SeasonListComponent, SeasonEditComponent, SeasonAttachComponent,
     LeagueListComponent, LeagueEditComponent, LeagueAttachComponent,
     CompetitionListComponent, CompetitionEditComponent, CompetitionAttachComponent,
-    CompetitionStructureComponent,
-    ExternalSourceEditComponent, ExternalSourceListComponent],
+    CompetitionStructureComponent, CompetitorAttachComponent,
+    ExternalSourceEditComponent, ExternalSourceListComponent,
+    CompetitionGameListComponent,
+    BookmakerListComponent, BookmakerEditComponent, BookmakerAttachComponent,
+  ],
   imports: [
     CommonModule,
     AdminRoutingModule,
@@ -67,6 +83,8 @@ import { QualifyGroupMapper } from 'ngx-sport/src/qualify/group/mapper';
     ExternalObjectRepository,
     ExternalSourceRepository,
     ExternalSourceMapper,
+    BookmakerRepository,
+    BookmakerMapper,
     SportRepository,
     SportMapper,
     AssociationRepository,
@@ -76,6 +94,7 @@ import { QualifyGroupMapper } from 'ngx-sport/src/qualify/group/mapper';
     LeagueRepository,
     LeagueMapper,
     CompetitionRepository,
+    CompetitorRepository,
     CompetitionMapper,
     RefereeMapper,
     FieldMapper,

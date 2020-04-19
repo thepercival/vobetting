@@ -1,5 +1,6 @@
 import { Attacher } from '../attacher';
 import { Association, Sport, Season, League, Competition, Competitor } from 'ngx-sport';
+import { Bookmaker } from '../bookmaker';
 
 export class ExternalSource {
     static readonly MAX_LENGTH_NAME = 50;
@@ -15,6 +16,7 @@ export class ExternalSource {
     static readonly LEAGUE = 8;
     static readonly COMPETITION = 16;
     static readonly COMPETITOR = 32;
+    static readonly BOOKMAKER = 512;
 
     protected id: number;
     protected name: string;
@@ -31,6 +33,7 @@ export class ExternalSource {
     protected leagueAttachers: Attacher[] = [];
     protected competitionAttachers: Attacher[] = [];
     protected competitorAttachers: Attacher[] = [];
+    protected bookmakerAttachers: Attacher[] = [];
 
     constructor(name: string) {
         this.setName(name);
@@ -100,19 +103,6 @@ export class ExternalSource {
         this.implementations = implementations;
     }
 
-    hasAssociationImplementation(): boolean {
-        // tslint:disable-next-line:no-bitwise
-        return (this.implementations & ExternalSource.ASSOCIATION) > 0;
-    }
-
-    addAssociationAttacher(attacher: Attacher) {
-        this.associationAttachers.push(attacher);
-    }
-
-    getAssociationAttacher(association: Association): Attacher {
-        return this.associationAttachers.find(attacher => attacher.getImportableId() === association.getId());
-    }
-
     hasSportImplementation(): boolean {
         // tslint:disable-next-line:no-bitwise
         return (this.implementations & ExternalSource.SPORT) > 0;
@@ -124,6 +114,19 @@ export class ExternalSource {
 
     getSportAttacher(sport: Sport): Attacher {
         return this.sportAttachers.find(attacher => attacher.getImportableId() === sport.getId());
+    }
+
+    hasAssociationImplementation(): boolean {
+        // tslint:disable-next-line:no-bitwise
+        return (this.implementations & ExternalSource.ASSOCIATION) > 0;
+    }
+
+    addAssociationAttacher(attacher: Attacher) {
+        this.associationAttachers.push(attacher);
+    }
+
+    getAssociationAttacher(association: Association): Attacher {
+        return this.associationAttachers.find(attacher => attacher.getImportableId() === association.getId());
     }
 
     hasSeasonImplementation(): boolean {
@@ -176,5 +179,18 @@ export class ExternalSource {
 
     getCompetitorAttacher(competitor: Competitor): Attacher {
         return this.competitorAttachers.find(attacher => attacher.getImportableId() === competitor.getId());
+    }
+
+    hasBookmakerImplementation(): boolean {
+        // tslint:disable-next-line:no-bitwise
+        return (this.implementations & ExternalSource.BOOKMAKER) > 0;
+    }
+
+    addBookmakerAttacher(attacher: Attacher) {
+        this.bookmakerAttachers.push(attacher);
+    }
+
+    getBookmakerAttacher(bookmaker: Bookmaker): Attacher {
+        return this.bookmakerAttachers.find(attacher => attacher.getImportableId() === bookmaker.getId());
     }
 }

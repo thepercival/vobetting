@@ -2,18 +2,18 @@
 export class Bookmaker {
     static readonly MAX_LENGTH_NAME = 30;
 
-    protected id: number;
-    protected name: string;
+    protected id: string | number;
     protected exchange: boolean;
 
-    constructor() {
+    constructor(protected name: string, exchange?: boolean) {
+        this.exchange = (exchange === true);
     }
 
-    getId(): number {
+    getId(): string | number {
         return this.id;
     }
 
-    setId(id: number): void {
+    setId(id: string | number): void {
         this.id = id;
     }
 

@@ -1,0 +1,62 @@
+<div class="container-fluid home">
+  <div class="row justify-content-center">
+    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+      <div class="d-flex justify-content-between mb-2">
+        <h1 class="text-truncate"><span>wedstrijden </span>
+          <span> {{competition ? competition.getName() : ''}}</span></h1>
+        <h1 class="mr-1">
+          <button (click)="navigateBack()" type="button" class="btn btn-outline-secondary">
+            <fa-icon [icon]="['fas', 'level-up-alt']" rotate="270"></fa-icon>
+            <span class="ml-1 d-none d-sm-inline"> terug</span>
+          </button>
+        </h1>
+      </div>
+      <h2 *ngIf="processing" class="text-center">
+        <fa-icon [icon]="['fas', 'spinner']" [spin]="true"></fa-icon>
+      </h2>
+      <ngb-alert *ngIf="alert" [type]="alert.type" [dismissible]="true" (close)="alert = undefined;">{{alert.message }}
+      </ngb-alert>
+      <div *ngIf="!processing && structure">
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="text-center">P</th>
+              <th class="text-center">B</th>
+              <th>start</th>
+              <th class="text-right">thuis</th>
+              <th class="text-center" title="score">score</th>
+              <th>uit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-template ngFor let-gmData [ngForOf]="gameDatas">
+              <tr [ngClass]="{ 'batch-striped-row': (gmData.game.getBatchNr() % 2) === 0 }">
+                <!-- poule -->
+                <td class="text-center">{{gmData.poule.name}}</td>
+                <!-- batchNr -->
+                <td class="text-center">{{gmData.game.getBatchNr()}}</td>
+                <!-- datetime -->
+                <td>
+                  <span>{{gmData.game.getStartDateTime().toLocaleString("nl",
+                        {"month":"short","day":"2-digit"})}} </span>
+                  <span>{{gmData.game.getStartDateTime().toLocaleString("nl", {"hour12":
+                         false,"hour":"2-digit","minute":"2-digit"})}}</span>
+                </td>
+                <!-- home -->
+                <td class="place text-right">
+                  <span>{{nameService.getPlacesFromName(gmData.game.getPlaces( GameHOME ),true,true)}}</span>
+                </td>
+                <!-- score -->
+                <td nowrap class="text-center">{{getScore(gmData.game)}}</td>
+                <!-- away -->
+                <td class="place">
+                  <span>{{nameService.getPlacesFromName(gmData.game.getPlaces( GameAWAY ),true,true)}}</span>
+                </td>
+              </tr>
+            </ng-template>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

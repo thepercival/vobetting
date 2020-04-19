@@ -9,6 +9,8 @@ import {
     CompetitionMapper, Competition, JsonCompetition, Competitor, CompetitorMapper, JsonCompetitor
 } from 'ngx-sport';
 import { ExternalSource } from './source';
+import { Bookmaker } from '../bookmaker';
+import { JsonBookmaker, BookmakerMapper } from '../bookmaker/mapper';
 
 @Injectable()
 export class ExternalObjectRepository extends APIRepository {
@@ -22,7 +24,8 @@ export class ExternalObjectRepository extends APIRepository {
         private seasonMapper: SeasonMapper,
         private leagueMapper: LeagueMapper,
         private competitionMapper: CompetitionMapper,
-        private competitorMapper: CompetitorMapper
+        private competitorMapper: CompetitorMapper,
+        private bookmakerMapper: BookmakerMapper
     ) {
         super();
         this.url = super.getApiUrl() + this.getUrlpostfix();
@@ -101,6 +104,16 @@ export class ExternalObjectRepository extends APIRepository {
         return this.http.get(url, this.getOptions()).pipe(
             map((json: JsonCompetitor[]) => {
                 return json.map(jsonCompetitor => this.competitorMapper.toObject(jsonCompetitor, association));
+            }),
+            catchError((err) => this.handleError(err))
+        );
+    }
+
+    getBookmakers(externalSource: ExternalSource): Observable<Bookmaker[]> {
+        const url = this.getUrl(externalSource, 'bookmakers');
+        return this.http.get(url, this.getOptions()).pipe(
+            map((json: JsonBookmaker[]) => {
+                return json.map(jsonBookmaker => this.bookmakerMapper.toObject(jsonBookmaker));
             }),
             catchError((err) => this.handleError(err))
         );

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   Competition, JsonCompetition, League, Season, RankingService, State, Sport, Structure, NameService, Competitor, Place
 } from 'ngx-sport';
@@ -38,6 +38,7 @@ export class CompetitionStructureComponent implements OnInit {
     private externalObjectRepos: ExternalObjectRepository,
     private externalSourceRepos: ExternalSourceRepository,
     private attacherRepos: AttacherRepository,
+    private router: Router,
     private route: ActivatedRoute,
     protected myNavigation: MyNavigation,
     private modalService: NgbModal,
@@ -174,20 +175,22 @@ export class CompetitionStructureComponent implements OnInit {
     this.myNavigation.back();
   }
 
-  attach(place: Place) {
-    // this.router.navigate(['/admin/competition/attach', competitionAttacher.competition.getId(), this.externalSource.getId()]);
+  attach(uiAttacher: CompetitorAttacher) {
+    this.router.navigate(['/admin/competitor/attach',
+      uiAttacher.place.getCompetitor().getId(), this.competition.getId(), this.externalSource.getId()]);
   }
 
   detach(competitorAttacher: CompetitorAttacher) {
-    // this.processingtaching = true;
-    // this.attacherRepos.removeCompetition(competitionAttacher.attacher)
-    //   .subscribe(
-    //     /* happy path */() => {
-    //       competitionAttacher.externalCompetition = undefined;
-    //     },
-    //     /* error path */ e => { this.processingtaching = false; this.setAlert('danger', e); },
-    //     /* onComplete */() => { this.processingtaching = false; }
-    //   );
+    this.processingtaching = true;
+    this.attacherRepos.removeCompetitor(competitorAttacher.attacher)
+      .subscribe(
+        /* happy path */() => {
+          competitorAttacher.externalCompetitor = undefined;
+          competitorAttacher.attacher = undefined;
+        },
+        /* error path */ e => { this.processingtaching = false; this.setAlert('danger', e); },
+        /* onComplete */() => { this.processingtaching = false; }
+      );
   }
 
   protected setAlert(type: string, message: string) {

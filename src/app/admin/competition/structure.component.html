@@ -28,46 +28,71 @@
           </button>
         </h1>
       </div>
-      <table *ngIf="!processing && structure && (!externalSource || externalSource.hasCompetitorImplementation())"
-        class="table">
-        <thead>
-          <tr>
-            <th></th>
-            <th>naam</th>
-            <th *ngIf="externalSource"></th>
-            <th *ngIf="externalSource"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <ng-template ngFor let-poule [ngForOf]="structure.getFirstRoundNumber().getPoules()">
-            <tr *ngFor="let place of poule.getPlaces()">
+      <div *ngIf="!processing && structure">
+        <table *ngIf="externalSource === undefined" class="table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>naam</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-template ngFor let-poule [ngForOf]="structure.getFirstRoundNumber().getPoules()">
+              <tr *ngFor="let place of poule.getPlaces()">
+                <td>
+                  {{nameService.getPlaceName(place)}}
+                </td>
+                <td>
+                  <span *ngIf="place.getCompetitor()">{{nameService.getPlaceName(place, true)}}</span>
+                </td>
+              </tr>
+            </ng-template>
+          </tbody>
+        </table>
+
+        <table *ngIf="externalSource && uiAttachers" class="table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>naam</th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let uiAttacher of uiAttachers">
+
               <td>
-                {{nameService.getPlaceName(place)}}
+                {{nameService.getPlaceName(uiAttacher.place)}}
               </td>
               <td>
-                <span *ngIf="place.getCompetitor()">{{nameService.getPlaceName(place, true)}}</span>
+                <span
+                  *ngIf="uiAttacher.place.getCompetitor()">{{nameService.getPlaceName(uiAttacher.place, true)}}</span>
               </td>
-              <td *ngIf="externalSource" class="text-center">
-                <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing"
-                  (click)="detach(getAttacher(place))">
+              <td class="text-center">
+                <button *ngIf="uiAttacher.attacher" type="button" class="btn btn-sm btn-outline-primary"
+                  [disabled]="processing" (click)="detach(uiAttacher)">
                   <fa-icon *ngIf="!processingtaching" [icon]="['fas', 'expand-alt']"></fa-icon>
                   <fa-icon *ngIf="processingtaching" [icon]="['fas', 'spinner']" [spin]="true"></fa-icon>
                 </button>
-                <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing"
-                  (click)="attach(place)">
+                <button *ngIf="uiAttacher.attacher === undefined" type="button" class="btn btn-sm btn-outline-primary"
+                  [disabled]="processing" (click)="attach(uiAttacher)">
                   <fa-icon *ngIf="!processingtaching" [icon]="['fas', 'compress-alt']"></fa-icon>
                   <fa-icon *ngIf="processingtaching" [icon]="['fas', 'spinner']" [spin]="true"></fa-icon>
                 </button>
               </td>
-              <td *ngIf="externalSource">
-                <span *ngIf="getAttacher(place) && getAttacher(place).externalCompetitor">
-                  {{getAttacher(place).externalCompetitor.getName()}}
+              <td class="">
+                <span *ngIf="uiAttacher.externalCompetitor">
+                  {{uiAttacher.externalCompetitor.getName()}}
+                </span>
+                <span *ngIf="!uiAttacher.externalCompetitor && uiAttacher.attacher">
+                  {{uiAttacher.attacher.getExternalId()}}
                 </span>
               </td>
             </tr>
-          </ng-template>
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

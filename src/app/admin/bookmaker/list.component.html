@@ -1,0 +1,101 @@
+<div class="row justify-content-center mx-0" style="min-height:4.5rem;">
+  <div class="col-xs-12 col-sm-8 col-md-8 col-lg-6 mt-1">
+    <div class="d-flex justify-content-between mb-2">
+      <h1 class="text-truncate">bookmakers</h1>
+      <h1 class="mr-1">
+        <button (click)="navigateBack()" type="button" class="btn btn-outline-secondary">
+          <fa-icon [icon]="['fas', 'level-up-alt']" rotate="270"></fa-icon>
+          <span class="ml-1 d-none d-sm-inline"> terug</span>
+        </button>
+      </h1>
+    </div>
+    <div *ngIf="!processing" class="d-flex justify-content-end mb-2">
+      <h1 class="mr-1">
+        <button *ngIf="externalSource === undefined" (click)="openExternalSource()" type="button"
+          class="btn btn-outline-secondary">
+          <fa-icon [icon]="['fas', 'cloud']"></fa-icon>
+          <span> externe bron</span>
+        </button>
+        <button *ngIf="externalSource" (click)="openExternalSource()" type="button" class="btn btn-outline-primary">
+          {{externalSource.getName()}}
+        </button>
+      </h1>
+    </div>
+    <h2 *ngIf="processing" class="text-center">
+      <fa-icon [icon]="['fas', 'spinner']" [spin]="true"></fa-icon>
+    </h2>
+    <ngb-alert *ngIf="alert" [type]="alert.type" [dismissible]="false" (close)="alert = undefined;">
+      {{ alert.message }}
+    </ngb-alert>
+    <table *ngIf="!processing && externalSource === undefined" class="table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>naam</th>
+          <th>exchange</th>
+          <th style="text-align: right;">
+            <button type="button" class="btn btn-sm btn-outline-primary" (click)="add()" [disabled]="processing">
+              <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+            </button>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let bookmaker of bookmakers">
+          <td>
+            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing"
+              (click)="edit(bookmaker)">
+              <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon>
+            </button>
+          </td>
+          <td>
+            <span>{{bookmaker.getName()}}</span>
+          </td>
+          <td>
+            <fa-icon *ngIf="bookmaker.getExchange()" [icon]="['fas', 'check-circle']"></fa-icon>
+          </td>
+          <td style="text-align: right;">
+            <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="processing"
+              (click)="remove(bookmaker);">
+              <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table *ngIf="!processing && externalSource && externalSource.hasBookmakerImplementation()" class="table">
+      <thead>
+        <tr>
+          <th>naam</th>
+          <th class="text-center">koppelen</th>
+          <th>{{externalSource.getName()}}-naam</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let uiAttacher of uiAttachers">
+          <td>
+            <span>{{uiAttacher.bookmaker.getName()}}</span>
+          </td>
+          <td class="text-center">
+            <button *ngIf="uiAttacher.attacher" type="button" class="btn btn-sm btn-outline-primary"
+              [disabled]="processing" (click)="detach(uiAttacher)">
+              <fa-icon *ngIf="!processingtaching" [icon]="['fas', 'expand-alt']"></fa-icon>
+              <fa-icon *ngIf="processingtaching" [icon]="['fas', 'spinner']" [spin]="true"></fa-icon>
+            </button>
+            <button *ngIf="uiAttacher.attacher === undefined" type="button" class="btn btn-sm btn-outline-primary"
+              [disabled]="processing" (click)="attach(uiAttacher)">
+              <fa-icon *ngIf="!processingtaching" [icon]="['fas', 'compress-alt']"></fa-icon>
+              <fa-icon *ngIf="processingtaching" [icon]="['fas', 'spinner']" [spin]="true"></fa-icon>
+            </button>
+          </td>
+          <td class="">
+            <span *ngIf="uiAttacher.externalBookmaker">
+              {{uiAttacher.externalBookmaker.getName()}}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
