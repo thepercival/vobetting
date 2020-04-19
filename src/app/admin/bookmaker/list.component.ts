@@ -101,6 +101,7 @@ export class BookmakerListComponent implements OnInit {
                 this.bookmakers.forEach(bookmaker => {
                   const attacher = this.externalSource.getBookmakerAttacher(bookmaker);
                   const externalBookmaker = attacher ? externalBookmakers.find(externalBookmakerIt => {
+                    // tslint:disable-next-line:triple-equals
                     return externalBookmakerIt.getId() == attacher.getExternalId();
                   }) : undefined;
                   const uiAttacher: BookmakerAttacher = { bookmaker, attacher, externalBookmaker };
