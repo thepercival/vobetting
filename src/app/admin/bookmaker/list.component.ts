@@ -135,6 +135,7 @@ export class BookmakerListComponent implements OnInit {
     this.attacherRepos.removeBookmaker(bookmakerAttacher.attacher)
       .subscribe(
         /* happy path */() => {
+          bookmakerAttacher.attacher = undefined;
           bookmakerAttacher.externalBookmaker = undefined;
         },
         /* error path */ e => { this.processingtaching = false; this.setAlert('danger', e); },

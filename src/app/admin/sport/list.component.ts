@@ -133,6 +133,7 @@ export class SportListComponent implements OnInit {
     this.attacherRepos.removeSport(sportAttacher.attacher)
       .subscribe(
         /* happy path */() => {
+          sportAttacher.attacher = undefined;
           sportAttacher.externalSport = undefined;
         },
         /* error path */ e => { this.processingtaching = false; this.setAlert('danger', e); },

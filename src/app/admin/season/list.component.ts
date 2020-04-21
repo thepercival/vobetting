@@ -134,6 +134,7 @@ export class SeasonListComponent implements OnInit {
     this.attacherRepos.removeSeason(seasonAttacher.attacher)
       .subscribe(
         /* happy path */() => {
+          seasonAttacher.attacher = undefined;
           seasonAttacher.externalSeason = undefined;
         },
         /* error path */ e => { this.processingtaching = false; this.setAlert('danger', e); },

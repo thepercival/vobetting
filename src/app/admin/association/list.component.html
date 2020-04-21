@@ -91,6 +91,9 @@
             <span *ngIf="uiAttacher.externalAssociation">
               {{uiAttacher.externalAssociation.getName()}}
             </span>
+            <span *ngIf="!uiAttacher.externalAssociation && uiAttacher.attacher">
+              {{uiAttacher.attacher.getExternalId()}}
+            </span>
           </td>
         </tr>
       </tbody>

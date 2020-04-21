@@ -94,6 +94,9 @@
             <span *ngIf="uiAttacher.externalSport">
               {{uiAttacher.externalSport.getName()}}
             </span>
+            <span *ngIf="!uiAttacher.externalSport && uiAttacher.attacher">
+              {{uiAttacher.attacher.getExternalId()}}
+            </span>
           </td>
         </tr>
       </tbody>

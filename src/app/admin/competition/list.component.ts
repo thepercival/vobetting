@@ -135,6 +135,7 @@ export class CompetitionListComponent implements OnInit {
     this.attacherRepos.removeCompetition(competitionAttacher.attacher)
       .subscribe(
         /* happy path */() => {
+          competitionAttacher.attacher = undefined;
           competitionAttacher.externalCompetition = undefined;
         },
         /* error path */ e => { this.processingtaching = false; this.setAlert('danger', e); },

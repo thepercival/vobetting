@@ -133,6 +133,7 @@ export class AssociationListComponent implements OnInit {
     this.attacherRepos.removeAssociation(associationAttacher.attacher)
       .subscribe(
         /* happy path */() => {
+          associationAttacher.attacher = undefined;
           associationAttacher.externalAssociation = undefined;
         },
         /* error path */ e => { this.processingtaching = false; this.setAlert('danger', e); },

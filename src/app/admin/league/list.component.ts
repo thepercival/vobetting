@@ -134,6 +134,7 @@ export class LeagueListComponent implements OnInit {
     this.attacherRepos.removeLeague(leagueAttacher.attacher)
       .subscribe(
         /* happy path */() => {
+          leagueAttacher.attacher = undefined;
           leagueAttacher.externalLeague = undefined;
         },
         /* error path */ e => { this.processingtaching = false; this.setAlert('danger', e); },
