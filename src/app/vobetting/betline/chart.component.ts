@@ -84,12 +84,12 @@ export class BetLineChartComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.game !== undefined && changes.game.currentValue !== undefined) {
-      this.betLineRepository.getObjects(this.game, this.betType).subscribe(betLines => {
-        this.betLines = betLines;
-      },
-        /* error path */ e => { this.processing = false; },
-        /* onComplete */() => { this.processing = false; }
-      );
+      // this.betLineRepository.getObjects(this.game, this.betType).subscribe(betLines => {
+      //   this.betLines = betLines;
+      // },
+      //   /* error path */ e => { this.processing = false; },
+      //   /* onComplete */() => { this.processing = false; }
+      // );
     }
   }
 
@@ -141,7 +141,7 @@ export class BetLineChartComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   getHomeAway(betLine: BetLine): boolean {
-    return this.game.getHomeAway(betLine.getPoulePlace());
+    return this.game.getHomeAway(betLine.getPlace());
   }
 
   getHomeAwayDescription(homeAway?: boolean) {
@@ -163,7 +163,7 @@ export class BetLineChartComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   protected getBetLine(homeAway?: boolean): BetLine {
-    return this.betLines.find(betLine => betLine.getGame().isParticipating(betLine.getPoulePlace(), homeAway));
+    return this.betLines.find(betLine => betLine.getGame().isParticipating(betLine.getPlace(), homeAway));
   }
 
   getLayBacks(betLine: BetLine): any[] {

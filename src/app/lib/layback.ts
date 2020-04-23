@@ -1,6 +1,5 @@
-import { ExternalSource } from 'ngx-sport';
-
 import { BetLine } from './betline';
+import { Bookmaker } from './bookmaker';
 
 /**
  * Created by coen on 9-10-17.
@@ -10,13 +9,9 @@ export class LayBack {
     protected back: boolean;
     protected price: number;
     private size: number;
-    protected dateTime: Date;
-    protected betLine: BetLine;
-    protected externalSource: ExternalSource;
 
-    constructor(dateTime: Date, betLine: BetLine) {
-        this.setDateTime(dateTime);
-        this.setBetLine(betLine);
+    constructor(private dateTime: Date, private betLine: BetLine, private bookmaker: Bookmaker) {
+
     }
 
     getId(): number {
@@ -55,24 +50,16 @@ export class LayBack {
         return this.dateTime;
     }
 
-    setDateTime(dateTime: Date): void {
-        this.dateTime = dateTime;
-    }
-
     getBetLine(): BetLine {
         return this.betLine;
     }
 
-    setBetLine(betLine: BetLine): void {
+    protected setBetLine(betLine: BetLine): void {
         this.betLine = betLine;
         this.betLine.getLayBacks().push(this);
     }
 
-    getExternalSource(): ExternalSource {
-        return this.externalSource;
-    }
-
-    setExternalSource(externalSource: ExternalSource): void {
-        this.externalSource = externalSource;
+    getBookmaker(): Bookmaker {
+        return this.bookmaker;
     }
 }

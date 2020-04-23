@@ -1,42 +1,48 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Competition, Game, Round, Structure } from 'ngx-sport';
+import { Competition, Game, Round, Structure, NameService } from 'ngx-sport';
 import { CompetitionRepository } from '../../lib/ngx-sport/competition/repository';
 import { StructureRepository } from '../../lib/ngx-sport/structure/repository';
 
 import { IAlert } from '../../common/alert';
 import { BetLineFilter } from '../../lib/betline/repository';
+import { MyNavigation } from 'src/app/common/navigation';
+import { BetLine } from 'src/app/lib/betline';
 
 @Component({
-  selector: 'app-betline-main',
-  templateUrl: './main.component.html',
-  styleUrls: ['./main.component.css']
+  selector: 'app-betgame',
+  templateUrl: './betgame.component.html',
+  styleUrls: ['./betgame.component.css']
 })
-export class BetLineMainComponent implements OnInit, OnDestroy {
+export class BetGameComponent implements OnInit {
 
-  // protected sub: Subscription;
-  // returnUrl: string;
-  // returnUrlParam: number;
-  // returnUrlQueryParamKey: string;
-  // returnUrlQueryParamValue: string;
   public alert: IAlert;
   public processing = true;
-  competitions: Competition[];
-  // competition: Competition;
-  games: Game[];
+  competition: Competition;
   structure: Structure;
-  betTypes: number;
+  game: Game;
+  betLines: BetLine[];
 
   constructor(
     private competitionRepos: CompetitionRepository,
     private structureRepository: StructureRepository,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private myNavigation: MyNavigation,
+    public nameService: NameService,
   ) {
 
   }
 
   ngOnInit() {
+    this.route.params.subscribe(params => {
+      console.log(+params.competitionId);
+      console.log(+params.gameId);
+      // eerst competitie ophalen +params.competitionId
+      // dan structuur
+      // dan meteen juiste game selecteren +params.gameId
+    });
+
     // this.competitionRepos.getObjects()
     //   .subscribe(
     //     /* happy path */(competitions: Competition[]) => {
@@ -57,39 +63,39 @@ export class BetLineMainComponent implements OnInit, OnDestroy {
     // });
   }
 
-  ngOnDestroy() {
-    //   this.sub.unsubscribe();
+  navigateBack() {
+    this.myNavigation.back();
   }
 
-  processBetLinesFilter(betLineFilter: BetLineFilter) {
-    // this.structureRepository.getObject(betLineFilter.competition)
-    //   .subscribe(
-    //     /* happy path */(structure: Structure) => {
-    //       this.structure = structure;
-    //       this.betTypes = betLineFilter.betType;
-    //       this.games = this.getAllGames(this.structure.getRootRound(), betLineFilter.startDateTime, betLineFilter.endDateTime);
-    //     },
-    //   /* error path */ e => { },
-    //   /* onComplete */() => { }
-    //   );
-  }
+  get GameHOME(): boolean { return Game.HOME; }
+  get GameAWAY(): boolean { return Game.AWAY; }
 
-  getBetTypes() {
-    return this.betTypes;
-  }
+  // processBetLinesFilter(betLineFilter: BetLineFilter) {
+  // this.structureRepository.getObject(betLineFilter.competition)
+  //   .subscribe(
+  //     /* happy path */(structure: Structure) => {
+  //       this.structure = structure;
+  //       this.betTypes = betLineFilter.betType;
+  //       this.games = this.getAllGames(this.structure.getRootRound(), betLineFilter.startDateTime, betLineFilter.endDateTime);
+  //     },
+  //   /* error path */ e => { },
+  //   /* onComplete */() => { }
+  //   );
+  // }
 
-  getAllGames(round: Round, startDateTime: Date, endDateTime: Date) {
-    let games = [];
-    round.getPoules().forEach(poule => {
-      games = games.concat(poule.getGames().filter(
-        game => game.getStartDateTime() > startDateTime && game.getStartDateTime() < endDateTime
-      ));
-    });
-    /*round.getChildRounds().forEach((childRound) => {
-      games = games.concat(this.getAllGames(childRound, startDateTime, endDateTime));
-    });*/
-    return games;
-  }
+
+  // getAllGames(round: Round, startDateTime: Date, endDateTime: Date) {
+  //   let games = [];
+  //   round.getPoules().forEach(poule => {
+  //     games = games.concat(poule.getGames().filter(
+  //       game => game.getStartDateTime() > startDateTime && game.getStartDateTime() < endDateTime
+  //     ));
+  //   });
+  //   /*round.getChildRounds().forEach((childRound) => {
+  //     games = games.concat(this.getAllGames(childRound, startDateTime, endDateTime));
+  //   });*/
+  //   return games;
+  // }
 
   // private postInit(id: number) {
   //   if (id === undefined || id < 1) {
@@ -120,23 +126,6 @@ export class BetLineMainComponent implements OnInit, OnDestroy {
   //       }
   //     }
   //   );
-  // }
-
-  // private getForwarUrl() {
-  //   if (this.returnUrlParam !== undefined) {
-  //     return [this.returnUrl, this.returnUrlParam];
-  //   }
-  //   return [this.returnUrl];
-  // }
-
-  // private getForwarUrlQueryParams(): {} {
-  //   const queryParams = {};
-  //   queryParams[this.returnUrlQueryParamKey] = this.returnUrlQueryParamValue;
-  //   return queryParams;
-  // }
-
-  // navigateBack() {
-  //   this.router.navigate(this.getForwarUrl(), { queryParams: this.getForwarUrlQueryParams() });
   // }
 
   protected setAlert(type: string, message: string) {

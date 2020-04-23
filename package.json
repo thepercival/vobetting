@@ -12,6 +12,7 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^9.1.2",
+    "@angular/cdk": "^9.2.1",
     "@angular/common": "^9.1.2",
     "@angular/compiler": "^9.1.2",
     "@angular/core": "^9.1.2",
@@ -27,7 +28,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.13.0",
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@ng-bootstrap/ng-bootstrap": "^6.0.3",
-    "@swimlane/ngx-charts": "^14.0.0",
+    "@swimlane/ngx-charts": "^13.0.0",
     "bootstrap": "^4.4.1",
     "module": "^1.2.5",
     "ngx-sport": "0.0.92",

@@ -13,11 +13,12 @@ import { CompetitionRepository } from '../lib/ngx-sport/competition/repository';
 
 import { BetLineRepository } from '../lib/betline/repository';
 import { LayBackRepository } from '../lib/layback/repository';
-import { BetLineChartComponent } from './betline/chart.component';
-import { BetLineMainComponent } from './betline/main.component';
-import { BetLineSelectionComponent } from './betline/selection.component';
 import { VOBettingRoutingModule } from './vobetting-routing.module';
-
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { BetGameRepository } from '../lib/betgame/repository';
+import { BetGameListComponent } from './betgames/betgamelist.component';
+import { BetGameComponent } from './betgames/betgame.component';
+import { CompetitionMapper } from 'ngx-sport';
 
 @NgModule({
   imports: [
@@ -26,8 +27,18 @@ import { VOBettingRoutingModule } from './vobetting-routing.module';
     ReactiveFormsModule,
     NgbAlertModule, NgbCollapseModule, NgbDatepickerModule, NgbPopoverModule, NgbTimepickerModule,
     NgxChartsModule,
+    FontAwesomeModule
   ],
-  declarations: [BetLineMainComponent, BetLineSelectionComponent, BetLineChartComponent],
-  providers: [CompetitionRepository, BetLineRepository, LayBackRepository]
+  declarations: [
+    BetGameListComponent, BetGameComponent/*, BetLineSelectionComponent, BetLineChartComponent, */
+  ],
+  providers: [
+    BetGameRepository,
+    BetLineRepository,
+    LayBackRepository
+  ]
 })
-export class VOBettingModule { }
+export class VOBettingModule {
+  constructor() {
+  }
+}

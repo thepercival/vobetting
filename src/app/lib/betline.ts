@@ -9,15 +9,10 @@ export class BetLine {
     static readonly MATCH_ODDS = 1;
 
     protected id: number;
-    protected betType: number;
-    protected game: Game;
-    protected poulePlace: Place;
+    protected place: Place;
     protected layBacks: LayBack[] = [];
 
-    // constructor
-    constructor(game: Game, betType) {
-        this.setGame(game);
-        this.setBetType(betType);
+    constructor(protected game: Game, protected betType: number) {
     }
 
     getId(): number {
@@ -32,24 +27,24 @@ export class BetLine {
         return this.betType;
     }
 
-    setBetType(betType: number): void {
-        this.betType = betType;
-    }
+    // setBetType(betType: number): void {
+    //     this.betType = betType;
+    // }
 
     getGame(): Game {
         return this.game;
     }
 
-    setGame(game: Game): void {
-        this.game = game;
+    // setGame(game: Game): void {
+    //     this.game = game;
+    // }
+
+    getPlace(): Place {
+        return this.place;
     }
 
-    getPoulePlace(): Place {
-        return this.poulePlace;
-    }
-
-    setPoulePlace(poulePlace: Place): void {
-        this.poulePlace = poulePlace;
+    setPlace(place: Place): void {
+        this.place = place;
     }
 
     getLayBacks(): LayBack[] {

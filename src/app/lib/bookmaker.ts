@@ -9,12 +9,12 @@ export class Bookmaker {
         this.exchange = (exchange === true);
     }
 
-    getId(): string | number {
-        return this.id;
+    getExchange(): boolean {
+        return this.exchange;
     }
 
-    setId(id: string | number): void {
-        this.id = id;
+    setExchange(exchange: boolean): void {
+        this.exchange = exchange;
     }
 
     getName(): string {
@@ -25,11 +25,11 @@ export class Bookmaker {
         this.name = name;
     }
 
-    getExchange(): boolean {
-        return this.exchange;
+    getId(): string | number {
+        return this.id;
     }
 
-    setExchange(exchange: boolean) {
-        this.exchange = exchange;
+    setId(id: string | number): void {
+        this.id = id;
     }
 }

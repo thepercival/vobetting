@@ -49,7 +49,16 @@ import {
 
 import { faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { HttpClientModule } from '@angular/common/http';
-import { NameService } from 'ngx-sport';
+import { NameService, SportMapper, AssociationMapper, SeasonMapper, LeagueMapper, CompetitionMapper, RefereeMapper, FieldMapper, SportConfigMapper, SportScoreConfigMapper, SportConfigService, SportScoreConfigService, StructureMapper, RoundNumberMapper, RoundMapper, PouleMapper, PlaceMapper, PlanningConfigMapper, CompetitorMapper, GameMapper, GamePlaceMapper, GameScoreMapper, PlanningMapper } from 'ngx-sport';
+import { BookmakerRepository } from './lib/bookmaker/repository';
+import { BookmakerMapper } from './lib/bookmaker/mapper';
+import { SportRepository } from './lib/ngx-sport/sport/repository';
+import { AssociationRepository } from './lib/ngx-sport/association/repository';
+import { SeasonRepository } from './lib/ngx-sport/season/repository';
+import { LeagueRepository } from './lib/ngx-sport/league/repository';
+import { CompetitionRepository } from './lib/ngx-sport/competition/repository';
+import { CompetitorRepository } from './lib/ngx-sport/competitor/repository';
+import { StructureRepository } from './lib/ngx-sport/structure/repository';
 
 @NgModule({
   declarations: [
@@ -73,6 +82,26 @@ import { NameService } from 'ngx-sport';
     GlobalEventsManager,
     MyNavigation,
     NameService,
+
+    BookmakerRepository,
+    BookmakerMapper,
+    SportRepository,
+    SportMapper,
+    AssociationRepository,
+    AssociationMapper,
+    SeasonRepository,
+    SeasonMapper,
+    LeagueRepository,
+    LeagueMapper,
+    CompetitionRepository,
+    CompetitorRepository,
+    CompetitionMapper,
+    RefereeMapper,
+    FieldMapper,
+    SportConfigMapper, SportScoreConfigMapper,
+    SportConfigService, SportScoreConfigService,
+    StructureRepository, StructureMapper, RoundNumberMapper, RoundMapper, PouleMapper, PlaceMapper, PlanningConfigMapper,
+    CompetitorMapper, GameMapper, GamePlaceMapper, GameScoreMapper, PlanningMapper
   ],
   bootstrap: [AppComponent]
 })

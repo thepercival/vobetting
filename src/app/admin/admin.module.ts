@@ -82,26 +82,7 @@ import { BookmakerMapper } from '../lib/bookmaker/mapper';
     AttacherMapper,
     ExternalObjectRepository,
     ExternalSourceRepository,
-    ExternalSourceMapper,
-    BookmakerRepository,
-    BookmakerMapper,
-    SportRepository,
-    SportMapper,
-    AssociationRepository,
-    AssociationMapper,
-    SeasonRepository,
-    SeasonMapper,
-    LeagueRepository,
-    LeagueMapper,
-    CompetitionRepository,
-    CompetitorRepository,
-    CompetitionMapper,
-    RefereeMapper,
-    FieldMapper,
-    SportConfigMapper, SportScoreConfigMapper,
-    SportConfigService, SportScoreConfigService,
-    StructureRepository, StructureMapper, RoundNumberMapper, RoundMapper, PouleMapper, PlaceMapper, PlanningConfigMapper,
-    CompetitorMapper, GameMapper, GamePlaceMapper, GameScoreMapper, PlanningMapper,
+    ExternalSourceMapper
   ]
 })
 export class AdminModule {

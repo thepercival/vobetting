@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Game, JsonPlace, PlaceMapper } from 'ngx-sport';
 
 import { BetLine } from '../betline';
+import { JsonLayBack } from '../layback/mapper';
 
 @Injectable()
 export class BetLineMapper {
@@ -13,8 +14,8 @@ export class BetLineMapper {
             betLine = new BetLine(game, json.betType);
         }
         betLine.setId(json.id);
-        if (json.poulePlace !== undefined) {
-            betLine.setPoulePlace(game.getPoule().getPlace(json.poulePlace.number));
+        if (json.place !== undefined) {
+            betLine.setPlace(game.getPoule().getPlace(json.place.number));
         }
         return betLine;
     }
@@ -23,7 +24,7 @@ export class BetLineMapper {
         return {
             id: betLine.getId(),
             betType: betLine.getBetType(),
-            poulePlace: betLine.getPoulePlace() ? this.placeMapper.toJson(betLine.getPoulePlace()) : undefined
+            place: betLine.getPlace() ? this.placeMapper.toJson(betLine.getPlace()) : undefined
         };
     }
 }
@@ -31,5 +32,6 @@ export class BetLineMapper {
 export interface JsonBetLine {
     id?: number;
     betType: number;
-    poulePlace?: JsonPlace;
+    place?: JsonPlace;
+    layBacks?: JsonLayBack[]
 }
