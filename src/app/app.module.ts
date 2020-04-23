@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -68,7 +68,7 @@ import { StructureRepository } from './lib/ngx-sport/structure/repository';
     HomeComponent,
   ],
   imports: [
-    BrowserModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
     CommonSharedModule,

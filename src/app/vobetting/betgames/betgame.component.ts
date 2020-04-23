@@ -5,9 +5,10 @@ import { CompetitionRepository } from '../../lib/ngx-sport/competition/repositor
 import { StructureRepository } from '../../lib/ngx-sport/structure/repository';
 
 import { IAlert } from '../../common/alert';
-import { BetLineFilter } from '../../lib/betline/repository';
+import { BetLineFilter, BetLineRepository } from '../../lib/betline/repository';
 import { MyNavigation } from 'src/app/common/navigation';
 import { BetLine } from 'src/app/lib/betline';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-betgame',
@@ -22,45 +23,60 @@ export class BetGameComponent implements OnInit {
   structure: Structure;
   game: Game;
   betLines: BetLine[];
+  form: FormGroup;
 
   constructor(
     private competitionRepos: CompetitionRepository,
-    private structureRepository: StructureRepository,
+    private structureRepos: StructureRepository,
+    private betLineRepos: BetLineRepository,
     private route: ActivatedRoute,
-    private router: Router,
     private myNavigation: MyNavigation,
     public nameService: NameService,
+    fb: FormBuilder
   ) {
-
+    this.form = fb.group({
+      betline: ['', Validators.compose([
+      ])]
+    });
   }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      console.log(+params.competitionId);
-      console.log(+params.gameId);
-      // eerst competitie ophalen +params.competitionId
-      // dan structuur
-      // dan meteen juiste game selecteren +params.gameId
+      this.competitionRepos.getObject(params.competitionId)
+        .subscribe(
+          /* happy path */(competition: Competition) => {
+            this.competition = competition;
+            this.initStructureAndGame(competition, params.gameId);
+          },
+          /* error path */ e => { this.processing = false; this.setAlert('danger', e); },
+          /* onComplete */() => { this.processing = false; }
+        );
     });
+  }
 
-    // this.competitionRepos.getObjects()
-    //   .subscribe(
-    //     /* happy path */(competitions: Competition[]) => {
-    //       this.competitions = competitions;
-    //       // this.postInit(+params.id);
-    //     },
-    //     /* error path */ e => { },
-    //     /* onComplete */() => { this.processing = false; }
-    //   );
+  private initStructureAndGame(competition: Competition, gameId: number) {
+    this.structureRepos.getObject(competition)
+      .subscribe(
+        /* happy path */(structure: Structure) => {
+          this.structure = structure;
+          this.game = structure.getFirstRoundNumber().getGames().find(game => game.getId() == gameId);
+          this.getBetLines();
+        },
+        /* error path */ e => { this.setAlert('danger', e); this.processing = false; },
+        /* onComplete */() => { }
+      );
+  }
 
-    // this.route.queryParamMap.subscribe(params => {
-    //   this.returnUrl = params.get('returnAction');
-    //   if (params.get('returnParam') !== null) {
-    //     this.returnUrlParam = +params.get('returnParam');
-    //   }
-    //   this.returnUrlQueryParamKey = params.get('returnQueryParamKey');
-    //   this.returnUrlQueryParamValue = params.get('returnQueryParamValue');
-    // });
+  private getBetLines() {
+    this.betLineRepos.getObjects(this.game)
+      .subscribe(
+        /* happy path */(betLines: BetLine[]) => {
+          this.betLines = betLines;
+          this.processing = false;
+        },
+        /* error path */ e => { this.setAlert('danger', e); this.processing = false; },
+        /* onComplete */() => { }
+      );
   }
 
   navigateBack() {

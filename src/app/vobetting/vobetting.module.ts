@@ -18,7 +18,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { BetGameRepository } from '../lib/betgame/repository';
 import { BetGameListComponent } from './betgames/betgamelist.component';
 import { BetGameComponent } from './betgames/betgame.component';
-import { CompetitionMapper } from 'ngx-sport';
+import { BetLineMapper } from '../lib/betline/mapper';
+import { BetLineChartComponent } from './betline/chart.component';
+import { LayBackMapper } from '../lib/layback/mapper';
 
 @NgModule({
   imports: [
@@ -27,15 +29,17 @@ import { CompetitionMapper } from 'ngx-sport';
     ReactiveFormsModule,
     NgbAlertModule, NgbCollapseModule, NgbDatepickerModule, NgbPopoverModule, NgbTimepickerModule,
     NgxChartsModule,
-    FontAwesomeModule
+    FontAwesomeModule,
   ],
   declarations: [
-    BetGameListComponent, BetGameComponent/*, BetLineSelectionComponent, BetLineChartComponent, */
+    BetGameListComponent, BetGameComponent, BetLineChartComponent
   ],
   providers: [
     BetGameRepository,
     BetLineRepository,
-    LayBackRepository
+    BetLineMapper,
+    LayBackRepository,
+    LayBackMapper
   ]
 })
 export class VOBettingModule {

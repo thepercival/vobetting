@@ -12,14 +12,12 @@ import { LayBackRepository } from '../../lib/layback/repository';
   templateUrl: './chart.component.html',
   styleUrls: ['./chart.component.css']
 })
-export class BetLineChartComponent implements OnInit, OnDestroy, OnChanges {
+export class BetLineChartComponent implements OnInit {
 
-  @Input() betType: number;
+  @Input() betLine: BetLine;
   @Input() game: Game;
-  processing = true;
 
-  showChart = false;
-  betLines: BetLine[];
+  processing = true;
   chartLayBacks: any[];
   filter: any = {
     thuis: true,
@@ -48,12 +46,10 @@ export class BetLineChartComponent implements OnInit, OnDestroy, OnChanges {
     ]
   };
   autoScale = true;
+  animations: boolean = true;
   // chart: end
 
   constructor(
-
-    private betLineRepository: BetLineRepository,
-    private layBackRepository: LayBackRepository
   ) {
     // const single = this.single;
     // const multi = this.multi;
@@ -77,63 +73,8 @@ export class BetLineChartComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnInit() {
-  }
-
-  ngOnDestroy() {
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.game !== undefined && changes.game.currentValue !== undefined) {
-      // this.betLineRepository.getObjects(this.game, this.betType).subscribe(betLines => {
-      //   this.betLines = betLines;
-      // },
-      //   /* error path */ e => { this.processing = false; },
-      //   /* onComplete */() => { this.processing = false; }
-      // );
-    }
-  }
-
-  toggleChart() {
-    this.processing = true;
-    this.setLayBacks();
-    this.showChart = true;
-  }
-
-  setLayBacks() {
-    const obsLayBacks: Observable<LayBack[]>[] = [];
-
-    this.betLines.forEach(betLine => {
-      obsLayBacks.push(this.layBackRepository.getObjects(betLine));
-    });
-    this.processLayBacks(obsLayBacks);
-  }
-
-  protected processLayBacks(obsLayBacks: Observable<LayBack[]>[]) {
-    forkJoin(obsLayBacks).subscribe(results => {
-      results.forEach(layBacks => {
-        layBacks.forEach(layBack => {
-          // do nothing
-        });
-      });
-      let chartLayBacks: any[] = [];
-      this.betLines.forEach((betLine) => {
-        chartLayBacks = chartLayBacks.concat(this.getLayBacks(betLine));
-      });
-      this.chartLayBacks = chartLayBacks;
-      this.processing = false;
-    },
-      err => {
-        // this.setAlert('danger', 'volgorde niet gewijzigd: ' + err);
-        this.processing = false;
-      }
-    );
-  }
-
-  getBetTypeDescription(betType: number) {
-    if (betType === BetLine.MATCH_ODDS) {
-      return 'MATCH_ODDS';
-    }
-    return undefined;
+    this.setChartLayBacks(this.betLine);
+    this.processing = false;
   }
 
   getDescription(betType: number, back: boolean, homeAway?: boolean) {
@@ -153,21 +94,17 @@ export class BetLineChartComponent implements OnInit, OnDestroy, OnChanges {
     return { 'background-color': color };
   }
 
-  updateFilter(betLine: BetLine) {
-    // update filter
-    // filter: any = {
-    //   thuis: true,
-    //   gelijk: true,
-    //   uit: true
-    // };
-  }
+  // updateFilter(betLine: BetLine) {
+  //   // update filter
+  //   // filter: any = {
+  //   //   thuis: true,
+  //   //   gelijk: true,
+  //   //   uit: true
+  //   // };
+  // }
 
-  protected getBetLine(homeAway?: boolean): BetLine {
-    return this.betLines.find(betLine => betLine.getGame().isParticipating(betLine.getPlace(), homeAway));
-  }
-
-  getLayBacks(betLine: BetLine): any[] {
-    return [
+  setChartLayBacks(betLine: BetLine) {
+    this.chartLayBacks = [
       {
         name: this.getDescription(betLine.getBetType(), true, this.getHomeAway(betLine)),
         series: this.getLayBacksHelper(betLine, true)
@@ -177,6 +114,7 @@ export class BetLineChartComponent implements OnInit, OnDestroy, OnChanges {
         series: this.getLayBacksHelper(betLine, false)
       },
     ];
+    console.log(this.chartLayBacks);
   }
 
   protected getLayBacksHelper(betLine: BetLine, back: boolean) {

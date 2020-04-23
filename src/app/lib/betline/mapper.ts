@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { Game, JsonPlace, PlaceMapper } from 'ngx-sport';
 
 import { BetLine } from '../betline';
-import { JsonLayBack } from '../layback/mapper';
+import { JsonLayBack, LayBackMapper } from '../layback/mapper';
 
 @Injectable()
 export class BetLineMapper {
 
-    constructor(private placeMapper: PlaceMapper) { }
+    constructor(private placeMapper: PlaceMapper, private layBackMapper: LayBackMapper) { }
 
     toObject(json: JsonBetLine, game: Game, betLine?: BetLine): BetLine {
         if (betLine === undefined) {
@@ -17,6 +17,7 @@ export class BetLineMapper {
         if (json.place !== undefined) {
             betLine.setPlace(game.getPoule().getPlace(json.place.number));
         }
+        json.layBacks.map(jsonLayBack => this.layBackMapper.toObject(jsonLayBack, betLine));
         return betLine;
     }
 

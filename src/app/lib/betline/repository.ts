@@ -19,38 +19,23 @@ export class BetLineRepository extends APIRepository {
         private mapper: BetLineMapper
     ) {
         super();
-        this.url = super.getApiUrl() + this.getUrlpostfix();
     }
 
     getUrlpostfix(): string {
         return 'betlines';
     }
 
-    // getObjects(game: Game, betTypes: number): Observable<BetLine[]> {
-    //     const options = {
-    //         headers: super.getHeaders(),
-    //         params: new HttpParams().set('gameid', game.getId().toString())
-    //     };
-    //     if (betTypes !== undefined) {
-    //         options.params = options.params.append('bettype', betTypes.toString());
-    //     }
-    //     return this.http.get(this.url, options).pipe(
-    //         map((json: JsonBetLine[]) => json.map(jsonBetLine => this.mapper.toObject(jsonBetLine, game))),
-    //         catchError((err) => this.handleError(err))
-    //     );
-    // }
+    protected getUrl(game?: Game): string {
+        return super.getApiUrl() + this.getUrlpostfix() + (game ? ('/' + game.getId()) : '');
 
-    // getObject(id: number, game: Game): Observable<BetLine> {
-    //     const options = {
-    //         headers: super.getHeaders(),
-    //         params: new HttpParams().set('gameid', game.getId().toString())
-    //     };
-    //     const url = this.url + '/' + id;
-    //     return this.http.get(url, options).pipe(
-    //         map((res: JsonBetLine) => this.mapper.toObject(res, game)),
-    //         catchError((err) => this.handleError(err))
-    //     );
-    // }
+    }
+
+    getObjects(game: Game): Observable<BetLine[]> {
+        return this.http.get(this.getUrl(game), this.getOptions()).pipe(
+            map((json: JsonBetLine[]) => json.map(jsonBetLine => this.mapper.toObject(jsonBetLine, game))),
+            catchError((err) => this.handleError(err))
+        );
+    }
 
     // createObject(json: JsonBetLine, game: Game): Observable<BetLine> {
     //     const options = {

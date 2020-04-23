@@ -61,7 +61,6 @@ export class CompetitionStructureComponent implements OnInit {
   }
 
   private postInit(competition: Competition) {
-
     this.competition = competition;
     this.structureRepos.getObject(competition)
       .subscribe(
@@ -85,7 +84,6 @@ export class CompetitionStructureComponent implements OnInit {
         /* error path */ e => { this.setAlert('danger', e); this.processing = false; },
         /* onComplete */() => { }
       );
-
   }
 
   openExternalSource() {

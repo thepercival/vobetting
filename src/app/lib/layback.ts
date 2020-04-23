@@ -6,12 +6,13 @@ import { Bookmaker } from './bookmaker';
  */
 export class LayBack {
     protected id: number;
+    protected betLine: BetLine;
     protected back: boolean;
     protected price: number;
     private size: number;
 
-    constructor(private dateTime: Date, private betLine: BetLine, private bookmaker: Bookmaker) {
-
+    constructor(private dateTime: Date, betLine: BetLine, private bookmaker: Bookmaker) {
+        this.setBetLine(betLine);
     }
 
     getId(): number {

@@ -19,8 +19,24 @@
     <ngb-alert *ngIf="alert" [type]="alert.type" [dismissible]="false" (close)="alert = undefined;">
       {{ alert.message }}
     </ngb-alert>
-    <div *ngIf="!processing">
-      <!-- <app-betline-chart *ngFor="let betType of getBetTypes(game)" [game]="game" [betType]="betType"></app-betline-chart> -->
+    <div *ngIf="!processing && betLines">
+      <form name="form" [formGroup]="form" novalidate>
+        <div class="form-group row">
+          <label for="start" class="col-4 col-form-label">wedtype</label>
+          <div class="col-8">
+            <select class="form-control"
+              [ngClass]="{ 'is-invalid': form.controls.betline.invalid, 'is-valid': form.controls.betline.valid }"
+              formControlName="betline">
+              <option [ngValue]="undefined">kies..</option>
+              <option *ngFor="let betLineIt of betLines" [ngValue]="betLineIt">
+                {{betLineIt.getDescription()}}</option>
+            </select>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div *ngIf="form.controls.betline.value">
+      <app-betline-chart [game]="game" [betLine]="form.controls.betline.value"></app-betline-chart>
     </div>
   </div>
 </div>

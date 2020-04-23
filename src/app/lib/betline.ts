@@ -54,4 +54,11 @@ export class BetLine {
     // setRoles(roles: TournamentRole[]): void {
     //     this.roles = roles;
     // }
+
+    getDescription(): string {
+        if (this.getBetType() === BetLine.MATCH_ODDS) {
+            return 'resultaat';
+        }
+        return 'onbekend';
+    }
 }
