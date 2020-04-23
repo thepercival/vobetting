@@ -11,6 +11,9 @@ export class LayBack {
     protected price: number;
     private size: number;
 
+    static readonly BACK = true;
+    static readonly LAY = false;
+
     constructor(private dateTime: Date, betLine: BetLine, private bookmaker: Bookmaker) {
         this.setBetLine(betLine);
     }

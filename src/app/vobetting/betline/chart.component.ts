@@ -106,20 +106,23 @@ export class BetLineChartComponent implements OnInit {
   setChartLayBacks(betLine: BetLine) {
     this.chartLayBacks = [
       {
-        name: this.getDescription(betLine.getBetType(), true, this.getHomeAway(betLine)),
-        series: this.getLayBacksHelper(betLine, true)
+        name: this.getDescription(betLine.getBetType(), LayBack.BACK, this.getHomeAway(betLine)),
+        series: this.getLayBacksHelper(betLine, LayBack.BACK)
       },
       {
-        name: this.getDescription(betLine.getBetType(), false, this.getHomeAway(betLine)),
-        series: this.getLayBacksHelper(betLine, false)
+        name: this.getDescription(betLine.getBetType(), LayBack.LAY, this.getHomeAway(betLine)),
+        series: this.getLayBacksHelper(betLine, LayBack.LAY)
       },
     ];
     console.log(this.chartLayBacks);
   }
 
-  protected getLayBacksHelper(betLine: BetLine, back: boolean) {
+  protected getLayBacksHelper(betLine: BetLine, backOrLay: boolean) {
     const layBacks: LayBack[] = betLine.getLayBacks();
-    const layBacksTmp = layBacks.filter(layBack => layBack.getBack() === back && layBack.getPrice() < 8);
+    console.log(layBacks);
+    console.log(layBacks.length);
+    const layBacksTmp = layBacks.filter(layBack => layBack.getBack() === backOrLay && layBack.getPrice() < 8);
+    console.log(layBacksTmp.length);
     return layBacksTmp.map(layback => {
       return {
         name: layback.getDateTime(),
