@@ -14,7 +14,7 @@ export class LayBackMapper {
                 new Date(json.dateTime),
                 betLine,
                 this.bookmakerMapper.toObject(json.bookmaker),
-                json.back);
+                json.runner);
         }
         layBack.setId(json.id);
         layBack.setBack(json.back);

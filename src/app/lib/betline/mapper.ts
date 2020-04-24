@@ -18,7 +18,8 @@ export class BetLineMapper {
         if (json.place !== undefined) {
             betLine.setPlace(game.getPoule().getPlace(json.place.number));
         }
-        const jsonLayBacks = this.test(json.layBacks);
+        // const jsonLayBacks = this.test(json.layBacks);
+        const jsonLayBacks = json.layBacks;
         jsonLayBacks.map(jsonLayBack => this.layBackMapper.toObject(jsonLayBack, betLine));
         return betLine;
     }
