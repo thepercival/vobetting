@@ -6,6 +6,9 @@ import { BetLine } from '../../lib/betline';
 import { BetLineRepository } from '../../lib/betline/repository';
 import { LayBack } from '../../lib/layback';
 import { LayBackRepository } from '../../lib/layback/repository';
+import { Bookmaker } from 'src/app/lib/bookmaker';
+import { SerieRunner, SerieLayBack, SerieBookmaker } from './series';
+import { BettingNameService } from 'src/app/lib/nameservice';
 
 @Component({
   selector: 'app-betline-chart',
@@ -13,17 +16,11 @@ import { LayBackRepository } from '../../lib/layback/repository';
   styleUrls: ['./chart.component.css']
 })
 export class BetLineChartComponent implements OnInit {
-  @Input() runner: boolean;
-  @Input() betLine: BetLine;
-  @Input() game: Game;
+  @Input() betType: number;
+  @Input() runnersSerie: SerieRunner[];
 
+  data: any[];
   processing = true;
-  chartLayBacks: any[];
-  filter: any = {
-    thuis: true,
-    gelijk: true,
-    uit: true
-  };
 
   // chart: start
   view: any[] = [700, 400];
@@ -50,22 +47,8 @@ export class BetLineChartComponent implements OnInit {
   // chart: end
 
   constructor(
+    private bettingNameService: BettingNameService
   ) {
-    // const single = this.single;
-    // const multi = this.multi;
-    // Object.assign(this, { single, multi });
-  }
-
-  get MatchOdds() {
-    return BetLine.MATCH_ODDS;
-  }
-
-  get Home() {
-    return Game.HOME;
-  }
-
-  get Away() {
-    return Game.AWAY;
   }
 
   onSelect(event) {
@@ -73,55 +56,40 @@ export class BetLineChartComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.setChartLayBacks(this.betLine);
+    this.data = this.getData();
     this.processing = false;
   }
 
-  getDescription(back: boolean) {
-    return this.betLine.getRunnerDescription(this.runner) + ' - ' + (back ? 'back' : 'lay');
+  protected getData(): any[] {
+    console.log('series');
+    console.log(this.runnersSerie);
+    const data: any[] = [];
+    this.runnersSerie.forEach((runnerSerie: SerieRunner) => {
+      runnerSerie.layBackSeries.forEach((layBackSerie: SerieLayBack) => {
+        layBackSerie.bookmakers.forEach((bookmakerSerie: SerieBookmaker) => {
+          data.push({
+            name: this.getDescription(runnerSerie.runner, layBackSerie.layOrBack, bookmakerSerie.bookmaker),
+            series: bookmakerSerie.layBacks
+          });
+        });
+      });
+    });
+    console.log('data');
+    console.log(data);
+    return data;
+  }
+
+  // maak nog een color scheme per lay/back bookmaker???
+
+  getDescription(runner: boolean, back: boolean, bookMaker: Bookmaker) {
+    let description = this.bettingNameService.getRunnerDescription(this.betType, runner) + ' - ';
+    description += (back ? 'back' : 'lay');
+    description += ' - ' + bookMaker.getName();
+    return description;
   }
 
   getStyle(color: string) {
     return { 'background-color': color };
-  }
-
-  // updateFilter(betLine: BetLine) {
-  //   // update filter
-  //   // filter: any = {
-  //   //   thuis: true,
-  //   //   gelijk: true,
-  //   //   uit: true
-  //   // };
-  // }
-
-  setChartLayBacks(betLine: BetLine) {
-    this.chartLayBacks = [
-      {
-        name: this.getDescription(LayBack.BACK),
-        series: this.getLayBacksHelper(betLine, LayBack.BACK)
-      },
-      {
-        name: this.getDescription(LayBack.LAY),
-        series: this.getLayBacksHelper(betLine, LayBack.LAY)
-      },
-    ];
-    console.log(this.chartLayBacks);
-  }
-
-  protected getLayBacksHelper(betLine: BetLine, backOrLay: boolean) {
-    const layBacks: LayBack[] = betLine.getLayBacks();
-    // console.log(layBacks);
-    // console.log(this.runner);
-    const layBacksTmp = layBacks.filter(layBack => {
-      return this.runner === layBack.getRunner() && layBack.getBack() === backOrLay && layBack.getPrice() < 8;
-    });
-    // console.log(layBacksTmp);
-    return layBacksTmp.map(layback => {
-      return {
-        name: layback.getDateTime(),
-        value: layback.getPrice()
-      };
-    });
   }
 
   getPerformance(items: any[]) {

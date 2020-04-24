@@ -55,24 +55,10 @@ export class BetLine {
     //     this.roles = roles;
     // }
 
-    getDescription(): string {
-        if (this.getBetType() === BetLine.MATCH_ODDS) {
-            return 'resultaat';
-        }
-        return 'onbekend';
-    }
-
-    getBetTypeOptions(): boolean[] {
+    getRunners(): boolean[] {
         if (this.getBetType() === BetLine.MATCH_ODDS) {
             return [Game.HOME, undefined, Game.AWAY];
         }
         return [];
-    }
-
-    getRunnerDescription(runner: boolean): string {
-        if (this.getBetType() === BetLine.MATCH_ODDS) {
-            return runner === Game.HOME ? 'thuis' : (runner === Game.AWAY ? 'uit' : 'gelijk');
-        }
-        return 'onbekend';
     }
 }

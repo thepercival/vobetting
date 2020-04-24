@@ -59,6 +59,7 @@ import { LeagueRepository } from './lib/ngx-sport/league/repository';
 import { CompetitionRepository } from './lib/ngx-sport/competition/repository';
 import { CompetitorRepository } from './lib/ngx-sport/competitor/repository';
 import { StructureRepository } from './lib/ngx-sport/structure/repository';
+import { BettingNameService } from './lib/nameservice';
 
 @NgModule({
   declarations: [
@@ -82,6 +83,7 @@ import { StructureRepository } from './lib/ngx-sport/structure/repository';
     GlobalEventsManager,
     MyNavigation,
     NameService,
+    BettingNameService,
 
     BookmakerRepository,
     BookmakerMapper,

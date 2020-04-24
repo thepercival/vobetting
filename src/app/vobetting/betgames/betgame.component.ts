@@ -9,6 +9,9 @@ import { BetLineFilter, BetLineRepository } from '../../lib/betline/repository';
 import { MyNavigation } from 'src/app/common/navigation';
 import { BetLine } from 'src/app/lib/betline';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { SerieRunner, SerieLayBack } from '../betline/series';
+import { LayBack } from 'src/app/lib/layback';
+import { BettingNameService } from 'src/app/lib/nameservice';
 
 @Component({
   selector: 'app-betgame',
@@ -23,6 +26,7 @@ export class BetGameComponent implements OnInit {
   structure: Structure;
   game: Game;
   betLines: BetLine[];
+  runnersSerie: SerieRunner[];
   form: FormGroup;
 
   constructor(
@@ -32,6 +36,7 @@ export class BetGameComponent implements OnInit {
     private route: ActivatedRoute,
     private myNavigation: MyNavigation,
     public nameService: NameService,
+    public bettingNameService: BettingNameService,
     fb: FormBuilder
   ) {
     this.form = fb.group({
@@ -47,6 +52,7 @@ export class BetGameComponent implements OnInit {
           /* happy path */(competition: Competition) => {
             this.competition = competition;
             this.initStructureAndGame(competition, params.gameId);
+            this.onBetLineChange();
           },
           /* error path */ e => { this.processing = false; this.setAlert('danger', e); },
           /* onComplete */() => { this.processing = false; }
@@ -87,69 +93,50 @@ export class BetGameComponent implements OnInit {
   get GameHOME(): boolean { return Game.HOME; }
   get GameAWAY(): boolean { return Game.AWAY; }
 
-  // processBetLinesFilter(betLineFilter: BetLineFilter) {
-  // this.structureRepository.getObject(betLineFilter.competition)
-  //   .subscribe(
-  //     /* happy path */(structure: Structure) => {
-  //       this.structure = structure;
-  //       this.betTypes = betLineFilter.betType;
-  //       this.games = this.getAllGames(this.structure.getRootRound(), betLineFilter.startDateTime, betLineFilter.endDateTime);
-  //     },
-  //   /* error path */ e => { },
-  //   /* onComplete */() => { }
-  //   );
-  // }
-
-
-  // getAllGames(round: Round, startDateTime: Date, endDateTime: Date) {
-  //   let games = [];
-  //   round.getPoules().forEach(poule => {
-  //     games = games.concat(poule.getGames().filter(
-  //       game => game.getStartDateTime() > startDateTime && game.getStartDateTime() < endDateTime
-  //     ));
-  //   });
-  //   /*round.getChildRounds().forEach((childRound) => {
-  //     games = games.concat(this.getAllGames(childRound, startDateTime, endDateTime));
-  //   });*/
-  //   return games;
-  // }
-
-  // private postInit(id: number) {
-  //   if (id === undefined || id < 1) {
-  //     return;
-  //   }
-  //   this.competition = this.competitions.find(competition => competition.getId() === id);
-  // }
-
-  // linkToBasics() {
-  //   this.router.navigate(
-  //     ['/admin/competition/edit', this.competition.getId()],
-  //     {
-  //       queryParams: {
-  //         returnAction: '/admin/competition/home',
-  //         returnParam: this.competition.getId()
-  //       }
-  //     }
-  //   );
-  // }
-
-  // linkToStructure() {
-  //   this.router.navigate(
-  //     ['/admin/structure', this.competition.getId()],
-  //     {
-  //       queryParams: {
-  //         returnAction: '/admin/competition/home',
-  //         returnParam: this.competition.getId()
-  //       }
-  //     }
-  //   );
-  // }
-
   protected setAlert(type: string, message: string) {
     this.alert = { type, message };
   }
 
   protected resetAlert(): void {
     this.alert = undefined;
+  }
+
+  getRunnerDescription(runnerSerie: SerieRunner): string {
+    return this.form.controls.betline.value.getRunnerDescription(runnerSerie);
+  }
+
+  onBetLineChange(): void {
+    this.form.get('betline').valueChanges.subscribe(val => {
+      this.runnersSerie = this.getRunnersSeries(this.form.controls.betline.value);
+    });
+  }
+
+  getRunnersSeries(betLine: BetLine): SerieRunner[] {
+    const runnersSerie: SerieRunner[] = [];
+
+    betLine.getLayBacks().forEach((layBack: LayBack) => {
+      if (layBack.getPrice() > 8) {
+        return;
+      }
+      let runnerSerie = runnersSerie.find(runnerSerieIt => runnerSerieIt.runner === layBack.getRunner())
+      if (runnerSerie === undefined) {
+        runnerSerie = { runner: layBack.getRunner(), layBackSeries: [] };
+        runnersSerie.push(runnerSerie);
+      }
+      const layBacksSerie = runnerSerie.layBackSeries;
+      let layBackSerie = layBacksSerie.find(layBackSerieIt => layBackSerieIt.layOrBack === layBack.getBack())
+      if (layBackSerie === undefined) {
+        layBackSerie = { layOrBack: layBack.getBack(), bookmakers: [] };
+        layBacksSerie.push(layBackSerie);
+      }
+      const bookmakersSeries = layBackSerie.bookmakers;
+      let bookmakerSerie = bookmakersSeries.find(bookmakerSerieIt => bookmakerSerieIt.bookmaker.getId() === layBack.getBookmaker().getId())
+      if (bookmakerSerie === undefined) {
+        bookmakerSerie = { bookmaker: layBack.getBookmaker(), layBacks: [] };
+        bookmakersSeries.push(bookmakerSerie);
+      }
+      bookmakerSerie.layBacks.push({ name: layBack.getDateTime(), value: layBack.getPrice() });
+    });
+    return runnersSerie;
   }
 }

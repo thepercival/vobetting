@@ -36,15 +36,16 @@
               formControlName="betline">
               <option [ngValue]="undefined">kies..</option>
               <option *ngFor="let betLineIt of betLines" [ngValue]="betLineIt">
-                {{betLineIt.getDescription()}}</option>
+                {{bettingNameService.getBetTypeDescription(betLineIt.getBetType())}}</option>
             </select>
           </div>
         </div>
       </form>
     </div>
     <div *ngIf="form.controls.betline.value">
-      <div *ngFor="let runner of form.controls.betline.value.getBetTypeOptions()">
-        <app-betline-chart [game]="game" [betLine]="form.controls.betline.value" [runner]="runner"></app-betline-chart>
+      <div *ngFor="let runnerSerie of runnersSerie">
+        <app-betline-chart [betType]="form.controls.betline.value.getBetType()" [runnersSerie]="[runnerSerie]">
+        </app-betline-chart>
       </div>
     </div>
   </div>
