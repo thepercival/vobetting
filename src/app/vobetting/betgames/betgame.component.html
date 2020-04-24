@@ -22,7 +22,14 @@
     <div *ngIf="!processing && betLines">
       <form name="form" [formGroup]="form" novalidate>
         <div class="form-group row">
-          <label for="start" class="col-4 col-form-label">wedtype</label>
+          <label for="start" class="col-4 col-form-label">start</label>
+          <div class="col-8">
+            <input type="text" readonly class="form-control-plaintext"
+              value='{{game.getStartDateTime().toLocaleString("nl",{"month":"short","day":"2-digit", "hour12": false,"hour":"2-digit","minute":"2-digit"})}}'>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="betline" class="col-4 col-form-label">wedtype</label>
           <div class="col-8">
             <select class="form-control"
               [ngClass]="{ 'is-invalid': form.controls.betline.invalid, 'is-valid': form.controls.betline.valid }"
