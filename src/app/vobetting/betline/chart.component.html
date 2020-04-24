@@ -1,22 +1,11 @@
 <div class="container-fluid">
   <fa-icon *ngIf="processing" [icon]="['fas', 'spinner']" [spin]="true"></fa-icon>
-  <!-- <div *ngIf="!processing">
-    
-    <span *ngIf="betLine.getBetType() === MatchOdds">
-      <div class="btn-group btn-group-toggle">
-        <label class="btn-primary" ngbButtonLabel>
-          <input type="checkbox" ngbButton (click)="updateFilter(betLine)">
-          {{getHomeAwayDescription(getHomeAway(betLine))}}
-        </label>
-      </div>
-    </span>
-  </div> -->
   <div *ngIf="!processing" class="row">
     <ngx-charts-line-chart class="col" [view]="view" *ngIf="chartLayBacks" [results]="chartLayBacks"
       [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
-      [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
-      [yAxisLabel]="yAxisLabel" [animations]="animations" [scheme]="colorScheme" [autoScale]="autoScale" timeline="true"
-      (select)="onSelect($event)">
+      [legendTitle]="betLine.getDescription()" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
+      [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [animations]="animations" [scheme]="colorScheme"
+      [autoScale]="autoScale" timeline="true" (select)="onSelect($event)">
       <ng-template #seriesTooltipTemplate let-items="model">
         <!-- <p>{{items[0].name | date:'short'}}</p> -->
         <p *ngIf="items.length === 6">perf(back) : {{getPerformance(items) | number:'1.2-2'}}%</p>

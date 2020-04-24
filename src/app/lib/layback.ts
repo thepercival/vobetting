@@ -14,7 +14,7 @@ export class LayBack {
     static readonly BACK = true;
     static readonly LAY = false;
 
-    constructor(private dateTime: Date, betLine: BetLine, private bookmaker: Bookmaker) {
+    constructor(private dateTime: Date, betLine: BetLine, private bookmaker: Bookmaker, private runner: boolean) {
         this.setBetLine(betLine);
     }
 
@@ -32,6 +32,14 @@ export class LayBack {
 
     setBack(back: boolean) {
         this.back = back;
+    }
+
+    getRunner(): boolean {
+        return this.runner;
+    }
+
+    setRunner(runner: boolean) {
+        this.runner = runner;
     }
 
     getPrice(): number {

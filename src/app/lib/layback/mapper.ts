@@ -10,7 +10,11 @@ export class LayBackMapper {
 
     toObject(json: JsonLayBack, betLine: BetLine, layBack?: LayBack): LayBack {
         if (layBack === undefined) {
-            layBack = new LayBack(new Date(json.dateTime), betLine, this.bookmakerMapper.toObject(json.bookmaker));
+            layBack = new LayBack(
+                new Date(json.dateTime),
+                betLine,
+                this.bookmakerMapper.toObject(json.bookmaker),
+                json.back);
         }
         layBack.setId(json.id);
         layBack.setBack(json.back);
@@ -23,6 +27,7 @@ export class LayBackMapper {
         return {
             id: layBack.getId(),
             dateTime: layBack.getDateTime().toISOString(),
+            runner: layBack.getRunner(),
             back: layBack.getBack(),
             price: layBack.getPrice(),
             size: layBack.getSize(),
@@ -34,6 +39,7 @@ export class LayBackMapper {
 export interface JsonLayBack {
     id?: number;
     dateTime: string;
+    runner: boolean;
     back: boolean;
     price: number;
     size: number;

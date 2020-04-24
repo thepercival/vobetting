@@ -83,6 +83,7 @@ export class BetGameComponent implements OnInit {
     this.myNavigation.back();
   }
 
+  get MatchOdds() { return BetLine.MATCH_ODDS; }
   get GameHOME(): boolean { return Game.HOME; }
   get GameAWAY(): boolean { return Game.AWAY; }
 

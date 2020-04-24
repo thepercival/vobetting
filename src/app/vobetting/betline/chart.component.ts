@@ -13,7 +13,7 @@ import { LayBackRepository } from '../../lib/layback/repository';
   styleUrls: ['./chart.component.css']
 })
 export class BetLineChartComponent implements OnInit {
-
+  @Input() runner: boolean;
   @Input() betLine: BetLine;
   @Input() game: Game;
 
@@ -77,20 +77,11 @@ export class BetLineChartComponent implements OnInit {
     this.processing = false;
   }
 
-  getDescription(betType: number, back: boolean, homeAway?: boolean) {
-    return this.getHomeAwayDescription(homeAway) + ' - ' + (back ? 'back' : 'lay');
-  }
-
-  getHomeAway(betLine: BetLine): boolean {
-    return this.game.getHomeAway(betLine.getPlace());
-  }
-
-  getHomeAwayDescription(homeAway?: boolean) {
-    return homeAway === true ? 'thuis' : (homeAway === false ? 'uit' : 'gelijk');
+  getDescription(back: boolean) {
+    return this.betLine.getRunnerDescription(this.runner) + ' - ' + (back ? 'back' : 'lay');
   }
 
   getStyle(color: string) {
-    console.log(color);
     return { 'background-color': color };
   }
 
@@ -106,11 +97,11 @@ export class BetLineChartComponent implements OnInit {
   setChartLayBacks(betLine: BetLine) {
     this.chartLayBacks = [
       {
-        name: this.getDescription(betLine.getBetType(), LayBack.BACK, this.getHomeAway(betLine)),
+        name: this.getDescription(LayBack.BACK),
         series: this.getLayBacksHelper(betLine, LayBack.BACK)
       },
       {
-        name: this.getDescription(betLine.getBetType(), LayBack.LAY, this.getHomeAway(betLine)),
+        name: this.getDescription(LayBack.LAY),
         series: this.getLayBacksHelper(betLine, LayBack.LAY)
       },
     ];
@@ -119,10 +110,12 @@ export class BetLineChartComponent implements OnInit {
 
   protected getLayBacksHelper(betLine: BetLine, backOrLay: boolean) {
     const layBacks: LayBack[] = betLine.getLayBacks();
-    console.log(layBacks);
-    console.log(layBacks.length);
-    const layBacksTmp = layBacks.filter(layBack => layBack.getBack() === backOrLay && layBack.getPrice() < 8);
-    console.log(layBacksTmp.length);
+    // console.log(layBacks);
+    // console.log(this.runner);
+    const layBacksTmp = layBacks.filter(layBack => {
+      return this.runner === layBack.getRunner() && layBack.getBack() === backOrLay && layBack.getPrice() < 8;
+    });
+    // console.log(layBacksTmp);
     return layBacksTmp.map(layback => {
       return {
         name: layback.getDateTime(),

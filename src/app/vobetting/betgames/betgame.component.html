@@ -36,7 +36,9 @@
       </form>
     </div>
     <div *ngIf="form.controls.betline.value">
-      <app-betline-chart [game]="game" [betLine]="form.controls.betline.value"></app-betline-chart>
+      <div *ngFor="let runner of form.controls.betline.value.getBetTypeOptions()">
+        <app-betline-chart [game]="game" [betLine]="form.controls.betline.value" [runner]="runner"></app-betline-chart>
+      </div>
     </div>
   </div>
 </div>
