@@ -135,7 +135,12 @@ export class BetGameComponent implements OnInit {
         bookmakerSerie = { bookmaker: layBack.getBookmaker(), layBacks: [] };
         bookmakersSeries.push(bookmakerSerie);
       }
-      bookmakerSerie.layBacks.push({ name: layBack.getDateTime(), value: layBack.getPrice() });
+      const seriesData = bookmakerSerie.layBacks;
+      const serieData = seriesData.find(serieDataIt => serieDataIt.name.getTime() === layBack.getDateTime().getTime())
+      if (serieData === undefined) {
+        seriesData.push({ name: layBack.getDateTime(), value: layBack.getPrice() });
+      }
+
     });
     return runnersSerie;
   }
