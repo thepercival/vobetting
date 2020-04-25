@@ -43,9 +43,8 @@
       </form>
     </div>
     <div *ngIf="form.controls.betline.value">
-      <div *ngFor="let runnerSerie of runnersSerie">
-        <app-betline-chart class="mb-3" [betType]="form.controls.betline.value.getBetType()"
-          [runnersSerie]="[runnerSerie]">
+      <div class="mb-4" *ngFor="let runnerSerie of runnersSerie">
+        <app-betline-chart [betType]="form.controls.betline.value.getBetType()" [runnersSerie]="[runnerSerie]">
         </app-betline-chart>
       </div>
     </div>
