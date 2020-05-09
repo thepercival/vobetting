@@ -16,6 +16,7 @@ import { JsonBookmaker, BookmakerMapper } from '../bookmaker/mapper';
 export class ExternalObjectRepository extends APIRepository {
 
     private url: string;
+    private disableCache: true;
 
     constructor(
         private http: HttpClient,
@@ -44,7 +45,7 @@ export class ExternalObjectRepository extends APIRepository {
         const url = this.getUrl(externalSource, 'sports');
         return this.http.get(url, this.getOptions()).pipe(
             map((json: JsonSport[]) => {
-                return json.map(jsonSport => this.sportMapper.toObject(jsonSport));
+                return json.map(jsonSport => this.sportMapper.toObject(jsonSport, this.disableCache));
             }),
             catchError((err) => this.handleError(err))
         );
@@ -54,7 +55,7 @@ export class ExternalObjectRepository extends APIRepository {
         const url = this.getUrl(externalSource, 'associations');
         return this.http.get(url, this.getOptions()).pipe(
             map((json: JsonAssociation[]) => {
-                return json.map(jsonAssociation => this.associationMapper.toObject(jsonAssociation));
+                return json.map(jsonAssociation => this.associationMapper.toObject(jsonAssociation, this.disableCache));
             }),
             catchError((err) => this.handleError(err))
         );
@@ -64,7 +65,7 @@ export class ExternalObjectRepository extends APIRepository {
         const url = this.getUrl(externalSource, 'seasons');
         return this.http.get(url, this.getOptions()).pipe(
             map((json: JsonSeason[]) => {
-                return json.map(jsonSeason => this.seasonMapper.toObject(jsonSeason));
+                return json.map(jsonSeason => this.seasonMapper.toObject(jsonSeason, this.disableCache));
             }),
             catchError((err) => this.handleError(err))
         );
@@ -74,7 +75,7 @@ export class ExternalObjectRepository extends APIRepository {
         const url = this.getUrl(externalSource, 'leagues');
         return this.http.get(url, this.getOptions()).pipe(
             map((json: JsonLeague[]) => {
-                return json.map(jsonLeague => this.leagueMapper.toObject(jsonLeague));
+                return json.map(jsonLeague => this.leagueMapper.toObject(jsonLeague, this.disableCache));
             }),
             catchError((err) => this.handleError(err))
         );
@@ -84,7 +85,7 @@ export class ExternalObjectRepository extends APIRepository {
         const url = this.getUrl(externalSource, 'competitions');
         return this.http.get(url, this.getOptions()).pipe(
             map((json: JsonCompetition[]) => {
-                return json.map(jsonCompetition => this.competitionMapper.toObject(jsonCompetition));
+                return json.map(jsonCompetition => this.competitionMapper.toObject(jsonCompetition, this.disableCache));
             }),
             catchError((err) => this.handleError(err))
         );
@@ -93,7 +94,7 @@ export class ExternalObjectRepository extends APIRepository {
     getCompetition(externalSource: ExternalSource, externalId: string): Observable<Competition> {
         const url = this.getUrl(externalSource, 'competitions', externalId);
         return this.http.get(url, this.getOptions()).pipe(
-            map((jsonCompetition: JsonCompetition) => this.competitionMapper.toObject(jsonCompetition)),
+            map((jsonCompetition: JsonCompetition) => this.competitionMapper.toObject(jsonCompetition, this.disableCache)),
             catchError((err) => this.handleError(err))
         );
     }

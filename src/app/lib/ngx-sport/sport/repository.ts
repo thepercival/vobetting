@@ -42,7 +42,7 @@ export class SportRepository extends APIRepository {
     editObject(sport: Sport): Observable<Sport> {
         const url = this.getUrl(sport.getId());
         return this.http.put(url, this.mapper.toJson(sport), this.getOptions()).pipe(
-            map((jsonSport: JsonSport) => this.mapper.toObject(jsonSport, sport)),
+            map((jsonSport: JsonSport) => this.mapper.updateObject(jsonSport, sport)),
             catchError((err) => this.handleError(err))
         );
     }

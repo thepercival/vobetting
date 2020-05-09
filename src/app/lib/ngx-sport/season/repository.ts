@@ -42,7 +42,7 @@ export class SeasonRepository extends APIRepository {
     editObject(season: Season): Observable<Season> {
         const url = this.getUrl(season.getId());
         return this.http.put(url, this.mapper.toJson(season), this.getOptions()).pipe(
-            map((jsonSeason: JsonSeason) => this.mapper.toObject(jsonSeason, season)),
+            map((jsonSeason: JsonSeason) => this.mapper.updateObject(jsonSeason, season)),
             catchError((err) => this.handleError(err))
         );
     }

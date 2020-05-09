@@ -42,7 +42,7 @@ export class AssociationRepository extends APIRepository {
     editObject(association: Association): Observable<Association> {
         const url = this.getUrl(association.getId());
         return this.http.put(url, this.mapper.toJson(association), this.getOptions()).pipe(
-            map((jsonAssociation: JsonAssociation) => this.mapper.toObject(jsonAssociation, association)),
+            map((jsonAssociation: JsonAssociation) => this.mapper.updateObject(jsonAssociation, association)),
             catchError((err) => this.handleError(err))
         );
     }

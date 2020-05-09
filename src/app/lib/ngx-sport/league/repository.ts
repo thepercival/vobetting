@@ -42,7 +42,7 @@ export class LeagueRepository extends APIRepository {
     editObject(league: League): Observable<League> {
         const url = this.getUrl(league.getId());
         return this.http.put(url, this.mapper.toJson(league), this.getOptions()).pipe(
-            map((jsonLeague: JsonLeague) => this.mapper.toObject(jsonLeague, league)),
+            map((jsonLeague: JsonLeague) => this.mapper.updateObject(jsonLeague, league)),
             catchError((err) => this.handleError(err))
         );
     }

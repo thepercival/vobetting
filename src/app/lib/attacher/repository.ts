@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 import { APIRepository } from '../repository';
-import { AssociationMapper, Association, JsonAssociation, Competition } from 'ngx-sport';
+import { Competition } from 'ngx-sport';
 import { AttacherMapper, JsonAttacher } from './mapper';
 import { ExternalSource } from '../external/source';
 import { Attacher } from '../attacher';
