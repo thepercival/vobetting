@@ -93,6 +93,9 @@
             <span *ngIf="uiAttacher.externalBookmaker">
               {{uiAttacher.externalBookmaker.getName()}}
             </span>
+            <span *ngIf="!uiAttacher.externalBookmaker && uiAttacher.attacher" class="text-danger">
+              {{uiAttacher.attacher.getExternalId()}}
+            </span>
           </td>
         </tr>
       </tbody>

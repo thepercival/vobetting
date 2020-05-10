@@ -70,7 +70,8 @@ export class CompetitionGameListComponent implements OnInit {
       const pouleData: PouleData = pouleDatas[game.getPoule().getId()];
       const gameData: GameData = {
         poule: pouleData,
-        game
+        game,
+        isCanceled: game.getState() === State.Canceled
       };
       gameDatas.push(gameData);
     });
@@ -119,6 +120,7 @@ export class CompetitionGameListComponent implements OnInit {
 interface GameData {
   poule: PouleData;
   game: Game;
+  isCanceled: boolean;
 }
 
 interface PouleData {

@@ -9,6 +9,7 @@ import { LayBackRepository } from '../../lib/layback/repository';
 import { Bookmaker } from 'src/app/lib/bookmaker';
 import { SerieRunner, SerieLayBack, SerieBookmaker } from './series';
 import { BettingNameService } from 'src/app/lib/nameservice';
+import { LayBackMapper } from 'src/app/lib/layback/mapper';
 
 @Component({
   selector: 'app-betline-chart',
@@ -34,12 +35,6 @@ export class BetLineChartComponent implements OnInit {
   yAxisLabel = 'quotering';
   colorScheme = {
     domain: [
-      '#000080', /* back home */
-      '#3090C7', /* lay home */
-      '#800517', /* back away */
-      '#FF2400', /* lay away */
-      '#348017', /* back draw */
-      '#6CC417' /* lay draw */
     ]
   };
   autoScale = true;
@@ -61,12 +56,12 @@ export class BetLineChartComponent implements OnInit {
   }
 
   protected getData(): any[] {
-    console.log('series');
-    console.log(this.runnersSerie);
+    console.log('series', this.runnersSerie);
     const data: any[] = [];
     this.runnersSerie.forEach((runnerSerie: SerieRunner) => {
       runnerSerie.layBackSeries.forEach((layBackSerie: SerieLayBack) => {
         layBackSerie.bookmakers.forEach((bookmakerSerie: SerieBookmaker) => {
+          this.colorScheme.domain.push(this.getColor(layBackSerie.layOrBack, bookmakerSerie.bookmaker));
           data.push({
             name: this.getDescription(runnerSerie.runner, layBackSerie.layOrBack, bookmakerSerie.bookmaker),
             series: bookmakerSerie.layBacks
@@ -74,8 +69,7 @@ export class BetLineChartComponent implements OnInit {
         });
       });
     });
-    console.log('data');
-    console.log(data);
+    console.log('data', data);
     return data;
   }
 
@@ -90,6 +84,32 @@ export class BetLineChartComponent implements OnInit {
 
   getStyle(color: string) {
     return { 'background-color': color };
+  }
+
+
+  // '#000080', /* back home */
+  // '#3090C7', /* lay home */
+  // '#800517', /* back away */
+  // '#FF2400', /* lay away */
+  // '#348017', /* back draw */
+  // '#6CC417' /* lay draw */
+  protected getColor(layOrBack: boolean, bookmaker: Bookmaker): string {
+    if (layOrBack === LayBack.BACK) {
+      if (bookmaker.getName() === 'matchbook') {
+        return '#000080';
+      } else if (bookmaker.getName() === 'betfair') {
+        return '#3090C7';
+      }
+      return 'purple';
+    } else if (layOrBack === LayBack.LAY) {
+      if (bookmaker.getName() === 'matchbook') {
+        return '#800517';
+      } else if (bookmaker.getName() === 'betfair') {
+        return '#FF2400';
+      }
+      return 'orange';
+    }
+    return 'black';
   }
 
   getPerformance(items: any[]) {

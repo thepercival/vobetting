@@ -109,7 +109,7 @@
             <span *ngIf="uiAttacher.externalCompetition">
               {{uiAttacher.externalCompetition.getName()}}
             </span>
-            <span *ngIf="!uiAttacher.externalCompetition && uiAttacher.attacher">
+            <span *ngIf="!uiAttacher.externalCompetition && uiAttacher.attacher" class="text-danger">
               {{uiAttacher.attacher.getExternalId()}}
             </span>
           </td>

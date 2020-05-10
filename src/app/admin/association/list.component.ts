@@ -42,6 +42,7 @@ export class AssociationListComponent implements OnInit {
       .subscribe(
         /* happy path */(associations: Association[]) => {
           this.associations = associations.sort((a, b) => a.getName() < b.getName() ? -1 : 0);
+          console.log("associations", this.associations);
           const externalSourceId = localStorage.getItem('externalSourceId');
           if (externalSourceId) {
             this.externalSourceRepos.getObject(externalSourceId)
@@ -98,6 +99,7 @@ export class AssociationListComponent implements OnInit {
           this.externalObjectRepos.getAssociations(externalSource)
             .subscribe(
             /* happy path */(externalAssociations: Association[]) => {
+                console.log("externalAssociations", externalAssociations);
                 this.associations.forEach(association => {
                   const attacher = this.externalSource.getAssociationAttacher(association);
                   const externalAssociation = attacher ? externalAssociations.find(externalAssociationIt => {

@@ -94,6 +94,9 @@
             <span *ngIf="uiAttacher.externalLeague">
               {{uiAttacher.externalLeague.getName()}}
             </span>
+            <span *ngIf="!uiAttacher.externalLeague && uiAttacher.attacher" class="text-danger">
+              {{uiAttacher.attacher.getExternalId()}}
+            </span>
           </td>
         </tr>
       </tbody>

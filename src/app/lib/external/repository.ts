@@ -16,7 +16,7 @@ import { JsonBookmaker, BookmakerMapper } from '../bookmaker/mapper';
 export class ExternalObjectRepository extends APIRepository {
 
     private url: string;
-    private disableCache: true;
+    private disableCache: boolean;
 
     constructor(
         private http: HttpClient,
@@ -30,6 +30,7 @@ export class ExternalObjectRepository extends APIRepository {
     ) {
         super();
         this.url = super.getApiUrl() + this.getUrlpostfix();
+        this.disableCache = true;
     }
 
     getUrlpostfix(): string {
@@ -55,6 +56,7 @@ export class ExternalObjectRepository extends APIRepository {
         const url = this.getUrl(externalSource, 'associations');
         return this.http.get(url, this.getOptions()).pipe(
             map((json: JsonAssociation[]) => {
+                console.log(this.disableCache);
                 return json.map(jsonAssociation => this.associationMapper.toObject(jsonAssociation, this.disableCache));
             }),
             catchError((err) => this.handleError(err))

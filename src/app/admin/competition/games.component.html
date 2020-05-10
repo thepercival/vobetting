@@ -30,7 +30,8 @@
           </thead>
           <tbody>
             <ng-template ngFor let-gmData [ngForOf]="gameDatas">
-              <tr [ngClass]="{ 'batch-striped-row': (gmData.game.getBatchNr() % 2) === 0 }">
+              <tr
+                [ngClass]="{ 'batch-striped-row': (gmData.game.getBatchNr() % 2) === 0, 'line-through': gmData.isCanceled }">
                 <!-- poule -->
                 <td class="text-center">{{gmData.poule.name}}</td>
                 <!-- batchNr -->
