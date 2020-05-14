@@ -1,15 +1,8 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { Game, StructureService } from 'ngx-sport';
-import { forkJoin, Observable } from 'rxjs';
-
-import { BetLine } from '../../lib/betline';
-import { BetLineRepository } from '../../lib/betline/repository';
+import { Component, Input, OnInit } from '@angular/core';
 import { LayBack } from '../../lib/layback';
-import { LayBackRepository } from '../../lib/layback/repository';
 import { Bookmaker } from 'src/app/lib/bookmaker';
 import { SerieRunner, SerieLayBack, SerieBookmaker } from './series';
 import { BettingNameService } from 'src/app/lib/nameservice';
-import { LayBackMapper } from 'src/app/lib/layback/mapper';
 
 @Component({
   selector: 'app-betline-chart',
@@ -17,6 +10,7 @@ import { LayBackMapper } from 'src/app/lib/layback/mapper';
   styleUrls: ['./chart.component.css']
 })
 export class BetLineChartComponent implements OnInit {
+  @Input() title: string;
   @Input() betType: number;
   @Input() runnersSerie: SerieRunner[];
 
@@ -76,9 +70,12 @@ export class BetLineChartComponent implements OnInit {
   // maak nog een color scheme per lay/back bookmaker???
 
   getDescription(runner: boolean, back: boolean, bookMaker: Bookmaker) {
-    let description = this.bettingNameService.getRunnerDescription(this.betType, runner) + ' - ';
+    let description = '';
+    description += bookMaker.getName();
+    description += ' - ';
     description += (back ? 'back' : 'lay');
-    description += ' - ' + bookMaker.getName();
+    description += ' - ';
+    description += this.bettingNameService.getRunnerDescription(this.betType, runner);
     return description;
   }
 

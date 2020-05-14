@@ -14,7 +14,7 @@ export class LayBackMapper {
                 new Date(json.dateTime),
                 betLine,
                 this.bookmakerMapper.toObject(json.bookmaker),
-                json.runner);
+                json.runnerHomeAway);
         }
         layBack.setId(json.id);
         layBack.setBack(json.back);
@@ -27,7 +27,7 @@ export class LayBackMapper {
         return {
             id: layBack.getId(),
             dateTime: layBack.getDateTime().toISOString(),
-            runner: layBack.getRunner(),
+            runnerHomeAway: layBack.getRunner(),
             back: layBack.getBack(),
             price: layBack.getPrice(),
             size: layBack.getSize(),
@@ -39,7 +39,7 @@ export class LayBackMapper {
 export interface JsonLayBack {
     id?: number;
     dateTime: string;
-    runner: boolean;
+    runnerHomeAway: boolean;
     back: boolean;
     price: number;
     size: number;

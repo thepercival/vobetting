@@ -101,10 +101,6 @@ export class BetGameComponent implements OnInit {
     this.alert = undefined;
   }
 
-  getRunnerDescription(runnerSerie: SerieRunner): string {
-    return this.form.controls.betline.value.getRunnerDescription(runnerSerie);
-  }
-
   onBetLineChange(): void {
     this.form.get('betline').valueChanges.subscribe(val => {
       this.runnersSerie = this.getRunnersSeries(this.form.controls.betline.value);
@@ -143,5 +139,9 @@ export class BetGameComponent implements OnInit {
 
     });
     return runnersSerie;
+  }
+
+  getChartTitle(betType: number, runnerSerie: SerieRunner): string {
+    return this.bettingNameService.getRunnerDescription(betType, runnerSerie.runner);
   }
 }
