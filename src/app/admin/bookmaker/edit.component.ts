@@ -23,7 +23,8 @@ export class BookmakerEditComponent implements OnInit {
   bookmaker: Bookmaker;
   validations: BookmakerValidations = {
     minlengthname: 1,
-    maxlengthname: Bookmaker.MAX_LENGTH_NAME
+    maxlengthname: Bookmaker.MAX_LENGTH_NAME,
+    maxlengthfee: 4
   };
 
   constructor(
@@ -38,7 +39,11 @@ export class BookmakerEditComponent implements OnInit {
         Validators.minLength(this.validations.minlengthname),
         Validators.maxLength(this.validations.maxlengthname)
       ])],
-      exchange: false
+      exchange: false,
+      fee: ['', Validators.compose([
+        Validators.required,
+        Validators.maxLength(this.validations.maxlengthfee)
+      ])],
     });
   }
 
@@ -73,6 +78,7 @@ export class BookmakerEditComponent implements OnInit {
 
     this.form.controls.name.setValue(this.bookmaker.getName());
     this.form.controls.exchange.setValue(this.bookmaker.getExchange());
+    this.form.controls.fee.setValue(this.bookmaker.getFeePercentage());
   }
 
   save() {
@@ -89,13 +95,14 @@ export class BookmakerEditComponent implements OnInit {
 
     const name = this.form.controls.name.value;
     const exchange = this.form.controls.exchange.value;
+    const feePercentage = this.form.controls.fee.value;
 
     if (this.isNameDuplicate(this.form.controls.name.value)) {
       this.setAlert('danger', 'de naam bestaan al');
       this.processing = false;
       return;
     }
-    const bookmaker: JsonBookmaker = { name, exchange };
+    const bookmaker: JsonBookmaker = { name, exchange, feePercentage };
     this.bookmakerRepos.createObject(bookmaker)
       .subscribe(
         /* happy path */ bookmakerRes => {
@@ -116,9 +123,11 @@ export class BookmakerEditComponent implements OnInit {
     }
     const name = this.form.controls.name.value;
     const exchange = this.form.controls.exchange.value;
+    const feePercentage = this.form.controls.fee.value;
 
     this.bookmaker.setName(name);
     this.bookmaker.setExchange(exchange);
+    this.bookmaker.setFeePercentage(feePercentage);
 
     this.bookmakerRepos.editObject(this.bookmaker)
       .subscribe(
@@ -150,4 +159,5 @@ export class BookmakerEditComponent implements OnInit {
 export interface BookmakerValidations {
   maxlengthname: number;
   minlengthname: number;
+  maxlengthfee: number;
 }

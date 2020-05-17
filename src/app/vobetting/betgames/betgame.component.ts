@@ -41,7 +41,8 @@ export class BetGameComponent implements OnInit {
   ) {
     this.form = fb.group({
       betline: ['', Validators.compose([
-      ])]
+      ])],
+      prematch: [true],
     });
   }
 
@@ -52,7 +53,6 @@ export class BetGameComponent implements OnInit {
           /* happy path */(competition: Competition) => {
             this.competition = competition;
             this.initStructureAndGame(competition, params.gameId);
-            this.onBetLineChange();
           },
           /* error path */ e => { this.processing = false; this.setAlert('danger', e); },
           /* onComplete */() => { this.processing = false; }
@@ -101,17 +101,19 @@ export class BetGameComponent implements OnInit {
     this.alert = undefined;
   }
 
-  onBetLineChange(): void {
-    this.form.get('betline').valueChanges.subscribe(val => {
-      this.runnersSerie = this.getRunnersSeries(this.form.controls.betline.value);
-    });
+  search(): void {
+    this.runnersSerie = this.getRunnersSeries(
+      this.form.controls.betline.value,
+      this.form.controls.prematch.value
+    );
   }
 
-  getRunnersSeries(betLine: BetLine): SerieRunner[] {
+  getRunnersSeries(betLine: BetLine, prematch: boolean): SerieRunner[] {
     const runnersSerie: SerieRunner[] = [];
 
     betLine.getLayBacks().forEach((layBack: LayBack) => {
-      if (layBack.getPrice() > 8) {
+      if (layBack.getPrice() > 8
+        || (prematch && layBack.getDateTime().getTime() > betLine.getGame().getStartDateTime().getTime())) {
         return;
       }
       let runnerSerie = runnersSerie.find(runnerSerieIt => runnerSerieIt.runner === layBack.getRunner())

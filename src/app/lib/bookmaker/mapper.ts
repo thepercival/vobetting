@@ -11,6 +11,7 @@ export class BookmakerMapper {
             bookmaker = new Bookmaker(json.name);
             bookmaker.setId(json.id);
             bookmaker.setExchange(json.exchange);
+            bookmaker.setFeePercentage(json.feePercentage);
             return bookmaker;
         }
     }
@@ -18,7 +19,8 @@ export class BookmakerMapper {
     toJson(bookmaker: Bookmaker): JsonBookmaker {
         return {
             name: bookmaker.getName(),
-            exchange: bookmaker.getExchange()
+            exchange: bookmaker.getExchange(),
+            feePercentage: bookmaker.getFeePercentage()
         };
     }
 }
@@ -27,4 +29,5 @@ export interface JsonBookmaker {
     id?: string | number;
     name: string;
     exchange: boolean;
+    feePercentage: number
 }

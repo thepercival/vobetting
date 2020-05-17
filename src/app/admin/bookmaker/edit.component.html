@@ -35,6 +35,14 @@
             </label>
           </div>
         </div>
+        <div class="form-group row">
+          <label for="fee" class="col-4 col-form-label pointer">toeslag</label>
+          <div class="form-check col-8">
+            <input class="form-control"
+              [ngClass]="{ 'is-invalid': form.controls.fee.invalid, 'is-valid': form.controls.fee.valid }" type="text"
+              formControlName="fee" maxlength="{{validations.maxlengthfee}}">
+          </div>
+        </div>
         <div class="form-group row justify-content-end">
           <div class="col-9">
             <button [disabled]="form.invalid" type="submit" class="btn btn-outline-primary">

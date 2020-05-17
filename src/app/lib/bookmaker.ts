@@ -4,6 +4,7 @@ export class Bookmaker {
 
     protected id: string | number;
     protected exchange: boolean;
+    protected feePercentage: number;
 
     constructor(protected name: string, exchange?: boolean) {
         this.exchange = (exchange === true);
@@ -31,5 +32,13 @@ export class Bookmaker {
 
     setId(id: string | number): void {
         this.id = id;
+    }
+
+    getFeePercentage(): number {
+        return this.feePercentage;
+    }
+
+    setFeePercentage(feePercentage: number): void {
+        this.feePercentage = feePercentage;
     }
 }
